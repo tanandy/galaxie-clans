@@ -2,3 +2,8 @@ host_vars/*
 group_vars/*
 secrets/*
 keys/*
+.idea
+*.iml
+*.ipr
+*.iws
+hosts
