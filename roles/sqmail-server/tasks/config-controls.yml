@@ -9,7 +9,7 @@
     group="root"
     mode=0644
 
-- name: update {{ glx_sqmail_dir }}/control/rules.qmtpd.cdb
-  shell: tcprules rules.qmtpd.cdb rules.qmtpd.tmp < rules.qmtpd.txt
-    chdir="{{ glx_sqmail_dir }}/control"
-  changed_when: false
+#- name: update {{ glx_sqmail_dir }}/control/rules.qmtpd.cdb
+#  shell: tcprules rules.qmtpd.cdb rules.qmtpd.tmp < rules.qmtpd.txt
+#    chdir="{{ glx_sqmail_dir }}/control"
+#  changed_when: false
