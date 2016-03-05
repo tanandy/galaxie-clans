@@ -1,0 +1,339 @@
+---
+# Common and path
+glx_slashpackage_dir: "/package"
+glx_sqmail_dir: "/var/qmail"
+glx_sqmail_ssl_dir: "{{ glx_sqmail_dir }}/ssl"
+glx_supervise_dir: "/var/lib/supervise"
+glx_service_dir: "/etc/service"
+glx_multilog_dir: "/var/multilog"
+glx_prefix_dir: "/usr/local"
+
+# information about IP bind look sslserver or tcpserver manual
+#glx_sqmail_inet_bind_info: "192.168.42.42"
+#glx_sqmail_inet_bind_info: "-4 192.168.42.42"
+#glx_sqmail_inet_bind_info: "-I eth0 fe80::f2ad:4eff:fe00:bcb0"
+#glx_sqmail_inet_bind_info: "-6 -I eth0 fe80::f2ad:4eff:fe00:bcb0"
+#glx_sqmail_inet_bind_info: "-4 -6 -I eth0 fe80::f2ad:4eff:fe00:bcb0,192.168.42.42"
+#glx_sqmail_inet_bind_info: "2001:32d0:8:4242::42"
+#glx_sqmail_inet_bind_info: "-6 2001:32d0:8:4242::42"
+glx_sqmail_inet_bind_info: "0"
+
+glx_sqmail_service_send:
+  enable: true
+  name: "send"
+  directory: "qmail-send"
+  script: "run_send"
+
+glx_sqmail_service_smtp:
+  enable: true
+  name: "smtp"
+  directory: "qmail-smtpd"
+  script: "run_smtpd"
+
+glx_sqmail_service_smtps:
+  enable: false
+  name: "smtps"
+  directory: "qmail-smtpsd"
+  script: "run_smtpsd"
+
+glx_sqmail_service_submission:
+  enable: true
+  name: "submission"
+  directory: "qmail-smtpsub"
+  script: "run_smtpsub"
+
+glx_sqmail_service_pop3:
+  enable: false
+  name: "pop3"
+  directory: "qmail-pop3d"
+  script: "run_pop3d"
+
+glx_sqmail_service_pop3s:
+  enable: false
+  name: "pop3s"
+  directory: "qmail-pop3sd"
+  script: "run_pop3sd"
+
+glx_sqmail_service_qmqp:
+  enable: false
+  name: "qmqp"
+  directory: "qmail-qmqpd"
+  script: "run_qmqpd"
+
+glx_sqmail_service_qmtp:
+  enable: false
+  name: "qmtp"
+  directory: "qmail-qmtpd"
+  script: "run_qmtpd"
+
+glx_sqmail_service_qmtps:
+  enable: false
+  name: "qmtps"
+  directory: "qmail-qmtpsd"
+  script: "run_qmtpsd"
+
+glx_sqmail_aviable_services_list:
+  - "{{ glx_sqmail_service_send }}"
+  - "{{ glx_sqmail_service_smtp }}"
+  - "{{ glx_sqmail_service_smtps }}"
+  - "{{ glx_sqmail_service_submission }}"
+  - "{{ glx_sqmail_service_pop3 }}"
+  - "{{ glx_sqmail_service_pop3s }}"
+  - "{{ glx_sqmail_service_qmqp }}"
+  - "{{ glx_sqmail_service_qmtp }}"
+  - "{{ glx_sqmail_service_qmtps }}"
+
+# qmail-scanner
+glx_sqmail_qmail_scanner_user: "clamav"
+
+# simscan
+glx_sqmail_simscan_user: "simscan"
+glx_sqmail_simscan_group: "simscan"
+
+# special - antispam
+glx_sqmail_config_qmail_scanner: false
+glx_sqmail_config_simscan: false
+
+# special - smtproutes
+glx_sqmail_set_smtproutes: false
+glx_sqmail_control_smtproutes: ""
+# special - virtualdomains
+glx_sqmail_set_virtualdomains: false
+
+# special - scripts
+glx_sqmail_install_sqmailctl: true
+
+# Controls
+glx_sqmail_domain: "galaxie.ici"
+# qmail-send
+glx_sqmail_control_me: "{{ ansible_hostname }}.{{ glx_sqmail_domain }}"
+glx_sqmail_control_queuelifetime: "604800"
+glx_sqmail_control_doublebouncehost: "{{ glx_sqmail_control_me }}"
+glx_sqmail_control_doublebounceto: "postmaster"
+glx_sqmail_control_bouncemaxbytes: "0"
+glx_sqmail_control_concurrencylocal: "10"
+glx_sqmail_control_concurrencyremote: "20"
+glx_sqmail_control_envnoathost: "{{ glx_sqmail_control_me }}"
+glx_sqmail_control_locals:
+  - "localhost"
+  - "localhost.localdomain"
+  - "{{ ansible_hostname }}"
+  - "{{ ansible_hostname }}.{{ glx_sqmail_domain }}"
+  - "{{ glx_sqmail_domain }}"
+glx_sqmail_control_percenthack: ""
+glx_sqmail_control_virtualdomains: ""
+
+# qmail-remote
+glx_sqmail_control_timeoutconnect: "60"
+glx_sqmail_control_timeoutremote: "1200"
+# qmail-smtpd
+glx_sqmail_control_badhelo:
+  - "{{ ansible_default_ipv4.address }}"
+  - "{{ ansible_hostname }}.{{ glx_sqmail_domain }}"
+  - "localhost"
+  - "localhost.localdomain"
+glx_sqmail_control_defaultdomain: "{{ glx_sqmail_domain }}"
+glx_sqmail_control_plusdomain: "{{ glx_sqmail_domain }}"
+
+
+glx_sqmail_control_rcpthosts:
+  - "{{ glx_sqmail_domain }}"
+  - ".{{ glx_sqmail_domain }}"
+
+glx_sqmail_maildirname: "Maildir"
+glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_maildirname }}/"
+glx_sqmail_control_concurrencyincoming: "30"
+glx_sqmail_control_spfbehavior: "3"
+glx_sqmail_control_bouncefrom: "postmaster"
+glx_sqmail_control_databytes: "8000000"
+glx_sqmail_control_timeoutsmtpd: "30"
+
+glx_sqmail_control_badloadertypes:
+  - "Mi5kb"
+  - "MzIuZ"
+  - "MyLmR"
+  - "MyLkR"
+
+glx_sqmail_control_badmailfrom:
+  - "# Wildmat evaluates from least specific to most specific"
+  - "*"
+  - "! "
+  - "!*@*.*"
+  - "*%*"
+
+glx_sqmail_control_badmimetypes:
+  - "TVqQAAMAA"
+  - "TVpQAAIAA"
+  - "TVpAALQAc"
+  - "TVpyAXkAX"
+  - "TVrmAU4AA"
+  - "TVrhARwAk"
+  - "TVoFAQUAA"
+  - "TVoAAAQAA"
+  - "TVoIARMAA"
+  - "TVouARsAA"
+  - "TVrQAT8AA"
+  - "TVoAAAEAA"
+
+glx_sqmail_control_badrcptto:
+  - "# Wildmat evaluates from least specifc to most specific"
+  - "*%*"
+  - "*\ *@*"
+  - "!*@*.*"
+
+glx_sqmail_control_rules_smtpd:
+  - '10.0.0.0/8:allow,RELAYCLIENT=""'
+  - '172.16.0.0/12:allow,RELAYCLIENT=""'
+  - '192.168.0.0/16:allow,RELAYCLIENT=""'
+  - '127.0.0.1/31:allow,RELAYCLIENT=""'
+  - '::1/127:allow,RELAYCLIENT=""'
+  - 'fe80::/10:allow,RELAYCLIENT=""'
+  - 'fc00::/7:allow,RELAYCLIENT=""'
+  - '=localhost:allow,RELAYCLIENT=""'
+  - '=:allow'
+  - ':deny'
+
+glx_sqmail_control_rules_qmtpd:
+  - '10.0.0.0/8:allow'
+  - '172.16.0.0/12:allow'
+  - '192.168.0.0/16:allow'
+  - '127.0.0.1/31:allow'
+  - 'fe80::/10:allow'
+  - 'fc00::/7:allow'
+  - ':deny'
+
+# cdb
+glx_cdb_force_install: true
+glx_cdb_repository: "https://raw.githubusercontent.com/aurelienmaury/galaxie/master/playbooks/roles/sqmail-server/files"
+#glx_cdb_repository: "http://cr.yp.to/cdb"
+glx_cdb_app_name: "cdb-0.75"
+glx_cdb_extension: "tar.gz"
+glx_cdb_download_url: "{{ glx_cdb_repository }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
+glx_cdb_source_dir: "/usr/src"
+
+# ucspi-tcp6
+glx_ucspi_tcp6_force_install: true
+glx_ucspi_tcp6_source_repository: "https://raw.githubusercontent.com/aurelienmaury/galaxie/master/playbooks/roles/sqmail-server/files"
+#glx_ucspi_tcp6_source_repository: "http://www.fehcom.de/ipnet/ucspi-tcp6"
+glx_ucspi_tcp6_source_name: "ucspi-tcp6-1.00a"
+glx_ucspi_tcp6_source_extension: "tgz"
+glx_ucspi_tcp6_source_url: "{{ glx_ucspi_tcp6_source_repository }}/{{ glx_ucspi_tcp6_source_name }}.{{ glx_ucspi_tcp6_source_extension }}"
+glx_ucspi_tcp6_source_dir: "/usr/src"
+
+# ucspi-ssl
+glx_ucspi_ssl_force_install: true
+glx_ucspi_ssl_source_repository: "https://raw.githubusercontent.com/aurelienmaury/galaxie/master/playbooks/roles/sqmail-server/files"
+#glx_ucspi_ssl_source_repository: "http://www.fehcom.de/ipnet/ucspi-ssl"
+glx_ucspi_ssl_source_name: "ucspi-ssl-0.95b"
+glx_ucspi_ssl_source_extension: "tgz"
+glx_ucspi_ssl_source_sha256sum: "9f3bcf66546b433b089f6f340d243065beb801b97d4026e54dd586f0022b5f1e"
+glx_ucspi_ssl_source_url: "{{ glx_ucspi_ssl_source_repository }}/{{ glx_ucspi_ssl_source_name }}.{{ glx_ucspi_ssl_source_extension }}"
+glx_ucspi_ssl_source_dir: "/usr/src"
+
+glx_ucspi_ssl_certificates_dir: "/etc/ssl/certs"
+glx_ucspi_ssl_dh_parameter_file: "{{ glx_ucspi_ssl_certificates_dir }}/dhparam.pem"
+glx_ucspi_ssl_kerberos_include_dir: "/usr/include/krb5"
+glx_ucspi_ssl_rsa_key_size: "1024"
+
+# s/qmail
+glx_sqmail_force_install: true
+glx_sqmail_source_repository: "https://raw.githubusercontent.com/aurelienmaury/galaxie/master/playbooks/roles/sqmail-server/files"
+#glx_sqmail_source_repository: "http://fehcom.de/sqmail"
+glx_sqmail_source_name: "sqmail-3.0.2"
+glx_sqmail_source_extension: "tgz"
+glx_sqmail_source_url: "{{ glx_sqmail_source_repository }}/{{ glx_sqmail_source_name }}.{{ glx_sqmail_source_extension }}"
+glx_sqmail_source_dir: "/usr/src"
+
+# users
+glx_sqmail_groups:
+  nofiles:
+    gname: "nofiles"
+    gid: "2108"
+    description: "sqmail group for auxiliar files"
+  sqmail:
+    gname: "sqmail"
+    gid: "2109"
+    description: "sqmail group for binary files"
+
+glx_sqmail_ids:
+  alias:
+    uname: "alias"
+    uid: "7790"
+    description: "sqmail Alias user"
+    group: "{{ glx_sqmail_groups.nofiles.gname }}"
+  qmaild:
+    uname: "qmaild"
+    uid: "7791"
+    description: "sqmail Daemon user"
+    group: "{{ glx_sqmail_groups.nofiles.gname }}"
+  qmaill:
+    uname: "qmaill"
+    uid: "7792"
+    description: "sqmail Log user"
+    group: "{{ glx_sqmail_groups.nofiles.gname }}"
+  qmailp:
+    uname: "qmailp"
+    uid: "7793"
+    description: "sqmail Password user"
+    group: "{{ glx_sqmail_groups.nofiles.gname }}"
+  qmailq:
+    uname: "qmailq"
+    uid: "7794"
+    description: "sqmail Queue user"
+    group: "{{ glx_sqmail_groups.sqmail.gname }}"
+  qmailr:
+    uname: "qmailr"
+    uid: "7795"
+    description: "sqmail Remote user"
+    group: "{{ glx_sqmail_groups.sqmail.gname }}"
+  qmails:
+    uname: "qmails"
+    uid: "7796"
+    description: "sqmail Send user"
+    group: "{{ glx_sqmail_groups.sqmail.gname }}"
+  sqmtls:
+    uname: "sqmtls"
+    uid: "7797"
+    description: "sqmail TLS user"
+    group: "{{ glx_sqmail_groups.nofiles.gname }}"
+
+# common setting
+glx_sqmail_service_scripts_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}/service"
+glx_sqmail_conf_thing_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+glx_sqmail_package_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}/package"
+
+# certificate
+glx_sqmail_openssl_use_self_signed_cert: true
+glx_sqmail_openssl_key_gen: true
+glx_sqmail_openssl_key_bit: "1024"
+glx_sqmail_openssl_key_days: "3650"
+glx_sqmail_openssl_cert_C: "FR"
+glx_sqmail_openssl_cert_ST: "Ile-de-France"
+glx_sqmail_openssl_cert_L: "Paris"
+glx_sqmail_openssl_cert_O: "Galaxie"
+glx_sqmail_openssl_cert_OU: "IT"
+glx_sqmail_openssl_cert_CN: "{{ ansible_hostname }}.{{ glx_sqmail_domain }}"
+glx_sqmail_openssl_subj: "/C={{ glx_sqmail_openssl_cert_C }}/ST={{ glx_sqmail_openssl_cert_ST }}/L={{ glx_sqmail_openssl_cert_L }}/O={{ glx_sqmail_openssl_cert_O }}/OU={{ glx_sqmail_openssl_cert_OU }}/CN={{ glx_sqmail_openssl_cert_CN }}"
+
+# Alias creation
+# http://www.qmail.org/man/man5/dot-qmail.html
+glx_sqmail_alias_admins_list:
+  - name: "root"
+    value:
+      - "root@{{ glx_sqmail_domain }}"
+  - name: "postmaster"
+    value:
+      - "root@{{ glx_sqmail_domain }}"
+  - name: "mailer-daemon"
+    value:
+      - "root@{{ glx_sqmail_domain }}"
+      
+glx_sqmail_alias_users_list:
+  - name: "lulu"
+    value:
+      - "lulu@galaxie.ici"
+  - name: "boris"
+    value:
+      - "boris@galaxie.ici"
+      - "lulu@galaxie.ici"
+

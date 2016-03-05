@@ -1,0 +1,36 @@
+---
+
+- name: Check desired packages
+  apt:
+    pkg="{{item}}"
+    state=present
+  with_items:
+    - bash-completion
+    - dnsutils
+    - htop
+    - git
+    - wget
+    - mc
+    - rsync
+    - sshfs
+    - screen
+    - minicom
+    - task-spooler
+    - cron
+    - findutils
+    - grc
+    - glances
+
+- name: Check undesired packages
+  apt:
+    pkg="{{item}}"
+    state=absent
+    purge=yes
+  with_items:
+    - ntpdate
+    - nfs-common
+    - nfs-kernel-server
+    - rpcbind
+    - emacs
+    - samba
+    - samba-co

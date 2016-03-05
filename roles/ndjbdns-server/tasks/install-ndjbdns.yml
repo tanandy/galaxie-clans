@@ -1,0 +1,75 @@
+---
+- name: delete previous {{ glx_ndjbdns_source_dir }} source directory
+  file:
+    path="{{ glx_ndjbdns_source_dir }}"
+    state=absent
+  when: glx_ndjbdns_force_install
+
+- name: check {{ glx_ndjbdns_source_dir }} directory
+  file:
+    path="{{ glx_ndjbdns_source_dir }}"
+    state=directory
+
+- name: install required software
+  action: apt pkg="{{item}}" state=installed
+  with_items:
+    - git
+    - checkinstall
+    - build-essential
+    - automake
+    - pkg-config
+    - rsyslog
+
+- name: get n-djbdns sources from {{ glx_ndjbdns_git_repo }} git repository
+  git:
+    repo="{{ glx_ndjbdns_git_repo }}"
+    dest="{{ glx_ndjbdns_source_dir }}"
+    update=yes
+
+- name: fixe https://github.com/pjps/ndjbdns/issues/14
+  shell: aclocal && autoconf && automake --add-missing
+    chdir="{{ glx_ndjbdns_source_dir }}"
+  changed_when: false
+
+- name: ./configure --prefix={{ glx_ndjbdns_prefix }} --sysconfdir={{ glx_ndjbdns_sysconfdir }}
+  shell: ./configure --prefix={{ glx_ndjbdns_prefix }} --sysconfdir={{ glx_ndjbdns_sysconfdir }}
+    chdir="{{ glx_ndjbdns_source_dir }}"
+  changed_when: false
+
+- name: make
+  shell: make
+    chdir="{{ glx_ndjbdns_source_dir }}"
+  changed_when: false
+
+- name: make install
+  shell: make install
+    chdir="{{ glx_ndjbdns_source_dir }}"
+  changed_when: false
+
+- name: copy services
+  shell: cp {{ item }} /lib/systemd/system/
+    chdir="{{ glx_ndjbdns_source_dir }}/etc/systemd"
+  with_items:
+    - "axfrdns@.service"
+    - "axfrdns.socket"
+    - "dnscache.service"
+    - "rbldns.service"
+    - "tinydns.service"
+    - "walldns.service"
+  changed_when: false
+
+- name: check /etc/rsyslog.d/20-ndjbdns.conf
+  template:
+    src=etc/rsyslog.d/20-ndjbdns.conf.j2
+    dest="/etc/rsyslog.d/20-ndjbdns.conf"
+    backup=no
+  notify:
+    - restart rsyslog
+
+- name: copy ndjbdns.logrotate to {{ glx_ndjbdns_sysconfdir }}/logrotate.d/ndjbdns
+  shell: cp ndjbdns.logrotate {{ glx_ndjbdns_sysconfdir }}/logrotate.d/ndjbdns
+    chdir="{{ glx_ndjbdns_source_dir }}"
+  changed_when: false
+
+- name: regen unit files
+  shell: systemctl daemon-reload

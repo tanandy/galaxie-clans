@@ -1,0 +1,98 @@
+- hosts: desktops
+
+  vars_files:
+    - "galaxie-vars.yml"
+
+  tasks:
+    - name: activate deb-multimedia jessie main non-free repository
+      apt_repository:
+        repo="{{ item }}"
+        state=present
+      with_items:
+        - deb http://www.deb-multimedia.org jessie main non-free
+      register: deb_multimedia_activated
+
+    - name: update apt
+      apt: update_cache=yes
+
+    - name: Install deb-multimedia-keyring
+      apt:
+        pkg=deb-multimedia-keyring
+        state=installed
+        force=yes
+
+    - name: update apt
+      apt: update_cache=yes
+
+    - name: Install desktop tools
+      apt:
+        pkg="{{item}}"
+        state=installed
+      with_items:
+        - alacarte
+        - dconf-tools
+        - gimp
+        - gimp-dds
+        - gimp-data-extras
+        - gimp-texturize
+        - gimp-data
+        - icedtea-7-plugin
+        - openjdk-7-jre
+        - libreoffice-l10n-fr
+        - libreoffice-help-fr
+        - libreoffice-draw
+        - libreoffice-calc
+        - libreoffice-writer
+        - libreoffice-gnome
+        - libreoffice-style-sifr
+        - hyphen-fr
+        - mythes-fr
+        - myspell-fr
+        - gimp-texturize
+        - gimp-dds
+        - flashplugin-nonfree
+        - handbrake-gtk
+        - handbrake-cli
+        - blender
+        - dia
+        - mkvtoolnix-gui
+        - qt4-qtconfig
+        - kodi
+        - kodi-pvr-tvheadend-hts
+        - stellarium
+        - inkscape
+
+# if aussi dans le groupe tvs :
+#        - xbmc
+#        - xbmc-pvr-tvheadend-hts
+# + config commune aux tvs
+# à faire à 2
+
+    - name: Remove not require software
+      apt:
+        pkg="{{item}}"
+        state=absent
+        purge=yes
+      with_items:
+        - orage
+        - abiword
+        - abiword-common
+        - abiword-plugin-grammar
+        - abiword-plugin-mathview
+        - gnumeric
+        - gnumeric-common
+        - gnumeric-doc
+        - gnumeric-plugins-extra
+        - imagemagick
+        - imagemagick-6.q16
+        - libreoffice-style-crystal
+        - libreoffice-style-galaxy
+        - libreoffice-style-hicontrast
+        - libreoffice-style-oxygen
+        - libreoffice-style-tango
+
+
+# s'assurer de l'absence d'autre implem de JRE
+
+
+

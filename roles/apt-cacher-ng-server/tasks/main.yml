@@ -1,0 +1,39 @@
+---
+### Configure apt-cacher-ng
+- name: Install packages apt-cacher-ng ed
+  apt:
+    pkg="{{item}}"
+    state=installed
+  with_items:
+    - apt-cacher-ng
+    - ed
+
+- name: Creat {{ galaxie_apt_cacher_ng_cache_dir }} directory
+  file:
+    path={{ galaxie_apt_cacher_ng_cache_dir }}
+    owner={{ galaxie_apt_cacher_ng_user }}
+    group={{ galaxie_apt_cacher_ng_group }}
+    state=directory
+    mode=0755
+
+- name: Write /etc/apt-cacher-ng/acng.conf
+  template:
+    src=acng.conf.j2
+    dest=/etc/apt-cacher-ng/acng.conf
+    backup=yes
+  notify:
+    - restart apt-cacher-ng
+
+### Configure Apt
+- name: write /etc/apt/apt.conf
+  template:
+    src=apt.conf.j2
+    dest=/etc/apt/apt.conf
+    backup=yes
+  when: inventory_hostname in groups["apt-cacher-ng-server"]
+  register: apt_config
+
+- name: update apt cache
+  apt:
+    update_cache=yes
+  when: apt_config.changed

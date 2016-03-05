@@ -1,0 +1,4 @@
+- hosts: galaxie
+
+  roles:
+    - apt-get-client

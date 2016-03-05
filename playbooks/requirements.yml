@@ -1,0 +1,5 @@
+---
+- src: git@github.com:aurelienmaury/galaxie.git/playbooks/roles/ntp_client
+  scm: git
+  version: 'master'
+  name: ntp_client

@@ -1,0 +1,5 @@
+---
+- hosts: openssh-server
+
+  roles:
+    - openssh-server

@@ -1,0 +1,24 @@
+- hosts: pvr-servers
+
+
+  tasks:
+    - name : Restart TVHeadEnd
+      service:
+        name=tvheadend
+        state=restarted
+
+#    - name: Restart HDHomeRun 1
+#      command: hdhomerun_config 11117BBD set /sys/restart self
+#
+#    - name: Restart HDHomeRun 2
+#      command: hdhomerun_config 12212EE6 set /sys/restart self
+
+    - name: Waiting 10 secondes
+      pause:
+        prompt="Wainting ..."
+        seconds=10
+
+    - name : Restart TVHeadEnd
+      service:
+        name=tvheadend
+        state=restarteed

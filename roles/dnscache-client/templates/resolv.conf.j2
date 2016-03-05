@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+{% if galaxie_dnscache_client_set_domain  %}
+{% if galaxie_dnscache_client_domain %}
+domain {{galaxie_dnscache_client_domain}}
+{% endif %}
+{% endif %}
+{% if galaxie_dnscache_client_set_nameservers %}
+{% if ResolverCheck.rc == 0 %}
+{% for dnsserver in galaxie_dnscache_client_dns_nameservers %}
+nameserver {{dnsserver}}
+{% endfor %}
+{% endif %}
+{% if ResolverCheck.rc != 0 %}
+{{ galaxie_dnscache_client_default_nameservers_description }}
+{% for dnsserver in galaxie_dnscache_client_default_nameservers %}
+nameserver {{dnsserver}}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if galaxie_dnscache_client_set_searchs %}
+search {% for suffix in galaxie_dnscache_client_dns_searchs %}{{suffix}} {% endfor %}
+{% endif %}

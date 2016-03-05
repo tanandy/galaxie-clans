@@ -1,0 +1,9 @@
+{% if "amd64" in DEB_BUILD_ARCH.stdout %}gcc -s -m64
+
+This is for AMD64 architecture; use else:
+{% endif %}
+gcc -s
+
+This will be used to link .o files into an executable.
+
+Note: UCSPI-SSL's conf-ld needs to use the same architecture!

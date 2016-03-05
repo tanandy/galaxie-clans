@@ -1,0 +1,7 @@
+---
+#YES!!! apt-cacher-ng use 127.0.1.1 as default and not 127.0.0.1
+galaxie_apt_cacher_ng_server_self: 127.0.1.1
+galaxie_apt_cacher_ng_port: 9999
+galaxie_apt_cacher_ng_cache_dir: /var/cache/apt-cacher-ng
+galaxie_apt_cacher_ng_user: apt-cacher-ng
+galaxie_apt_cacher_ng_group: apt-cacher-ng

@@ -1,0 +1,20 @@
+- hosts: tftp-servers
+
+  vars_files:
+    - "galaxie-vars.yml"
+
+  tasks:
+
+    - name: Install tftpd-hpa
+      action: apt pkg="{{item}}" state=installed
+      with_items:
+        - tftpd-hpa
+
+    - name: Remove previus TFTP services version
+      apt:
+        pkg="{{item}}"
+        state=absent
+        purge=yes
+      with_items:
+        - atftpd
+        - tftpd
