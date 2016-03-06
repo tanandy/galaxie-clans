@@ -45,7 +45,7 @@
     - "{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}"
 
 - name: copy files to "{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}"
-  shell: cp -R {{ glx_pycharm_professional_cache_dir }}/{{ glx_pycharm_professional_name }}-{{ glx_pycharm_professional_version }}/* {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}
+  shell: cp -dr --no-preserve=ownership  {{ glx_pycharm_professional_cache_dir }}/pycharm-{{ glx_pycharm_professional_version }}/* {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}
 
 # delete some conflicts files for i686
 - name: delete {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/libyjpagent-linux64.so
