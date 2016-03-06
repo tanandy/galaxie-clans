@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
+
+# refreshzones  refresh tinydns zone files over ssh
+# (c) Jérôme Ornech <tuux@rtnp.org>
+#
+#   This package is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
 #
 # https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
 #
 # $Id: refreshzones 28 2008-05-04 15:08:08Z greg $
 #
 # A script to support multiple primary and secondary
-# domains. This works with a standard TinyDNS directory
+# domains. This works with a standard "ndjbdns" directory
 # structure. Any exisiting  'data' file MUST be moved
 # into the primary.d directory (or it will be lost).
 #
@@ -14,8 +22,8 @@
 # must be manually edited.
 #
 # Domains for which the TinyDNS server will act as a
-# secondary via AXFR, will automatically be transfered
-# into the secondary.d directory.
+# secondary, should be automatically be transfered
+# into the secondary.d directory by a other server via ssh.
 #
 # Prior to performing any zone transfers, the script will query the master
 # nameserver for the zone for a serial (from the SOA record). If the serial
@@ -49,13 +57,7 @@
 # see http://cr.yp.to/djbdns/tinydns-data.html
 
 #
-# Configure the zones here, or on the command line
-#
-SECONDARY_ZONES=""
-
-#
-# My DNS server to query. This is the server that we query prior to performing
-# a zone transfer to check if we have the current zone data.
+# My DNS server use during verbose mode
 #
 ME=
 
@@ -73,16 +75,14 @@ set -e
 #
 while [ "$1" != "${1##-}" ] ; do # loop over options
     case $1 in
-        -v)
+       -v|--version)
+                echo "refreshzone v0.2 by Galaxie "
+                exit 1;
+        ;;
+        --verbose)
                 VERBOSE=yes
         ;;
-
-        --zones)
-                shift
-                SECONDARY_ZONES="$1"
-        ;;
-
-        --server)
+        -n|--name)
                 shift
                 ME="$1"
         ;;
@@ -92,8 +92,28 @@ while [ "$1" != "${1##-}" ] ; do # loop over options
                 TINYDNS_DIR="$1"
         ;;
 
-        -h)
-                echo "Usage: $0 [-v] [-h] [--zones domain,primary:domain,primary:...] [--server hostname] [--tinydnsdir dir]"
+        --primarydir)
+                shift
+                TINYDNS_ZONES_PRIMARY_DIR="$1"
+        ;;
+
+        --secondarydir)
+                shift
+                TINYDNS_ZONES_SECONDARY_DIR="$1"
+        ;;
+
+        -h|--help)
+                cat <<-EOF
+Usage: $0 [-v] [--help] [--name hostname] [--tinydnsdir dir] [--primarydir dir] [--secondarydir dir] [--verbose]"
+Info :
+    -v --version   : print the script version
+    -h --help      : display it message
+    -n --name      : display a other name as IP during --verbose usage
+    --tinydnsdir   : tinydns root dir , where is store data and data.cdb
+    --primarydir   : directory where store primary servers zone files
+    --secondarydir : directory where store secondary servers zone files
+    --verbose      : display output messages if not nothing is display on the output
+EOF
                 exit 1;
         ;;
 
@@ -138,26 +158,21 @@ if [ ! -n "${ME}" ] ; then
 fi
 [ -n "$VERBOSE" ] && echo "Using TinyDNS server ${ME}"
 
-#if [ ! -n "${SECONDARY_ZONES}" ] ; then
-#  echo "No secondary zones defined"
-#  #exit 1;
-#fi
-
 #
 # Create directories (if they don't exist) to store primary
 # and secondary dns zone data.
 #
-[ -d "${TINYDNS_DIR}/zones/primary.d"   ] || mkdir -p "${TINYDNS_DIR}/zones/primary.d"
-[ -d "${TINYDNS_DIR}/zones/secondary.d" ] || mkdir -p "${TINYDNS_DIR}/zones/secondary.d"
+[ -d "$TINYDNS_ZONES_PRIMARY_DIR"   ] || mkdir -p "$TINYDNS_ZONES_PRIMARY_DIR"
+[ -d "$TINYDNS_ZONES_SECONDARY_DIR" ] || mkdir -p "$TINYDNS_ZONES_SECONDARY_DIR"
 
 #
 # Concatenate all the primary and secondary zone files together
 # add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
 rm -f "${TINYDNS_DIR}/.data.tmp"
-if [ $(ls -1A ${TINYDNS_DIR}/zones/primary.d/ | wc -l) -gt 0 ] ; then
+if [ $(ls -1A $TINYDNS_ZONES_PRIMARY_DIR/ | wc -l) -gt 0 ] ; then
     echo "# Primary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
-    for PRIMARY in "${TINYDNS_DIR}/zones/primary.d"/*.data ; do
+    for PRIMARY in "$TINYDNS_ZONES_PRIMARY_DIR"/*.data ; do
         # Generate serial
         STAMP="`ls  --time-style=+%s -G  -o -g  $PRIMARY | awk '{ print $4 }'`"
         [ -n "$VERBOSE" ] && echo "  ${PRIMARY} serial ${STAMP}"
@@ -170,9 +185,9 @@ else
 fi
 ### add secondary file zone
 [ -n "$VERBOSE" ] && echo "Secondary zones:"
-if [ $(ls -1A ${TINYDNS_DIR}/zones/secondary.d/ | wc -l) -gt 0 ] ; then
+if [ $(ls -1A $TINYDNS_ZONES_SECONDARY_DIR/ | wc -l) -gt 0 ] ; then
     echo "# Secondary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
-    for file in ${TINYDNS_DIR}/zones/secondary.d/*.data ; do
+    for file in "$TINYDNS_ZONES_SECONDARY_DIR"/*.data ; do
         [ -n "$VERBOSE" ] && echo "  $file"
         echo "# $file" >> "${TINYDNS_DIR}/.data.tmp"
 	    cat "$file" >> "${TINYDNS_DIR}/.data.tmp"

@@ -4,13 +4,13 @@ data.cdb: data
 {% if glx_domain_list %}
 remote: data
 		@echo "*** Refresh local zone files"
-		refreshzones -v
+		refreshzones --verbose
 {% for domain in glx_domain_list %}
 {% for seconday_server in domain.secondary %}
 		@echo "*** Transfert {{ domain.name }} zone file"
 		scp -i /root/.ssh/{{ domain.priv_key_name }} {{ glx_tinydns_primary_directory }}/{{ domain.name }}.data.tosend {{ galaxie_ansible_user }}@{{ seconday_server }}:{{ domain.name }}.data.tmp
 		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo mv {{ domain.name }}.data.tmp {{ glx_tinydns_secondary_directory }}/{{ domain.name }}.data
-		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo refreshzones -v
+		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo refreshzones --verbose
 {% endfor %}
 {% endfor %}
 {% endif %}
