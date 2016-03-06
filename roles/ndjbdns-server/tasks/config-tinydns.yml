@@ -24,3 +24,48 @@
     - { key: "GID",           value: "{{ daemon_gid.stdout }}" }
     - { key: "ROOT",          value: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns" }
     - { key: "DEBUG_LEVEL",   value: "1" }
+
+# [inspired_by] https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
+- name: check for require directory in to {{ glx_ndjbdns_sysconfdir }}/ndjbdns directory
+  file:
+    path="{{ item }}"
+    owner=root
+    group=root
+    state=directory
+    mode=0755
+  with_items:
+    - "{{ glx_ndjbdns_sysconfdir }}/ndjbdns"
+    - "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/primary.d"
+    - "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/secondary.d"
+
+#- name: test zones file
+#  stat:
+#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
+#  register: send
+#  with_items: glx_ndjbdns_tinydns_service.managed_domain
+#
+#- name: remove previus  data's files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/
+#  file:
+#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
+#    state=absent
+#  with_items:
+#    - "data"
+#    - "data.cdb"
+#    - "data.tmp"
+#
+#- name: assemble zone files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/data
+#  assemble:
+#    src="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#    dest="{{ glx_ndjbdns_tinydns_service.zones_dir }}/data"
+#
+#- name: generate data.cdb file
+#  shell: tinydns-data
+#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#  register: tinydns_data
+#  changed_when: false
+#
+#- name: move data* file to {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
+#  shell: mv data* {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
+#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#  changed_when: false
+#  when: tinydns_data|success

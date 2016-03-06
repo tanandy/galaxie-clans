@@ -1,0 +1,5 @@
+---
+- hosts: dns-resolver
+
+  roles:
+    - dns-resolver

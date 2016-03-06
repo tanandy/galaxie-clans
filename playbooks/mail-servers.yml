@@ -1,5 +1,5 @@
 ---
-- hosts: sqmail-servers
+- hosts: mail-servers
 
   roles:
      - sqmail-server

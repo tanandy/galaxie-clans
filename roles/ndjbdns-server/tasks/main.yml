@@ -12,4 +12,4 @@
 
 - include: config-tinydns.yml
   tags: config, config-tinydns
-  when: not glx_ndjbdns_upgrade_roots
+#  when: not glx_ndjbdns_upgrade_roots
