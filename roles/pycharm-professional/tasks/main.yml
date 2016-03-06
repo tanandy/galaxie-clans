@@ -1,5 +1,5 @@
 ---
-# inspirate by: https://github.com/archlinuxcn/repo/blob/master/pycharm-professional/PKGBUILD
+# [inspired_by] https://github.com/archlinuxcn/repo/blob/master/pycharm-professional/PKGBUILD
 - name: check directorys
   file:
     path="{{item}}"
