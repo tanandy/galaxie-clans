@@ -66,6 +66,12 @@
   notify:
     - restart rsyslog
 
+- name: check {{ glx_ndjbdns_sysconfdir }}/ndjbdns/Makefile
+  template:
+    src=Makefile.j2
+    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/Makefile"
+    backup=no
+
 - name: copy ndjbdns.logrotate to {{ glx_ndjbdns_sysconfdir }}/logrotate.d/ndjbdns
   shell: cp ndjbdns.logrotate {{ glx_ndjbdns_sysconfdir }}/logrotate.d/ndjbdns
     chdir="{{ glx_ndjbdns_source_dir }}"

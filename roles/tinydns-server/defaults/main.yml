@@ -1,8 +1,8 @@
 ---
-tinydns:
-  service_name: tinydns
-  dnslog_user: dnslog
-  multilog_user: multilog
-  supervise_dir: /var/lib/supervise
-  multilog_dir: /var/multilog
-  interface: 127.0.0.1
+glx_ndjbdns_source_dir: "/usr/src/ndjbdns"
+glx_ndjbdns_prefix: "/usr/local"
+glx_ndjbdns_sysconfdir: "/etc"
+
+glx_tinydns_root_directory: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns"
+glx_tinydns_primary_directory: "{{ glx_tinydns_root_directory }}/primary.d"
+glx_tinydns_secondary_directory: "{{ glx_tinydns_root_directory }}/secondary.d"
