@@ -54,12 +54,11 @@
 #
 #  e.g. 'Zdomain.com:a.ns.domain.com.:hostmaster.domain.com.::::::'
 #
-# see http://cr.yp.to/djbdns/tinydns-data.html
-
+# see https://cr.yp.to/djbdns/tinydns-data.html
 #
-# My DNS server use during verbose mode
+# The Makefile is supposate to deal with ssh
+# see https://cr.yp.to/djbdns/run-server-bind.html
 #
-ME=
 
 #
 # The location of the TinyDNS service.
@@ -76,15 +75,11 @@ set -e
 while [ "$1" != "${1##-}" ] ; do # loop over options
     case $1 in
        -v|--version)
-                echo "refreshzone v0.2 by Galaxie "
+                echo "refreshzone v0.3 by Galaxie "
                 exit 1;
         ;;
         --verbose)
                 VERBOSE=yes
-        ;;
-        -n|--name)
-                shift
-                ME="$1"
         ;;
 
         --tinydnsdir)
@@ -104,11 +99,10 @@ while [ "$1" != "${1##-}" ] ; do # loop over options
 
         -h|--help)
                 cat <<-EOF
-Usage: $0 [-v] [--help] [--name hostname] [--tinydnsdir dir] [--primarydir dir] [--secondarydir dir] [--verbose]"
+Usage: $0 [-v] [--help] [--tinydnsdir dir] [--primarydir dir] [--secondarydir dir] [--verbose]"
 Info :
     -v --version   : print the script version
     -h --help      : display it message
-    -n --name      : display a other name as IP during --verbose usage
     --tinydnsdir   : tinydns root dir , where is store data and data.cdb
     --primarydir   : directory where store primary servers zone files
     --secondarydir : directory where store secondary servers zone files
@@ -134,29 +128,11 @@ if [ ! -d "${TINYDNS_DIR}" ] ; then
     echo "Tiny DNS directory ${TINYDNS_DIR} not found"
     exit 1;
 fi
-[ -n "$VERBOSE" ] && echo "Using TinyDNS directory ${TINYDNS_DIR}"
 
 if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
     echo "Makefile not present in the TinyDNS directory ${TINYDNS_DIR}"
     exit 1;
 fi
-
-# If 'my' server isn't set, then take the first non-comment, non-blank line
-# from the IP file as the address of 'my' server.
-if [ ! -n "${ME}" ] ; then
-    if [ ! -f "${TINYDNS_DIR}/tinydns.conf" ] ; then
-        echo "TinyDNS config file tinydns.conf is not present in the directory ${TINYDNS_DIR}"
-    else
-        #ME="`egrep --invert-match '^ *(#|$)' ${TINYDNS_DIR}/env/IP | head -n 1`"
-        ME="`egrep "^IP=" ${TINYDNS_DIR}/tinydns.conf | cut -d'=' -f2-`"
-    fi
-fi
-
-if [ ! -n "${ME}" ] ; then
-    echo "The address of this name server is not defined"
-    exit 1;
-fi
-[ -n "$VERBOSE" ] && echo "Using TinyDNS server ${ME}"
 
 #
 # Create directories (if they don't exist) to store primary
@@ -212,5 +188,3 @@ if [ ! -f "${TINYDNS_DIR}/data" ] || \
 else
     [ -n "$VERBOSE" ] && echo "No changes to zone data"
 fi
-
-[ -n "$VERBOSE" ] && echo "Done"

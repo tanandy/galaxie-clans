@@ -10,6 +10,7 @@ remote: data
 		@echo "*** Transfert {{ domain.name }} zone file"
 		scp -i /root/.ssh/{{ domain.priv_key_name }} {{ glx_tinydns_primary_directory }}/{{ domain.name }}.data.tosend {{ galaxie_ansible_user }}@{{ seconday_server }}:{{ domain.name }}.data.tmp
 		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo mv {{ domain.name }}.data.tmp {{ glx_tinydns_secondary_directory }}/{{ domain.name }}.data
+		@echo "*** Refresh {{ domain.name }} zone files"
 		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo refreshzones --verbose
 {% endfor %}
 {% endfor %}
