@@ -1,0 +1,24 @@
+- name: check daemon uid
+  shell: id -u daemon
+  register: daemon_uid
+  changed_when: false
+
+- name: check daemon gid
+  shell: id -g daemon
+  register: daemon_gid
+  changed_when: false
+
+- name: check if axfrdns is configured the good way
+  lineinfile:
+    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/axfrdns.conf"
+    regexp="^{{ item.key }}="
+    line="{{ item.key }}={{ item.value }}"
+    insertafter="{{ item.key }}="
+    state=present
+    backup=no
+  with_items:
+    - { key: "AXF",           value: "{{ glx_axfdns_axfr }}" }
+    - { key: "UID",           value: "{{ daemon_uid.stdout }}" }
+    - { key: "GID",           value: "{{ daemon_gid.stdout }}" }
+    - { key: "ROOT",          value: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns" }
+    - { key: "DEBUG_LEVEL",   value: "1" }

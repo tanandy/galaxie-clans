@@ -32,6 +32,8 @@ glx_ndjbdns_walldns_service:
   enable: false
   name: "walldns"
 
+glx_axfdns_axfr: ""
+
 ### Clean previus design Debian dnscache ###
 glx_supervise_dir: "/var/lib/supervise"
 glx_service_dir: "/etc/service"

@@ -1,0 +1,109 @@
+---
+# [inspired_by] https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
+# [inspired_by] https://en.internetwache.org/scanning-alexas-top-1m-for-axfr-29-03-2015/
+- name: check daemon uid
+  shell: id -u daemon
+  register: daemon_uid
+  changed_when: false
+
+- name: check daemon gid
+  shell: id -g daemon
+  register: daemon_gid
+  changed_when: false
+
+- name: check if tinydns is configured the good way
+  lineinfile:
+    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/tinydns.conf"
+    regexp="^{{ item.key }}="
+    line="{{ item.key }}={{ item.value }}"
+    insertafter="{{ item.key }}="
+    state=present
+    backup=no
+  with_items:
+    - { key: "DATALIMIT",     value: "300000" }
+    - { key: "IP",            value: "{{ ansible_default_ipv4.address }}" }
+    - { key: "UID",           value: "{{ daemon_uid.stdout }}" }
+    - { key: "GID",           value: "{{ daemon_gid.stdout }}" }
+    - { key: "ROOT",          value: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns" }
+    - { key: "DEBUG_LEVEL",   value: "1" }
+
+- name: check for require directory in to {{ glx_ndjbdns_sysconfdir }}/ndjbdns directory
+  file:
+    path="{{ item }}"
+    owner=root
+    group=root
+    state=directory
+    mode=0755
+  with_items:
+    - "{{ glx_tinydns_root_directory }}"
+    - "{{ glx_tinydns_zones_directory }}"
+    - "{{ glx_tinydns_primary_directory }}"
+    - "{{ glx_tinydns_secondary_directory }}"
+
+- name: check {{ glx_ndjbdns_sysconfdir }}/ndjbdns/Makefile
+  template:
+    src=Makefile.j2
+    dest="{{ glx_tinydns_root_directory }}/Makefile"
+    backup=no
+
+- name: check {{ glx_ndjbdns_prefix }}/bin/refreshzones
+  template:
+    src=refreshzones.sh
+    dest="{{ glx_ndjbdns_prefix }}/bin/refreshzones"
+    mode=0755
+    backup=no
+
+- name: check /root/.ssh
+  file:
+    path="/root/.ssh"
+    owner="root"
+    group="root"
+    state=directory
+    mode=0700
+
+- name: check /root/.ssh/{{ item.priv_key_name }}
+  copy:
+    src="../keys/{{ item.priv_key_name }}"
+    dest="/root/.ssh/{{ item.priv_key_name }}"
+    owner="root"
+    group="root"
+    mode="0600"
+    backup=no
+  with_items: glx_domain_list
+  ignore_errors: true
+
+#- name: send ssh key for zones transfert
+#  file:
+#    source="{{ ansible_ssh_private_key_file }}"
+#    target="/root/.ssh/id_rsa.{{ ansible_hostname }}"
+#- name: test zones file
+#  stat:
+#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
+#  register: send
+#  with_items: glx_ndjbdns_tinydns_service.managed_domain
+#
+#- name: remove previus  data's files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/
+#  file:
+#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
+#    state=absent
+#  with_items:
+#    - "data"
+#    - "data.cdb"
+#    - "data.tmp"
+#
+#- name: assemble zone files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/data
+#  assemble:
+#    src="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#    dest="{{ glx_ndjbdns_tinydns_service.zones_dir }}/data"
+#
+#- name: generate data.cdb file
+#  shell: tinydns-data
+#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#  register: tinydns_data
+#  changed_when: false
+#
+#- name: move data* file to {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
+#  shell: mv data* {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
+#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
+#  changed_when: false
+#  when: tinydns_data|success
