@@ -8,31 +8,31 @@
     state=directory
     mode=0755
   with_items:
-    - "{{ galaxie_pycharm_community_cache_dir }}"
-    - "{{ galaxie_pycharm_community_opt_dir }}"
+    - "{{ glx_pycharm_community_cache_dir }}"
+    - "{{ glx_pycharm_community_opt_dir }}"
 
-- name: download {{ galaxie_pycharm_community_source }}
+- name: download {{ glx_pycharm_community_source }}
   get_url:
-    url="{{ galaxie_pycharm_community_source }}"
-    dest="{{ galaxie_pycharm_community_cache_dir }}/{{ galaxie_pycharm_community_name }}-{{ galaxie_pycharm_community_version }}.tar.gz"
+    url="{{ glx_pycharm_community_source }}"
+    dest="{{ glx_pycharm_community_cache_dir }}/{{ glx_pycharm_community_name }}-{{ glx_pycharm_community_version }}.tar.gz"
     validate_certs=False
-  when: galaxie_pycharm_community_source
-  register: galaxie_pycharm_community_download
+  when: glx_pycharm_community_source
+  register: glx_pycharm_community_download
 
-- debug: msg="{{ galaxie_pycharm_community_download }}"
+- debug: msg="{{ glx_pycharm_community_download }}"
 
-- name: delete {{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}
+- name: delete {{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}
   file:
-    path={{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}
+    path={{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}
     state=absent
-  #when: galaxie_pycharm_community_download.changed
+  #when: glx_pycharm_community_download.changed
 
-- name: unarchive {{ galaxie_pycharm_community_download.dest }}
+- name: unarchive {{ glx_pycharm_community_download.dest }}
   unarchive:
-    src="{{ galaxie_pycharm_community_download.dest }}"
-    dest="{{ galaxie_pycharm_community_cache_dir }}"
+    src="{{ glx_pycharm_community_download.dest }}"
+    dest="{{ glx_pycharm_community_cache_dir }}"
     copy=no
-  #when: galaxie_pycharm_community_download.changed
+  #when: glx_pycharm_community_download.changed
 
 - name: check directorys
   file:
@@ -42,26 +42,26 @@
     state=directory
     mode=0755
   with_items:
-    - "{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}"
+    - "{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}"
 
-- name: copy files to "{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}"
-  shell: cp -R {{ galaxie_pycharm_community_cache_dir }}/{{ galaxie_pycharm_community_name }}-{{ galaxie_pycharm_community_version }}/* {{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}
+- name: copy files to "{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}"
+  shell: cp -R {{ glx_pycharm_community_cache_dir }}/{{ glx_pycharm_community_name }}-{{ glx_pycharm_community_version }}/* {{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}
 
-- name: delete {{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/libyjpagent-linux64.so
+- name: delete {{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/libyjpagent-linux64.so
   file:
-    path="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/libyjpagent-linux64.so"
+    path="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/libyjpagent-linux64.so"
     state=absent
   when: not ansible_architecture == "x86_64"
 
-- name: delete {{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/fsnotifier64
+- name: delete {{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/fsnotifier64
   file:
-    path="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/fsnotifier64"
+    path="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/fsnotifier64"
     state=absent
   when: not ansible_architecture == "x86_64"
 
 - name: check "-Dawt.useSystemAAFontSettings=on" option inside pycharm.vmoptions file
   lineinfile:
-    dest="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/pycharm.vmoptions"
+    dest="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/pycharm.vmoptions"
     state=present
     regexp="^-Dawt.useSystemAAFontSettings"
     line="-Dawt.useSystemAAFontSettings=on"
@@ -69,7 +69,7 @@
 
 - name: check "-Dswing.aatext=true" option inside pycharm.vmoptions file
   lineinfile:
-    dest="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/pycharm.vmoptions"
+    dest="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/pycharm.vmoptions"
     state=present
     regexp="^-Dswing.aatext="
     line="-Dswing.aatext=true"
@@ -77,7 +77,7 @@
 
 - name: check "-Dawt.useSystemAAFontSettings=on" option inside pycharm64.vmoptions file
   lineinfile:
-    dest="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/pycharm64.vmoptions"
+    dest="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/pycharm64.vmoptions"
     state=present
     regexp="^-Dawt.useSystemAAFontSettings"
     line="-Dawt.useSystemAAFontSettings=on"
@@ -85,7 +85,7 @@
 
 - name: check "-Dswing.aatext=true" option inside pycharm64.vmoptions file
   lineinfile:
-    dest="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/pycharm64.vmoptions"
+    dest="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/pycharm64.vmoptions"
     state=present
     regexp="^-Dswing.aatext="
     line="-Dswing.aatext=true"
@@ -93,12 +93,12 @@
 
 - name: create symbolic link
   file:
-    src="{{ galaxie_pycharm_community_opt_dir }}/{{ galaxie_pycharm_community_name }}/bin/pycharm.sh"
+    src="{{ glx_pycharm_community_opt_dir }}/{{ glx_pycharm_community_name }}/bin/pycharm.sh"
     dest=/usr/bin/pycharm
     state=link
 
-- name: creat /usr/share/applications/{{ galaxie_pycharm_community_name }}.desktop is ok
+- name: creat /usr/share/applications/{{ glx_pycharm_community_name }}.desktop is ok
   template:
-    src=templates/{{ galaxie_pycharm_community_name }}.desktop.j2
-    dest=/usr/share/applications/{{ galaxie_pycharm_community_name }}.desktop
+    src=templates/{{ glx_pycharm_community_name }}.desktop.j2
+    dest=/usr/share/applications/{{ glx_pycharm_community_name }}.desktop
     backup=no

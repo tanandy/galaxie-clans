@@ -1,4 +1,4 @@
-- hosts: desktops
+- hosts: pycharm-community
 
   roles:
     - pycharm-community

@@ -1,0 +1,108 @@
+---
+# inspirate by: https://github.com/archlinuxcn/repo/blob/master/pycharm-professional/PKGBUILD
+- name: check directorys
+  file:
+    path="{{item}}"
+    owner=root
+    group=root
+    state=directory
+    mode=0755
+  with_items:
+    - "{{ glx_pycharm_professional_cache_dir }}"
+    - "{{ glx_pycharm_professional_opt_dir }}"
+
+- name: download {{ glx_pycharm_professional_source }}
+  get_url:
+    url="{{ glx_pycharm_professional_source }}"
+    dest="{{ glx_pycharm_professional_cache_dir }}/{{ glx_pycharm_professional_name }}-{{ glx_pycharm_professional_version }}.tar.gz"
+    validate_certs=False
+  when: glx_pycharm_professional_source
+  register: glx_pycharm_professional_download
+
+- debug: msg="{{ glx_pycharm_professional_download }}"
+
+- name: delete {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}
+  file:
+    path={{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}
+    state=absent
+  #when: glx_pycharm_professional_download.changed
+
+- name: unarchive {{ glx_pycharm_professional_download.dest }}
+  unarchive:
+    src="{{ glx_pycharm_professional_download.dest }}"
+    dest="{{ glx_pycharm_professional_cache_dir }}"
+    copy=no
+  #when: glx_pycharm_professional_download.changed
+
+- name: check directorys
+  file:
+    path="{{item}}"
+    owner=root
+    group=root
+    state=directory
+    mode=0755
+  with_items:
+    - "{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}"
+
+- name: copy files to "{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}"
+  shell: cp -R {{ glx_pycharm_professional_cache_dir }}/{{ glx_pycharm_professional_name }}-{{ glx_pycharm_professional_version }}/* {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}
+
+# delete some conflicts files for i686
+- name: delete {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/libyjpagent-linux64.so
+  file:
+    path="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/libyjpagent-linux64.so"
+    state=absent
+  when: not ansible_architecture == "x86_64"
+
+# delete some conflicts files for i686
+- name: delete {{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/fsnotifier64
+  file:
+    path="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/fsnotifier64"
+    state=absent
+  when: not ansible_architecture == "x86_64"
+
+# enable anti-aliasing text in pycharm options for i686
+#- name: check "-Dawt.useSystemAAFontSettings=on" option inside pycharm.vmoptions file
+#  lineinfile:
+#    dest="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/pycharm.vmoptions"
+#    state=present
+#    regexp="^-Dawt.useSystemAAFontSettings"
+#    line="-Dawt.useSystemAAFontSettings=on"
+#  when: not ansible_architecture == "x86_64"
+
+- name: check "-Dswing.aatext=true" option inside pycharm.vmoptions file
+  lineinfile:
+    dest="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/pycharm.vmoptions"
+    state=present
+    regexp="^-Dswing.aatext="
+    line="-Dswing.aatext=true"
+  when: not ansible_architecture == "x86_64"
+
+# enable anti-aliasing text in pycharm options for x86_64
+#- name: check "-Dawt.useSystemAAFontSettings=on" option inside pycharm64.vmoptions file
+#  lineinfile:
+#    dest="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/pycharm64.vmoptions"
+#    state=present
+#    regexp="^-Dawt.useSystemAAFontSettings"
+#    line="-Dawt.useSystemAAFontSettings=on"
+#  when: ansible_architecture == "x86_64"
+
+- name: check "-Dswing.aatext=true" option inside pycharm64.vmoptions file
+  lineinfile:
+    dest="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/pycharm64.vmoptions"
+    state=present
+    regexp="^-Dswing.aatext="
+    line="-Dswing.aatext=true"
+  when: ansible_architecture == "x86_64"
+
+- name: create symbolic link
+  file:
+    src="{{ glx_pycharm_professional_opt_dir }}/{{ glx_pycharm_professional_name }}/bin/pycharm.sh"
+    dest=/usr/bin/pycharm
+    state=link
+
+- name: creat /usr/share/applications/{{ glx_pycharm_professional_name }}.desktop is ok
+  template:
+    src=templates/{{ glx_pycharm_professional_name }}.desktop.j2
+    dest=/usr/share/applications/{{ glx_pycharm_professional_name }}.desktop
+    backup=no
