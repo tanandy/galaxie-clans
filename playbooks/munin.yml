@@ -1,4 +1,4 @@
 - hosts: web-servers
 
   roles:
-    - apache-server
+    - munin

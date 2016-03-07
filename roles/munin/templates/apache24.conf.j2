@@ -1,0 +1,28 @@
+Alias /munin /var/cache/munin/www
+<Directory /var/cache/munin/www>
+        AuthType Digest
+        AuthName "Munin"
+        AuthDigestDomain /var/cache/munin/www/ {{ glx_munin_host_url }}/munin
+        AuthUserFile /etc/munin/munin-htpasswd
+        AuthDigestProvider file
+        Require valid-user
+        SetEnv R_ENV "/var/cache/munin/www"
+        Options None
+</Directory>
+
+ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
+<Location /munin-cgi/munin-cgi-graph>
+        AuthType Digest
+        AuthName "Munin"
+        AuthDigestDomain /usr/lib/munin/cgi/munin-cgi-graph/ {{ glx_munin_host_url }}/munin-cgi/munin-cgi-graph
+        AuthUserFile /etc/munin/munin-htpasswd
+        AuthDigestProvider file
+        Require valid-user
+        SetEnv R_ENV "/usr/lib/munin/cgi/munin-cgi-graph"
+    <IfModule mod_fcgid.c>
+        SetHandler fcgid-script
+    </IfModule>
+        <IfModule !mod_fcgid.c>
+            SetHandler cgi-script
+        </IfModule>
+</Location>

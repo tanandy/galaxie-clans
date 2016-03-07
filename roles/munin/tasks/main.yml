@@ -1,0 +1,166 @@
+---
+# [inspired_by] https://www.howtoforge.com/tutorial/server-monitoring-with-munin-and-monit-on-debian/
+
+- name: install Munin
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - munin
+    - munin-node
+    - munin-plugins-extra
+  notify:
+    - restart munin-node
+
+- name: enable few extra Munin plugins to monitor MySQL
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    state=link
+    force=yes
+  with_items:
+    - { src: '/usr/share/munin/plugins/mysql_', dest: '/etc/munin/plugins/mysql_' }
+    - { src: '/usr/share/munin/plugins/mysql_bytes', dest: '/etc/munin/plugins/mysql_bytes' }
+    - { src: '/usr/share/munin/plugins/mysql_innodb', dest: '/etc/munin/plugins/mysql_innodb' }
+    - { src: '/usr/share/munin/plugins/mysql_isam_space_', dest: '/etc/munin/plugins/mysql_isam_space_' }
+    - { src: '/usr/share/munin/plugins/mysql_queries', dest: '/etc/munin/plugins/mysql_queries' }
+    - { src: '/usr/share/munin/plugins/mysql_slowqueries', dest: '/etc/munin/plugins/mysql_slowqueries' }
+    - { src: '/usr/share/munin/plugins/mysql_threads', dest: '/etc/munin/plugins/mysql_threads' }
+  notify:
+    - restart munin-node
+
+- name: set dbdir /var/lib/munin
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\# dbdir\t[^\n]*\n+|^\#dbdir\t[^\n]*\n|^dbdir\t[^\n]*\n'
+    replace='dbdir\t/var/lib/munin\n'
+  notify:
+    - restart munin-node
+
+- name: check dbdir /var/lib/munin
+  lineinfile:
+    dest="/etc/munin/munin.conf"
+    line='dbdir\t/var/lib/munin'
+    state=present
+  notify:
+    - restart munin-node
+
+- name: set htmldir /var/cache/munin/www
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\# htmldir [^\n]*\n+|^\#htmldir [^\n]*\n|^htmldir [^\n]*\n'
+    replace='htmldir /var/cache/munin/www\n'
+  notify:
+    - restart munin-node
+
+- name: check htmldir /var/cache/munin/www
+  lineinfile:
+    dest="/etc/munin/munin.conf"
+    line='htmldir /var/cache/munin/www'
+    state=present
+  notify:
+    - restart munin-node
+
+- name: set logdir /var/log/munin
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\# logdir [^\n]*\n+|^\#logdir [^\n]*\n|^logdir [^\n]*\n'
+    replace='logdir /var/log/munin\n'
+  notify:
+    - restart munin-node
+
+- name: check logdir /var/log/munin
+  lineinfile:
+    dest="/etc/munin/munin.conf"
+    line='logdir /var/log/munin'
+    state=present
+  notify:
+    - restart munin-node
+
+- name: set rundir /var/run/munin
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\# rundir [^\n]*\n+|^\#rundir [^\n]*\n|^rundir [^\n]*\n'
+    replace='rundir /var/run/munin\n'
+  notify:
+    - restart munin-node
+
+- name: check rundir /var/run/munin
+  lineinfile:
+    dest="/etc/munin/munin.conf"
+    line='rundir /var/run/munin'
+    state=present
+  notify:
+    - restart munin-node
+
+- name: set tmpldir /etc/munin/templates
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\# tmpldir\t[^\n]*\n+|^\#tmpldir\t[^\n]*\n|^tmpldir\t[^\n]*\n'
+    replace='tmpldir\t/etc/munin/templates\n'
+  notify:
+    - restart munin-node
+
+- name: check tmpldir /etc/munin/templates
+  lineinfile:
+    dest="/etc/munin/munin.conf"
+    line='tmpldir\t/etc/munin/templates'
+    state=present
+  notify:
+    - restart munin-node
+
+- name: set host tree
+  replace:
+    dest="/etc/munin/munin.conf"
+    regexp='^\[localhost\.localdomain\]\n'
+    replace='[{{ ansible_hostname }}.{{ glx_munin_domain }}]\n'
+  notify:
+    - restart munin-node
+
+- name: check /etc/munin/apache24.conf
+  template:
+    src="apache24.conf.j2"
+    dest="/etc/munin/apache24.conf"
+    backup=no
+
+- name: check /etc/munin/munin-htpasswd
+  copy:
+    src="../secrets/{{ ansible_hostname }}.munin_htpassword.password"
+    dest="/etc/munin/munin-htpasswd"
+    backup=no
+    owner="www-data"
+    group="www-data"
+    mode=0640
+  ignore_errors: true
+  notify:
+    - restart apache
+
+- name: enable and load the configuration into apache
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    state=link
+    force=yes
+  with_items:
+    - { src: '/etc/munin/apache24.conf', dest: '/etc/apache2/conf-enabled/munin.conf' }
+  notify:
+    - restart apache
+
+- name: get recommendations for additional Munin modules
+  shell: munin-node-configure --suggest
+  register: recommendations
+  changed_when: false
+  failed_when: recommendations.rc >= 2
+  notify:
+    - restart munin-node
+
+- name: enable the apache_* modules
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    state=link
+    force=yes
+  with_items:
+    - { src: '/usr/share/munin/plugins/apache_accesses', dest: '/etc/munin/plugins/apache_accesses' }
+    - { src: '/usr/share/munin/plugins/apache_processes', dest: '/etc/munin/plugins/apache_processes' }
+    - { src: '/usr/share/munin/plugins/apache_volume', dest: '/etc/munin/plugins/apache_volume' }
+  notify:
+    - restart munin-node

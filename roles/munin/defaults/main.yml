@@ -1,0 +1,3 @@
+---
+glx_munin_domain: "galaxie.ici"
+glx_munin_host_url: "https://www.{{ glx_munin_domain }}"

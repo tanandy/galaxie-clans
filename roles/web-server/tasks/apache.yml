@@ -1,0 +1,32 @@
+---
+- name: install Apache
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - apache2
+    - apache2-utils
+    - apache2-mpm-prefork
+    - libapache2-mod-fcgid
+    - libcgi-fast-perl
+  notify:
+    - restart apache
+
+- name: add "{{ galaxie_ansible_user }}" user in www-data group
+  user:
+    name: "{{ galaxie_ansible_user }}"
+    groups: "www-data"
+    append: yes
+
+- name: enable the fcgid module in apache
+  apache2_module:
+    state=present
+    name="fcgid"
+
+- name: enable the auth_digest module in apache
+  apache2_module:
+    state=present
+    name="auth_digest"
+
+- name: enable the ssl module in apache
+  apache2_module:
+    state=present
+    name="ssl"
