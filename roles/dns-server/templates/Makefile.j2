@@ -3,15 +3,18 @@ data.cdb: data
 
 {% if glx_domain_list %}
 remote: data
-		@echo "*** Refresh local zone files"
-		refreshzones --verbose
+		@echo ""
+		@echo "`hostname --fqdn`: {{ ansible_default_ipv4.address }} Refresh local zone files"
+		@refreshzones --verbose
+		@echo ""
 {% for domain in glx_domain_list %}
 {% for seconday_server in domain.secondary %}
-		@echo "*** Transfert {{ domain.name }} zone file"
-		scp -i /root/.ssh/{{ domain.priv_key_name }} {{ glx_tinydns_primary_directory }}/{{ domain.name }}.data.tosend {{ galaxie_ansible_user }}@{{ seconday_server }}:{{ domain.name }}.data.tmp
-		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo mv {{ domain.name }}.data.tmp {{ glx_tinydns_secondary_directory }}/{{ domain.name }}.data
-		@echo "*** Refresh {{ domain.name }} zone files"
-		ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo refreshzones --verbose
+		@echo "{{ domain.name }}: {{ seconday_server }} Transfert {{ glx_tinydns_primary_directory }}/{{ domain.name }}.data.tosend"
+		@scp -i /root/.ssh/{{ domain.priv_key_name }} {{ glx_tinydns_primary_directory }}/{{ domain.name }}.data.tosend {{ galaxie_ansible_user }}@{{ seconday_server }}:{{ domain.name }}.data.tmp
+		@ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo mv {{ domain.name }}.data.tmp {{ glx_tinydns_secondary_directory }}/{{ domain.name }}.data
+		@echo -n "{{ domain.name }}: {{ seconday_server }} "
+		@ssh -i /root/.ssh/{{ domain.priv_key_name }} {{ galaxie_ansible_user }}@{{ seconday_server }} sudo refreshzones --remote
+		@echo ""
 {% endfor %}
 {% endfor %}
 {% endif %}

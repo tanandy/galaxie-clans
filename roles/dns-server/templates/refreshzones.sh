@@ -83,6 +83,10 @@ while [ "$1" != "${1##-}" ] ; do # loop over options
                 VERBOSE=yes
         ;;
 
+        --remote)
+                REMOTE=yes
+        ;;
+
         --tinydnsdir)
                 shift
                 TINYDNS_DIR="$1"
@@ -100,7 +104,7 @@ while [ "$1" != "${1##-}" ] ; do # loop over options
 
         -h|--help)
                 cat <<-EOF
-Usage: $0 [-v] [--help] [--tinydnsdir dir] [--primarydir dir] [--secondarydir dir] [--verbose]"
+Usage: $0 [-v] [--help] [--tinydnsdir dir] [--primarydir dir] [--secondarydir dir] [--remote]"
 Info :
     -v --version   : print the script version
     -h --help      : display it message
@@ -108,6 +112,7 @@ Info :
     --primarydir   : directory where store primary servers zone files
     --secondarydir : directory where store secondary servers zone files
     --verbose      : display output messages if not nothing is display on the output
+    --remote       : less verbose ideal for script
 EOF
                 exit 1;
         ;;
@@ -180,6 +185,7 @@ fi
 if [ ! -f "${TINYDNS_DIR}/data" ] || \
     ! ( diff -q "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data" > /dev/null ) ; then
     [ -n "$VERBOSE" ] && echo "Building new tinydns database"
+    [ -n "$REMOTE" ] && echo "Building new data file"
     mv "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data"
         if [ -n "$VERBOSE" ] ; then
             make -C "${TINYDNS_DIR}"
@@ -188,4 +194,6 @@ if [ ! -f "${TINYDNS_DIR}/data" ] || \
         fi
 else
     [ -n "$VERBOSE" ] && echo "No changes to zone data"
+    [ -n "$REMOTE" ] && echo "No changes"
+    exit 0;
 fi
