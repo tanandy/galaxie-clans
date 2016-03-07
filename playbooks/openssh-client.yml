@@ -1,5 +1,5 @@
 ---
-- hosts: openssh-client
+- hosts: galaxie
 
   roles:
     - openssh-client

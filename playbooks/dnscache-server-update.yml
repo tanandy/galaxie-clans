@@ -1,5 +1,5 @@
 ---
-- hosts: ndjbdns-servers
+- hosts: galaxie
 
   roles:
-    - { role: ndjbdns-server, glx_ndjbdns_upgrade_roots: true }
+    - { role: ndjbdns, glx_ndjbdns_upgrade_roots: true }

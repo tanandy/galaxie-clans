@@ -1,4 +1,4 @@
-- hosts: apt-unattended
+- hosts: galaxie
 
   roles:
     - apt-unattended
