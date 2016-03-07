@@ -2,4 +2,4 @@
 - hosts: mail-servers
 
   roles:
-     - sqmail-server
+     - sqmail

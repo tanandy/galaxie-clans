@@ -16,6 +16,13 @@
     state=started
     enabled=true
 
+- name: copy .my.cnf file with root password credentials
+  template:
+    src=my.cnf.j2
+    dest=/root/.my.cnf
+    owner=root
+    mode=0600
+
 - name: Setup MySQL root password
   mysql_user:
     name=root
@@ -27,13 +34,6 @@
     - 127.0.0.1
     - ::1
     - localhost
-
-- name: copy .my.cnf file with root password credentials
-  template:
-    src=my.cnf.j2
-    dest=/root/.my.cnf
-    owner=root
-    mode=0600
 
 - name: ensure anonymous users are not in the database
   mysql_user:

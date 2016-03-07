@@ -168,10 +168,10 @@
     chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
   when: glx_sqmail_download.changed
 
-- name: package/control -- populates the mininmal required control files for running
-  shell: package/control
-    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
-  when: glx_sqmail_download.changed
+#- name: package/control -- populates the mininmal required control files for running
+#  shell: package/control
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
 
 - name: package/sslenv -- sets up the SSL/TLS environments together with X.509 certs and key files (from ucspi-ssl)
   shell: package/sslenv

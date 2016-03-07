@@ -1,5 +1,0 @@
----
-- hosts: galaxie
-
-  roles:
-     - { role: ndjbdns, glx_ndjbdns_force_install: true }

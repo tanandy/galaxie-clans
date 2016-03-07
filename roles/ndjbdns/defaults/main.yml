@@ -25,7 +25,7 @@ glx_ndjbdns_rbldns_service:
   name: "rbldns"
 
 glx_ndjbdns_tinydns_service:
-  enable: true
+  enable: false
   name: "tinydns"
 
 glx_ndjbdns_walldns_service:

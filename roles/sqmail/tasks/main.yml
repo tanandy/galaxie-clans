@@ -1,0 +1,53 @@
+# the big picture : http://www.fehcom.de/images/sqmail_Big_Picture.pdf
+
+# Stop everything for permit to overwrite fews binarys
+- include: services-stop.yml
+  tags: install
+
+## Intall the requirements
+- include: install-cdb.yml
+  tags: install-cdb, install
+
+- include: install-ucspi-tcp6.yml
+  tags: install-ucspi-tcp6, install
+
+- include: install-ucspi-ssl.yml
+  tags: install-ucspi-ssl, install
+
+- include: install-sqmail.yml
+  tags: install-sqmail, install
+
+- include: install-sqmailctl.yml
+  tags: install-sqmailctl, install
+
+## Initital setting
+- include: config-controls.yml
+  tags: controls, config, install-sqmail, install
+
+- include: config-qmail-send.yml
+  tags: controls, config, install-sqmail, install
+
+- include: config-qmail-smtpd.yml
+  tags: controls, config, install-sqmail, install
+
+- include: config-qmail-remote.yml
+  tags: controls, config, install-sqmail, install
+
+- include: config-qmail-inject.yml
+  tags: controls, config, install-sqmail, install
+
+- include: config-alias.yml
+  tags: alias, config, install-sqmail, install
+
+- include: config-openssl.yml
+  tags: config, install-sqmail, install
+
+- include: install-mta.yml
+  tags: config, install-sqmail, install, mta
+
+## finilize
+- include: services-cleanup.yml
+  tags: cleanup, install-sqmail, install-sqmail, install
+
+- include: cleanup.yml
+  tags: cleanup, install-sqmail, install
