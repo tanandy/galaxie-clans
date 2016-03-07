@@ -21,7 +21,7 @@
 # directory, with an extensions of '.data'. These files
 # must be manually edited.
 #
-# Domains for which the TinyDNS server will act as a
+# Domains for which the tinydns server will act as a
 # secondary, should be automatically be transfered
 # into the secondary.d directory by a other server via ssh.
 #
@@ -62,7 +62,7 @@
 #
 
 #
-# The location of the TinyDNS service.
+# The location of the tinydns service.
 #
 TINYDNS_DIR="{{ glx_tinydns_root_directory }}"
 TINYDNS_ZONES_PRIMARY_DIR="{{ glx_tinydns_primary_directory }}"
@@ -126,12 +126,12 @@ done
 # Check things are sane and where we expected
 #
 if [ ! -d "${TINYDNS_DIR}" ] ; then
-    echo "Tiny DNS directory ${TINYDNS_DIR} not found"
+    echo "tinydns root directory ${TINYDNS_DIR} not found"
     exit 1;
 fi
 
 if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
-    echo "Makefile not present in the TinyDNS directory ${TINYDNS_DIR}"
+    echo "Makefile not present in the tinydns root directory ${TINYDNS_DIR}"
     exit 1;
 fi
 
@@ -179,7 +179,7 @@ fi
 #
 if [ ! -f "${TINYDNS_DIR}/data" ] || \
     ! ( diff -q "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data" > /dev/null ) ; then
-    [ -n "$VERBOSE" ] && echo "Building new TinyDNS database"
+    [ -n "$VERBOSE" ] && echo "Building new tinydns database"
     mv "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data"
         if [ -n "$VERBOSE" ] ; then
             make -C "${TINYDNS_DIR}"

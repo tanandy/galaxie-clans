@@ -72,6 +72,12 @@
   with_items: glx_domain_list
   ignore_errors: true
 
+- name: enable tinydns
+  service:
+    name=tinydns
+    state=started
+    enabled=yes
+
 #- name: send ssh key for zones transfert
 #  file:
 #    source="{{ ansible_ssh_private_key_file }}"

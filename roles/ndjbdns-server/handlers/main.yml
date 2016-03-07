@@ -41,6 +41,7 @@
 - name: enable tinydns
   service:
     name=tinydns
+    state=started
     enabled=yes
 
 ### walldns ###
