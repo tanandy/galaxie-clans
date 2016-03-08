@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# refreshzones  refresh tinydns zone files over ssh
+# refreshzones v0.4 refresh tinydns zone files over ssh
 # (c) Jérôme Ornech <tuux@rtnp.org>
 #
 #   This package is free software; you can redistribute it and/or modify
@@ -8,28 +8,18 @@
 #   the Free Software Foundation; either version 2 of the License, or
 #   (at your option) any later version.
 #
+# It script has been originaly white by:
+# The Plone® CMS — Open Source Content Management System is © 2000-2016 by the Plone Foundation et al.
 # https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
+# refreshzones 28 2008-05-04 15:08:08
 #
-# $Id: refreshzones 28 2008-05-04 15:08:08Z greg $
+# The script have been modified and be coupled with a Makefile generate by Ansible via Jinja template
+# see https://raw.githubusercontent.com/Tuuux/galaxie/master/roles/dns-server/templates/Makefile.j2
+# The Makefile is suppose to deal with ssh
+# see https://cr.yp.to/djbdns/run-server-bind.html
 #
-# A script to support multiple primary and secondary
-# domains. This works with a standard "ndjbdns" directory
-# structure. Any exisiting  'data' file MUST be moved
-# into the primary.d directory (or it will be lost).
-#
-# Place primary domain 'data' files into the primary.d
-# directory, with an extensions of '.data'. These files
-# must be manually edited.
-#
-# Domains for which the tinydns server will act as a
-# secondary, should be automatically be transfered
-# into the secondary.d directory by a other server via ssh.
-#
-# Prior to performing any zone transfers, the script will query the master
-# nameserver for the zone for a serial (from the SOA record). If the serial
-# is the same (and valid) then the zone transfer is not performed. This means
-# that the zone transfers will only occur when a zones changes (keeping thw
-# whole process light weight.
+# The script support multiple primary and secondary domains.
+# This works with a standard "ndjbdns" directory structure.
 #
 #  +- /etc/ndjbdns
 #  +- Makefile
@@ -48,35 +38,41 @@
 #       +- ...
 #  +- /var/log/tinydns.log
 #
-# The primary zone files SHOULD have a SOA record ('Z') with the serial number
-# field ('ser') empty. This script will replace the serial number with the
-# date of the primary file.
+# Any exisiting  'data' file MUST be moved into the ./zones/primary.d/ directory (or it will be lost).
 #
-#  e.g. 'Zdomain.com:a.ns.domain.com.:hostmaster.domain.com.::::::'
+# Place primary domain 'data' zone files into the ./zones/primary.d directory,
+# with an extensions of '.data'. (e.g. ./zones/primary.d/domain.eu.org.data)
+# These files must be manually edited.
+#
+# Domains for which the tinydns server will act as a secondary, should be automatically be receive
+# into the ./zones/secondary.d directory by a other server via ssh.
+#
+# Prior to performing any things, the script will parse the ./zones/primary.d/ directory for search
+# zone files (extensions '.data') and generate a SAO serial with the epoch date of the last modification
+# for each zone files, and write a other file with extensions '.data.tosend' it will be use
+# by the Makefile in case of ssh transfert.
+#
+# The primary zone files (e.g. ./zones/primary.d/*) SHOULD have a SOA record ('Z') with the serial number
+# field ('ser') empty. This script will replace the serial number of each primary zone files with it own
+# last modification epoch date. You
+#
+#  e.g. 'Zdomain.eu.org:a.ns.domain.eu.org.:hostmaster.domain.eu.org.::::::'
 #
 # see https://cr.yp.to/djbdns/tinydns-data.html
-#
-# The Makefile is supposate to deal with ssh
-# see https://cr.yp.to/djbdns/run-server-bind.html
-#
-#
 
-#
-# The location of the tinydns service.
-#
+
+# The location of the tinydns root and primary, secondary directory path.
 TINYDNS_DIR="{{ glx_tinydns_root_directory }}"
 TINYDNS_ZONES_PRIMARY_DIR="{{ glx_tinydns_primary_directory }}"
 TINYDNS_ZONES_SECONDARY_DIR="{{ glx_tinydns_secondary_directory }}"
 
 set -e
 
-#
 # Parse switches
-#
 while [ "$1" != "${1##-}" ] ; do # loop over options
     case $1 in
        -v|--version)
-                echo "refreshzone v0.3 by Galaxie "
+                echo "refreshzone v0.4 by Galaxie "
                 exit 1;
         ;;
         --verbose)
@@ -126,10 +122,7 @@ EOF
     shift
 done
 
-
-#
 # Check things are sane and where we expected
-#
 if [ ! -d "${TINYDNS_DIR}" ] ; then
     echo "tinydns root directory ${TINYDNS_DIR} not found"
     exit 1;
@@ -140,14 +133,11 @@ if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
     exit 1;
 fi
 
-#
 # Create directories (if they don't exist) to store primary
 # and secondary dns zone data.
-#
 [ -d "$TINYDNS_ZONES_PRIMARY_DIR"   ] || mkdir -p "$TINYDNS_ZONES_PRIMARY_DIR"
 [ -d "$TINYDNS_ZONES_SECONDARY_DIR" ] || mkdir -p "$TINYDNS_ZONES_SECONDARY_DIR"
 
-#
 # Concatenate all the primary and secondary zone files together
 # add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
@@ -165,6 +155,7 @@ if [ $(ls -1A $TINYDNS_ZONES_PRIMARY_DIR/ | wc -l) -gt 0 ] ; then
 else
     [ -n "$VERBOSE" ] && echo "  no file zone ..."
 fi
+
 ### add secondary file zone
 [ -n "$VERBOSE" ] && echo "Secondary zones:"
 if [ $(ls -1A $TINYDNS_ZONES_SECONDARY_DIR/ | wc -l) -gt 0 ] ; then
@@ -177,11 +168,10 @@ if [ $(ls -1A $TINYDNS_ZONES_SECONDARY_DIR/ | wc -l) -gt 0 ] ; then
 else
     [ -n "$VERBOSE" ] && echo "  no file zone ..."
 fi
-#
+
 # If the master 'data' file is not present, or is different to the one
-# generated above, then use the new data from the concantenated zone
+# generated above, then use the new data from the concatenated zone
 # files, and compile it into a database.
-#
 if [ ! -f "${TINYDNS_DIR}/data" ] || \
     ! ( diff -q "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data" > /dev/null ) ; then
     [ -n "$VERBOSE" ] && echo "Building new tinydns database"
