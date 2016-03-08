@@ -15,7 +15,7 @@
 #
 # The script have been modified and be coupled with a Makefile generate by Ansible via Jinja template
 # see https://raw.githubusercontent.com/Tuuux/galaxie/master/roles/dns-server/templates/Makefile.j2
-# The Makefile is suppose to deal with ssh
+# The Makefile is suppose to deal with ssh for transfert zone files to secondary server
 # see https://cr.yp.to/djbdns/run-server-bind.html
 #
 # The script support multiple primary and secondary domains.
@@ -48,7 +48,7 @@
 # into the ./zones/secondary.d directory by a other server via ssh.
 #
 # Prior to performing any things, the script will parse the ./zones/primary.d/ directory for search
-# zone files (extensions '.data') and generate a SAO serial with the epoch date of the last modification
+# zone files (extensions '.data') and generate a SOA serial number with the epoch date of the last modification
 # for each zone files, and write a other file with extensions '.data.tosend' it will be use
 # by the Makefile in case of ssh transfert.
 #
