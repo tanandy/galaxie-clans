@@ -145,7 +145,6 @@ done
 # Check if we have to crach before say hello #
 ##############################################
 
-# Check things are sane and where we expected
 if [ ! -d "${TINYDNS_DIR}" ] ; then
     echo "tinydns root directory ${TINYDNS_DIR} not found"
     exit 1;
@@ -153,7 +152,7 @@ fi
 
 if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
     echo "Makefile not present in the tinydns root directory ${TINYDNS_DIR}"
-    exit 1;
+    #exit 1;
 fi
 
 #############################################################
@@ -169,9 +168,11 @@ fi
 # Concatenate all the primary and secondary zone files together #
 #################################################################
 
+# Clean previous .data.tmp file
+rm -f "${TINYDNS_DIR}/.data.tmp"
+
 # Add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
-rm -f "${TINYDNS_DIR}/.data.tmp"
 if [ $(ls -1A $TINYDNS_ZONES_PRIMARY_DIR/ | wc -l) -gt 0 ] ; then
     echo "# Primary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
     for PRIMARY in "$TINYDNS_ZONES_PRIMARY_DIR"/*.data ; do
