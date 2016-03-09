@@ -65,15 +65,28 @@
 #
 # see https://cr.yp.to/djbdns/tinydns-data.html
 
+###########################
+# USER VARIABLES SETTINGS #
+###########################
 
-# The location of the tinydns root and primary, secondary directory path.
+# The location of the tinydns root
+# e.g. /etc/ndjbdns
 TINYDNS_DIR="{{ glx_tinydns_root_directory }}"
+
+# The location of directory where store primary zone files
+# e.g.  /etc/ndjbdns/zones/primary.d
 TINYDNS_ZONES_PRIMARY_DIR="{{ glx_tinydns_primary_directory }}"
+
+# e.g. /etc/ndjbdns/zones/secondary.d
+# The location of directory where store seconday zone files
 TINYDNS_ZONES_SECONDARY_DIR="{{ glx_tinydns_secondary_directory }}"
 
 set -e
 
-# Parse switches
+####################################################
+# Parse command line arguments in case it have one #
+####################################################
+
 while [ "$1" != "${1##-}" ] ; do # loop over options
     case $1 in
        -v|--version)
@@ -128,6 +141,10 @@ EOF
     shift
 done
 
+##############################################
+# Check if we have to crach before say hello #
+##############################################
+
 # Check things are sane and where we expected
 if [ ! -d "${TINYDNS_DIR}" ] ; then
     echo "tinydns root directory ${TINYDNS_DIR} not found"
@@ -139,8 +156,11 @@ if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
     exit 1;
 fi
 
-# Create directories (if they don't exist) to store primary
-# and secondary dns zone data.
+#############################################################
+# Create directories (if they don't exist) to store primary #
+# and secondary dns zone files.                             #
+#############################################################
+
 [ -d "$TINYDNS_ZONES_PRIMARY_DIR"   ] || mkdir -p "$TINYDNS_ZONES_PRIMARY_DIR"
 [ -d "$TINYDNS_ZONES_SECONDARY_DIR" ] || mkdir -p "$TINYDNS_ZONES_SECONDARY_DIR"
 
@@ -200,3 +220,5 @@ else
     [ -n "$REMOTE" ] && echo "No changes"
     exit 0;
 fi
+
+# Everything have a end
