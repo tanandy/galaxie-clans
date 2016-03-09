@@ -152,7 +152,7 @@ fi
 
 if [ ! -f "${TINYDNS_DIR}/Makefile" ] ; then
     echo "Makefile not present in the tinydns root directory ${TINYDNS_DIR}"
-    #exit 1;
+    exit 1;
 fi
 
 #############################################################
