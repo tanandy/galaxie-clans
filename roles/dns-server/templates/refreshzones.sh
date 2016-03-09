@@ -7,6 +7,7 @@
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
 # version.
+# This script is provide like this without any warranty, you use it at your own risks.
 #
 # It script has been originaly white by The Plone® CMS
 # https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
@@ -143,8 +144,12 @@ fi
 [ -d "$TINYDNS_ZONES_PRIMARY_DIR"   ] || mkdir -p "$TINYDNS_ZONES_PRIMARY_DIR"
 [ -d "$TINYDNS_ZONES_SECONDARY_DIR" ] || mkdir -p "$TINYDNS_ZONES_SECONDARY_DIR"
 
-# Concatenate all the primary and secondary zone files together
-# add primary file zone
+
+#################################################################
+# Concatenate all the primary and secondary zone files together #
+#################################################################
+
+# Add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
 rm -f "${TINYDNS_DIR}/.data.tmp"
 if [ $(ls -1A $TINYDNS_ZONES_PRIMARY_DIR/ | wc -l) -gt 0 ] ; then
@@ -161,7 +166,7 @@ else
     [ -n "$VERBOSE" ] && echo "  no file zone ..."
 fi
 
-### add secondary file zone
+# Add secondary file zone
 [ -n "$VERBOSE" ] && echo "Secondary zones:"
 if [ $(ls -1A $TINYDNS_ZONES_SECONDARY_DIR/ | wc -l) -gt 0 ] ; then
     echo "# Secondary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
@@ -174,9 +179,12 @@ else
     [ -n "$VERBOSE" ] && echo "  no file zone ..."
 fi
 
-# If the master 'data' file is not present, or is different to the one
-# generated above, then use the new data from the concatenated zone
-# files, and compile it into a database.
+########################################################################
+# If the master 'data' file is not present, or is different to the one #
+# generated above, then use the new data from the concatenated zone    #
+# files, and compile it into a database.                               #
+########################################################################
+
 if [ ! -f "${TINYDNS_DIR}/data" ] || \
     ! ( diff -q "${TINYDNS_DIR}/.data.tmp" "${TINYDNS_DIR}/data" > /dev/null ) ; then
     [ -n "$VERBOSE" ] && echo "Building new tinydns database"
