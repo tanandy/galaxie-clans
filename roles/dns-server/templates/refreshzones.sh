@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # refreshzones v0.4 refresh tinydns zone files over ssh
-# (c) Jérôme Ornech <tuux@rtnp.org>
+# (c) Tuux from www.rtnp.org
 #
 # This package is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -76,7 +76,8 @@ set -e
 while [ "$1" != "${1##-}" ] ; do # loop over options
     case $1 in
        -v|--version)
-                echo "refreshzone v0.4 by Galaxie "
+                echo "refreshzone v0.4 by (c) Tuux from www.rtnp.org "
+                echo "Galaxie is good for you ... "
                 exit 1;
         ;;
         --verbose)
