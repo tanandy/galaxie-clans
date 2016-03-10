@@ -7,9 +7,9 @@
   tags: config, config-dnscache
   when: not glx_ndjbdns_upgrade_roots
 
-- include: update-roots.yml
-  tags: config, upgrade-roots
-
 - include: config-tinydns.yml
   tags: config, config-tinydns
-#  when: not glx_ndjbdns_upgrade_roots
+  when: not glx_ndjbdns_upgrade_roots
+
+- include: update-roots.yml
+  tags: config, upgrade-roots

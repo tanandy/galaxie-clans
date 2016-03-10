@@ -27,8 +27,8 @@
 - name: update dnscache dnsroots list
   command: cp {{ glx_ndjbdns_roots_tmp_file.stat.path }} {{ glx_ndjbdns_roots_file.stat.path}}
   when: "'{{ glx_ndjbdns_roots_file.stat.checksum }}' != '{{ glx_ndjbdns_roots_tmp_file.stat.checksum }}'"
-#  notify:
-#    - restart service
+  notify:
+    - restart dnscache
 
 - name: delete {{ tmp_file.stdout }}
   file:
