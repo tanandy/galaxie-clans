@@ -181,6 +181,7 @@ if [ $(ls -1A ${TINYDNS_ZONES_PRIMARY_DIR}/ | wc -l) -gt 0 ] ; then
         [ -n "$VERBOSE" ] && echo "  ${PRIMARY} serial ${STAMP}"
         sed -r -e  "s/^(Z[^:]*:[^:]*:[^:]*)::(.*)$/\1:${STAMP}:\2/g" < ${PRIMARY} > "$PRIMARY.tosend"
         echo "# Primary zone file $PRIMARY with timestamp of $STAMP" >> "${TINYDNS_DIR}/.data.tmp"
+        chmod 640 "$PRIMARY.tosend"
         cat "$PRIMARY.tosend" >> "${TINYDNS_DIR}/.data.tmp"
     done
 else

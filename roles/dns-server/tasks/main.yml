@@ -72,6 +72,16 @@
   with_items: glx_domain_list
   ignore_errors: true
 
+- name: send master zone files to {{ glx_tinydns_primary_directory }}
+  copy:
+    src="../zone_files/{{ item.name }}.data"
+    dest="{{ glx_tinydns_primary_directory }}/{{ item.name }}.data"
+    owner="root"
+    group="root"
+    mode="0640"
+    backup=no
+  with_items: glx_domain_list
+
 - name: enable tinydns
   service:
     name=tinydns
