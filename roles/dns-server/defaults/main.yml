@@ -11,5 +11,15 @@ glx_tinydns_primary_directory: "{{ glx_tinydns_zones_directory }}/primary.d"
 glx_tinydns_secondary_directory: "{{ glx_tinydns_zones_directory }}/secondary.d"
 
 
-glx_domain_list:
-  - { name: "galaxie.ici",   priv_key_name: "id_rsa", primary: "192.168.1.1", secondary: [] }
+glx_domain_list: false
+#glx_domain_list:
+#  - name: "galaxie.ici"
+#    ansible_port: "22"
+#    priv_key_name: "id_rsa.hostname"
+#    primary: "192.168.1.1"
+#    secondary: ["192.168.2.1","192.168.3.1"]
+#  - name: "galaxie.laba"
+#    ansible_port: "22"
+#    priv_key_name: "id_rsa.hostname"
+#    primary: "192.168.1.1"
+#    secondary: ["192.168.2.1","192.168.3.1"]

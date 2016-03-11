@@ -1,6 +1,7 @@
 ---
 # [inspired_by] https://plone.lucidsolutions.co.nz/linux/dns/creating-a-djb-tiny-dns-primary-secondary-server
 # [inspired_by] https://en.internetwache.org/scanning-alexas-top-1m-for-axfr-29-03-2015/
+
 - name: check daemon uid
   shell: id -u daemon
   register: daemon_uid
@@ -70,6 +71,7 @@
     mode="0600"
     backup=no
   with_items: glx_domain_list
+  when: glx_domain_list
   ignore_errors: true
 
 - name: send master zone files to {{ glx_tinydns_primary_directory }}
@@ -81,45 +83,10 @@
     mode="0640"
     backup=no
   with_items: glx_domain_list
+  when: glx_domain_list
 
 - name: enable tinydns
   service:
     name=tinydns
     state=started
     enabled=yes
-
-#- name: send ssh key for zones transfert
-#  file:
-#    source="{{ ansible_ssh_private_key_file }}"
-#    target="/root/.ssh/id_rsa.{{ ansible_hostname }}"
-#- name: test zones file
-#  stat:
-#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
-#  register: send
-#  with_items: glx_ndjbdns_tinydns_service.managed_domain
-#
-#- name: remove previus  data's files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/
-#  file:
-#    path="{{ glx_ndjbdns_tinydns_service.zones_dir }}/{{ item }}"
-#    state=absent
-#  with_items:
-#    - "data"
-#    - "data.cdb"
-#    - "data.tmp"
-#
-#- name: assemble zone files in to {{ glx_ndjbdns_tinydns_service.zones_dir }}/data
-#  assemble:
-#    src="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
-#    dest="{{ glx_ndjbdns_tinydns_service.zones_dir }}/data"
-#
-#- name: generate data.cdb file
-#  shell: tinydns-data
-#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
-#  register: tinydns_data
-#  changed_when: false
-#
-#- name: move data* file to {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
-#  shell: mv data* {{ glx_ndjbdns_sysconfdir }}/ndjbdns/
-#    chdir="{{ glx_ndjbdns_tinydns_service.zones_dir }}"
-#  changed_when: false
-#  when: tinydns_data|success
