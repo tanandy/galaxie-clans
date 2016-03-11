@@ -8,3 +8,5 @@ zone_files/*
 *.ipr
 *.iws
 hosts
+Vagrantfile
+.vagrant
