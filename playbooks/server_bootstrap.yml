@@ -1,48 +1,59 @@
 ---
-- name: Galaxie
+- name: Galaxie bootstrap for new host
   hosts: galaxie_staging
   become: yes
 
   vars:
-    galaxie_user: aldecloud
+    rsa_key_size: "4096"
 
   pre_tasks:
+######
+# Checks, lookups and new facts
+######
+    - name: compute facts
+      set_fact:
+        host_key_path: "{{ inventory_dir }}/keys/{{ inventory_hostname }}"
+        target_port: "{{ ansible_port|default('22', true) }}"
 
     - name: check mandatory variable galaxie_user
       fail: msg="galaxie_user is undefined"
       when: not galaxie_user
 
-    - set_fact:
-        host_key: "{{ inventory_dir }}/keys/{{ inventory_hostname }}"
-        target_port: "{{ ansible_port|default('22', true) }}"
-
-    - set_fact:
+    - name: lookup galaxie_user password
+      set_fact:
         galaxie_passwd: "{{ lookup('password', inventory_dir + '/secrets/' + ansible_hostname + '.' + galaxie_user +'.passwd chars=ascii_letters,digits,hexdigits,punctuation') }}"
       delegate_to: localhost
       become: no
 
     - name: host key is in place
       stat:
-        path="{{ host_key }}"
+        path="{{ host_key_path }}"
       register: host_key_presence
       delegate_to: localhost
       become: no
 
-    - name: host key absent, generating a new one
-      when: not host_key_presence.stat.exists
-      command: "ssh-keygen -t rsa -b 4096 -f {{ host_key }}"
-      delegate_to: localhost
-      become: no
+    - name: host key is in place
+      stat:
+        path="/etc/ssh/.glx_generated_keys"
+      register: glx_generated_keys
 
+    - name: compute facts
+      set_fact:
+        need_server_key_regen: not glx_generated_keys.stat.exists
+        need_host_key_regen: not host_key_presence.stat.exists
+        need_to_ban_current_key: ansible_ssh_private_key_file is defined and ansible_user != galaxie_user
+######
+# Host basic setup
+######
     - script: files/ansible-seed.sh
 
-    - name: Galaxie group is present
+    - name: galaxie group is present
       group:
         name="{{ galaxie_user }}"
         gid=4200
         state=present
 
-    - name: Galaxie user is present
+    - name: galaxie user is present
       user:
         name="{{ galaxie_user }}"
         uid=4200
@@ -70,49 +81,51 @@
     - name: Change password for galaxie
       shell: >
         usermod -p $(echo '{{ galaxie_passwd }}' | openssl passwd -1 -stdin) {{ galaxie_user }}
+######
+# SSH key black magic
+######
+    - name: generate new host key {{ host_key_path }}
+      when: need_host_key_regen
+      command: "ssh-keygen -t rsa -b {{ rsa_key_size }} -f {{ host_key_path }}"
+      delegate_to: localhost
+      become: no
 
     - name: host_key is authorized for user
       authorized_key:
         user="{{ galaxie_user }}"
-        key="{{ lookup('file', host_key + '.pub') }}"
+        key="{{ lookup('file', host_key_path + '.pub') }}"
         state=present
         exclusive=yes
 
-    - name: current key is banished for current ansible_user
-      when: ansible_ssh_private_key_file is defined and ansible_user != galaxie_user
+    - name: current key is banished for ansible_user
+      when: need_to_ban_current_key
       authorized_key:
         user="{{ ansible_user }}"
         key="{{ lookup('file', ansible_ssh_private_key_file + '.pub') }}"
         state=absent
 
-    - name: User is sudoer
+    - name: galaxie_user is sudoer
       lineinfile: >
-        dest=/etc/sudoers.d/galaxie
+        dest=/etc/sudoers.d/galaxie_user
         regexp='^{{ galaxie_user }}'
         line='{{ galaxie_user }} ALL=(ALL) NOPASSWD: ALL'
         state='present'
-        create=yes
         validate='visudo -cf %s'
+        create=yes
 
   roles:
     - ntp-client
 
   tasks:
-# Host server key regeneration, this host is now part of the galaxie
+
 # [inspired_by] http://www.cyberciti.biz/faq/howto-regenerate-openssh-host-keys/
-
-    - name: CHECK - key generation trace is present
-      shell: if [ -f "/etc/ssh/.glx_generated_keys" ]; then /bin/true; else /bin/false; fi
-      register: glx_generated_keys
-      ignore_errors: true
-
     - name: cleaning old ssh_keys
       shell: /bin/rm -f /etc/ssh/ssh_host_*
-      when: glx_generated_keys|failed
+      when: need_server_key_regen
 
     - name: cleaning old ssh_keys
       shell: /usr/sbin/dpkg-reconfigure openssh-server
-      when: glx_generated_keys|failed
+      when: need_server_key_regen
 
     - name: leaving trace of key generation
       file:
@@ -120,45 +133,34 @@
         owner=root
         group=root
         state=touch
-      when: glx_generated_keys|failed
+      when: need_server_key_regen
 
     - name: delete known fingerprint of host
       shell: "ssh-keygen -R [{{ inventory_hostname }}]:{{ target_port }}"
       delegate_to: localhost
       become: no
-      when: glx_generated_keys|failed
+      when: need_server_key_regen
 
     - name: add new fingerprint of host to known host
       shell: "ssh-keyscan -p {{ target_port }} {{ inventory_hostname }} >> ~/.ssh/known_hosts"
       delegate_to: localhost
       become: no
-      when: glx_generated_keys|failed
+      when: need_server_key_regen
 
-    - lineinfile:
+    - name: generating host variables files {{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml
+      lineinfile:
         dest="{{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
-        line="---"
-        insertbefore="BOF"
+        line="{{ item.line }}"
+        insertbefore="{{ item.insert_marker }}"
         create=yes
       delegate_to: localhost
       become: no
-
-    - lineinfile: >
-        dest="{{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
-        line="ansible_ssh_private_key_file: {{ host_key }}"
-        insertafter="EOF"
-      delegate_to: localhost
-      become: no
-
-    - lineinfile: >
-        dest="{{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
-        line="ansible_user: {{ galaxie_user }}"
-        insertafter="EOF"
-      delegate_to: localhost
-      become: no
-
-    - lineinfile: >
-        dest="{{ inventory_dir }}/host_vars/{{ inventory_hostname }}.yml"
-        line="ansible_port: {{ target_port }}"
-        insertafter="EOF"
-      delegate_to: localhost
-      become: no
+      with_items:
+        - line: "---"
+          insert_marker: "BOF"
+        - line: "ansible_ssh_private_key_file: {{ host_key_path }}"
+          insert_marker: "EOF"
+        - line: "ansible_user: {{ galaxie_user }}"
+          insert_marker: "EOF"
+        - line: "ansible_port: {{ target_port }}"
+          insert_marker: "EOF"
