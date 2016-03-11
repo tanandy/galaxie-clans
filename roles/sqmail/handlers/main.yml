@@ -1,21 +1,27 @@
 ---
-
+### qmail-send
 - name: restart qmail-send
   service:
-    name={{ galaxie_qmail_server_service_send }}
+    name="qmail-send"
     state=restarted
+
+- name: start qmail-send
+  service:
+    name="qmail-send"
+    state=started
     enabled=yes
 
-- name: register qmail-send service
-  shell:
-    /usr/sbin/update-service --add {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }}
-  when: serviceSendRegistered|failed
-
-- name: restart qmail-send service
-  shell:
-    /usr/sbin/update-service --remove {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }} &&
-    /usr/sbin/update-service --add {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }}
-  when: serviceSendRegistered|success
+#
+#- name: register qmail-send service
+#  shell:
+#    /usr/sbin/update-service --add {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }}
+#  when: serviceSendRegistered|failed
+#
+#- name: restart qmail-send service
+#  shell:
+#    /usr/sbin/update-service --remove {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }} &&
+#    /usr/sbin/update-service --add {{ glx_supervise_dir }}/{{ galaxie_qmail_server_service_send }}
+#  when: serviceSendRegistered|success
 
 # qmail-smtpd-ipv4
 - name: add qmail-smtpd-ipv4 service

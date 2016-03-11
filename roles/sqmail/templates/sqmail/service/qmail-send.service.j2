@@ -1,0 +1,19 @@
+[Unit]
+Description=s/qmail delivery daemon
+After=syslog.target
+After=local-fs.target
+ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-start
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+StandardOutput=syslog
+StandardError=inherit
+SyslogFacility=mail
+SyslogIdentifier=qmail-send
+Environment=PATH={{ glx_sqmail_dir }}/bin:/usr/bin:/bin:/usr/sbin:/sbin
+ExecStart={{ glx_sqmail_dir }}/bin/qmail-start {{ glx_sqmail_control_defaultdelivery }}
+ExecReload={{ glx_sqmail_dir }}/bin/qmail-tcpok ; /bin/kill -ALRM ${MAINPID}

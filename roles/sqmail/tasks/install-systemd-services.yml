@@ -1,0 +1,10 @@
+---
+- name: check /lib/systemd/system/
+  template:
+    src=sqmail/services/qmail-send.service.j2
+    dest="/lib/systemd/system/qmail-send.service"
+    backup=no
+
+- name: regen unit files
+  shell: systemctl daemon-reload
+
