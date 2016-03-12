@@ -45,6 +45,9 @@
 - include: install-mta.yml
   tags: config, install-sqmail, install, mta
 
+- include: install-systemd-services.yml
+  tags: config, install-sqmail, install, systemd-services
+
 ## finilize
 - include: services-cleanup.yml
   tags: cleanup, install-sqmail, install-sqmail, install

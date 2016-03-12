@@ -1,10 +1,59 @@
 ---
-- name: check /lib/systemd/system/
+- name: check services qmail-send service
   template:
-    src=sqmail/services/qmail-send.service.j2
+    src="sqmail/service/qmail-send.service.j2"
     dest="/lib/systemd/system/qmail-send.service"
     backup=no
+  register: qmail_send_service
+
+- name: check rsyslog setting
+  template:
+    src="etc/rsyslog.d/20-sqmail.conf.j2"
+    dest="/etc/rsyslog.d/20-sqmail.conf"
+    backup=no
+  register: rsyslog_sqmail_status
 
 - name: regen unit files
   shell: systemctl daemon-reload
+  notify:
+    - restart qmail-send service
+  when: qmail_send_service|changed
 
+- name: restart rsyslog service
+  service:
+    name=rsyslog
+    state=restarted
+  when: rsyslog_sqmail_status|changed
+
+- name: check logrotate /etc/logrotate.d/sqmail file
+  template:
+    src="etc/logrotate.d/sqmail.j2"
+    dest="/etc/logrotate.d/sqmail"
+    backup=no
+
+- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}
+  stat:
+    path="{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}"
+  register: send
+  when: glx_sqmail_service_send.enable
+
+- name: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log
+  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log
+  when: glx_sqmail_service_send.enable and send.stat.exists
+
+- name: remove {{ glx_sqmail_service_send.directory }} files and directory
+  file:
+    path="{{ item }}"
+    state=absent
+  with_items:
+    - "{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log"
+    - "{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}"
+    - "{{ glx_supervise_dir }}/{{ glx_sqmail_service_send.directory }}"
+    - "{{ glx_multilog_dir}}/{{ glx_sqmail_service_send.directory }}"
+  when: glx_sqmail_service_send.enable and send.stat.exists
+
+- name: start qmail-send
+  service:
+    name="qmail-send"
+    state=started
+    enabled=yes

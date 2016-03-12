@@ -25,7 +25,13 @@
   shell: "{{ glx_sqmail_dir }}/bin/qmail-badmimetypes"
   changed_when: false
 
+- name: test {{ glx_sqmail_dir }}/control/rules.smtpd.txt
+  stat:
+    path="{{ glx_sqmail_dir }}/control/rules.smtpd.txt"
+  register: smtpd_txt_file
+
 - name: update {{ glx_sqmail_dir }}/control/rules.smtpd.cdb
   shell: tcprules rules.smtpd.cdb rules.smtpd.tmp < rules.smtpd.txt
     chdir="{{ glx_sqmail_dir }}/control"
   changed_when: false
+  when: smtpd_txt_file.stat.exists

@@ -1,4 +1,4 @@
-{% if not glx_sqmail_service_send.enable %}#{% endif %}svc:{{ glx_sqmail_service_send.name }}:{{ glx_sqmail_service_send.directory }}:{{ glx_sqmail_service_send.script }}
+#{% if not glx_sqmail_service_send.enable %}#{% endif %}svc:{{ glx_sqmail_service_send.name }}:{{ glx_sqmail_service_send.directory }}:{{ glx_sqmail_service_send.script }}
 {% if not glx_sqmail_service_smtp.enable %}#{% endif %}svc:{{ glx_sqmail_service_smtp.name }}:{{ glx_sqmail_service_smtp.directory }}:{{ glx_sqmail_service_smtp.script }}
 {% if not glx_sqmail_service_smtps.enable %}#{% endif %}svc:{{ glx_sqmail_service_smtps.name }}:{{ glx_sqmail_service_smtps.directory }}:{{ glx_sqmail_service_smtps.script }}
 {% if not glx_sqmail_service_submission.enable %}#{% endif %}svc:{{ glx_sqmail_service_submission.name }}:{{ glx_sqmail_service_submission.directory }}:{{ glx_sqmail_service_submission.script }}
