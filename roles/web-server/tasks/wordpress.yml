@@ -1,0 +1,12 @@
+---
+# [inspired_by] https://wiki.debian.org/WordPress#An_alternate_installation_method
+
+# Look nothing but both ar virtual packages all dependency will come
+- name: General | Install required packages.
+  tags: debs
+  action: apt pkg={{ item }} state=installed
+  with_items:
+    - wordpress
+    - wordpress-l10n
+    - apache2
+    - mysql-server

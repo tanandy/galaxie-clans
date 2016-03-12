@@ -1,5 +1,10 @@
 ---
 
-- include: apache.yml
+#- include: apache.yml
+#  when: install_apache
+#
+#- include: php.yml
+#  when: install_php
 
-- include: php.yml
+- include: wordpress.yml
+  when: install_wordpress

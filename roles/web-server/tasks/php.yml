@@ -7,6 +7,7 @@
     - php5-mysql
     - libapache2-mod-php5
     - php5
+    - php5-apcu
     - php5-common
     - php5-curl
     - php5-dev
