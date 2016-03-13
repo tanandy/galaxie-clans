@@ -1,0 +1,19 @@
+[Unit]
+Description=s/qmail qmtpd Daemon
+After=syslog.target
+After=local-fs.target
+ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-qmtpd
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+Restart=always
+StandardOutput=syslog
+StandardError=inherit
+SyslogFacility=mail
+SyslogIdentifier=qmail-qmtpd
+Environment=PATH={{ glx_sqmail_dir }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart={{ glx_sqmail_dir }}/bin/run_qmtpd
+ExecReload=/bin/kill -ALRM ${MAINPID}
