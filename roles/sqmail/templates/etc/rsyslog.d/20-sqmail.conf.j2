@@ -1,9 +1,9 @@
-if $programname startswith 'qmail-send' then /var/log/mail.send
-if $programname startswith 'qmail-smtpd' then /var/log/mail.esmtp
-if $programname startswith 'qmail-smtpsd' then /var/log/mail.esmtps
-if $programname startswith 'qmail-smtpsub' then /var/log/mail.submission
-if $programname startswith 'qmail-qmtpd' then /var/log/mail.qmtp
-if $programname startswith 'qmail-qmtpsd' then /var/log/mail.qmtps
-if $programname startswith 'qmail-qmqpd' then /var/log/mail.qmqpd
-if $programname startswith 'qmail-pop3d ' then /var/log/mail.pop3
-if $programname startswith 'qmail-pop3sd' then /var/log/mail.pop3s
+if $programname startswith '{{ glx_sqmail_service_delivery.identifier }}' then /var/log/mail.{{ glx_sqmail_service_delivery.name }}
+if $programname startswith '{{ glx_sqmail_service_smtp.identifier }}' then /var/log/mail.{{ glx_sqmail_service_smtp.name }}
+if $programname startswith '{{ glx_sqmail_service_smtps.identifier }}' then /var/log/mail.{{ glx_sqmail_service_smtps.name }}
+if $programname startswith '{{ glx_sqmail_service_submission.identifier }}' then /var/log/mail.{{ glx_sqmail_service_submission.name }}
+if $programname startswith '{{ glx_sqmail_service_qmtp.identifier }}' then /var/log/mail.{{ glx_sqmail_service_qmtp.name }}
+if $programname startswith '{{ glx_sqmail_service_qmtps.identifier }}' then /var/log/mail.{{ glx_sqmail_service_qmtps.name }}
+if $programname startswith '{{ glx_sqmail_service_qmqp.identifier }}' then /var/log/mail.{{ glx_sqmail_service_qmqp.name }}
+if $programname startswith '{{ glx_sqmail_service_pop3.identifier }}' then /var/log/mail.{{ glx_sqmail_service_pop3.name }}
+if $programname startswith '{{ glx_sqmail_service_pop3s.identifier }}' then /var/log/mail.{{ glx_sqmail_service_pop3s.name }}

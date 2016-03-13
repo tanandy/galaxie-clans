@@ -17,6 +17,41 @@
     - "run_smtpsd"
     - "run_smtpsub"
 
+- name: check service qmail-pop3d service
+  template:
+    src="sqmail/service/qmail-pop3d.service.j2"
+    dest="/lib/systemd/system/qmail-pop3d.service"
+    backup=no
+  register: qmail_pop3d_service
+
+- name: check service qmail-pop3sd service
+  template:
+    src="sqmail/service/qmail-pop3sd.service.j2"
+    dest="/lib/systemd/system/qmail-pop3sd.service"
+    backup=no
+  register: qmail_pop3sd_service
+
+- name: check service qmail-qmqpd service
+  template:
+    src="sqmail/service/qmail-qmqpd.service.j2"
+    dest="/lib/systemd/system/qmail-qmqpd.service"
+    backup=no
+  register: qmail_qmqpd_service
+
+- name: check service qmail-qmtpd service
+  template:
+    src="sqmail/service/qmail-qmtpd.service.j2"
+    dest="/lib/systemd/system/qmail-qmtpd.service"
+    backup=no
+  register: qmail_qmtpd_service
+
+- name: check service qmail-qmtpsd service
+  template:
+    src="sqmail/service/qmail-qmtpsd.service.j2"
+    dest="/lib/systemd/system/qmail-qmtpsd.service"
+    backup=no
+  register: qmail_qmtpsd_service
+
 - name: check service qmail-send service
   template:
     src="sqmail/service/qmail-send.service.j2"
@@ -70,29 +105,90 @@
     dest="/etc/logrotate.d/sqmail"
     backup=no
 
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}
+### Clean for migration
+- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}
   stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}"
+    path="{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
   register: send
-  when: glx_sqmail_service_send.enable
+  when: glx_sqmail_service_delivery.enable
 
-- name: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log
-  when: glx_sqmail_service_send.enable and send.stat.exists
+- name: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
+  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
+  when: glx_sqmail_service_delivery.enable and send.stat.exists
 
-- name: remove {{ glx_sqmail_service_send.directory }} files and directory
+- name: remove {{ glx_sqmail_service_delivery.identifier }} files and directory
   file:
     path="{{ item }}"
     state=absent
   with_items:
-    - "{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log"
-    - "{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}"
-    - "{{ glx_supervise_dir }}/{{ glx_sqmail_service_send.directory }}"
-    - "{{ glx_multilog_dir}}/{{ glx_sqmail_service_send.directory }}"
-  when: glx_sqmail_service_send.enable and send.stat.exists
+    - "{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log"
+    - "{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
+    - "{{ glx_supervise_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
+    - "{{ glx_multilog_dir}}/{{ glx_sqmail_service_delivery.identifier }}"
+  when: glx_sqmail_service_delivery.enable and send.stat.exists
 
-- name: start qmail-send
+
+### Service Systemd
+### Enable services
+- name: start qmail-{{ glx_sqmail_service_delivery.name }}
   service:
-    name="qmail-send"
+    name="qmail-{{ glx_sqmail_service_delivery.name }}"
     state=started
     enabled=yes
+  when: glx_sqmail_service_delivery.enable
+
+- name: start qmail-{{ glx_sqmail_service_smtp.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_smtp.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_smtp.enable
+
+- name: start qmail-{{ glx_sqmail_service_smtps.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_smtps.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_smtps.enable
+
+- name: start qmail-{{ glx_sqmail_service_submission.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_submission.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_submission.enable
+
+- name: start qmail-{{ glx_sqmail_service_pop3.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_pop3.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_pop3.enable
+
+- name: start qmail-{{ glx_sqmail_service_pop3s.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_pop3s.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_pop3s.enable
+
+- name: start qmail-{{ glx_sqmail_service_qmqp.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_qmqp.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_qmqp.enable
+
+- name: start qmail-{{ glx_sqmail_service_qmqp.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_qmqp.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_qmtp.enable
+
+- name: start qmail-{{ glx_sqmail_service_qmtps.name }}
+  service:
+    name="qmail-{{ glx_sqmail_service_qmtps.name }}"
+    state=started
+    enabled=yes
+  when: glx_sqmail_service_qmtps.enable

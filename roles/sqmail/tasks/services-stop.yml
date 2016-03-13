@@ -1,13 +1,13 @@
 ---
 # send
 ###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}
+- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}
   stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}"
+    path="{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
   register: send
 
-- name: svc -dt {{ glx_sqmail_service_send.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_send.directory }}/log
+- name: svc -dt {{ glx_sqmail_service_delivery.identifier }}
+  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
   when: send.stat.exists
 
 # smtp

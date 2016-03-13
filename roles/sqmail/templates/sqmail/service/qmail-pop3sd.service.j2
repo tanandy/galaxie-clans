@@ -1,5 +1,6 @@
 [Unit]
 Description=s/qmail POP3S Daemon
+Documentation=man:qmail-pop3d(8)
 After=syslog.target
 After=local-fs.target
 ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-pop3d
@@ -13,7 +14,7 @@ Restart=always
 StandardOutput=syslog
 StandardError=inherit
 SyslogFacility=mail
-SyslogIdentifier=qmail-pop3sd
+SyslogIdentifier={{ glx_sqmail_service_pop3s.identifier }}
 Environment=PATH={{ glx_sqmail_dir }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart={{ glx_sqmail_dir }}/bin/run_pop3sd
+ExecStart={{ glx_sqmail_dir }}/bin/{{ glx_sqmail_service_pop3s.script }}
 ExecReload=/bin/kill -ALRM ${MAINPID}

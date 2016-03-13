@@ -6,7 +6,7 @@
     name="qmail-send"
     state=stoped
     enabled=no
-  when: not glx_sqmail_service_send.enable
+  when: not glx_sqmail_service_delivery.enable
 
 # smtp
 ###############################################################################

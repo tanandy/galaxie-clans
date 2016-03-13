@@ -38,7 +38,7 @@ BOLD_RST="\e[22m"
 
 case "$1" in
   start)
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send start
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
@@ -182,7 +182,7 @@ case "$1" in
     fi
     ;;
   stop)
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send stop
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
@@ -327,7 +327,7 @@ case "$1" in
     ;;
   stat)
     printf "Show statistics of $BOLD%s$BOLD_RST service(s)\n" "$SERVICE_TEXT"
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send status
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
@@ -390,7 +390,7 @@ case "$1" in
     ;;
   doqueue|alrm|flush)
     printf "Flushing timeout table and sending ALRM signal to $BOLD%s$BOLD_RST service(s)\n" "$SERVICE_TEXT"
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send reload
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
@@ -434,7 +434,7 @@ case "$1" in
     ;;
   reload|hup)
     printf "Sending HUP signal to $BOLD%s$BOLD_RST service(s)\n" "$SERVICE_TEXT"
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send reload
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
@@ -544,7 +544,7 @@ case "$1" in
     printf "\n"
     ;;
   restart)
-{% if glx_sqmail_service_send.enable %}
+{% if glx_sqmail_service_delivery.enable %}
     service qmail-send restart
 {% endif %}
 {% if glx_sqmail_service_smtp.enable %}
