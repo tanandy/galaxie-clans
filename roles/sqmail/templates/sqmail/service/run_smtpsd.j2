@@ -6,8 +6,8 @@ export HELOCHECK="."
 export MFDNSCHECK=""
 export SMTPAUTH=""
 . {{ glx_sqmail_dir }}/ssl/ssl.env
-exec env PATH="{{ glx_sqmail_dir }}/bin:$PATH" \
+exec env PATH="{{ glx_sqmail_dir }}/bin:{{ glx_prefix_dir }}/bin:$PATH" \
      sslserver -seV -Rp -l $HOSTNAME \
      -Xx {{ glx_sqmail_dir }}/control/rules.smtpd.cdb \
      -u $QMAILU -g $QMAILG {{ glx_sqmail_inet_bind_info }} smtps \
-     qmail-smtpd qmail-authuser true 2>&1
+     qmail-smtpd qmail-authuser true 2>&1 &

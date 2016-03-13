@@ -1,5 +1,5 @@
 [Unit]
-Description=s/qmail delivery daemon
+Description=s/qmail Submission Daemon
 After=syslog.target
 After=local-fs.target
 ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-start
@@ -8,12 +8,12 @@ ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-start
 WantedBy=multi-user.target
 
 [Service]
-Type=simple
+Type=forking
 Restart=always
 StandardOutput=syslog
 StandardError=inherit
 SyslogFacility=mail
-SyslogIdentifier=qmail-send
+SyslogIdentifier=qmail-smtpsub
 Environment=PATH={{ glx_sqmail_dir }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart={{ glx_sqmail_dir }}/bin/qmail-start {{ glx_sqmail_control_defaultdelivery }}
-ExecReload={{ glx_sqmail_dir }}/bin/qmail-tcpok ; /bin/kill -ALRM ${MAINPID}
+ExecStart={{ glx_sqmail_dir }}/bin/run_smtpsub
+ExecReload={{ glx_sqmail_dir }}/bin/qmail-tcpto ; /bin/kill -ALRM ${MAINPID}

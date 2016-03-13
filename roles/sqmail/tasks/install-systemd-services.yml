@@ -1,10 +1,49 @@
 ---
-- name: check services qmail-send service
+- name: check scripts
+  template:
+    src="sqmail/service/{{ item }}.j2"
+    dest="{{ glx_sqmail_dir }}/bin/{{ item }}"
+    owner="root"
+    group="{{ glx_sqmail_groups.sqmail.gname }}"
+    mode=0755
+  with_items:
+    - "run_pop3d"
+    - "run_pop3sd"
+    - "run_qmqpd"
+    - "run_qmtpd"
+    - "run_qmtpsd"
+    - "run_send"
+    - "run_smtpd"
+    - "run_smtpsd"
+    - "run_smtpsub"
+
+- name: check service qmail-send service
   template:
     src="sqmail/service/qmail-send.service.j2"
     dest="/lib/systemd/system/qmail-send.service"
     backup=no
   register: qmail_send_service
+
+- name: check service qmail-smtpd service
+  template:
+    src="sqmail/service/qmail-smtpd.service.j2"
+    dest="/lib/systemd/system/qmail-smtpd.service"
+    backup=no
+  register: qmail_smtpd_service
+
+- name: check service qmail-smtpsd service
+  template:
+    src="sqmail/service/qmail-smtpsd.service.j2"
+    dest="/lib/systemd/system/qmail-smtpsd.service"
+    backup=no
+  register: qmail_smtpsd_service
+
+- name: check service qmail-smtpsub service
+  template:
+    src="sqmail/service/qmail-smtpsub.service.j2"
+    dest="/lib/systemd/system/qmail-smtpsub.service"
+    backup=no
+  register: qmail_smtpsub_service
 
 - name: check rsyslog setting
   template:

@@ -10,3 +10,15 @@
     - wordpress-l10n
     - apache2
     - mysql-server
+    - unzip
+    - tar
+    - gzip
+    - bzip2
+
+- name: Unarchive /usr/share/doc/wordpress/examples/setup-mysql.gz
+  shell: gunzip /usr/share/doc/wordpress/examples/setup-mysql.gz
+    chdir="/usr/share/doc/wordpress/examples"
+  unarchive:
+    src="/usr/share/doc/wordpress/examples/setup-mysql.gz"
+    dest="/usr/share/doc/wordpress/examples/setup-mysql"
+    copy=no

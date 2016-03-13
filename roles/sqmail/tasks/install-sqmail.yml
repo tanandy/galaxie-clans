@@ -106,21 +106,29 @@
     - "conf-users"
 
 # send scripts
+#- name: check scripts
+#  template:
+#    src="sqmail/service/{{ item }}.j2"
+#    dest="{{ glx_sqmail_service_scripts_dir }}/{{ item }}"
+#  with_items:
+#    - "run_log"
+#    - "run_pop3d"
+#    - "run_pop3sd"
+#    - "run_qmqpd"
+#    - "run_qmtpd"
+#    - "run_qmtpsd"
+#    - "run_send"
+#    - "run_smtpd"
+#    - "run_smtpsd"
+#    - "run_smtpsub"
+#    - "ssl.env"
+
 - name: check scripts
   template:
     src="sqmail/service/{{ item }}.j2"
     dest="{{ glx_sqmail_service_scripts_dir }}/{{ item }}"
   with_items:
     - "run_log"
-    - "run_pop3d"
-    - "run_pop3sd"
-    - "run_qmqpd"
-    - "run_qmtpd"
-    - "run_qmtpsd"
-    - "run_send"
-    - "run_smtpd"
-    - "run_smtpsd"
-    - "run_smtpsub"
     - "ssl.env"
 
 # send package dir
@@ -178,10 +186,10 @@
     chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
   when: glx_sqmail_download.changed
 
-- name: package/service -- sets up the run script for daemontools' /service and additionally the logging
-  shell: package/service
-    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
-  when: glx_sqmail_download.changed
+#- name: package/service -- sets up the run script for daemontools' /service and additionally the logging
+#  shell: package/service
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
 
 #- name: package/scripts setup optional, undocumented and unmaintained scripts
 #  shell: package/scripts
