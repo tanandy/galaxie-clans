@@ -17,9 +17,6 @@
 - include: install-sqmail.yml
   tags: install-sqmail, install
 
-- include: install-sqmailctl.yml
-  tags: install-sqmailctl, install
-
 ## Initital setting
 - include: config-controls.yml
   tags: controls, config, install-sqmail, install
@@ -48,9 +45,5 @@
 - include: install-systemd-services.yml
   tags: config, install-sqmail, install, systemd-services
 
-## finilize
-- include: services-cleanup.yml
-  tags: cleanup, install-sqmail, install-sqmail, install
-
-- include: cleanup.yml
-  tags: cleanup, install-sqmail, install
+- include: services-enable.yml
+  tags: config, install-sqmail, install, systemd-services

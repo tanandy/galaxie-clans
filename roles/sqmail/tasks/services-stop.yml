@@ -1,100 +1,54 @@
----
-# send
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
-  register: send
+### Disable services
+- name: disable qmail-{{ glx_sqmail_service_delivery.name }}
+  service:
+    name="qmail-send"
+    state=stopped
+    enabled=no
 
-- name: svc -dt {{ glx_sqmail_service_delivery.identifier }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
-  when: send.stat.exists
+- name: disable qmail-{{ glx_sqmail_service_smtp.name }}
+  service:
+    name="qmail-smtpd"
+    state=stopped
+    enabled=no
 
-# smtp
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_smtp.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_smtp.directory }}"
-  register: smtp
+- name: disable qmail-{{ glx_sqmail_service_smtps.name }}
+  service:
+    name="qmail-smtpsd"
+    state=stopped
+    enabled=no
 
-- name: svc -dt {{ glx_sqmail_service_smtp.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_smtp.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_smtp.directory }}/log
-  when: smtp.stat.exists
+- name: disable qmail-{{ glx_sqmail_service_submission.name }}
+  service:
+    name="qmail-smtpsub"
+    state=stopped
+    enabled=no
 
-# smtps
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_smtps.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_smtps.directory }}"
-  register: smtp
+- name: disable qmail-{{ glx_sqmail_service_pop3.name }}
+  service:
+    name="qmail-pop3d"
+    state=stopped
+    enabled=no
 
-- name: svc -dt {{ glx_sqmail_service_smtps.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_smtps.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_smtps.directory }}/log
-  when: smtp.stat.exists
+- name: disable qmail-{{ glx_sqmail_service_pop3s.name }}
+  service:
+    name="qmail-pop3sd"
+    state=stopped
+    enabled=no
 
-# submission
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_submission.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_submission.directory }}"
-  register: submission
+- name: disable qmail-{{ glx_sqmail_service_qmqp.name }}
+  service:
+    name="qmail-qmqpd"
+    state=stopped
+    enabled=no
 
-- name: svc -dt {{ glx_sqmail_service_submission.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_submission.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_submission.directory }}/log
-  when: submission.stat.exists
+- name: disable qmail-{{ glx_sqmail_service_qmtp.name }}
+  service:
+    name="qmail-qmtpd"
+    state=stopped
+    enabled=no
 
-# pop3
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_pop3.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_pop3.directory }}"
-  register: pop3
-
-- name: svc -dt {{ glx_sqmail_service_pop3.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_pop3.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_pop3.directory }}/log
-  when: pop3.stat.exists
-
-# pop3s
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_pop3s.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_pop3s.directory }}"
-  register: pop3s
-
-- name: svc -dt {{ glx_sqmail_service_pop3s.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_pop3s.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_pop3s.directory }}/log
-  when: pop3s.stat.exists
-
-# qmqp
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_qmqp.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_qmqp.directory }}"
-  register: qmqp
-
-- name: svc -dt {{ glx_sqmail_service_qmqp.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_qmqp.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_qmqp.directory }}/log
-  when: qmqp.stat.exists
-
-# qmtp
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_qmtp.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_qmtp.directory }}"
-  register: qmtp
-
-- name: svc -dt {{ glx_sqmail_service_qmtp.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_qmtp.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_qmtp.directory }}/log
-  when: qmtp.stat.exists
-
-# qmtps
-###############################################################################
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_qmtps.directory }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_qmtps.directory }}"
-  register: qmtps
-
-- name: svc -dt {{ glx_sqmail_service_qmtps.directory }}
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_qmtps.directory }} {{ glx_service_dir }}/{{ glx_sqmail_service_qmtps.directory }}/log
-  when: qmtps.stat.exists
-
+- name: disable qmail-{{ glx_sqmail_service_qmtps.name }}
+  service:
+    name="qmail-qmtpsd"
+    state=stopped
+    enabled=no
