@@ -329,11 +329,5 @@ glx_sqmail_alias_admins_list:
       - "root@{{ glx_sqmail_domain }}"
       
 glx_sqmail_alias_users_list:
-  - name: "lulu"
-    value:
-      - "lulu@galaxie.ici"
-  - name: "boris"
-    value:
-      - "boris@galaxie.ici"
-      - "lulu@galaxie.ici"
+  - { name: "anonymous",      value: ["postmaster"] }
 
