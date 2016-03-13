@@ -1,8 +1,8 @@
 # the big picture : http://www.fehcom.de/images/sqmail_Big_Picture.pdf
 
 # Stop everything for permit to overwrite fews binarys
-- include: services-stop.yml
-  tags: install
+#- include: services-stop.yml
+#  tags: install
 
 ## Intall the requirements
 - include: install-cdb.yml
