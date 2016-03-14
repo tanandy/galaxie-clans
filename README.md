@@ -19,7 +19,6 @@ The Galaxie system is use as Action Layer for a AI call Alferd:
  https://github.com/aurelienmaury/alfred-cli
 
 
-
 ## Bootstrap
 
 * define the variable `galaxie_user` either in your `./hosts` of group_vars. Does not mater where, but have it defined when launching intergation playbook.
