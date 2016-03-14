@@ -1,16 +1,16 @@
 Role Name
 =========
 
-sqmail-server role have goal to install and configure a s/qmail server from "fehcom" design.
+sqmail role have goal to install and configure a s/qmail server from "fehcom" design.
 
     s/qmail (pronounced skew-mail) is a Mail Transfer Agent (MTA) based on Qmail
     suited for high-speed and confidential email transport over IPv4 and IPv6 networks.
 
 For more informations: http://fehcom.de/sqmail/sqmail.html
 
-That role by default follow exactelly the design describ by fehcom, but convert a maximum of path, values, file for have a dynamic setting. By exemple all UID, GID, path, can be change , or be different by machine (not sure it's usefull).
+That role by default don't follow exactelly the design describ by fehcom, it's very close but don't use Damontools by use Systemd and Rsyslog , path, values, file for have a dynamic setting. By exemple all UID, GID, path, can be change , or be different by machine (not sure it's usefull).
 
-It role is part of Galaxie design, if you like it project please not fork it like you go to the toilet, propose a patch or why not just send me a e-mail ?
+It role is part of Galaxie design, if you like it project please not fork that project like you go to the toilet, propose a patch or why not just send me a e-mail ?
 I'm not part of "fehcom" team, i'm just a humain it focus on Galaxie design devellopement, you are free to use my work without any warranty , may be in 50 years that work will be out-dated who know ...
 
 By default that role will done the same result as the "fehcom" documentation, that mean after all conditional test and teamplate application under Ansible all scripts, configuration files will use default as descript on "fehcom" documentation.
@@ -37,15 +37,31 @@ The role use the daemons-tool provide by Debian packages
 
 Features
 --------
-Like all Galaxie roles:
-- Use Ansible templating system for write the script from "./defaults/main.yml" variable file
-- Don't depends of strange Ansible modules, it try to be autonome inside that role
-- Respect a documented methode, it it role that start here: http://www.fehcom.de/sqmail/sqmail.html
+Like others Galaxie roles:
+- That role use Ansible templating system for write files all is managable via variables store on "./defaults/main.yml" file
+- It not depend of other strange Ansible modules, it try to be autonomus inside that role, Sources files are store on the role, it self.
+- Respect a documented method, start here: http://www.fehcom.de/sqmail/sqmail.html
+- Pure Systemd design, Not use Dameontools at all, that because that role use Ansible native service plugin/module.
+- Pure Rsyslog design, use native /var/log/mail.log and /var/log/mail.XXX as require for mail system and big centralize logs services.
 
-ucspi-tcp6:
+### Systemd:
+
+https://github.com/Tuuux/galaxie/tree/master/roles/sqmail/templates/sqmail/service
+
+- s/qmail scripts normaly prepare for Daemontools have recice a "&" at end of each file for permit to use Systemd type=forking.
+- All scripts is store a s/qmail directory e. g. /var/qmail/bin with the same name as s/smail sources
+- That role provide one .service file by service offer by s/qmail.
+
+### Rsyslog
+
+https://github.com/Tuuux/galaxie/blob/master/roles/sqmail/templates/etc/rsyslog.d/20-sqmail.conf.j2
+
+- The role provide a template it follow path and name store on "./defaults/main.yml" file
+
+### ucspi-tcp6:
 - auto 32/64 bit configuration by x64 detection and switch play with -m64 on conf-ld files
 
-s/qmail:
+### s/qmail:
 - conf-log, get value from "glx_multilog_dir" var
 - scripts get all value from settings
 - conf-ids, conf-group -  by edit a value inside defaults/main.yml it will automatiquelly make consistant setting.
