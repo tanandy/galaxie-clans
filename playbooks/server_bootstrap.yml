@@ -50,13 +50,13 @@
     - name: galaxie group is present
       group:
         name="{{ galaxie.user }}"
-        gid=4200
+        gid=42000
         state=present
 
     - name: galaxie user is present
       user:
         name="{{ galaxie.user }}"
-        uid=4200
+        uid=42000
         groups="{{ galaxie.user }},sudo"
         generate_ssh_key=yes
         state=present
