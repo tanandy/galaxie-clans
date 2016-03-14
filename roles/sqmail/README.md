@@ -33,7 +33,7 @@ Requirements
 it should work on Debian's familly GNU/Linux distribution.
 The role install it self requirements
 
-The role use the daemons-tool provide by Debian packages
+The role NOT use the daemons-tool provide by Debian packages, uninstall outdated DEBIAN DJB packages like qmail(netqmail patch) , daemontools 
 
 Features
 --------
@@ -116,8 +116,7 @@ ssl.env file:
 - Value "NOFILES" it make reference to "sqmail group for auxiliar files" have been replace by {{ glx_sqmail_groups.nofiles.gname }}
 - Value "QMAIL" it make reference to "/var/qmail" directory have been replace by {{ glx_qmail_dir }}
 
-Role Variables
---------------
+## Role Variables
 
 A maxium of variables have been set that for permit fine tuning inside host_var or group_var
 
@@ -127,16 +126,12 @@ yet (You can found it on ./defaults/main.yml)
 we have make our maximum for have explicite variable name, that should minimize the need of details.
 
 
-Dependencies
-------------
-"daemontools" from D. J. Bernstein (https://cr.yp.to/daemontools.html) should be install frist.
+## Dependencies
 
-By default the role use Debian packages "daemontools" and "daemontools-run" then have default Debian system directory path, it's the root cause about why everything is dynamic on that role.
+Systemd and Rsyslog are default package on GNU/Debian systems
 
-by exemple: glx_supervise_dir: "/var/lib/supervise" it the true Debian path, /service is /etc/service
+## Example Playbook
 
-Example Playbook
-----------------
 as do by ../sqmail-server.yml all default value are inside ./defaults/main.yml file
 
     - hosts: sqmail-servers
@@ -144,12 +139,10 @@ as do by ../sqmail-server.yml all default value are inside ./defaults/main.yml f
       roles:
          - sqmail-server
 
-License
--------
+## License
 
 GPL 3
 
-Author Information
-------------------
+## Author Information
 
-Tuux from rtnp.org
+Tuux from www/rtnp.org
