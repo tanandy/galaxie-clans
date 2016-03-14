@@ -51,7 +51,7 @@ Like others Galaxie roles:
 
 The magic happen with systemd type=forking when the exec command is finish by a "&", in that case systemd us $! and will know the forked PID. That really important to continue to use original s/qmail scripts that because SSL informations and ENV are use on the right way.
 
-- A Other important thing is about the socket creation, we have to let sslserver creat the socket and bind IP to the network device that because s/qmail design use CDB file , it have no wait for explain to systemd how deal with a CDB file.
+- A Other important thing is about the socket creation, we have to let sslserver creat the socket and bind IP to the network device that because s/qmail design use CDB file , it have no way to explain to systemd how deal with a CDB file.
 
 https://github.com/Tuuux/galaxie/tree/master/roles/sqmail/templates/sqmail/service
 
@@ -69,13 +69,13 @@ https://github.com/Tuuux/galaxie/blob/master/roles/sqmail/templates/etc/rsyslog.
 - auto 32/64 bit configuration by x64 detection and switch play with -m64 on conf-ld files
 
 ### s/qmail:
-- conf-log, get value from "glx_multilog_dir" var
+- conf-log, get value from "glx_log_dir" defaults is /var/log
 - scripts get all value from settings
 - conf-ids, conf-group -  by edit a value inside defaults/main.yml it will automatiquelly make consistant setting.
 
 run_log script:
-- Value "/var/log" have been replace by "{{ glx_multilog_dir }}"
-- Value "/var/log" inside "conf-log" file have been replace by {{ glx_multilog_dir }}
+- Value "/var/log" have been replace by "{{ glx_log_dir }}"
+- Value "/var/log" inside "conf-log" file have been replace by {{ glx_log_dir }}
 - Value "nofiles" it make reference to nofiles group have been replace by {{ glx_sqmail_groups.nofiles.gname }}, "conf-ids", "conf-users" and  "conf-groups" use the same method then the log script recive consitent informations.
 - Value "qmaill" it make reference to sqmail Log user have been replace by {{ glx_sqmail_ids.qmaill.uname }}, "conf-ids", "conf-users" and  "conf-groups" use the same method then the log script recive consitent informations.
 todo: Reference to "multilog" group , it make reference to daemontools group name should be dynamic; actually Galaxie design use daemontools Debian package but soon, daemontools will be dedicated to s/qmail, then the multilog username or UID will be under s/qmail control.

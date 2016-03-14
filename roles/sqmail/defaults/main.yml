@@ -5,7 +5,7 @@ glx_sqmail_dir: "/var/qmail"
 glx_sqmail_ssl_dir: "{{ glx_sqmail_dir }}/ssl"
 glx_supervise_dir: "/var/lib/supervise"
 glx_service_dir: "/etc/service"
-glx_multilog_dir: "/var/multilog"
+glx_log_dir: "/var/log"
 glx_prefix_dir: "/usr/local"
 
 # information about IP bind look sslserver or tcpserver manual

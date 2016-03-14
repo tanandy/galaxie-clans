@@ -1,6 +1,16 @@
 # Galaxie
 
-Ansible toolbox aimed at managing a set of Debian servers.
+Ansible toolbox aimed at managing a set of Debian's like servers. Originaly write for manage Home Network with external services.
+That a Serie a powerfull Roles make by a senior system admin and review by a senior develloper.
+Galaxie is a true mixe of the two world, by luck authos Tuux and Mo have make the necessary for have no compromise.
+
+Do you know lot of roles it verify you DHCP client setting after have touch you /etc/resolv.conf ?
+
+- Pure System Admin compliance
+- Pure Syntax Devs compliance
+
+We'll be enjoy if you take as exemple our work, our roles are correct if regarding system admin point of view, that unfortunally not the case for many Ansible Roles. 
+
 
 ## Bootstrap
 

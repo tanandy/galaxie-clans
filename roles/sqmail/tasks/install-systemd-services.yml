@@ -105,27 +105,5 @@
     dest="/etc/logrotate.d/sqmail"
     backup=no
 
-### Clean for migration
-- name: test {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}
-  stat:
-    path="{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
-  register: send
-  when: glx_sqmail_service_delivery.enable
-
-- name: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
-  shell: svc -dt {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }} {{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log
-  when: glx_sqmail_service_delivery.enable and send.stat.exists
-
-- name: remove {{ glx_sqmail_service_delivery.identifier }} files and directory
-  file:
-    path="{{ item }}"
-    state=absent
-  with_items:
-    - "{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}/log"
-    - "{{ glx_service_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
-    - "{{ glx_supervise_dir }}/{{ glx_sqmail_service_delivery.identifier }}"
-    - "{{ glx_multilog_dir}}/{{ glx_sqmail_service_delivery.identifier }}"
-  when: glx_sqmail_service_delivery.enable and send.stat.exists
-
 
 
