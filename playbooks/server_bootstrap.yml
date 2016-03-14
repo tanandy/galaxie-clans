@@ -15,13 +15,13 @@
         host_key_path: "{{ inventory_dir }}/keys/{{ inventory_hostname }}"
         target_port: "{{ ansible_port|default('22', true) }}"
 
-    - name: check mandatory variable galaxie_user
-      fail: msg="galaxie_user is undefined"
-      when: not galaxie_user
+    - name: check mandatory variable galaxie.user
+      fail: msg="galaxie.user is undefined"
+      when: not galaxie.user
 
-    - name: lookup galaxie_user password
+    - name: lookup galaxie.user password
       set_fact:
-        galaxie_passwd: "{{ lookup('password', inventory_dir + '/secrets/' + ansible_hostname + '.' + galaxie_user +'.passwd chars=ascii_letters,digits,hexdigits,punctuation') }}"
+        galaxie_passwd: "{{ lookup('password', inventory_dir + '/secrets/' + ansible_hostname + '.' + galaxie.user +'.passwd chars=ascii_letters,digits,hexdigits,punctuation') }}"
       delegate_to: localhost
       become: no
 
@@ -41,7 +41,7 @@
       set_fact:
         need_server_key_regen: not glx_generated_keys.stat.exists
         need_host_key_regen: not host_key_presence.stat.exists
-        need_to_ban_current_key: ansible_ssh_private_key_file is defined and ansible_user != galaxie_user
+        need_to_ban_current_key: ansible_ssh_private_key_file is defined and ansible_user != galaxie.user
 ######
 # Host basic setup
 ######
@@ -49,38 +49,38 @@
 
     - name: galaxie group is present
       group:
-        name="{{ galaxie_user }}"
+        name="{{ galaxie.user }}"
         gid=4200
         state=present
 
     - name: galaxie user is present
       user:
-        name="{{ galaxie_user }}"
+        name="{{ galaxie.user }}"
         uid=4200
-        groups="{{ galaxie_user }},sudo"
+        groups="{{ galaxie.user }},sudo"
         generate_ssh_key=yes
         state=present
         shell=/bin/bash
 
-    - name: /home/{{ galaxie_user }}/.bashrc is ok
+    - name: /home/{{ galaxie.user }}/.bashrc is ok
       copy:
         src=etc_skel_bashrc
-        dest=/home/{{ galaxie_user }}/.bashrc
-        owner={{ galaxie_user }}
-        group={{ galaxie_user }}
+        dest=/home/{{ galaxie.user }}/.bashrc
+        owner={{ galaxie.user }}
+        group={{ galaxie.user }}
         mode=0644
 
-    - name: set permissions of /home/{{ galaxie_user }}/ directory
+    - name: set permissions of /home/{{ galaxie.user }}/ directory
       file:
-        path=/home/{{ galaxie_user }}
-        owner={{ galaxie_user }}
-        group={{ galaxie_user }}
+        path=/home/{{ galaxie.user }}
+        owner={{ galaxie.user }}
+        group={{ galaxie.user }}
         state=directory
         mode=0750
 
     - name: Change password for galaxie
       shell: >
-        usermod -p $(echo '{{ galaxie_passwd }}' | openssl passwd -1 -stdin) {{ galaxie_user }}
+        usermod -p $(echo '{{ galaxie_passwd }}' | openssl passwd -1 -stdin) {{ galaxie.user }}
 ######
 # SSH key black magic
 ######
@@ -92,7 +92,7 @@
 
     - name: host_key is authorized for user
       authorized_key:
-        user="{{ galaxie_user }}"
+        user="{{ galaxie.user }}"
         key="{{ lookup('file', host_key_path + '.pub') }}"
         state=present
         exclusive=yes
@@ -104,11 +104,11 @@
         key="{{ lookup('file', ansible_ssh_private_key_file + '.pub') }}"
         state=absent
 
-    - name: galaxie_user is sudoer
+    - name: galaxie.user is sudoer
       lineinfile: >
-        dest=/etc/sudoers.d/galaxie_user
-        regexp='^{{ galaxie_user }}'
-        line='{{ galaxie_user }} ALL=(ALL) NOPASSWD: ALL'
+        dest=/etc/sudoers.d/galaxie.user
+        regexp='^{{ galaxie.user }}'
+        line='{{ galaxie.user }} ALL=(ALL) NOPASSWD: ALL'
         state='present'
         validate='visudo -cf %s'
         create=yes
@@ -160,7 +160,7 @@
           insert_marker: "BOF"
         - line: "ansible_ssh_private_key_file: {{ host_key_path }}"
           insert_marker: "EOF"
-        - line: "ansible_user: {{ galaxie_user }}"
+        - line: "ansible_user: {{ galaxie.user }}"
           insert_marker: "EOF"
         - line: "ansible_port: {{ target_port }}"
           insert_marker: "EOF"
