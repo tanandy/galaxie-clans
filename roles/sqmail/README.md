@@ -46,6 +46,12 @@ Like others Galaxie roles:
 
 ### Systemd:
 
+That role make the true systemd usage and a not fake thing it use Daemonttols on the background ... For permit sslserver end ENV usage we use original script suppose to be start by daemontools. 
+
+The magic happen with systemd type=forking when the exec command is finish by a "&", in that case systemd us $! and will know the forked PID. That really important to continue to use original s/qmail scripts that because SSL informations and ENV are use.
+
+A Other important thing is about the socket creation, we have to let sslserver creat the socket that because s/qmail design use CDB file , it have no wait for explain to systemd how deal with a CDB file.
+
 https://github.com/Tuuux/galaxie/tree/master/roles/sqmail/templates/sqmail/service
 
 - s/qmail scripts normaly prepare for Daemontools have recice a "&" at end of each file for permit to use Systemd type=forking.
