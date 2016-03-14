@@ -1,5 +1,5 @@
-Role Name
-=========
+s/qmail Role
+============
 
 sqmail role have goal to install and configure a s/qmail server from "fehcom" design.
 
