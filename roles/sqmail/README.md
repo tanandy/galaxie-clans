@@ -82,12 +82,12 @@ todo: Reference to "multilog" group , it make reference to daemontools group nam
 
 run_pop3d script:
 - Value "/var/qmail" have been replace by {{ glx_qmail_dir }}
-- Value "Maildir" it suppose to be the maildirname have been replace by {{ glx_sqmail_maildirname }} it store "Mailbox", {{ glx_sqmail_maildirname }} is use during "defaultdelivery" control file creation, like that glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_maildirname }}/"
+- Value "Maildir" it suppose to be the maildirname have been replace by {{ glx_sqmail_control_defaultdelivery }} it store "Mailbox", {{ glx_sqmail_control_defaultdelivery }} is use during "defaultdelivery" control file creation, like that glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_control_defaultdelivery }}/"
 todo: HOSTNAME should store same value a control/me file
 
 run_pop3sd script:
 - Value "/var/qmail" have been replace by {{ glx_qmail_dir }}
-- Value "Maildir" it suppose to be the maildirname have been replace by {{ glx_sqmail_maildirname }} it store "Mailbox", {{ glx_sqmail_maildirname }} is use during "defaultdelivery" control file creation, like that glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_maildirname }}/"
+- Value "Maildir" it suppose to be the maildirname have been replace by {{ glx_sqmail_control_defaultdelivery }} it store "Mailbox", {{ glx_sqmail_control_defaultdelivery }} is use during "defaultdelivery" control file creation, like that glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_control_defaultdelivery }}/"
 todo: HOSTNAME should store same value a control/me file
 
 run_qmqpd script:

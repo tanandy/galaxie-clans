@@ -1,5 +1,5 @@
 ---
-- name: check scripts
+- name: check {{ glx_sqmail_dir }}/bin/run* scripts
   template:
     src="sqmail/service/{{ item }}.j2"
     dest="{{ glx_sqmail_dir }}/bin/{{ item }}"
@@ -17,63 +17,63 @@
     - "run_smtpsd"
     - "run_smtpsub"
 
-- name: check service qmail-pop3d service
+- name: check qmail-pop3d service
   template:
     src="sqmail/service/qmail-pop3d.service.j2"
     dest="/lib/systemd/system/qmail-pop3d.service"
     backup=no
   register: qmail_pop3d_service
 
-- name: check service qmail-pop3sd service
+- name: check qmail-pop3sd service
   template:
     src="sqmail/service/qmail-pop3sd.service.j2"
     dest="/lib/systemd/system/qmail-pop3sd.service"
     backup=no
   register: qmail_pop3sd_service
 
-- name: check service qmail-qmqpd service
+- name: check qmail-qmqpd service
   template:
     src="sqmail/service/qmail-qmqpd.service.j2"
     dest="/lib/systemd/system/qmail-qmqpd.service"
     backup=no
   register: qmail_qmqpd_service
 
-- name: check service qmail-qmtpd service
+- name: check qmail-qmtpd service
   template:
     src="sqmail/service/qmail-qmtpd.service.j2"
     dest="/lib/systemd/system/qmail-qmtpd.service"
     backup=no
   register: qmail_qmtpd_service
 
-- name: check service qmail-qmtpsd service
+- name: check qmail-qmtpsd service
   template:
     src="sqmail/service/qmail-qmtpsd.service.j2"
     dest="/lib/systemd/system/qmail-qmtpsd.service"
     backup=no
   register: qmail_qmtpsd_service
 
-- name: check service qmail-send service
+- name: check qmail-send service
   template:
     src="sqmail/service/qmail-send.service.j2"
     dest="/lib/systemd/system/qmail-send.service"
     backup=no
   register: qmail_send_service
 
-- name: check service qmail-smtpd service
+- name: check qmail-smtpd service
   template:
     src="sqmail/service/qmail-smtpd.service.j2"
     dest="/lib/systemd/system/qmail-smtpd.service"
     backup=no
   register: qmail_smtpd_service
 
-- name: check service qmail-smtpsd service
+- name: check qmail-smtpsd service
   template:
     src="sqmail/service/qmail-smtpsd.service.j2"
     dest="/lib/systemd/system/qmail-smtpsd.service"
     backup=no
   register: qmail_smtpsd_service
 
-- name: check service qmail-smtpsub service
+- name: check qmail-smtpsub service
   template:
     src="sqmail/service/qmail-smtpsub.service.j2"
     dest="/lib/systemd/system/qmail-smtpsub.service"

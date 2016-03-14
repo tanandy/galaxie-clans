@@ -1,0 +1,5 @@
+---
+- hosts: mail-servers
+
+  roles:
+     - dovecot

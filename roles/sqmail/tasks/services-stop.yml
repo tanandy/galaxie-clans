@@ -1,54 +1,117 @@
 ### Disable services
+- name: check if qmail-{{ glx_sqmail_service_delivery.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_delivery.name }}"
+  register: check_service_delivery
+  changed_when: false
+  failed_when: check_service_delivery.rc >= 2
+
 - name: disable qmail-{{ glx_sqmail_service_delivery.name }}
   service:
     name="qmail-send"
     state=stopped
     enabled=no
+  when: not check_service_delivery.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_smtp.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_smtp.name }}"
+  register: check_service_smtp
+  changed_when: false
+  failed_when: check_service_smtp.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_smtp.name }}
   service:
     name="qmail-smtpd"
     state=stopped
     enabled=no
+  when: not check_service_smtp.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_smtps.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_smtps.name }}"
+  register: check_service_smtps
+  changed_when: false
+  failed_when: check_service_smtps.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_smtps.name }}
   service:
     name="qmail-smtpsd"
     state=stopped
     enabled=no
+  when: not check_service_smtps.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_submission.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_submission.name }}"
+  register: check_service_submission
+  changed_when: false
+  failed_when: check_service_submission.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_submission.name }}
   service:
     name="qmail-smtpsub"
     state=stopped
     enabled=no
+  when: not check_service_submission.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_pop3.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_pop3.name }}"
+  register: check_service_pop3
+  changed_when: false
+  failed_when: check_service_pop3.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_pop3.name }}
   service:
     name="qmail-pop3d"
     state=stopped
     enabled=no
+  when: not check_service_pop3.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_pop3s.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_pop3s.name }}"
+  register: check_service_pop3s
+  changed_when: false
+  failed_when: check_service_pop3s.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_pop3s.name }}
   service:
     name="qmail-pop3sd"
     state=stopped
     enabled=no
+  when: not check_service_pop3s.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_qmqp.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_qmqp.name }}"
+  register: check_service_qmqp
+  changed_when: false
+  failed_when: check_service_qmqp.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_qmqp.name }}
   service:
     name="qmail-qmqpd"
     state=stopped
     enabled=no
+  when: not check_service_qmqp.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_qmtp.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_qmtp.name }}"
+  register: check_service_qmtp
+  changed_when: false
+  failed_when: check_service_qmtp.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_qmtp.name }}
   service:
     name="qmail-qmtpd"
     state=stopped
     enabled=no
+  when: not check_service_qmtp.rc == 1
+
+- name: check if qmail-{{ glx_sqmail_service_qmtps.name }} is install
+  shell: systemctl list-units --type=service | grep -c "qmail-{{ glx_sqmail_service_qmtps.name }}"
+  register: check_service_qmtps
+  changed_when: false
+  failed_when: check_service_qmtps.rc >= 2
 
 - name: disable qmail-{{ glx_sqmail_service_qmtps.name }}
   service:
     name="qmail-qmtpsd"
     state=stopped
     enabled=no
+  when: not check_service_qmtps.rc == 1

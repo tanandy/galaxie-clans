@@ -140,8 +140,8 @@ glx_sqmail_control_rcpthosts:
   - "{{ glx_sqmail_domain }}"
   - ".{{ glx_sqmail_domain }}"
 
-glx_sqmail_maildirname: "Maildir"
-glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_maildirname }}/"
+glx_sqmail_defaultdelivery: "Maildir"
+glx_sqmail_control_defaultdelivery: "./{{ glx_sqmail_defaultdelivery }}/"
 glx_sqmail_control_concurrencyincoming: "30"
 glx_sqmail_control_spfbehavior: "3"
 glx_sqmail_control_bouncefrom: "postmaster"
