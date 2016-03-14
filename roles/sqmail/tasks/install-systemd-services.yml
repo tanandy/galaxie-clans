@@ -17,6 +17,15 @@
     - "run_smtpsd"
     - "run_smtpsub"
 
+- name: check sqmailctl
+  template:
+    src="sqmailctl.j2"
+    dest="{{ glx_prefix_dir }}/bin/sqmailctl"
+    owner="root"
+    group="root"
+    mode=0755
+    backup=no
+
 - name: check qmail-pop3d service
   template:
     src="sqmail/service/qmail-pop3d.service.j2"
