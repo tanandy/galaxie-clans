@@ -21,7 +21,7 @@ The Galaxie system is use as Action Layer for a AI call Alferd:
 ## How the Magic happen
 Galaxie is provide a subdirectory
 
-```bash
+```
 ./galaxie
 ├── ansible.cfg    (Config file for ansible setting)
 ├── hosts          (Config file for ansible inventory file)
