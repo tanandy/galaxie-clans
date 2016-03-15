@@ -91,18 +91,16 @@
     backup=no
   register: qmail_smtpsub_service
 
+- name: regen unit files
+  shell: systemctl daemon-reload
+  when: qmail_pop3d_service|changed or qmail_pop3sd_service|changed or qmail_qmqpd_service|changed or qmail_qmtpd_service|changed or qmail_qmtpsd_service|changed or qmail_send_service|changed or qmail_smtpd_service|changed or qmail_smtpsd_service|changed or qmail_smtpsub_service|changed
+
 - name: check rsyslog setting
   template:
     src="etc/rsyslog.d/20-sqmail.conf.j2"
     dest="/etc/rsyslog.d/20-sqmail.conf"
     backup=no
   register: rsyslog_sqmail_status
-
-- name: regen unit files
-  shell: systemctl daemon-reload
-  notify:
-    - restart qmail-send service
-  when: qmail_send_service|changed
 
 - name: restart rsyslog service
   service:
