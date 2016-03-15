@@ -21,17 +21,18 @@ The Galaxie system is use as Action Layer for a AI call Alferd:
 ## How the Magic happen
 Galaxie is provide a subdirectory
 
->./galaxie
->├── ansible.cfg    (Config file for ansible setting)
->├── hosts          (Config file for ansible inventory file)
->├── group_vars     (Ansible Group Vars directory, The groupe.yml file can store dedicated group of host vars)
->├── host_vars      (Ansible Host Vars directory, The hostname.yml file can store dedicated host vars)
->├── keys           (Directory where is generate and store SSH private and pub keys)
->├── playbooks      (Directory where Ansys Playbooks are store)
->├── roles          (Directory where Ansys Roles are store)
->├── secrets        (Directory where is store password)
->└── zone_files     (Directory where is store primary and secondary DNS zone files)
-
+```bash
+./galaxie
+├── ansible.cfg    (Config file for ansible setting)
+├── hosts          (Config file for ansible inventory file)
+├── group_vars     (Ansible Group Vars directory, The groupe.yml file can store dedicated group of host vars)
+├── host_vars      (Ansible Host Vars directory, The hostname.yml file can store dedicated host vars)
+├── keys           (Directory where is generate and store SSH private and pub keys)
+├── playbooks      (Directory where Ansys Playbooks are store)
+├── roles          (Directory where Ansys Roles are store)
+├── secrets        (Directory where is store password)
+└── zone_files     (Directory where is store primary and secondary DNS zone files)
+```
 
 ## Bootstrap
 
