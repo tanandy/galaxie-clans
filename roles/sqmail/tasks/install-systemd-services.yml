@@ -1,4 +1,6 @@
 ---
+# [inspired_by] http://mario.raval.li/category/linux/qmail/
+
 - name: check {{ glx_sqmail_dir }}/bin/run* scripts
   template:
     src="sqmail/service/{{ item }}.j2"
