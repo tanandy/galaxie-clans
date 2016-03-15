@@ -2,7 +2,6 @@ host_vars/*
 group_vars/*
 secrets/*
 keys/*
-zone_files/*
 .idea
 *.iml
 *.ipr
