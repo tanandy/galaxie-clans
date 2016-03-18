@@ -30,3 +30,18 @@
   apache2_module:
     state=present
     name="ssl"
+
+- name: creat virtual domain files
+  template:
+    src="000-default.conf.j2"
+    dest="{{ glx_apache_sysconfdir }}/apache2/sites-available/{{ item.ServerName }}.conf"
+    owner="root"
+    group="root"
+    mode=0644
+  with_items: glx_apache_virtualhosts
+
+- name: creat DocumentRoot dor for each Virtualhosts
+  file:
+    path="{{ item.DocumentRoot }}"
+    state=directory
+  with_items: glx_apache_virtualhosts
