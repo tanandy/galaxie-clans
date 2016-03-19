@@ -34,11 +34,11 @@
   notify:
     - service apache2 restart
 
-- name: apache2 | add webmasters user lisr in www-data group
+- name: apache2 | add webmasters user lisr in {{ glx_apache_gname }} group
   user:
-    name: "{{ item }}"
-    groups: "www-data"
-    append: yes
+    name="{{ item }}"
+    groups="{{ glx_apache_gname }}"
+    append=yes
   with_items: glx_apache_webmasters
 
 - name: apache2 | enable the fcgid module in apache
@@ -83,8 +83,8 @@
   file:
     path="{{ item.DocumentRoot }}"
     state=directory
-    owner="www-data"
-    group="www-data"
+    owner="{{ glx_apache_uname }}"
+    group="{{ glx_apache_gname }}"
     mode=2775
   with_items: glx_apache_virtualhosts
 
@@ -93,11 +93,12 @@
     src=index.php
     dest={{ item.DocumentRoot }}/index.php
     force=no
-    owner="www-data"
-    group="www-data"
+    owner="{{ glx_apache_uname }}"
+    group="{{ glx_apache_gname }}"
     mode=0664
   with_items: glx_apache_virtualhosts
 
+# Enable HTTP Virtual Hosts
 - name: apache2 | a2ensite virtual hosts
   command: a2ensite {{ item.ServerName }}
     creates="{{ glx_apache_sysconfdir }}/apache2/sites-enabled/{{ item.ServerName }}.conf"
@@ -119,8 +120,8 @@
   file:
     path="{{ item.DocumentRoot }}"
     state=directory
-    owner="www-data"
-    group="www-data"
+    owner="{{ glx_apache_uname }}"
+    group="{{ glx_apache_gname }}"
     mode=2775
   with_items: glx_apache_ssl_virtualhosts
 
@@ -129,11 +130,12 @@
     src=index.php
     dest={{ item.DocumentRoot }}/index.php
     force=no
-    owner="www-data"
-    group="www-data"
+    owner="{{ glx_apache_uname }}"
+    group="{{ glx_apache_gname }}"
     mode=0664
   with_items: glx_apache_ssl_virtualhosts
 
+# Enable HTTPS Virtual Hosts
 #- name: apache2 | a2ensite SSL virtual hosts
 #  command: a2ensite {{ item.ServerName }}-ssl
 #    creates="{{ glx_apache_sysconfdir }}/apache2/sites-enabled/{{ item.ServerName }}-ssl.conf"

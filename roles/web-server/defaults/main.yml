@@ -14,14 +14,17 @@ glx_apache_webmasters:
 # Apache sysconfigdir
 glx_apache_sysconfdir: "/etc"
 glx_apache_wwwdir: "/var/www"
-
+glx_apache_uname: "www-data"
+glx_apache_gname: "www-data"
+gtx_apache_http_port: "80"
+gtx_apache_https_port: "443"
 
 # Virtual Domains list to configure
 glx_apache_virtualhosts:
-  - { VirtualHost: "*:80", ServerName: "galaxie.ici", ServerAlias: ['www'], ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
+  - { VirtualHost: "*:{{ gtx_apache_http_port }}", ServerName: "galaxie.ici", ServerAlias: ['www'], ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
 
 glx_apache_ssl_virtualhosts:
-  - { VirtualHost: "_default_:443", ServerName: "galaxie.ici", ServerAlias: ['www'], ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
+  - { VirtualHost: "_default_:{{ gtx_apache_https_port }}", ServerName: "galaxie.ici", ServerAlias: ['www'], ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
 
 # PHP Setting
 glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"

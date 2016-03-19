@@ -118,7 +118,8 @@
     replace='expose_php = Off'
   notify:
     - service apache2 restart
-
+# Disable server Signature and Version thing
+# [inspired_by] http://ask.xmodulo.com/turn-off-server-signature-apache-web-server.html
 - name: php5 | using expose_php = Off
   lineinfile:
     dest={{ glx_apache2_php_ini_file }}
