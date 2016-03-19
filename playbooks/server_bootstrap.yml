@@ -45,7 +45,54 @@
 ######
 # Host basic setup
 ######
-    - script: files/ansible-seed.sh
+    - shell: apt-get update
+      environment:
+        DEBIAN_FRONTEND: "noninteractive"
+
+    - shell: apt-get -o Dpkg::Options::="--force-confold" install python-apt python-apt-dev aptitude -y
+      environment:
+        DEBIAN_FRONTEND: "noninteractive"
+
+    - apt:
+        update_cache=yes
+        upgrade=full
+
+    - apt:
+        pkg="{{ item }}"
+      with_items:
+        - libssl-dev
+        - libffi-dev
+        - git
+        - python-dev
+        - libperl-dev
+        - sudo
+        - build-essential
+        - python-setuptools
+        - python-distutils-extra
+
+    - apt:
+        pkg=python-pip
+        state=absent
+        purge=yes
+
+    - easy_install: name=pip state=latest
+
+    - pip:
+        name="{{ item }}"
+        state=latest
+      with_items:
+        - pip
+        - pyopenssl
+        - ndg-httpsclient
+        - pyasn1
+        - ansible
+
+    - file:
+        path=/etc/ansible
+        state=directory
+        owner=root
+        group=root
+        mode=0755
 
     - name: galaxie group is present
       group:
@@ -97,12 +144,12 @@
         state=present
         exclusive=yes
 
-    - name: current key is banished for ansible_user
-      when: need_to_ban_current_key
-      authorized_key:
-        user="{{ ansible_user }}"
-        key="{{ lookup('file', ansible_ssh_private_key_file + '.pub') }}"
-        state=absent
+#    - name: current key is banished for ansible_user
+#      when: need_to_ban_current_key
+#      authorized_key:
+#        user="{{ ansible_user }}"
+#        key="{{ lookup('file', ansible_ssh_private_key_file + '.pub') }}"
+#        state=absent
 
     - name: galaxie.user is sudoer
       lineinfile: >
@@ -119,12 +166,8 @@
   tasks:
 
 # [inspired_by] http://www.cyberciti.biz/faq/howto-regenerate-openssh-host-keys/
-    - name: cleaning old ssh_keys
-      shell: /bin/rm -f /etc/ssh/ssh_host_*
-      when: need_server_key_regen
-
-    - name: cleaning old ssh_keys
-      shell: /usr/sbin/dpkg-reconfigure openssh-server
+    - name: regenerating ssh_keys
+      shell: /bin/rm -f /etc/ssh/ssh_host_* && /usr/sbin/dpkg-reconfigure openssh-server
       when: need_server_key_regen
 
     - name: leaving trace of key generation
