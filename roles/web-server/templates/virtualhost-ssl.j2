@@ -18,8 +18,8 @@
 		#   /usr/share/doc/apache2/README.Debian.gz for more info.
 		#   If both key and certificate are stored in the same file, only the
 		#   SSLCertificateFile directive is needed.
-		SSLCertificateFile	/etc/ssl/certs/ssl-cert-{{ item.ServerName }}.pem
-		SSLCertificateKeyFile /etc/ssl/private/ssl-cert-{{ item.ServerName }}.key
+		SSLCertificateFile	{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
+		SSLCertificateKeyFile {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key
 
 		#   Server Certificate Chain:
 		#   Point SSLCertificateChainFile at a file containing the

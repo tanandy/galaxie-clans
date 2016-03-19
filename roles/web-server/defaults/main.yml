@@ -11,13 +11,18 @@ install_wordpress: false
 glx_apache_webmasters:
   - "{{ galaxie_ansible_user }}"
 
-# Apache sysconfigdir
+# Common Setting
 glx_apache_sysconfdir: "/etc"
 glx_apache_wwwdir: "/var/www"
 glx_apache_uname: "www-data"
 glx_apache_gname: "www-data"
 gtx_apache_http_port: "80"
 gtx_apache_https_port: "443"
+
+# SSL
+glx_apache_use_self_signed_certs: true
+glx_apache_force_self_signed_gen: true
+glx_apache_localcerts_dir: "/etc/ssl/localcerts"
 
 # Virtual Domains list to configure
 glx_apache_virtualhosts:

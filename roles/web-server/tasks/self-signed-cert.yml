@@ -1,0 +1,33 @@
+---
+- name: apache2 | creat localcerts directory
+  file:
+    path="{{ glx_apache_localcerts_dir }}"
+    state=directory
+    owner="root"
+    group="root"
+    mode=0770
+  when: glx_apache_use_self_signed_certs
+
+- name: apache2 | delete previous certificates .pem
+  file:
+    path="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem"
+    state=absent
+  with_items: glx_apache_ssl_virtualhosts
+  when: glx_apache_use_self_signed_certs and glx_apache_force_self_signed_gen
+
+- name: apache2 | delete previous certificates .key
+  file:
+    path="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key"
+    state=absent
+  with_items: glx_apache_ssl_virtualhosts
+  when: glx_apache_use_self_signed_certs and glx_apache_force_self_signed_gen
+
+- name: apache2 | generaterate cert for each Virtual host
+  command: openssl req -new -x509 -days 365 -nodes -out {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem -keyout {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key
+    creates="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem"
+  when: glx_apache_use_self_signed_certs
+  with_items: glx_apache_ssl_virtualhosts
+
+- name: apache2 | set permissions of {{ glx_apache_localcerts_dir }}/ssl-cert-*
+  shell: chmod 600 {{ glx_apache_localcerts_dir }}/ssl-cert-*
+  changed_when: false
