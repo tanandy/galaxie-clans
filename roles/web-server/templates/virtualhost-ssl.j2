@@ -1,6 +1,6 @@
 <IfModule mod_ssl.c>
 	<VirtualHost {{ item.VirtualHost }}>
-        ServerName {{ item.ServerName }}:{{ gtx_apache_https_port }}
+        ServerName {{ item.ServerName }}:{{ glx_apache_https_port }}
 {% for ServerAlias in item.ServerAlias %}
         ServerAlias {{ ServerAlias }}.{{ item.ServerName }}
 {% endfor %}

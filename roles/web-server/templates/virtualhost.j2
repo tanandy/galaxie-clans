@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 <VirtualHost {{ item.VirtualHost }}>
-    ServerName {{ item.ServerName }}:{{ gtx_apache_http_port }}
+    ServerName {{ item.ServerName }}:{{ glx_apache_http_port }}
 {% for ServerAlias in item.ServerAlias %}
     ServerAlias {{ ServerAlias }}.{{ item.ServerName }}
 {% endfor %}
