@@ -2,7 +2,9 @@
 
 <VirtualHost {{ item.VirtualHost }}>
     ServerName {{ item.ServerName }}
-    ServerAlias www.{{ item.ServerName }}
+{% for ServerAlias in item.ServerAlias %}
+    ServerAlias {{ ServerAlias }}.{{ item.ServerName }}
+{% endfor %}
     ServerAdmin {{ item.ServerAdmin }}
     DocumentRoot {{ item.DocumentRoot }}
     ErrorLog ${APACHE_LOG_DIR}/{{ item.ServerName }}.error.log

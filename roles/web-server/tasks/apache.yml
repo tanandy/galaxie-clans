@@ -72,7 +72,7 @@
 ### HTTP
 - name: apache2 | creat HTTP virtual hosts files
   template:
-    src="000-default.conf.j2"
+    src="virtualhost.j2"
     dest="{{ glx_apache_sysconfdir }}/apache2/sites-available/{{ item.ServerName }}.conf"
     owner="root"
     group="root"
@@ -108,7 +108,7 @@
 ### HTTPS
 - name: apache2 | creat HTTPS virtual hosts files
   template:
-    src="default-ssl.conf.j2"
+    src="virtualhost-ssl.j2"
     dest="{{ glx_apache_sysconfdir }}/apache2/sites-available/{{ item.ServerName }}-ssl.conf"
     owner="root"
     group="root"
