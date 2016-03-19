@@ -1,42 +1,42 @@
 ---
-- name: uninstall libcdb1
+- name: cdb | uninstall libcdb1
   apt:
     pkg={{ item }}
     state=absent
   with_items:
     - libcdb1
 
-- name: check {{ glx_slashpackage_dir }} directory
+- name: cdb | check {{ glx_slashpackage_dir }} directory
   file:
     path="{{ glx_slashpackage_dir }}"
     state=directory
     mode=1755
 
-- name: check {{ glx_cdb_source_dir }} directory
+- name: cdb | check {{ glx_cdb_source_dir }} directory
   file:
     path="{{ glx_cdb_source_dir }}"
     state=directory
 
-- name: delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
+- name: cdb | delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
   file:
     path="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
     state=absent
   when: glx_cdb_force_install
 
-- name: get "{{ glx_cdb_download_url }}"
+- name: cdb | get "{{ glx_cdb_download_url }}"
   get_url:
     url="{{ glx_cdb_download_url }}"
     dest={{ glx_cdb_source_dir }}
     sha256sum=1919577799a50c080a8a05a1cbfa5fa7e7abc823d8d7df2eeb181e624b7952c5
   register: glx_cdb_source_download
 
-- name: delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}" directory
+- name: cdb | delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}" directory
   file:
     path="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}"
     state=absent
   when: glx_cdb_source_download.changed
 
-- name: unarchive {{ glx_cdb_source_download.dest }}
+- name: cdb | unarchive {{ glx_cdb_source_download.dest }}
   unarchive:
     src="{{ glx_cdb_source_download.dest }}"
     dest="{{ glx_cdb_source_dir }}"
@@ -44,14 +44,14 @@
   when: glx_cdb_source_download.changed
 
 # conf-ld -- loader options to be adjusted (for i386; AMD64 normalydefault)
-- name: check DEB_BUILD_ARCH
+- name: cdb | check DEB_BUILD_ARCH
   shell: dpkg-architecture 2>&1 | grep '^DEB_BUILD_ARCH=' | cut -d'=' -f2
   when: ansible_os_family == "Debian"
   register: DEB_BUILD_ARCH
   changed_when: false
 
 # send conf-* files
-- name: check conf-*
+- name: cdb | check conf-*
   template:
     src="cdb/{{ item }}.j2"
     dest="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}/{{ item }}"
@@ -60,12 +60,12 @@
     - "conf-home"
     - "conf-ld"
 
-- name: build {{ glx_cdb_app_name }} on "{{ glx_cdb_source_dir }}" directory
+- name: cdb | build {{ glx_cdb_app_name }} on "{{ glx_cdb_source_dir }}" directory
   shell: make
     chdir="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}"
   changed_when: false
 
-- name: install {{ glx_cdb_app_name }}
+- name: cdb | install {{ glx_cdb_app_name }}
   shell: make setup check
     chdir="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}"
   changed_when: false

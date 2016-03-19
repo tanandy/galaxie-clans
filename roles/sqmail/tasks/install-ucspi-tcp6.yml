@@ -1,5 +1,5 @@
 ---
-- name: uninstall ucspi-tcp-ipv6 and ucspi-tcp packages
+- name: ucspi-tcp-ipv6 | uninstall ucspi-tcp-ipv6 and ucspi-tcp packages
   apt:
     pkg={{ item }}
     state=absent
@@ -9,7 +9,7 @@
     - ucspi-proxy
     - ucspi-unix
 
-- name: install packages for ucspi-ssl building
+- name: ucspi-tcp-ipv6 | install packages for ucspi-ssl building
   apt:
     pkg={{ item }}
     state=present
@@ -18,44 +18,44 @@
     - libssl-dev
     - libperl-dev
 
-- name: check {{ glx_slashpackage_dir }} directory
+- name: ucspi-tcp-ipv6 | check {{ glx_slashpackage_dir }} directory
   file:
     path="{{ glx_slashpackage_dir }}"
     state=directory
     mode=1755
 
-- name: check {{ glx_ucspi_tcp6_source_dir }} directory
+- name: ucspi-tcp-ipv6 | check {{ glx_ucspi_tcp6_source_dir }} directory
   file:
     path="{{ glx_ucspi_tcp6_source_dir }}"
     state=directory
 
-- name: delete "{{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_source_name }}.{{ glx_ucspi_tcp6_source_extension }}"
+- name: ucspi-tcp-ipv6 | delete "{{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_source_name }}.{{ glx_ucspi_tcp6_source_extension }}"
   file:
     path="{{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_source_name }}.{{ glx_ucspi_tcp6_source_extension }}"
     state=absent
   when: glx_ucspi_tcp6_force_install
 
-- name: get "{{ glx_ucspi_tcp6_source_url }}"
+- name: ucspi-tcp-ipv6 | get "{{ glx_ucspi_tcp6_source_url }}"
   get_url:
     url="{{ glx_ucspi_tcp6_source_url }}"
     dest="{{ glx_ucspi_tcp6_source_dir }}"
     sha256sum="b0f6df425c2f3e90c89a94c501414834ea1bc0b66b8ba381fda8ca02f25d1608"
   register: glx_ucspi_tcp6_download
 
-- name: delete "{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00" directory
+- name: ucspi-tcp-ipv6 | delete "{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00" directory
   file:
     path="{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00"
     state=absent
   when: glx_ucspi_tcp6_download.changed
 
-- name: unarchive {{ glx_ucspi_tcp6_download.dest }}
+- name: ucspi-tcp-ipv6 | unarchive {{ glx_ucspi_tcp6_download.dest }}
   unarchive:
     src="{{ glx_ucspi_tcp6_download.dest }}"
     dest="{{ glx_slashpackage_dir }}"
     copy=no
   when: glx_ucspi_tcp6_download.changed
 
-- name: fixe permissions
+- name: ucspi-tcp-ipv6 | fixe permissions
   file:
     path="{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00"
     owner="root"
@@ -64,14 +64,14 @@
   when: glx_ucspi_tcp6_download.changed
 
 # conf-ld -- loader options to be adjusted (for i386; AMD64 normalydefault)
-- name: check DEB_BUILD_ARCH
+- name: ucspi-tcp-ipv6 | check DEB_BUILD_ARCH
   shell: dpkg-architecture 2>&1 | grep '^DEB_BUILD_ARCH=' | cut -d'=' -f2
   when: ansible_os_family == "Debian"
   register: DEB_BUILD_ARCH
   changed_when: false
 
 # send conf-* files
-- name: check conf-*
+- name: ucspi-tcp-ipv6 | check conf-*
   template:
     src="ucspi-tcp6/src/{{ item }}.j2"
     dest="{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00/src/{{ item }}"
@@ -79,12 +79,12 @@
     - "conf-cc"
     - "conf-ld"
 
-- name: package/install
+- name: ucspi-tcp-ipv6 | package/install
   shell: package/install
     chdir="{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00"
   when: glx_ucspi_tcp6_download.changed
 
-- name: package/man
+- name: ucspi-tcp-ipv6 | package/man
   shell: package/man
     chdir="{{ glx_slashpackage_dir }}/host/ucspi-tcp6-1.00"
   when: glx_ucspi_tcp6_download.changed

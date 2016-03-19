@@ -1,5 +1,5 @@
 ---
-- name: install packages for ucspi-ssl building
+- name: ucspi-ssl | install packages for ucspi-ssl building
   apt:
     pkg="{{ item }}"
     state=present
@@ -9,44 +9,44 @@
     - "libperl-dev"
     - "libkrb5-dev"
 
-- name: check {{ glx_slashpackage_dir }} directory
+- name: ucspi-ssl | check {{ glx_slashpackage_dir }} directory
   file:
     path="{{ glx_slashpackage_dir }}"
     state=directory
     mode=1755
 
-- name: check {{ glx_ucspi_ssl_source_dir }} directory
+- name: ucspi-ssl | check {{ glx_ucspi_ssl_source_dir }} directory
   file:
     path="{{ glx_ucspi_ssl_source_dir }}"
     state=directory
 
-- name: delete "{{ glx_ucspi_ssl_source_dir }}/{{ glx_ucspi_ssl_source_name }}.{{ glx_ucspi_ssl_source_extension }}"
+- name: ucspi-ssl | delete "{{ glx_ucspi_ssl_source_dir }}/{{ glx_ucspi_ssl_source_name }}.{{ glx_ucspi_ssl_source_extension }}"
   file:
     path="{{ glx_ucspi_ssl_source_dir }}/{{ glx_ucspi_ssl_source_name }}.{{ glx_ucspi_ssl_source_extension }}"
     state=absent
   when: glx_ucspi_ssl_force_install
 
-- name: get "{{ glx_ucspi_ssl_source_url }}"
+- name: ucspi-ssl | get "{{ glx_ucspi_ssl_source_url }}"
   get_url:
     url="{{ glx_ucspi_ssl_source_url }}"
     dest="{{ glx_ucspi_ssl_source_dir }}"
     sha256sum="{{ glx_ucspi_ssl_source_sha256sum }}"
   register: glx_ucspi_ssl_download
 
-- name: delete "{{ glx_slashpackage_dir }}/host/superscript.com/net/{{ glx_ucspi_ssl_source_name }}" directory
+- name: ucspi-ssl | delete "{{ glx_slashpackage_dir }}/host/superscript.com/net/{{ glx_ucspi_ssl_source_name }}" directory
   file:
     path="{{ glx_slashpackage_dir }}/host/superscript.com/net/{{ glx_ucspi_ssl_source_name }}"
     state=absent
   when: glx_ucspi_ssl_download.changed
 
-- name: unarchive {{ glx_ucspi_ssl_download.dest }}
+- name: ucspi-ssl | unarchive {{ glx_ucspi_ssl_download.dest }}
   unarchive:
     src="{{ glx_ucspi_ssl_download.dest }}"
     dest="{{ glx_slashpackage_dir }}"
     copy=no
   when: glx_ucspi_ssl_download.changed
 
-- name: fixe permissions
+- name: ucspi-ssl | fixe permissions
   file:
     path="{{ glx_slashpackage_dir }}/host/superscript.com/net/{{ glx_ucspi_ssl_source_name }}"
     owner="root"
@@ -55,7 +55,7 @@
   when: glx_ucspi_ssl_download.changed
 
 # This is the sslserver DH parameter file.
-- name: check "{{ glx_ucspi_ssl_certificates_dir }}" directory
+- name: ucspi-ssl | check "{{ glx_ucspi_ssl_certificates_dir }}" directory
   file:
     path="{{ glx_ucspi_ssl_certificates_dir }}"
     owner="root"
@@ -63,18 +63,18 @@
     state=directory
     mode=0755
 
-- name: generate {{ glx_sqmail_openssl_key_bit }} bits dh parameter "{{ glx_ucspi_ssl_dh_parameter_file }}" fle
+- name: ucspi-ssl | generate {{ glx_sqmail_openssl_key_bit }} bits dh parameter "{{ glx_ucspi_ssl_dh_parameter_file }}" fle
   shell: openssl dhparam -out {{ glx_ucspi_ssl_dh_parameter_file }} {{ glx_sqmail_openssl_key_bit }}
     creates=/etc/ssl/certs/dhparam.pem
 
-- name: check DEB_BUILD_ARCH
+- name: ucspi-ssl | check DEB_BUILD_ARCH
   shell: dpkg-architecture 2>&1 | grep '^DEB_BUILD_ARCH=' | cut -d'=' -f2
   when: ansible_os_family == "Debian"
   register: DEB_BUILD_ARCH
   changed_when: false
 
 # send conf-* files
-- name: check conf-*
+- name: ucspi-ssl | check conf-*
   template:
     src="ucspi-ssl/src/{{ item }}.j2"
     dest="{{ glx_slashpackage_dir }}/host/superscript.com/net/{{ glx_ucspi_ssl_source_name }}/src/{{ item }}"
@@ -99,17 +99,17 @@
     - "conf-tcpbin"
 
 # continue by build the programme
-- name: package/compile
+- name: ucspi-ssl | package/compile
   shell: package/install
     chdir="{{ glx_slashpackage_dir }}/host/superscript.com/net/ucspi-ssl-0.95b"
   when: glx_ucspi_ssl_download.changed
 
-- name: package/install
+- name: ucspi-ssl | package/install
   shell: package/install
     chdir="{{ glx_slashpackage_dir }}/host/superscript.com/net/ucspi-ssl-0.95b"
   when: glx_ucspi_ssl_download.changed
 
-- name: package/man
+- name: ucspi-ssl | package/man
   shell: package/man
     chdir="{{ glx_slashpackage_dir }}/host/superscript.com/net/ucspi-ssl-0.95b"
   when: glx_ucspi_ssl_download.changed

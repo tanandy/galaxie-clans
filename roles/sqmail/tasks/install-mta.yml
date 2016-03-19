@@ -1,4 +1,4 @@
-- name: remove other MTA services
+- name: mta | remove other MTA services
   apt:
     pkg={{ item }}
     state=absent
@@ -13,19 +13,19 @@
     - sendmail-cf
   tags: mta
 
-#- name: get local fake MTA
+#- name: mta | get local fake MTA
 #  get_url:
 #    url=http://qmailrocks.thibs.com/downloads/deb-packages/mta-local_1.0_all.deb
 #    dest={{ galaxie_qmail_server_source_dir }}
 #  tags: mta
 #
-#- name: install local mta-local_1.0_all.deb mta
+#- name: mta | install local mta-local_1.0_all.deb mta
 #  apt:
 #    deb={{ galaxie_qmail_server_source_dir }}/mta-local_1.0_all.deb
 #  changed_when: false
 #  tags: mta
 
-- name: symlink to use qmail instead of default mta
+- name: mta | symlink to use qmail instead of default mta
   file:
     src={{ item.src }}
     dest={{ item.dest }}
