@@ -7,6 +7,9 @@ install_wordpress: false
 ########################
 ###      APACHE      ###
 ########################
+# Webmaster who have permission to write via groups www-data
+glx_apache_webmasters:
+  - "{{ galaxie_ansible_user }}"
 
 # Apache sysconfigdir
 glx_apache_sysconfdir: "/etc"
