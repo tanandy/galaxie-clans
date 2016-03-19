@@ -10,3 +10,4 @@ zone_files/*
 hosts
 Vagrantfile
 .vagrant
+test_mo.*
