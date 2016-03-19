@@ -15,7 +15,10 @@ glx_apache_wwwdir: "/var/www"
 
 # Virtual Domains list to configure
 glx_apache_virtualhosts:
-  - { VirtualHost: "*:80", ServerName: "www.galaxie.ici", ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/www.galaxie.ici" }
+  - { VirtualHost: "*:80", ServerName: "galaxie.ici", ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
+
+glx_apache_ssl_virtualhosts:
+  - { VirtualHost: "_default_:443", ServerName: "galaxie.ici", ServerAdmin: "webmaster@galaxie.ici", DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici" }
 
 # PHP Setting
-galaxie_apache_server_php_ini_file: "/etc/php5/apache2/php.ini"
+glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"
