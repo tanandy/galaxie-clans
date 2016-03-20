@@ -25,7 +25,7 @@
     - { key: "ROOT",          value: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns" }
     - { key: "DEBUG_LEVEL",   value: "1" }
 
-- name: enable tinydns
+- name: service tinydns start
   service:
     name=tinydns
     state=started
