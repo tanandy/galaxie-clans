@@ -50,13 +50,13 @@
 
 ### Generate .csr for use a valide signed certificate
 - name: apache2 | generaterate .csr and .key for each Virtual host in case of use signed certs
-  command: openssl req -nodes -newkey rsa:{{ glx_apache_openssl_key_bit }} -sha512 -keyout {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key -out {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr -subj "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN=*.{{ item.ServerName }}"
+  command: openssl req -new -newkey rsa:2048 -sha256 -nodes -keyout {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key -out {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr -subj '/C={{ glx_apache_openssl_cert_C }}/CN={{ item.ServerName }}'
     creates="{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr"
   with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
-- name: apache2 | check {{ glx_apache_privacerts_dir }}/ssl-cert-*.pem certificats permission
+- name: apache2 | check {{ glx_apache_privacerts_dir }}/ssl-cert-*.csr certificats permission
   file:
     path="{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr"
     owner="root"
