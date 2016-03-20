@@ -1,6 +1,6 @@
 ---
-#- include: self-signed-cert.yml
-#  when: glx_apache_use_self_signed_certs
+- include: self-signed-cert.yml
+  when: glx_apache_use_self_signed_certs
 
 - include: apache.yml
   when: install_apache

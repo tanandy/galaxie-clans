@@ -79,6 +79,8 @@
     group="root"
     mode=0644
   with_items: glx_apache_virtualhosts
+  notify:
+    - service apache2 restart
 
 - name: apache2 | creat DocumentRoot dor for each HTTP Virtual hosts
   file:
@@ -88,6 +90,8 @@
     group="{{ glx_apache_gname }}"
     mode=2775
   with_items: glx_apache_virtualhosts
+  notify:
+    - service apache2 restart
 
 - name: apache2 | blanck page if need
   copy:
@@ -117,6 +121,8 @@
     group="root"
     mode=0644
   with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart
 
 - name: apache2 | creat DocumentRoot dor for each HTTPS Virtual hosts
   file:
@@ -126,6 +132,8 @@
     group="{{ glx_apache_gname }}"
     mode=2775
   with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart
 
 - name: apache2 | blanck page if need
   copy:
@@ -138,9 +146,9 @@
   with_items: glx_apache_ssl_virtualhosts
 
 # Enable HTTPS Virtual Hosts
-#- name: apache2 | a2ensite SSL virtual hosts
-#  command: a2ensite {{ item.ServerName }}-ssl
-#    creates="{{ glx_apache_sysconfdir }}/apache2/sites-enabled/{{ item.ServerName }}-ssl.conf"
-#  with_items: glx_apache_ssl_virtualhosts
-#  notify:
-#    - service apache2 restart
+- name: apache2 | a2ensite SSL virtual hosts
+  command: a2ensite {{ item.ServerName }}-ssl
+    creates="{{ glx_apache_sysconfdir }}/apache2/sites-enabled/{{ item.ServerName }}-ssl.conf"
+  with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart

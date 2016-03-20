@@ -24,6 +24,18 @@ glx_apache_use_self_signed_certs: true
 glx_apache_force_self_signed_gen: true
 glx_apache_localcerts_dir: "/etc/ssl/localcerts"
 
+# certificate
+glx_apache_openssl_key_bit: "2048"
+glx_apache_openssl_key_days: "3650"
+glx_apache_openssl_cert_C: ""
+glx_apache_openssl_cert_ST: ""
+glx_apache_openssl_cert_L: ""
+glx_apache_openssl_cert_O: ""
+glx_apache_openssl_cert_OU: ""
+#glx_apache_openssl_cert_CN: "{{ ansible_hostname }}.{{ glx_apache_domain }}"
+#glx_apache_openssl_subj: "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN={{ glx_apache_openssl_cert_CN }}"
+
+
 # Virtual Domains list to configure
 glx_apache_virtualhosts:
   - VirtualHost: "*:{{ glx_apache_http_port }}"

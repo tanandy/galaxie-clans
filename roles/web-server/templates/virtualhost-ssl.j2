@@ -6,18 +6,9 @@
 {% endfor %}
 		ServerAdmin {{ item.ServerAdmin }}
 		DocumentRoot {{ item.DocumentRoot }}
-		ErrorLog ${APACHE_LOG_DIR}/{{ item.ServerName }}.error.log
-		CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}.access.log combined
-
-		#   SSL Engine Switch:
-		#   Enable/Disable SSL for this virtual host.
+		ErrorLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.error.log
+		CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.access.log combined
 		SSLEngine on
-
-		#   A self-signed (snakeoil) certificate can be created by installing
-		#   the ssl-cert package. See
-		#   /usr/share/doc/apache2/README.Debian.gz for more info.
-		#   If both key and certificate are stored in the same file, only the
-		#   SSLCertificateFile directive is needed.
 		SSLCertificateFile	{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
 		SSLCertificateKeyFile {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key
 

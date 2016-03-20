@@ -23,10 +23,12 @@
   when: glx_apache_use_self_signed_certs and glx_apache_force_self_signed_gen
 
 - name: apache2 | generaterate cert for each Virtual host
-  command: openssl req -new -x509 -days 365 -nodes -out {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem -keyout {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key
+  command: openssl req -new -x509 -days {{ glx_apache_openssl_key_days }} -nodes -out {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem -keyout {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key -subj "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN=*.{{ item.ServerName }}"
     creates="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem"
   when: glx_apache_use_self_signed_certs
   with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart
 
 - name: apache2 | set permissions of {{ glx_apache_localcerts_dir }}/ssl-cert-*
   shell: chmod 600 {{ glx_apache_localcerts_dir }}/ssl-cert-*
