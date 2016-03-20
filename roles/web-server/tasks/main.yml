@@ -1,11 +1,37 @@
 ---
+### Users and Webmasters write authorizations
+- name: apache2 | add {{ glx_apache_gname }} to {{ glx_apache_gname }} group
+  user:
+    name="{{ item }}"
+    groups="{{ glx_apache_gname }}"
+    append=yes
+  with_items: glx_apache_webmasters
+  tags: config, config-webmasters
+
+### CERTIFICATES
 - include: self-signed-cert.yml
   when: glx_apache_use_self_signed_certs
 
-- include: apache.yml
+### APACHE
+- include: install-apache.yml
+  tags: install, install-apache
   when: install_apache
 
-- include: php.yml
+- include: config-apache.yml
+  tags: config, config-apache
+  when: install_apache
+
+- include: config-apache-virtualhosts.yml
+  tags: config, config-apache-virtualhosts
+  when: install_apache
+
+### PHP
+- include: install-php.yml
+  tags: install, install-php
+  when: install_php
+
+- include: config-php.yml
+  tags: config, config-php
   when: install_php
 
 #- include: wordpress.yml

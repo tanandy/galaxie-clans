@@ -1,0 +1,12 @@
+---
+- name: apache2 | install Apache
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - apache2
+    - apache2-utils
+    - apache2-mpm-prefork
+    - libapache2-mod-fcgid
+    - libcgi-fast-perl
+    - openssl
+  notify:
+    - service apache2 restart
