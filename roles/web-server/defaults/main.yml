@@ -23,15 +23,15 @@ glx_apache_https_port: "443"
 glx_apache_use_self_signed_certs: true
 glx_apache_force_self_signed_gen: true
 glx_apache_localcerts_dir: "/etc/ssl/localcerts"
-
+glx_apache_privacerts_dir: "/etc/ssl/private"
 # certificate
 glx_apache_openssl_key_bit: "2048"
-glx_apache_openssl_key_days: "3650"
+glx_apache_openssl_key_days: "365"
 glx_apache_openssl_cert_C: ""
 glx_apache_openssl_cert_ST: ""
 glx_apache_openssl_cert_L: ""
-glx_apache_openssl_cert_O: ""
-glx_apache_openssl_cert_OU: ""
+glx_apache_openssl_cert_O: "Galaxie"
+glx_apache_openssl_cert_OU: "IT"
 #glx_apache_openssl_cert_CN: "{{ ansible_hostname }}.{{ glx_apache_domain }}"
 #glx_apache_openssl_subj: "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN={{ glx_apache_openssl_cert_CN }}"
 
@@ -52,6 +52,7 @@ glx_apache_ssl_virtualhosts:
       - "www"
     ServerAdmin: "webmaster@galaxie.ici"
     DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici"
+    AutoSignedCert: true
 
 # PHP Setting
 glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"

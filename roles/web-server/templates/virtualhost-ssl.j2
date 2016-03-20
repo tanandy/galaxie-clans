@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 <IfModule mod_ssl.c>
 	<VirtualHost {{ item.VirtualHost }}>
         ServerName {{ item.ServerName }}:{{ glx_apache_https_port }}
