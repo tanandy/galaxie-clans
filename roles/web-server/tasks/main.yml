@@ -1,6 +1,6 @@
 ---
 ### Users and Webmasters write authorizations
-- name: apache2 | add {{ glx_apache_gname }} to {{ glx_apache_gname }} group
+- name: apache2 | add {{ glx_apache_webmasters }} to {{ glx_apache_gname }} group
   user:
     name="{{ item }}"
     groups="{{ glx_apache_gname }}"
@@ -10,7 +10,10 @@
 
 ### CERTIFICATES
 - include: self-signed-cert.yml
-  when: glx_apache_use_self_signed_certs
+  tags: config-self-signed-cert
+
+- include: self-signed-cert.yml
+  tags: config-valid-cert
 
 ### APACHE
 - include: install-apache.yml
