@@ -2,7 +2,7 @@
 install_apache: true
 install_mysql: false
 install_php: true
-install_wordpress: false
+install_wordpress: true
 
 ########################
 ###      APACHE      ###
@@ -21,7 +21,7 @@ glx_apache_https_port: "443"
 
 # SSL
 glx_apache_use_self_signed_certs: true
-glx_apache_force_self_signed_gen: true
+glx_apache_force_self_signed_gen: false
 glx_apache_localcerts_dir: "/etc/ssl/localcerts"
 glx_apache_privacerts_dir: "/etc/ssl/private"
 # certificate
@@ -56,3 +56,8 @@ glx_apache_ssl_virtualhosts:
 
 # PHP Setting
 glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"
+
+# Wordpress
+glx_wordpress_db_name: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_name length=16 chars=ascii_letters,digits') }}"
+glx_wordpress_db_user: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_user length=16 chars=ascii_letters,digits') }}"
+glx_wordpress_db_password: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_password length=16 chars=ascii_letters,digits') }}"

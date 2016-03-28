@@ -1,0 +1,30 @@
+---
+#- name: creat wordpress MySQL databases
+#  mysql_db:
+#    db="{{ glx_wordpress_db_name }}"
+#    state=absent
+#  with_items: glx_apache_virtualhosts
+
+#- name: creat wordpress users for each MySQL databases
+#  mysql_user:
+#    name="{{ glx_wordpress_db_user }}"
+#    password="{{ glx_wordpress_db_password }}"
+#    priv="{{ glx_wordpress_db_name }}.*:ALL"
+#    state=present
+#  with_items: glx_apache_virtualhosts
+
+- name: create a file to hold the database creation instructions
+  template:
+    src="database_creation_instructions.j2"
+    dest="{{ glx_apache_sysconfdir }}/apache2/sites-available/{{ item.ServerName }}.sql"
+    owner="root"
+    group="root"
+    mode=0640
+  with_items: glx_apache_virtualhosts
+
+- name: create the databases
+  shell: cat {{ glx_apache_sysconfdir }}/apache2/sites-available/{{ item.ServerName }}.sql | mysql --defaults-extra-file=/etc/mysql/debian.cnf
+  changed_when: creat_database_cmd.rc == 0
+  failed_when: creat_database_cmd.rc >= 2
+  register: creat_database_cmd
+  with_items: glx_apache_virtualhosts

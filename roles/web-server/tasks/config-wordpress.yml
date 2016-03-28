@@ -1,0 +1,21 @@
+---
+# [inspired_by] https://wiki.debian.org/WordPress#An_alternate_installation_method
+
+- name: create wordpress configuration file peer ServerName
+  template:
+    src="wordpress_configuration_file.j2"
+    dest="/etc/wordpress/config-{{ item.ServerName }}.php"
+    owner="root"
+    group="{{ glx_apache_gname }}"
+    mode=0640
+  with_items: glx_apache_virtualhosts
+  notify:
+    - service apache2 restart
+
+#- name: Unarchive /usr/share/doc/wordpress/examples/setup-mysql.gz
+#  shell: gunzip /usr/share/doc/wordpress/examples/setup-mysql.gz
+#    chdir="/usr/share/doc/wordpress/examples"
+#  unarchive:
+#    src="/usr/share/doc/wordpress/examples/setup-mysql.gz"
+#    dest="/usr/share/doc/wordpress/examples/setup-mysql"
+#    copy=no
