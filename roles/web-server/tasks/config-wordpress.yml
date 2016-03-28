@@ -12,6 +12,7 @@
   notify:
     - service apache2 restart
 
+# [inspired_by] /usr/share/doc/wordpress/README.Debian
 # Permit to update actual default skin
 - name: check if {{ glx_wordpress_content_dir }}/themes/twentyfifteen is a symlink
   stat:
@@ -32,6 +33,7 @@
     chdir="{{ glx_wordpress_content_dir }}"
   when: twentyfifteen_link|changed
 
+# [inspired_by] /usr/share/doc/wordpress/README.Debian
 # Permit to update plugins akismet
 - name: check if {{ glx_wordpress_content_dir }}/plugins/akismet is a symlink
   stat:
@@ -52,6 +54,7 @@
     chdir="{{ glx_wordpress_content_dir }}"
   when: akismet_link|changed
 
+# [inspired_by] /usr/share/doc/wordpress/README.Debian
 # index.php is editable
 - name: check if {{ glx_wordpress_content_dir }}/plugins/index.php is a symlink
   stat:
@@ -129,13 +132,3 @@
     - "upgrade"
     - "uploads"
   changed_when: false
-
-
-
-#- name: Unarchive /usr/share/doc/wordpress/examples/setup-mysql.gz
-#  shell: gunzip /usr/share/doc/wordpress/examples/setup-mysql.gz
-#    chdir="/usr/share/doc/wordpress/examples"
-#  unarchive:
-#    src="/usr/share/doc/wordpress/examples/setup-mysql.gz"
-#    dest="/usr/share/doc/wordpress/examples/setup-mysql"
-#    copy=no
