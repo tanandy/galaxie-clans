@@ -4,13 +4,133 @@
 - name: create wordpress configuration file peer ServerName
   template:
     src="wordpress_configuration_file.j2"
-    dest="/etc/wordpress/config-{{ item.ServerName }}.php"
+    dest="{{ glx_wordpress_sysconfdir }}/wordpress/config-{{ item.ServerName }}.php"
     owner="root"
     group="{{ glx_apache_gname }}"
     mode=0640
   with_items: glx_apache_virtualhosts
   notify:
     - service apache2 restart
+
+# Permit to update actual default skin
+- name: check if {{ glx_wordpress_content_dir }}/themes/twentyfifteen is a symlink
+  stat:
+    path="{{ glx_wordpress_content_dir }}/themes/twentyfifteen"
+  register: twentyfifteen_dir
+
+#- debug: msg="{{ twentyfifteen_dir }}"
+
+- name: remove {{ glx_wordpress_content_dir }}/themes/twentyfifteen (only if it is a link)
+  file:
+    path="{{ glx_wordpress_content_dir }}/themes/twentyfifteen"
+    state=absent
+  register: twentyfifteen_link
+  when: twentyfifteen_dir.stat.islnk is defined and twentyfifteen_dir.stat.islnk
+
+- name: copy /usr/share/wordpress/wp-content/themes/twentyfifteen to {{ glx_wordpress_content_dir }}/themes/
+  shell: cp -R /usr/share/wordpress/wp-content/themes/twentyfifteen {{ glx_wordpress_content_dir }}/themes/
+    chdir="{{ glx_wordpress_content_dir }}"
+  when: twentyfifteen_link|changed
+
+# Permit to update plugins akismet
+- name: check if {{ glx_wordpress_content_dir }}/plugins/akismet is a symlink
+  stat:
+    path="{{ glx_wordpress_content_dir }}/plugins/akismet"
+  register: akismet_dir
+
+#- debug: msg="{{ akismet_dir }}"
+
+- name: remove {{ glx_wordpress_content_dir }}/plugins/akismet (only if it is a link)
+  file:
+    path="{{ glx_wordpress_content_dir }}/plugins/akismet"
+    state=absent
+  register: akismet_link
+  when: akismet_dir.stat.islnk is defined and akismet_dir.stat.islnk
+
+- name: copy /usr/share/wordpress/wp-content/plugins/akismet to {{ glx_wordpress_content_dir }}/plugins/
+  shell: cp -R /usr/share/wordpress/wp-content/plugins/akismet {{ glx_wordpress_content_dir }}/plugins/
+    chdir="{{ glx_wordpress_content_dir }}"
+  when: akismet_link|changed
+
+# index.php is editable
+- name: check if {{ glx_wordpress_content_dir }}/plugins/index.php is a symlink
+  stat:
+    path="{{ glx_wordpress_content_dir }}/plugins/index.php"
+  register: index_php_file
+
+#- debug: msg="{{ index_php_file }}"
+
+- name: remove {{ glx_wordpress_content_dir }}/plugins/index.php (only if it is a link)
+  file:
+    path="{{ glx_wordpress_content_dir }}/plugins/index.php"
+    state=absent
+  register: index_php_link
+  when: index_php_file.stat.islnk is defined and index_php_file.stat.islnk
+
+- name: copy /usr/share/wordpress/wp-content/plugins/index.php to {{ glx_wordpress_content_dir }}/plugins/index.php
+  shell: cp /usr/share/wordpress/wp-content/plugins/index.php {{ glx_wordpress_content_dir }}/plugins/index.php
+    chdir="{{ glx_wordpress_content_dir }}"
+  when: index_php_link|changed
+
+# Check permission
+- name: wordpress will able to edit themes and to update plugins
+  shell: chown -R {{ glx_apache_uname }}:{{ glx_apache_gname }} {{ glx_wordpress_content_dir }}
+    chdir="{{ glx_wordpress_content_dir }}"
+  changed_when: false
+
+- name: wordpress set permission
+  file:
+    path="{{ glx_wordpress_content_dir }}/{{ item }}"
+    mode="2775"
+    owner="{{ glx_apache_uname }}"
+    group="{{ glx_apache_gname }}"
+    state=directory
+  with_items:
+    - "blogs.dir"
+    - "languages"
+    - "plugins"
+    - "themes"
+    - "upgrade"
+    - "uploads"
+  changed_when: false
+
+- name: wordpress chanche owner of subdir in {{ glx_wordpress_content_dir }}/
+  shell: chown -R {{ glx_apache_uname }}:{{ glx_apache_gname }} {{ glx_wordpress_content_dir }}/{{ item }}
+    chdir="{{ glx_wordpress_content_dir }}"
+  with_items:
+    - "blogs.dir"
+    - "languages"
+    - "plugins"
+    - "themes"
+    - "upgrade"
+    - "uploads"
+  changed_when: false
+
+- name: wordpress remove write permission to others of subdir in {{ glx_wordpress_content_dir }}/
+  shell: chmod -R o-w {{ glx_wordpress_content_dir }}/{{ item }}
+    chdir="{{ glx_wordpress_content_dir }}"
+  with_items:
+    - "blogs.dir"
+    - "languages"
+    - "plugins"
+    - "themes"
+    - "upgrade"
+    - "uploads"
+  changed_when: false
+
+- name: wordpress set files to 664 and directory to 775
+  shell: chmod -R u+rwX,g+rwX,o+rX {{ glx_wordpress_content_dir }}/{{ item }}
+    chdir="{{ glx_wordpress_content_dir }}"
+  with_items:
+    - "blogs.dir"
+    - "languages"
+    - "plugins"
+    - "themes"
+    - "upgrade"
+    - "uploads"
+  changed_when: false
+
+
 
 #- name: Unarchive /usr/share/doc/wordpress/examples/setup-mysql.gz
 #  shell: gunzip /usr/share/doc/wordpress/examples/setup-mysql.gz

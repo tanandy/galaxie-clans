@@ -113,7 +113,7 @@
 		BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
 		# Wordpress content
-        Alias /wp/wp-content /var/lib/wordpress/wp-content
+        Alias /wp/wp-content {{ glx_wordpress_content_dir }}
         Alias /wp /usr/share/wordpress
         <Directory /usr/share/wordpress>
             Options FollowSymLinks

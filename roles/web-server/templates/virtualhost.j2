@@ -11,7 +11,7 @@
     CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}.access.log combined
 
     # Wordpress content
-    Alias /wp/wp-content /var/lib/wordpress/wp-content
+    Alias /wp/wp-content {{ glx_wordpress_content_dir }}
     Alias /wp /usr/share/wordpress
     <Directory /usr/share/wordpress>
         Options FollowSymLinks

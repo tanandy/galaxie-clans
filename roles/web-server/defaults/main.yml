@@ -58,6 +58,9 @@ glx_apache_ssl_virtualhosts:
 glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"
 
 # Wordpress
+glx_wordpress_sysconfdir: "/etc"
+glx_wordpress_content_dir: "/var/lib/wordpress/wp-content"
+
 glx_wordpress_db_name: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_name length=16 chars=ascii_letters,digits') }}"
 glx_wordpress_db_user: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_user length=16 chars=ascii_letters,digits') }}"
 glx_wordpress_db_password: "{{ lookup('password', '{{ playbook_dir }}/../secrets/{{ ansible_hostname }}.wordpress_{{ item.ServerName }}.db_password length=16 chars=ascii_letters,digits') }}"
