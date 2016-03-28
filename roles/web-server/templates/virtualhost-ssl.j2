@@ -7,7 +7,11 @@
         ServerAlias {{ ServerAlias }}.{{ item.ServerName }}
 {% endfor %}
 		ServerAdmin {{ item.ServerAdmin }}
+{% if install_wordpress %}
+		DocumentRoot {{ glx_wordpress_root_dir }}
+{% else %}
 		DocumentRoot {{ item.DocumentRoot }}
+{% endif %}
 		ErrorLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.error.log
 		CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.access.log combined
 		SSLEngine on
@@ -111,20 +115,21 @@
 				downgrade-1.0 force-response-1.0
 		# MSIE 7 and newer should be able to use keepalive
 		BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
-
+{% if install_wordpress %}
 		# Wordpress content
         Alias /wp/wp-content {{ glx_wordpress_content_dir }}
-        Alias /wp /usr/share/wordpress
-        <Directory /usr/share/wordpress>
+        Alias /wp {{ glx_wordpress_root_dir }}
+        <Directory {{ glx_wordpress_root_dir }}>
             Options FollowSymLinks
             AllowOverride Limit Options FileInfo
             DirectoryIndex index.php
             Require all granted
         </Directory>
-        <Directory /var/lib/wordpress/wp-content>
+        <Directory {{ glx_wordpress_content_dir }}>
             Options FollowSymLinks
             Require all granted
         </Directory>
+{% endif %}
 	</VirtualHost>
 </IfModule>
 
