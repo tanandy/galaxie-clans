@@ -28,8 +28,8 @@
   register: twentyfifteen_link
   when: twentyfifteen_dir.stat.islnk is defined and twentyfifteen_dir.stat.islnk
 
-- name: copy /usr/share/wordpress/wp-content/themes/twentyfifteen to {{ glx_wordpress_content_dir }}/themes/
-  shell: cp -R /usr/share/wordpress/wp-content/themes/twentyfifteen {{ glx_wordpress_content_dir }}/themes/
+- name: copy {{ glx_wordpress_root_dir }}/wp-content/themes/twentyfifteen to {{ glx_wordpress_content_dir }}/themes/
+  shell: cp -R {{ glx_wordpress_root_dir }}/wp-content/themes/twentyfifteen {{ glx_wordpress_content_dir }}/themes/
     chdir="{{ glx_wordpress_content_dir }}"
   when: twentyfifteen_link|changed
 
@@ -49,8 +49,8 @@
   register: akismet_link
   when: akismet_dir.stat.islnk is defined and akismet_dir.stat.islnk
 
-- name: copy /usr/share/wordpress/wp-content/plugins/akismet to {{ glx_wordpress_content_dir }}/plugins/
-  shell: cp -R /usr/share/wordpress/wp-content/plugins/akismet {{ glx_wordpress_content_dir }}/plugins/
+- name: copy {{ glx_wordpress_root_dir }}/wp-content/plugins/akismet to {{ glx_wordpress_content_dir }}/plugins/
+  shell: cp -R {{ glx_wordpress_root_dir }}/wp-content/plugins/akismet {{ glx_wordpress_content_dir }}/plugins/
     chdir="{{ glx_wordpress_content_dir }}"
   when: akismet_link|changed
 
@@ -70,10 +70,31 @@
   register: index_php_link
   when: index_php_file.stat.islnk is defined and index_php_file.stat.islnk
 
-- name: copy /usr/share/wordpress/wp-content/plugins/index.php to {{ glx_wordpress_content_dir }}/plugins/index.php
-  shell: cp /usr/share/wordpress/wp-content/plugins/index.php {{ glx_wordpress_content_dir }}/plugins/index.php
+- name: copy {{ glx_wordpress_root_dir }}/wp-content/plugins/index.php to {{ glx_wordpress_content_dir }}/plugins/index.php
+  shell: cp {{ glx_wordpress_root_dir }}/wp-content/plugins/index.php {{ glx_wordpress_content_dir }}/plugins/index.php
     chdir="{{ glx_wordpress_content_dir }}"
   when: index_php_link|changed
+
+# [inspired_by] /usr/share/doc/wordpress/README.Debian
+# Permit language update
+- name: check if {{ glx_wordpress_content_dir }}/languages/admin-fr_FR.mo is a symlink
+  stat:
+    path="{{ glx_wordpress_content_dir }}/languages/admin-fr_FR.mo"
+  register: languages_checked_file
+
+#- debug: msg="{{ languages_checked_file }}"
+
+- name: remove {{ glx_wordpress_content_dir }}/languages (only if contain links)
+  file:
+    path="{{ glx_wordpress_content_dir }}/languages"
+    state=absent
+  register: languages_checked_file_link
+  when: languages_checked_file.stat.islnk is defined and languages_checked_file.stat.islnk
+
+- name: copy {{ glx_wordpress_root_dir }}/wp-content/languages to {{ glx_wordpress_content_dir }}/languages
+  shell: cp -R {{ glx_wordpress_root_dir }}/wp-content/languages {{ glx_wordpress_content_dir }}/
+    chdir="{{ glx_wordpress_content_dir }}"
+  when: languages_checked_file_link|changed
 
 # Check permission
 - name: wordpress will able to edit themes and to update plugins
