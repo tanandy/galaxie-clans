@@ -53,6 +53,7 @@ glx_apache_ssl_virtualhosts:
     ServerAdmin: "webmaster@galaxie.ici"
     DocumentRoot: "{{ glx_apache_wwwdir }}/galaxie.ici"
     AutoSignedCert: true
+    WildcardCert: true
 
 # PHP Setting
 glx_apache2_php_ini_file: "/etc/php5/apache2/php.ini"

@@ -26,8 +26,17 @@
 
 ### Generate self signed certificate it match with ServerName
 - name: apache2 | generaterate self-signed .pem and .key certificate for each Virtual host
+  command: openssl req -new -x509 -days {{ glx_apache_openssl_key_days }} -nodes -out {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem -keyout {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key -subj "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN={{ item.ServerName }}"
+    creates="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem"
+  when: not item.WildcardCert
+  with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart
+
+- name: apache2 | generaterate wildcard self-signed .pem and .key certificate for each Virtual host
   command: openssl req -new -x509 -days {{ glx_apache_openssl_key_days }} -nodes -out {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem -keyout {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key -subj "/C={{ glx_apache_openssl_cert_C }}/ST={{ glx_apache_openssl_cert_ST }}/L={{ glx_apache_openssl_cert_L }}/O={{ glx_apache_openssl_cert_O }}/OU={{ glx_apache_openssl_cert_OU }}/CN=*.{{ item.ServerName }}"
     creates="{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem"
+  when: item.WildcardCert
   with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
@@ -52,6 +61,15 @@
 - name: apache2 | generaterate .csr and .key for each Virtual host in case of use signed certs
   command: openssl req -new -newkey rsa:2048 -sha256 -nodes -keyout {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key -out {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr -subj '/C={{ glx_apache_openssl_cert_C }}/CN={{ item.ServerName }}'
     creates="{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr"
+  when: not item.WildcardCert
+  with_items: glx_apache_ssl_virtualhosts
+  notify:
+    - service apache2 restart
+
+- name: apache2 | generaterate wildcard .csr and .key for each Virtual host in case of use signed certs
+  command: openssl req -new -newkey rsa:2048 -sha256 -nodes -keyout {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key -out {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr -subj '/C={{ glx_apache_openssl_cert_C }}/CN=*.{{ item.ServerName }}'
+    creates="{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.csr"
+  when: item.WildcardCert
   with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart

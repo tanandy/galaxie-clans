@@ -9,11 +9,8 @@
   tags: config, config-webmasters
 
 ### CERTIFICATES
-- include: self-signed-cert.yml
-  tags: config-self-signed-cert
-
-- include: self-signed-cert.yml
-  tags: config-valid-cert
+- include: config-certificats.yml
+  tags: config, config-certificats
 
 ### APACHE
 - include: install-apache.yml
