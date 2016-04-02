@@ -1,0 +1,4 @@
+---
+glx_prefix: "/var/lib/galaxie"
+glx_packages_dir: "{{ glx_prefix }}/pkgs"
+glx_opt_dir: "/opt"
