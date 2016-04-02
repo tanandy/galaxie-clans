@@ -1,18 +1,5 @@
 ---
-# DEBMULTIMEDIA
-- name: activate dedmultimedia key
-  apt_key:
-    keyserver="pgp.mit.edu"
-    id="5C808C2B65558117"
 
-- name: activate debian debmultimedia repository
-  apt_repository:
-    repo="{{ item }}"
-    state=present
-  with_items:
-    - "deb http://www.deb-multimedia.org stable main non-free"
-
-#    - "deb-src http://www.deb-multimedia.org sid main"
 
 
 

@@ -1,0 +1,6 @@
+---
+- name: download http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz
+  get_url:
+    url="http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz"
+    dest="{{ glx_src_dir }}/sox-14.4.2.tar.gz"
+  register: swftools_download
