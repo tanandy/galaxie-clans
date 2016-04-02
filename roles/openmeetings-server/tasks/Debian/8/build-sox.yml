@@ -1,6 +1,58 @@
 ---
+- name: build sox | uninstall sox package
+  apt:
+    pkg={{ item }}
+    state=absent
+  with_items:
+    - sox
+
 - name: download http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz
   get_url:
     url="http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz"
     dest="{{ glx_src_dir }}/sox-14.4.2.tar.gz"
   register: swftools_download
+
+- name: build sox | install requirement
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - "libflac-dev"
+    - "libogg-dev"
+    - "libvorbis-dev"
+    - "libmp3lame-dev"
+    - "libid3tag0-dev"
+    - "libtwolame-dev"
+    - "libopus-dev"
+    - "libopusfile-dev"
+    - "libsndfile1-dev"
+    - "libasound2-dev"
+    - "libpulse-dev"
+    - "libwavpack-dev"
+    - "libmad0-dev"
+    - "libopencore-amrnb-dev"
+    - "libopencore-amrwb-dev"
+    - "libmagic-dev"
+
+- name: run configure script ...
+  shell: ./configure \
+          --prefix={{ glx_sox_prefix }} \
+          --sysconfdir={{ glx_sox_sysconfdir }} \
+          --enable-dl-mad \
+          --enable-dl-lame \
+          --enable-dl-twolame \
+          --enable-dl-amrwb \
+          --enable-dl-amrnb \
+          --enable-dl-sndfile
+    chdir="{{ glx_sox_source_dir }}"
+  changed_when: false
+
+- name: make -s
+  shell: make -s
+    chdir="{{ glx_sox_source_dir }}"
+  changed_when: false
+
+- name: make install
+  shell: make install
+    chdir="{{ glx_sox_source_dir }}"
+  changed_when: false

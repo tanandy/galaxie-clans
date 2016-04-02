@@ -1,4 +1,10 @@
 ---
 glx_prefix: "/var/lib/galaxie"
 glx_packages_dir: "{{ glx_prefix }}/pkgs"
+
 glx_opt_dir: "/opt"
+
+# SOX PATH
+glx_sox_prefix: "/usr"
+glx_sox_sysconfdir: "/etc"
+glx_sox_source_dir: "/usr/src/sox-14.4.2"

@@ -9,6 +9,7 @@
   with_items:
     - "{{ glx_packages_dir }}"
     - "{{ glx_opt_dir }}"
+    - "{{ glx_src_dir }}"
 
 - include: config-apt.yml
   tags: config, config-apt
