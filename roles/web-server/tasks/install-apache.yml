@@ -1,6 +1,8 @@
 ---
 - name: apache2 | install Apache
-  apt: pkg={{ item }} state=latest
+  apt:
+    pkg={{ item }}
+    state=latest
   with_items:
     - apache2
     - apache2-utils

@@ -1,3 +1,6 @@
 Acquire::http {
         Proxy "http://{{ galaxie_apt_cacher_ng_server_self }}:{{ galaxie_apt_cacher_ng_port }}";
         };
+Acquire::http::Proxy {
+        download.oracle.com DIRECT;
+        };

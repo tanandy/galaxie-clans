@@ -1,0 +1,30 @@
+---
+- name: activate "WebUpd8" team key
+  apt_key:
+    keyserver="keyserver.ubuntu.com"
+    id="EEA14886"
+
+- name: activate {{ ansible_distribution }} {{ ansible_distribution_major_version }} WebUpd8 team repository
+  apt_repository:
+    repo="{{ item }}"
+    state=present
+  with_items:
+    - "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main"
+    - "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main"
+
+- name: run apt-get update
+  apt:
+    update_cache=yes
+
+- name: accept the java license automatically
+  shell: /bin/echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+  changed_when: false
+
+- name: install java 8 installer
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+

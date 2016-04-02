@@ -1,0 +1,29 @@
+---
+# JAVA
+- name: activate "WebUpd8" team key
+  apt_key:
+    keyserver="keyserver.ubuntu.com"
+    id="EEA14886"
+
+- name: activate debian WebUpd8 team Wheezy repository
+  apt_repository:
+    repo="{{ item }}"
+    state=present
+  with_items:
+    - "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main"
+    - "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main"
+
+- name: accept the java license automatically
+  shell: /bin/echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+
+- name: run apt-get update
+  apt:
+    update_cache=yes
+
+- name: install java 7 installer
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - oracle-java7-installer
+    - oracle-java7-set-default

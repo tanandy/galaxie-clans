@@ -1,0 +1,15 @@
+---
+- include: config-apt.yml
+  tags: config, config-apt
+
+- include: install-java.yml
+  tags: install, install-java
+
+- name: OpenMeetings | install requirement
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - openjdk-7-jre
+    - libreoffice
+    - libreoffice-l10n-fr
