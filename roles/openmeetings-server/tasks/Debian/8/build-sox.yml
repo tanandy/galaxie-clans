@@ -58,9 +58,11 @@
     src="{{ glx_sox_source_download.dest }}"
     dest="{{ glx_sox_source_dir }}"
     copy=no
+    owner="root"
+    group="root"
   when: glx_sox_source_download.changed
 
-- name: run configure script ...
+- name: build sox | run configure script ...
   shell: ./configure \
           --prefix={{ glx_sox_prefix }} \
           --sysconfdir={{ glx_sox_sysconfdir }} \
@@ -73,12 +75,25 @@
     chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false
 
-- name: make -s
+- name: build sox | make -s
   shell: make -s
     chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false
 
-- name: make install
-  shell: make install
+- name: build sox | creat .deb package
+  shell: checkinstall \
+         --pkgsource="{{ glx_sox_source_download.dest }}" \
+         --pkgaltsource="{{ glx_sox_download_url }}" \
+         --pkglicense="GPL2" \
+         --deldesc=no \
+         --nodoc \
+         --maintainer="Ansible" \
+         --pkgarch=$(dpkg --print-architecture) \
+         --requires="libflac8, libogg0, libvorbis0a, libmp3lame0, libid3tag0, libtwolame0, libopus0, libopusfile0, libsndfile1, libasound2, libpulse0, libwavpack1, libmad0, libopencore-amrnb0, libopencore-amrwb0, libmagic1, libao4" \
+         --pakdir="{{ glx_sox_source_dir }}" \
+         --reset-uids \
+         --default \
+         --install \
+         make install
     chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false

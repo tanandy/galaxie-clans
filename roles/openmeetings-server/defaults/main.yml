@@ -5,18 +5,17 @@ glx_source_dir: "/usr/src"
 
 glx_opt_dir: "/opt"
 
-# SOX PATH
-glx_sox_prefix: "/usr"
-glx_sox_sysconfdir: "/etc"
-glx_sox_source_dir: "/usr/src/sox-14.4.2"
 
-# cdb
+
+# sox
 glx_sox_force_install: true
 # Original Source
 # glx_sox_repository: "http://sourceforge.net/projects/sox/files/sox/14.4.2/"
 glx_sox_repository: "https://raw.githubusercontent.com/Tuuux/galaxie/master/roles/openmeetings-server/files"
 glx_sox_app_name: "sox-14.4.2"
 glx_sox_extension: "tar.gz"
-glx_sox_download_url: "{{ glx_cdb_repository }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
+glx_sox_download_url: "{{ glx_sox_repository }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
 glx_sox_sha256sum: "b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb55f6c"
 glx_sox_source_dir: "/usr/src"
+glx_sox_prefix: "/usr"
+glx_sox_sysconfdir: "/etc"
