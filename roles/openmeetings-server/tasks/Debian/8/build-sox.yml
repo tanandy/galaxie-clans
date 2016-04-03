@@ -6,12 +6,6 @@
   with_items:
     - sox
 
-- name: download http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz
-  get_url:
-    url="http://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2.tar.gz"
-    dest="{{ glx_src_dir }}/sox-14.4.2.tar.gz"
-  register: swftools_download
-
 - name: build sox | install requirement
   apt:
     pkg={{ item }}
@@ -33,6 +27,38 @@
     - "libopencore-amrnb-dev"
     - "libopencore-amrwb-dev"
     - "libmagic-dev"
+    - "libao-dev"
+
+- name: build sox | check {{ glx_sox_source_dir }} directory
+  file:
+    path="{{ glx_sox_source_dir }}"
+    state=directory
+
+- name: build sox | delete "{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
+  file:
+    path="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
+    state=absent
+  when: glx_sox_force_install
+
+- name: build sox | get "{{ glx_sox_download_url }}"
+  get_url:
+    url="{{ glx_sox_download_url }}"
+    dest="{{ glx_sox_source_dir }}"
+    sha256sum="{{ glx_sox_sha256sum }}"
+  register: glx_sox_source_download
+
+- name: build sox | delete "{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}" directory
+  file:
+    path="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
+    state=absent
+  when: glx_sox_source_download.changed
+
+- name: build sox | unarchive {{ glx_sox_source_download.dest }}
+  unarchive:
+    src="{{ glx_sox_source_download.dest }}"
+    dest="{{ glx_sox_source_dir }}"
+    copy=no
+  when: glx_sox_source_download.changed
 
 - name: run configure script ...
   shell: ./configure \
@@ -44,15 +70,15 @@
           --enable-dl-amrwb \
           --enable-dl-amrnb \
           --enable-dl-sndfile
-    chdir="{{ glx_sox_source_dir }}"
+    chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false
 
 - name: make -s
   shell: make -s
-    chdir="{{ glx_sox_source_dir }}"
+    chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false
 
 - name: make install
   shell: make install
-    chdir="{{ glx_sox_source_dir }}"
+    chdir="{{ glx_sox_source_dir }}/{{ glx_sox_app_name }}"
   changed_when: false
