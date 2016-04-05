@@ -1,5 +1,6 @@
 ---
 # [inspired_by] https://wiki.debian.org/WordPress#An_alternate_installation_method
+# [inspired_by] /usr/share/doc/wordpress/README.Debian
 
 - name: create wordpress configuration file peer ServerName
   template:
@@ -95,7 +96,7 @@
   notify:
     - service apache2 restart
 
-# Supress blogs.dir link
+# Suppress blogs.dir link
 - name: check if {{ glx_wordpress_root_dir }}/wp-content/blogs.dir is a symlink
   stat:
     path="{{ glx_wordpress_root_dir }}/wp-content/blogs.dir"
@@ -139,7 +140,6 @@
     group="root"
     state=directory
 
-# [inspired_by] /usr/share/doc/wordpress/README.Debian
 # Final
 - name: populate wp-content of each virtualhost
   shell: cp -R {{ glx_wordpress_root_dir }}/wp-content/* {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}/
