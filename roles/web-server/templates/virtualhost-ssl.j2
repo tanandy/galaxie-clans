@@ -117,6 +117,7 @@
 		BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 {% if install_wordpress %}
 		# Wordpress content
+		Alias /wp-content {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
         Alias /wp/wp-content {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
         Alias /wp {{ glx_wordpress_root_dir }}
         <Directory {{ glx_wordpress_root_dir }}>

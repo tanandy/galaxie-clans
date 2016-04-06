@@ -15,6 +15,7 @@
     CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}.access.log combined
 {% if install_wordpress %}
     # Wordpress content
+    Alias /wp-content {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
     Alias /wp/wp-content {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
     Alias /wp {{ glx_wordpress_root_dir }}
     <Directory {{ glx_wordpress_root_dir }}>
