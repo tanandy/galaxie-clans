@@ -8,7 +8,7 @@ glx_pycharm_professional_opt_dir: "/opt"
 # https://download.jetbrains.com/python/pycharm-professional-5.0.4.tar.gz
 # https://download.jetbrains.com/python/pycharm-professional-2016.1.tar.gz
 glx_pycharm_professional_name: "pycharm-professional"
-glx_pycharm_professional_version: "2016.1"
+glx_pycharm_professional_version: "2016.1.2"
 glx_pycharm_professional_desc: "Powerful Python and Django IDE. Professional version."
 glx_pycharm_professional_url: "https://www.jetbrains.com/pycharm/"
 glx_pycharm_professional_depends:
@@ -23,4 +23,4 @@ glx_pycharm_professional_depends:
   - "vagrant"
 
 glx_pycharm_professional_source: "https://download.jetbrains.com/python/{{ glx_pycharm_professional_name }}-{{ glx_pycharm_professional_version }}.tar.gz"
-glx_pycharm_professional_sha256sums: "76f9debcf5621f03a859afa37534e400685d2064664a57af9a47c4859ab407a7"
+glx_pycharm_professional_sha256sums: "730e994f3582b1cb9754b121457636265515c19199eabd762cd78b0c504b91cf"
