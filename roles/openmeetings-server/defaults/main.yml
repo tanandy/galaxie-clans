@@ -19,3 +19,8 @@ glx_sox_sha256sum: "b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb5
 glx_sox_source_dir: "/usr/src"
 glx_sox_prefix: "/usr"
 glx_sox_sysconfdir: "/etc"
+
+# ffmpeg
+glx_ffmpeg_force_install: true
+#
+glx_ffmpeg_source_dir: "/usr/src"

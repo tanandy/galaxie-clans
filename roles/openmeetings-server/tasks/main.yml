@@ -22,3 +22,6 @@
 
 - include: build-sox.yml
   tags: install, install-sox, build-sox
+
+- include: build-ffmpeg.yml
+  tags: install, install-ffmpeg, build-ffmpeg

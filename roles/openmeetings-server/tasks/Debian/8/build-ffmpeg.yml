@@ -6,12 +6,13 @@
   with_items:
     - "autoconf"
     - "automake"
-    - "build-essential"
     - "libass-dev"
     - "libfreetype6-dev"
+    - "libgpac-dev"
     - "libsdl1.2-dev"
     - "libtheora-dev"
-    - "libtool libva-dev"
+    - "libtool"
+    - "libva-dev"
     - "libvdpau-dev"
     - "libvorbis-dev"
     - "libxcb1-dev"
@@ -20,5 +21,13 @@
     - "pkg-config"
     - "texi2html"
     - "zlib1g-dev"
-    - "mercurial"
+    - "nasm"
+    - "libx264-dev"
     - "cmake"
+    - "mercurial"
+    - "libopus-dev"
+
+- name: build ffmpeg | check {{ glx_ffmpeg_source_dir }} directory
+  file:
+    path="{{ glx_ffmpeg_source_dir }}"
+    state=directory
