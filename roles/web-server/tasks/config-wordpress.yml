@@ -175,3 +175,13 @@
     - "themes"
     - "upgrade"
     - "uploads"
+
+- name: enable rewrite for DocumentRootDir / by default
+  template:
+    src="htaccess.j2"
+    dest="{{ glx_wordpress_sysconfdir }}/wordpress/htaccess"
+    owner="root"
+    group="root"
+    mode=0644
+  notify:
+    - service apache2 restart
