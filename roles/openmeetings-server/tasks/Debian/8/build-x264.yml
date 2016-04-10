@@ -1,0 +1,18 @@
+---
+# Download x264 sources
+- name: build ffmpeg | clone latest x264
+  git:
+    repo=git://git.videolan.org/x264.git
+    dest={{ glx_ffmpeg_source_dir }}/x264
+    accept_hostkey=yes
+
+- name:  build ffmpeg | compile x264
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/x264"
+    creates: "{{ glx_ffmpeg_bin_dir }}/x264"
+  with_items:
+    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }} --enable-static
+    - make
+    - make install
+    - make distclean

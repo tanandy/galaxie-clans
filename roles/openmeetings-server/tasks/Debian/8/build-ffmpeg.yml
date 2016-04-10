@@ -4,14 +4,15 @@
     pkg={{ item }}
     state=absent
   with_items:
-    - "libmp3lame0"
-    - "libmp3lame-dev"
     - "libopus0"
     - "libopus-dev"
     - "libopusfile0"
     - "libopusfile-dev"
     - "libx264-dev"
     - "x264"
+    - "libvpx-dev"
+    - "librtmp0"
+    - "librtmp-dev"
 
 - name: build ffmpeg | install requirement
   apt:
@@ -47,140 +48,13 @@
     path="{{ glx_ffmpeg_source_dir }}"
     state=directory
 
-# Download sources yasm
-- name: build ffmpeg | clone latest yasm
-  git:
-    repo=git://github.com/yasm/yasm.git
-    dest={{ glx_ffmpeg_source_dir }}/yasm
-    accept_hostkey=yes
-
-# Build yasm
-- name: build ffmpeg | compile yasm
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/yasm"
-    creates: "{{ glx_ffmpeg_bin_dir }}/yasm"
-  with_items:
-    - ./autogen.sh
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }}
-    - make
-    - make install
-    - make distclean
-
-# Download x264 sources
-- name: build ffmpeg | clone latest x264
-  git:
-    repo=git://git.videolan.org/x264.git
-    dest={{ glx_ffmpeg_source_dir }}/x264
-    accept_hostkey=yes
-
-- name:  build ffmpeg | compile x264
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/x264"
-    creates: "{{ glx_ffmpeg_bin_dir }}/x264"
-  with_items:
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }} --enable-static
-    - make
-    - make install
-    - make distclean
-
-# Download x265 sources
-- name: build ffmpeg | clone latest x265
-  git:
-    repo=https://github.com/videolan/x265.git
-    dest={{ glx_ffmpeg_source_dir }}/x265
-    accept_hostkey=yes
-
-# Build x265
-- name: build ffmpeg | compile x265
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/x265/build/linux"
-    creates: "{{ glx_ffmpeg_bin_dir }}/x265"
-  with_items:
-    - cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX={{ glx_ffmpeg_prefix }} -DENABLE_SHARED:bool=off ../../source
-    - make
-    - make install
-    - make clean
-
-# Download fdk-aac sources
-- name: build ffmpeg | clone latest fdk-aac
-  git:
-    repo=git://github.com/mstorsjo/fdk-aac.git
-    dest={{ glx_ffmpeg_source_dir }}/fdk-aac
-    accept_hostkey=yes
-
-# Build fdk-aac
-- name: build ffmpeg | compile fdk-aac
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/fdk-aac"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libfdk-aac.a"
-  with_items:
-    - autoreconf -fiv
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
-    - make
-    - make install
-    - make distclean
-
-# Download libmp3lame sources
-- name: build ffmpeg | clone latest libmp3lame
-  git:
-    repo=https://github.com/gypified/libmp3lame.git
-    dest={{ glx_ffmpeg_source_dir }}/libmp3lame
-    accept_hostkey=true
-
-# Build libmp3lame
-- name: build ffmpeg | compile libmp3lame
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/libmp3lame"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libmp3lame.a"
-  with_items:
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --enable-nasm --disable-shared
-    - make
-    - make install
-    - make distclean
-
-# Download opus sources
-- name: build ffmpeg | clone latest opus
-  git:
-    repo=git://git.opus-codec.org/opus.git
-    dest={{ glx_ffmpeg_source_dir }}/opus
-    accept_hostkey=yes
-
-# Build opus
-- name: build ffmpeg | compile libopus
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/opus"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libopus.a"
-  with_items:
-    - ./autogen.sh
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
-    - make
-    - make install
-    - make distclean
-
-# Download libvpx
-- name: build ffmpeg | clone latest libvpx
-  git:
-    repo=https://chromium.googlesource.com/webm/libvpx.git
-    dest={{ glx_ffmpeg_source_dir }}/libvpx
-    accept_hostkey=yes
-
-## Build libvpx
-- name: compile libvpx
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/libvpx"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libvpx.a"
-  with_items:
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared --disable-examples --disable-unit-tests
-    - make
-    - make install
-    - make clean
+- include: build-yasm.yml
+- include: build-x264.yml
+- include: build-x265.yml
+- include: build-fdk-aac.yml
+- include: build-libmp3lame.yml
+- include: build-opus.yml
+- include: build-libvpx.yml
 
 - name: build ffmpeg | clone latest ffmpeg
   git:
@@ -188,7 +62,7 @@
     dest={{ glx_ffmpeg_source_dir }}/ffmpeg
     accept_hostkey=yes
 
-- name: compile ffmpeg
+- name: build ffmpeg | compile ffmpeg
   command: "{{ item }}"
   args:
     chdir: "{{ glx_ffmpeg_source_dir }}/ffmpeg"

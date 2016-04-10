@@ -1,0 +1,32 @@
+---
+- name: build ffmpeg | install requirement
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - "libncurses5-dev"
+    - "nasm"
+    - "libsndfile1-dev"
+    - "autotools-dev"
+    - "debhelper"
+
+# Download libmp3lame sources
+- name: build libmp3lame | clone latest libmp3lame
+  git:
+    repo=https://github.com/gypified/libmp3lame.git
+    dest={{ glx_ffmpeg_source_dir }}/libmp3lame
+    accept_hostkey=true
+
+# Build libmp3lame
+- name: build libmp3lame | compile libmp3lame
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/libmp3lame"
+  with_items:
+    - ./configure --prefix={{ glx_ffmpeg_prefix }} --enable-nasm --disable-shared
+    - dpkg-buildpackage
+    - make distclean
+
+- name: build libmp3lame | install
+  shell: dpkg -i lame_*.deb libmp3lame0_*.deb libmp3lame-dev_*.deb
+    chdir="{{ glx_ffmpeg_source_dir }}"

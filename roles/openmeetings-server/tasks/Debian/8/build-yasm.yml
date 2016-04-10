@@ -1,0 +1,30 @@
+---
+# Build yasm
+# Download sources yasm
+- name: build ffmpeg | clone yasm
+  git:
+    repo=git://github.com/yasm/yasm.git
+    dest={{ glx_ffmpeg_source_dir }}/yasm
+    accept_hostkey=yes
+
+- name: build ffmpeg | compile yasm
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/yasm"
+  with_items:
+    - ./autogen.sh
+    - sed -i 's#) ytasm.*#)#' Makefile.in
+    - ./configure --prefix={{ glx_ffmpeg_prefix }}
+    - make
+
+- name: creat yasm package
+  shell: checkinstall \
+          --pkgname="$(grep PACKAGE_NAME config.h | sed -e 's/\#define PACKAGE_NAME "\(.*\)"/\1/g')" \
+          --pkgversion="$(grep PACKAGE_VERSION config.h | sed -e 's/\#define PACKAGE_VERSION "\(.*\)"/\1/g')" \
+          --backup=no \
+          --deldoc=yes \
+          --fstrans=no \
+          --pakdir="{{ glx_ffmpeg_source_dir }}" \
+          --default \
+          make install
+    chdir="{{ glx_ffmpeg_source_dir }}/yasm"

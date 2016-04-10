@@ -1,0 +1,20 @@
+---
+# Download fdk-aac sources
+- name: build ffmpeg | clone latest fdk-aac
+  git:
+    repo=git://github.com/mstorsjo/fdk-aac.git
+    dest={{ glx_ffmpeg_source_dir }}/fdk-aac
+    accept_hostkey=yes
+
+# Build fdk-aac
+- name: build ffmpeg | compile fdk-aac
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/fdk-aac"
+    creates: "{{ glx_ffmpeg_lib_dir }}/libfdk-aac.a"
+  with_items:
+    - autoreconf -fiv
+    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
+    - make
+    - make install
+    - make distclean

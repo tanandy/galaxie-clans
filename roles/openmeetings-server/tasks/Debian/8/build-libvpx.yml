@@ -1,0 +1,19 @@
+---
+# Download libvpx
+- name: build ffmpeg | clone latest libvpx
+  git:
+    repo=https://chromium.googlesource.com/webm/libvpx.git
+    dest={{ glx_ffmpeg_source_dir }}/libvpx
+    accept_hostkey=yes
+
+## Build libvpx
+- name: compile libvpx
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/libvpx"
+    creates: "{{ glx_ffmpeg_lib_dir }}/libvpx.a"
+  with_items:
+    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared --disable-examples --disable-unit-tests
+    - make
+    - make install
+    - make clean

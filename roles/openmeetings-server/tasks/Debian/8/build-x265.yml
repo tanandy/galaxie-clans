@@ -1,0 +1,19 @@
+---
+# Download x265 sources
+- name: build ffmpeg | clone latest x265
+  git:
+    repo=https://github.com/videolan/x265.git
+    dest={{ glx_ffmpeg_source_dir }}/x265
+    accept_hostkey=yes
+
+# Build x265
+- name: build ffmpeg | compile x265
+  command: "{{ item }}"
+  args:
+    chdir: "{{ glx_ffmpeg_source_dir }}/x265/build/linux"
+    creates: "{{ glx_ffmpeg_bin_dir }}/x265"
+  with_items:
+    - cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX={{ glx_ffmpeg_prefix }} -DENABLE_SHARED:bool=off ../../source
+    - make
+    - make install
+    - make clean

@@ -1,22 +1,5 @@
 ---
-- name: build sox | uninstall sox package
-  apt:
-    pkg={{ item }}
-    state=absent
-  with_items:
-    - sox
 
-- name: build sox | unnstall libmp3lame, libopus
-  apt:
-    pkg={{ item }}
-    state=absent
-  with_items:
-    - "libmp3lame0"
-    - "libmp3lame-dev"
-    - "libopus0"
-    - "libopus-dev"
-    - "libopusfile0"
-    - "libopusfile-dev"
 
 - name: build sox | install requirement
   apt:
@@ -37,7 +20,7 @@
     - "libopencore-amrwb-dev"
     - "libmagic-dev"
     - "libao-dev"
-    - "nasm"
+
 
 - name: build sox | check {{ glx_sox_source_dir }} directory
   file:
@@ -72,44 +55,8 @@
     group="root"
   when: glx_sox_source_download.changed
 
-# Download libmp3lame sources
-- name: build sox | clone latest libmp3lame
-  git:
-    repo=https://github.com/gypified/libmp3lame.git
-    dest={{ glx_sox_source_dir }}/libmp3lame
-    accept_hostkey=true
-
-# Build libmp3lame
-- name: build sox | compile libmp3lame
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_sox_source_dir }}/libmp3lame"
-    creates: "{{ glx_sox_lib_dir }}/libmp3lame.a"
-  with_items:
-    - ./configure --prefix={{ glx_sox_prefix }} --enable-nasm --disable-shared --includedir={{ glx_sox_prefix }}/include
-    - make
-    - make install
-    - make distclean
-
-# Download opus sources
-- name: build sox | clone latest opus
-  git:
-    repo=git://git.opus-codec.org/opus.git
-    dest={{ glx_sox_source_dir }}/opus
-    accept_hostkey=yes
-
-# Build opus
-- name: build sox | compile libopus
-  command: "{{ item }}"
-  args:
-    chdir: "{{ glx_sox_source_dir }}/opus"
-    creates: "{{ glx_sox_lib_dir }}/libopus.a"
-  with_items:
-    - ./autogen.sh
-    - ./configure --prefix={{ glx_sox_prefix }} --disable-shared
-    - make
-    - make install
-    - make distclean
+- include: build-libmp3lame.yml
+- include: build-opus.yml
 
 # Build sox
 - name: build sox | run configure script ...
