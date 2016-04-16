@@ -23,6 +23,9 @@
 - include: build-yasm.yml
   tags: install, install-yasm, build-yasm
 
+- include: build-x264.yml
+  tags: install, install-yasm, build-x264
+
 - include: build-sox.yml
   tags: install, install-sox, build-sox
 

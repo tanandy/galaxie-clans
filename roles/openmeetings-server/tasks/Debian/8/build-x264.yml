@@ -1,18 +1,84 @@
 ---
 # Download x264 sources
-- name: build ffmpeg | clone latest x264
-  git:
-    repo=git://git.videolan.org/x264.git
-    dest={{ glx_ffmpeg_source_dir }}/x264
-    accept_hostkey=yes
+#- name: build ffmpeg | clone latest x264
+#  git:
+#    repo=git://git.videolan.org/x264.git
+#    dest={{ glx_ffmpeg_source_dir }}/x264
+#    accept_hostkey=yes
+#
+#- name:  build ffmpeg | compile x264
+#  command: "{{ item }}"
+#  args:
+#    chdir: "{{ glx_ffmpeg_source_dir }}/x264"
+#    creates: "{{ glx_ffmpeg_bin_dir }}/x264"
+#  with_items:
+#    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }} --enable-static
+#    - make
+#    - make install
+#    - make distclean
 
-- name:  build ffmpeg | compile x264
+- name: copy files in {{ glx_ffmpeg_source_dir }}/
+  copy:
+    src="Debian/8/{{ item }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
+    backup=no
+  with_items:
+    - "x264_0.148.2643+git5c65704.orig.tar.gz"
+    - "x264_0.148.2643+git5c65704-1.debian.tar.xz"
+    - "x264_0.148.2643+git5c65704-1.dsc"
+
+- name: install requirement
+  apt:
+    pkg="{{ item }}"
+    state=latest
+  with_items:
+    - "debhelper"
+    - "autotools-dev"
+    - "dpkg-dev"
+    - "libavformat-dev"
+    - "libffms2-dev"
+    - "libgpac-dev"
+    - "yasm"
+
+- name: unarchive {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704.orig.tar.gz in {{ glx_ffmpeg_source_dir }}/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704.orig.tar.gz"
+    dest="{{ glx_ffmpeg_source_dir }}"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: unarchive {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1.debian.tar.xz in {{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1.debian.tar.xz"
+    dest="{{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: check dpkg --print-architecture
+  shell: dpkg --print-architecture
+  register: dpkg_arch
+  changed_when: false
+
+- name: creat x264 package
   command: "{{ item }}"
   args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/x264"
-    creates: "{{ glx_ffmpeg_bin_dir }}/x264"
+    chdir: "{{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704"
+    creates: "{{ glx_ffmpeg_source_dir }}/libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb"
   with_items:
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }} --enable-static
-    - make
-    - make install
-    - make distclean
+    - dpkg-buildpackage
+
+- name: install libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install libx264-dev_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-dev_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install x264_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+  changed_when: false

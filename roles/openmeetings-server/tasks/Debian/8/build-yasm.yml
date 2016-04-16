@@ -31,7 +31,7 @@
 
 - name: copy files in {{ glx_ffmpeg_source_dir }}/
   copy:
-    src="{{ item }}"
+    src="Debian/8/{{ item }}"
     dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
     backup=no
   with_items:
