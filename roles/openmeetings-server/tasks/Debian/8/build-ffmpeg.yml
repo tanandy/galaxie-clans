@@ -48,7 +48,7 @@
     path="{{ glx_ffmpeg_source_dir }}"
     state=directory
 
-- include: build-yasm.yml
+#- include: build-yasm.yml
 - include: build-x264.yml
 - include: build-x265.yml
 - include: build-fdk-aac.yml

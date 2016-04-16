@@ -20,6 +20,9 @@
 - include: install-packages.yml
   tags: install, install-packages
 
+- include: build-yasm.yml
+  tags: install, install-yasm, build-yasm
+
 - include: build-sox.yml
   tags: install, install-sox, build-sox
 
