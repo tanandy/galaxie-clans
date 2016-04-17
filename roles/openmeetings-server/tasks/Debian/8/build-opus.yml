@@ -1,31 +1,68 @@
 ---
-# Clean Debian packages
-- name: build opus | unnstall doublon
-  apt:
-    pkg={{ item }}
-    state=absent
+- name: copy files in {{ glx_ffmpeg_source_dir }}/
+  copy:
+    src="Debian/8/{{ item }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
+    backup=no
   with_items:
-    - "libopus0"
-    - "libopus-dev"
-    - "libopusfile0"
-    - "libopusfile-dev"
+    - "{{ glx_opus_orig_filename }}"
+    - "{{ glx_opus_debian_filename }}"
+    - "{{ glx_opus_dsc_filename }}"
 
-# Download opus sources
-- name: build opus | clone latest opus
-  git:
-    repo=git://git.opus-codec.org/opus.git
-    dest={{ glx_ffmpeg_source_dir }}/opus
-    accept_hostkey=yes
+- name: install requirement
+  apt:
+    pkg="{{ item }}"
+    state=latest
+  with_items:
+    - "debhelper"
+    - "doxygen"
 
-# Build opus
-- name: build opus | compile libopus
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_opus_orig_filename }} in {{ glx_ffmpeg_source_dir }}/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_opus_orig_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: creat {{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}/debian directory
+  file:
+    path="{{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}/debian"
+    state=directory
+    mode=0755
+
+- name: apply patch
+  shell: zcat {{ glx_ffmpeg_source_dir }}/{{ glx_opus_debian_filename }} | patch
+    chdir="{{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}/debian"
+
+- name: check {{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}/debian/rules permission
+  file:
+    path="{{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}/debian/rules"
+    mode=0744
+
+- name: check dpkg --print-architecture
+  shell: dpkg --print-architecture
+  register: dpkg_arch
+  changed_when: false
+
+- name: creat {{ glx_opus_package_name }} packages
   command: "{{ item }}"
   args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/opus"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libopus.a"
+    chdir: "{{ glx_ffmpeg_source_dir }}/{{ glx_opus_package_name }}-{{ glx_opus_version }}"
+    creates: "{{ glx_ffmpeg_source_dir }}/libopus0_{{ glx_opus_version }}-{{ glx_opus_package_version }}_{{ dpkg_arch.stdout }}.deb"
   with_items:
-    - ./autogen.sh
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
-    - make
-    - make install
-    - make distclean
+    - dpkg-buildpackage
+
+- name: install libopus0_{{ glx_opus_version }}-{{ glx_opus_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libopus0_{{ glx_opus_version }}-{{ glx_opus_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install libopus-dev_{{ glx_opus_version }}-{{ glx_opus_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libopus-dev_{{ glx_opus_version }}-{{ glx_opus_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install libopus-doc_{{ glx_opus_version }}-{{ glx_opus_package_version }}_all.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libopus-doc_{{ glx_opus_version }}-{{ glx_opus_package_version }}_all.deb
+  changed_when: false
+

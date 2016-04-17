@@ -60,6 +60,14 @@ glx_lame_orig_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}.orig
 glx_lame_debian_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}-{{ glx_lame_package_version }}.debian.tar.xz"
 glx_lame_dsc_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}-{{ glx_lame_package_version }}.dsc"
 
+# opus
+glx_opus_package_name: "opus"
+glx_opus_version: "1.1.2"
+glx_opus_package_version: "1"
+glx_opus_orig_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}.orig.tar.gz"
+glx_opus_debian_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}-{{ glx_opus_package_version }}.diff.gz"
+glx_opus_dsc_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}-{{ glx_opus_package_version }}.dsc"
+
 
 # ffmpeg
 glx_ffmpeg_force_install: true

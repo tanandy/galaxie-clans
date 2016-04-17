@@ -35,6 +35,9 @@
 - include: build-libmp3lame.yml
   tags: install, install-libmp3lame, build-libmp3lame
 
+- include: build-opus.yml
+  tags: install, install-libopus, build-libopus
+
 - include: build-sox.yml
   tags: install, install-sox, build-sox
 
