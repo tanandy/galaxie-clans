@@ -1,20 +1,81 @@
 ---
-# Download fdk-aac sources
-- name: build ffmpeg | clone latest fdk-aac
-  git:
-    repo=git://github.com/mstorsjo/fdk-aac.git
-    dest={{ glx_ffmpeg_source_dir }}/fdk-aac
-    accept_hostkey=yes
+## Download fdk-aac sources
+#- name: build ffmpeg | clone latest fdk-aac
+#  git:
+#    repo=git://github.com/mstorsjo/fdk-aac.git
+#    dest={{ glx_ffmpeg_source_dir }}/fdk-aac
+#    accept_hostkey=yes
+#
+## Build fdk-aac
+#- name: build ffmpeg | compile fdk-aac
+#  command: "{{ item }}"
+#  args:
+#    chdir: "{{ glx_ffmpeg_source_dir }}/fdk-aac"
+#    creates: "{{ glx_ffmpeg_lib_dir }}/libfdk-aac.a"
+#  with_items:
+#    - autoreconf -fiv
+#    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
+#    - make
+#    - make install
+#    - make distclean
 
-# Build fdk-aac
-- name: build ffmpeg | compile fdk-aac
+- name: copy files in {{ glx_ffmpeg_source_dir }}/
+  copy:
+    src="Debian/8/{{ item }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
+    backup=no
+  with_items:
+    - "{{ glx_fdk_aac_orig_filename }}"
+    - "{{ glx_fdk_aac_debian_filename }}"
+    - "{{ glx_fdk_aac_dsc_filename }}"
+
+- name: install requirement
+  apt:
+    pkg="{{ item }}"
+    state=latest
+  with_items:
+    - "debhelper"
+    - "dh-autoreconf"
+
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_orig_filename }} in {{ glx_ffmpeg_source_dir }}/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_orig_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_debian_filename }} in {{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_package_name }}-0.1.3/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_debian_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_package_name }}-0.1.3"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: check dpkg --print-architecture
+  shell: dpkg --print-architecture
+  register: dpkg_arch
+  changed_when: false
+
+- name: creat {{ glx_fdk_aac_package_name }} package
   command: "{{ item }}"
   args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/fdk-aac"
-    creates: "{{ glx_ffmpeg_lib_dir }}/libfdk-aac.a"
+    chdir: "{{ glx_ffmpeg_source_dir }}/{{ glx_fdk_aac_package_name }}-0.1.3"
+    creates: "{{ glx_ffmpeg_source_dir }}/libfdk-aac0_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb"
   with_items:
-    - autoreconf -fiv
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --disable-shared
-    - make
-    - make install
-    - make distclean
+    - dpkg-buildpackage
+
+- name: install libfdk-aac0_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libfdk-aac0_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install libfdk-aac-dev_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libfdk-aac-dev_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install aac-enc_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/aac-enc_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false

@@ -24,10 +24,13 @@
   tags: install, install-yasm, build-yasm
 
 - include: build-x264.yml
-  tags: install, install-yasm, build-x264
+  tags: install, install-x264, build-x264
 
 - include: build-x265.yml
-  tags: install, install-yasm, build-x265
+  tags: install, install-x265, build-x265
+
+- include: build-fdk-aac.yml
+  tags: install, install-fdk-aac, build-fdk-aac
 
 - include: build-sox.yml
   tags: install, install-sox, build-sox
