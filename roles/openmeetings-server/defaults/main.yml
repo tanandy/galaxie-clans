@@ -52,6 +52,15 @@ glx_fdk_aac_orig_filename: "{{ glx_fdk_aac_package_name }}_{{ glx_fdk_aac_versio
 glx_fdk_aac_debian_filename: "{{ glx_fdk_aac_package_name }}_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}.debian.tar.xz"
 glx_fdk_aac_dsc_filename: "{{ glx_fdk_aac_package_name }}_{{ glx_fdk_aac_version }}-{{ glx_fdk_aac_package_version }}.dsc"
 
+# lame
+glx_lame_package_name: "lame"
+glx_lame_version: "3.99.5+repack1"
+glx_lame_package_version: "9"
+glx_lame_orig_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}.orig.tar.gz"
+glx_lame_debian_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}-{{ glx_lame_package_version }}.debian.tar.xz"
+glx_lame_dsc_filename: "{{ glx_lame_package_name }}_{{ glx_lame_version }}-{{ glx_lame_package_version }}.dsc"
+
+
 # ffmpeg
 glx_ffmpeg_force_install: true
 #

@@ -32,6 +32,9 @@
 - include: build-fdk-aac.yml
   tags: install, install-fdk-aac, build-fdk-aac
 
+- include: build-libmp3lame.yml
+  tags: install, install-libmp3lame, build-libmp3lame
+
 - include: build-sox.yml
   tags: install, install-sox, build-sox
 

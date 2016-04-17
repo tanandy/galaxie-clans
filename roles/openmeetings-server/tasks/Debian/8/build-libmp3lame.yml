@@ -1,32 +1,74 @@
 ---
-- name: build ffmpeg | install requirement
+- name: copy files in {{ glx_ffmpeg_source_dir }}/
+  copy:
+    src="Debian/8/{{ item }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
+    backup=no
+  with_items:
+    - "{{ glx_lame_orig_filename }}"
+    - "{{ glx_lame_debian_filename }}"
+    - "{{ glx_lame_dsc_filename }}"
+
+- name: build libmp3lame | install requirement
   apt:
     pkg={{ item }}
     state=latest
   with_items:
-    - "libncurses5-dev"
-    - "nasm"
-    - "libsndfile1-dev"
-    - "autotools-dev"
     - "debhelper"
+    - "dh-autoreconf"
+    - "libncurses5-dev"
+    - "libsndfile1-dev"
+    - "nasm"
+    - "pkg-config"
 
-# Download libmp3lame sources
-- name: build libmp3lame | clone latest libmp3lame
-  git:
-    repo=https://github.com/gypified/libmp3lame.git
-    dest={{ glx_ffmpeg_source_dir }}/libmp3lame
-    accept_hostkey=true
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_lame_orig_filename }} in {{ glx_ffmpeg_source_dir }}/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_lame_orig_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
 
-# Build libmp3lame
-- name: build libmp3lame | compile libmp3lame
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_lame_debian_filename }} in {{ glx_ffmpeg_source_dir }}/{{ glx_lame_package_name }}-{{ glx_lame_version }}/
+  unarchive:
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_lame_debian_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{ glx_lame_package_name }}-{{ glx_lame_version }}"
+    copy=no
+    owner="root"
+    group="root"
+  changed_when: false
+
+- name: check dpkg --print-architecture
+  shell: dpkg --print-architecture
+  register: dpkg_arch
+  changed_when: false
+
+- name: creat {{ glx_lame_package_name }} package
   command: "{{ item }}"
   args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/libmp3lame"
+    chdir: "{{ glx_ffmpeg_source_dir }}/{{ glx_lame_package_name }}-{{ glx_lame_version }}"
+    creates: "{{ glx_ffmpeg_source_dir }}/libmp3lame0_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb"
   with_items:
-    - ./configure --prefix={{ glx_ffmpeg_prefix }} --enable-nasm --disable-shared
     - dpkg-buildpackage
-    - make distclean
 
-- name: build libmp3lame | install
-  shell: dpkg -i lame_*.deb libmp3lame0_*.deb libmp3lame-dev_*.deb
-    chdir="{{ glx_ffmpeg_source_dir }}"
+- name: install libmp3lame0_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libmp3lame0_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install libmp3lame-dev_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libmp3lame-dev_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install lame_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/lame_{{ glx_lame_version }}-{{ glx_lame_package_version }}_{{ dpkg_arch.stdout }}.deb
+  changed_when: false
+
+- name: install lame-doc_{{ glx_lame_version }}-{{ glx_lame_package_version }}_all.deb
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/lame-doc_{{ glx_lame_version }}-{{ glx_lame_package_version }}_all.deb
+  changed_when: false
+
+
+
+
+
