@@ -1,31 +1,13 @@
 ---
-# Download x264 sources
-#- name: build ffmpeg | clone latest x264
-#  git:
-#    repo=git://git.videolan.org/x264.git
-#    dest={{ glx_ffmpeg_source_dir }}/x264
-#    accept_hostkey=yes
-#
-#- name:  build ffmpeg | compile x264
-#  command: "{{ item }}"
-#  args:
-#    chdir: "{{ glx_ffmpeg_source_dir }}/x264"
-#    creates: "{{ glx_ffmpeg_bin_dir }}/x264"
-#  with_items:
-#    - ./configure --prefix={{ glx_ffmpeg_prefix }} --bindir={{ glx_ffmpeg_bin_dir }} --enable-static
-#    - make
-#    - make install
-#    - make distclean
-
 - name: copy files in {{ glx_ffmpeg_source_dir }}/
   copy:
     src="Debian/8/{{ item }}"
     dest="{{ glx_ffmpeg_source_dir }}/{{item  }}"
     backup=no
   with_items:
-    - "x264_0.148.2643+git5c65704.orig.tar.gz"
-    - "x264_0.148.2643+git5c65704-1.debian.tar.xz"
-    - "x264_0.148.2643+git5c65704-1.dsc"
+    - "{{ glx_x264_orig_filename }}"
+    - "{{ glx_x264_debian_filename }}"
+    - "{{ glx_x264_dsc_filename }}"
 
 - name: install requirement
   apt:
@@ -40,19 +22,19 @@
     - "libgpac-dev"
     - "yasm"
 
-- name: unarchive {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704.orig.tar.gz in {{ glx_ffmpeg_source_dir }}/
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_x264_orig_filename }} in {{ glx_ffmpeg_source_dir }}/
   unarchive:
-    src="{{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704.orig.tar.gz"
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_x264_orig_filename }}"
     dest="{{ glx_ffmpeg_source_dir }}"
     copy=no
     owner="root"
     group="root"
   changed_when: false
 
-- name: unarchive {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1.debian.tar.xz in {{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704
+- name: unarchive {{ glx_ffmpeg_source_dir }}/{{ glx_x264_debian_filename }} in {{ glx_ffmpeg_source_dir }}/{{ glx_x264_package_name }}-{{ glx_x264_version }}/
   unarchive:
-    src="{{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1.debian.tar.xz"
-    dest="{{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704"
+    src="{{ glx_ffmpeg_source_dir }}/{{ glx_x264_debian_filename }}"
+    dest="{{ glx_ffmpeg_source_dir }}/{{ glx_x264_package_name }}-{{ glx_x264_version }}"
     copy=no
     owner="root"
     group="root"
@@ -63,22 +45,22 @@
   register: dpkg_arch
   changed_when: false
 
-- name: creat x264 package
+- name: creat {{ glx_x264_package_name }} package
   command: "{{ item }}"
   args:
-    chdir: "{{ glx_ffmpeg_source_dir }}/x264-0.148.2643+git5c65704"
-    creates: "{{ glx_ffmpeg_source_dir }}/libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb"
+    chdir: "{{ glx_ffmpeg_source_dir }}/{{ glx_x264_package_name }}-{{ glx_x264_version }}"
+    creates: "{{ glx_ffmpeg_source_dir }}/libx264-148_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb"
   with_items:
     - dpkg-buildpackage
 
-- name: install libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
-  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-148_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+- name: install libx264-148_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-148_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb
   changed_when: false
 
-- name: install libx264-dev_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
-  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-dev_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+- name: install libx264-dev_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/libx264-dev_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb
   changed_when: false
 
-- name: install x264_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb package
-  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/x264_0.148.2643+git5c65704-1_{{ dpkg_arch.stdout }}.deb
+- name: install x264_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb package
+  shell: dpkg -i {{ glx_ffmpeg_source_dir }}/{{ glx_x264_package_name }}_{{ glx_x264_version }}-{{ glx_x264_package_version }}_{{ dpkg_arch.stdout }}.deb
   changed_when: false

@@ -21,6 +21,29 @@ glx_sox_lib_dir: "/usr/lib"
 glx_sox_prefix: "/usr"
 glx_sox_sysconfdir: "/etc"
 
+# yasm
+glx_yasm_package_name: "yasm"
+glx_yasm_package_version: "1.3.0"
+glx_yasm_orig_filename: "{{ glx_yasm_package_name }}_{{ glx_yasm_package_version }}.orig.tar.gz"
+glx_yasm_debian_filename: "{{ glx_yasm_package_name }}_{{ glx_yasm_package_version }}-2.debian.tar.xz"
+glx_yasm_dsc_filename: "{{ glx_yasm_package_name }}_{{ glx_yasm_package_version }}-2.dsc"
+
+# h264
+glx_x264_package_name: "x264"
+glx_x264_version: "0.148.2643+git5c65704"
+glx_x264_package_version: "1"
+glx_x264_orig_filename: "{{ glx_x264_package_name }}_{{ glx_x264_version }}.orig.tar.gz"
+glx_x264_debian_filename: "{{ glx_x264_package_name }}_{{ glx_x264_version }}-{{ glx_x264_package_version }}.debian.tar.xz"
+glx_x264_dsc_filename: "{{ glx_x264_package_name }}_{{ glx_x264_version }}-{{ glx_x264_package_version }}.dsc"
+
+# x265
+glx_x265_package_name: "x265"
+glx_x265_version: "1.9"
+glx_x265_package_version: "3"
+glx_x265_orig_filename: "{{ glx_x265_package_name }}_{{ glx_x265_version }}.orig.tar.gz"
+glx_x265_debian_filename: "{{ glx_x265_package_name }}_{{ glx_x265_version }}-{{ glx_x265_package_version }}.debian.tar.xz"
+glx_x265_dsc_filename: "{{ glx_x265_package_name }}_{{ glx_x265_version }}-{{ glx_x265_package_version }}.dsc"
+
 # ffmpeg
 glx_ffmpeg_force_install: true
 #

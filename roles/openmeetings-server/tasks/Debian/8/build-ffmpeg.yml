@@ -50,7 +50,7 @@
 
 #- include: build-yasm.yml
 #- include: build-x264.yml
-- include: build-x265.yml
+#- include: build-x265.yml
 - include: build-fdk-aac.yml
 - include: build-libmp3lame.yml
 - include: build-opus.yml
