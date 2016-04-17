@@ -1,19 +1,4 @@
 ---
-- name: build ffmpeg | unnstall doublon
-  apt:
-    pkg={{ item }}
-    state=absent
-  with_items:
-    - "libopus0"
-    - "libopus-dev"
-    - "libopusfile0"
-    - "libopusfile-dev"
-    - "libx264-dev"
-    - "x264"
-    - "libvpx-dev"
-    - "librtmp0"
-    - "librtmp-dev"
-
 - name: build ffmpeg | install requirement
   apt:
     pkg={{ item }}
@@ -41,26 +26,25 @@
     - "cmake"
     - "mercurial"
     - "git-core"
-
+    - "librtmp1"
+    - "librtmp-dev"
 
 - name: build ffmpeg | check {{ glx_ffmpeg_source_dir }} directory
   file:
     path="{{ glx_ffmpeg_source_dir }}"
     state=directory
 
-#- include: build-yasm.yml
-#- include: build-x264.yml
-#- include: build-x265.yml
-#- include: build-fdk-aac.yml
-#- include: build-libmp3lame.yml
-#- include: build-opus.yml
-#- include: build-libvpx.yml
-
 - name: build ffmpeg | clone latest ffmpeg
   git:
     repo=git://source.ffmpeg.org/ffmpeg.git
     dest={{ glx_ffmpeg_source_dir }}/ffmpeg
     accept_hostkey=yes
+
+- name: build ffmpeg | delete "{{ glx_ffmpeg_bin_dir }}/ffmpeg"
+  file:
+    path="{{ glx_ffmpeg_bin_dir }}/ffmpeg"
+    state=absent
+  when: glx_ffmpeg_force_install
 
 - name: build ffmpeg | compile ffmpeg
   command: "{{ item }}"
@@ -72,9 +56,3 @@
     - make
     - make install
     - make distclean
-
-#- name: build ffmpeg | delete "{{ glx_ffmpeg_source_dir }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
-#  file:
-#    path="{{ glx_ffmpeg_source_dir }}/{{ glx_sox_app_name }}.{{ glx_sox_extension }}"
-#    state=absent
-#  when: glx_ffmpeg_force_install
