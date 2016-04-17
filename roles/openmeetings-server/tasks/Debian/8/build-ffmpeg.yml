@@ -54,7 +54,7 @@
 #- include: build-fdk-aac.yml
 #- include: build-libmp3lame.yml
 #- include: build-opus.yml
-- include: build-libvpx.yml
+#- include: build-libvpx.yml
 
 - name: build ffmpeg | clone latest ffmpeg
   git:

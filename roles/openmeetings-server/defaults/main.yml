@@ -68,6 +68,13 @@ glx_opus_orig_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}.orig
 glx_opus_debian_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}-{{ glx_opus_package_version }}.diff.gz"
 glx_opus_dsc_filename: "{{ glx_opus_package_name }}_{{ glx_opus_version }}-{{ glx_opus_package_version }}.dsc"
 
+# libvpx
+glx_libvpx_package_name: "libvpx"
+glx_libvpx_version: "1.5.0"
+glx_libvpx_package_version: "2"
+glx_libvpx_orig_filename: "{{ glx_libvpx_package_name }}_{{ glx_libvpx_version }}.orig.tar.bz2"
+glx_libvpx_debian_filename: "{{ glx_libvpx_package_name }}_{{ glx_libvpx_version }}-{{ glx_libvpx_package_version }}.debian.tar.xz"
+glx_libvpx_dsc_filename: "{{ glx_libvpx_package_name }}_{{ glx_libvpx_version }}-{{ glx_libvpx_package_version }}.dsc"
 
 # ffmpeg
 glx_ffmpeg_force_install: true

@@ -38,6 +38,9 @@
 - include: build-opus.yml
   tags: install, install-libopus, build-libopus
 
+- include: build-libvpx.yml
+  tags: install, install-libvpx, build-libvpx
+
 - include: build-sox.yml
   tags: install, install-sox, build-sox
 
