@@ -28,8 +28,8 @@ Galaxie is provide a subdirectory
 ├── group_vars     (Ansible Group Vars directory, The groupe.yml file can store dedicated group of host vars)
 ├── host_vars      (Ansible Host Vars directory, The hostname.yml file can store dedicated host vars)
 ├── keys           (Directory where is generate and store SSH private and pub keys)
-├── playbooks      (Directory where Ansys Playbooks are store)
-├── roles          (Directory where Ansys Roles are store)
+├── playbooks      (Directory where Ansible Playbooks are store)
+├── roles          (Directory where Ansible Roles are store)
 ├── secrets        (Directory where is store password)
 └── zone_files     (Directory where is store primary and secondary DNS zone files)
 ```
