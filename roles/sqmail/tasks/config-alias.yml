@@ -10,7 +10,6 @@
     group="{{ glx_sqmail_groups.sqmail.gname }}"
     mode=0644
   with_items: glx_sqmail_alias_admins_list
-  tags: alias
 
 # http://www.qmail.org/man/man5/dot-qmail.html
 - name: check dot-qmail alias
@@ -21,4 +20,3 @@
     group="{{ glx_sqmail_groups.sqmail.gname }}"
     mode=0644
   with_items: glx_sqmail_alias_users_list
-  tags: alias
