@@ -15,9 +15,14 @@
 		ErrorLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.error.log
 		CustomLog ${APACHE_LOG_DIR}/{{ item.ServerName }}-ssl.access.log combined
 		SSLEngine on
+{% if item.AutoSignedCert %}
 		SSLCertificateFile	{{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
 		SSLCertificateKeyFile {{ glx_apache_localcerts_dir }}/ssl-cert-{{ item.ServerName }}.key
-
+{% else %}
+		SSLCertificateFile	{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.crt
+		SSLCertificateKeyFile {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key
+		SSLCACertificateFile {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
+{% endif %}
 		#   Server Certificate Chain:
 		#   Point SSLCertificateChainFile at a file containing the
 		#   concatenation of PEM encoded CA certificates which form the
