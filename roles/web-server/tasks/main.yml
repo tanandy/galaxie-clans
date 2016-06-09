@@ -42,6 +42,6 @@
 - include: install-wordpress.yml
   when: install_wordpress
 
-- include: config-wordpress.yml
-  tags: config, config-wordpress
+- include: config-wordpress-ssl.yml
+  tags: config, config-wordpress-ssl
   when: install_wordpress

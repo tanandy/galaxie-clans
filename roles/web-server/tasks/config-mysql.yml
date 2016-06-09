@@ -1,4 +1,5 @@
 ---
+# HTTP
 - name: create a file to hold the database creation instructions
   template:
     src="database_creation_instructions.j2"
@@ -14,3 +15,20 @@
   failed_when: creat_database_cmd.rc >= 2
   register: creat_database_cmd
   with_items: glx_apache_virtualhosts
+
+# HPPS SSL
+- name: create a file to hold the database creation instructions
+  template:
+    src="database_creation_instructions.j2"
+    dest="/root/{{ item.ServerName }}.sql"
+    owner="root"
+    group="root"
+    mode=0640
+  with_items: glx_apache_ssl_virtualhosts
+
+- name: create the databases
+  shell: cat /root/{{ item.ServerName }}.sql | mysql --defaults-extra-file=/etc/mysql/debian.cnf
+  changed_when: creat_database_cmd.rc == 0
+  failed_when: creat_database_cmd.rc >= 2
+  register: creat_database_cmd
+  with_items: glx_apache_ssl_virtualhosts

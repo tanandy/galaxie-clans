@@ -9,7 +9,7 @@
     owner="root"
     group="{{ glx_apache_gname }}"
     mode=0640
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -20,7 +20,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -32,7 +32,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -44,7 +44,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -56,7 +56,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -68,7 +68,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -80,7 +80,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -92,7 +92,7 @@
     owner="{{ glx_apache_uname }}"
     group="{{ glx_apache_gname }}"
     state=directory
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   notify:
     - service apache2 restart
 
@@ -144,24 +144,24 @@
 - name: populate wp-content of each virtualhost
   shell: cp -R {{ glx_wordpress_root_dir }}/wp-content/* {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}/
     chdir="{{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}/"
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
 
   changed_when: false
 
 ## Check permission
 - name: wordpress chanche owner of subdir in {{ glx_wordpress_content_dir }}/
   shell: chown -R {{ glx_apache_uname }}:{{ glx_apache_gname }} {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   changed_when: false
 
 - name: wordpress remove write permission to others of subdir in {{ glx_wordpress_content_dir }}/
   shell: chmod -R o-w {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   changed_when: false
 
 - name: wordpress set files to 664 and directory to 775
   shell: chmod -R u+rwX,g+rwX,o+rX {{ glx_wordpress_content_dir }}/{{ item.ServerName }}/{{ glx_wordpress_wp_content_dirname }}
-  with_items: glx_apache_virtualhosts
+  with_items: glx_apache_ssl_virtualhosts
   changed_when: false
 
 # Clean Up
