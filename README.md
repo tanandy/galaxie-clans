@@ -20,7 +20,7 @@ The Galaxie system is also used as an Action Layer for an AI called Alfred:
 * https://github.com/aurelienmaury/alfred
 * https://github.com/aurelienmaury/alfred-brain
 * https://github.com/aurelienmaury/alfred-spine
-* https://github.com/aurelienmaury/alfred-muscles (Galaxie is use here)
+* https://github.com/aurelienmaury/alfred-muscles (Galaxie is used here)
 * https://github.com/aurelienmaury/alfred-cli
 
 ## How the Magic happen
