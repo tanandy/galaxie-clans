@@ -1,5 +1,5 @@
-ntp_client
-==========
+apt-cacher-ng-server
+====================
 
 This role configure apt-cacher-ng server for Internal or External host.
 
@@ -30,7 +30,7 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-GPL 3
+GPLv3
 
 Author Information
 ------------------
