@@ -14,6 +14,36 @@ Use the right combination of options to get the initial connection. This first s
 for the other playbooks. The ```sudo: yes``` at the top of the playbook, and options like 
 ```[ --su, --ask-su-pass, --ask-pass]``` should help you achieve initial connection.
 
+## Exemple of a installation
+
+* Connect you to you remote machine via ssh and make necessary update.
+```
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
+```
+
+* install the minimal survival kit
+```
+apt-get install python vim bash-completion sudo
+```
+
+* creat a **user** in our example that will be zoe
+```
+addgroup --gid 4200 zoe
+adduser --shell /bin/bash --uid 4200 --gid 4200 zoe
+```
+
+* configue you sudo configuration file for give superuser owner to our zoe
+```
+vim /etc/sudoers
+```
+and add that line:
+```
+zoe     ALL=(ALL) NOPASSWD: ALL
+```
+
+
 ## Initial setup
 
 When adding a freshly installed host to the design:

@@ -3,3 +3,4 @@
   service:
     name=apt-cacher-ng
     state=restarted
+     enabled=yes
