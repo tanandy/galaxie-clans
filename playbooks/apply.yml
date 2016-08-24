@@ -42,5 +42,5 @@
 # Desktops
 #- include: desktops-base.yml
 #- include: gnome-setting.yml
-- include: mozilla-firefox.yml
-- include: mozilla-thunderbird.yml
+#- include: mozilla-firefox.yml
+#- include: mozilla-thunderbird.yml
