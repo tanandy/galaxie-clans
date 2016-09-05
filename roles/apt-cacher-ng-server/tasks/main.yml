@@ -42,4 +42,4 @@
   service:
     name=apt-cacher-ng
     state=started
-    enable=yes
+    enabled=yes
