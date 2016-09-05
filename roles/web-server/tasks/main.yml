@@ -27,6 +27,7 @@
 
 ### MYSQL
 - include: config-mysql.yml
+  when: "{{ 'mysql-servers' in group_names }}"
   tags: config, config-mysql
 
 ### PHP
@@ -40,8 +41,8 @@
 
 ### WORDPRESS
 - include: install-wordpress.yml
-  when: install_wordpress
+  when: "{{ 'wordpress' in group_names }}"
 
 - include: config-wordpress-ssl.yml
   tags: config, config-wordpress-ssl
-  when: install_wordpress
+  when: "{{ 'wordpress' in group_names }}"

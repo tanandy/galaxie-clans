@@ -25,8 +25,9 @@
 
 ### Configure a LAMP (Linux Apache MySQL PHP)
 # PHP is manage inside apache-server role
-- include: web-server.yml
 - include: mysql-server.yml
+- include: web-server.yml
+
 
 ###############
 ### Setting ###
