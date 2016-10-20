@@ -42,6 +42,10 @@
 
 #    - "deb-src http://www.deb-multimedia.org sid main"
 
+- name: Cleanup apt cache
+  command: apt-get clean warn=no
+  changed_when: False
+
 - name: run apt-get update
   apt:
     update_cache=yes

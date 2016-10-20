@@ -1,10 +1,19 @@
 - hosts: galaxie
 
   tasks:
+
   - name: Apt-get update
     apt:
       update_cache=yes
 
+#  - name: Apt-get upgrade
+#    apt:
+#      upgrade=yes
+
   - name: Apt-get upgrade
-    apt:
-      upgrade=yes
+    command: aptitude -q -y upgrade
+    changed_when: False
+
+  - name: Apt-get Cleanup cache
+    command: apt-get clean warn=no
+    changed_when: False
