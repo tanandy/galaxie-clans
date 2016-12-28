@@ -42,8 +42,16 @@ and add that line:
 ```
 zoe     ALL=(ALL) NOPASSWD: ALL
 ```
-
-
+Personally i disable the sudo group, that because i configure everything from /etc/sudoers file
+```
+# Allow members of group sudo to execute any command
+# %sudo ALL=(ALL:ALL) ALL
+```
+## Configure the Ansible spawn host
+If the host is call "host01" generate a SSH key
+```
+ssh-keygen -t rsa -b 4096 -f $HOME/Projets/galaxie/keys/id_rsa.host01
+```
 ## Initial setup
 
 When adding a freshly installed host to the design:
