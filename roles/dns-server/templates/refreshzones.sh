@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# refreshzones v0.4 refresh tinydns zone files over ssh
+# refreshzones v0.4 refresh tinydns zone templates over ssh
 # (c) Tuux from www.rtnp.org
 #
 # This package is free software; you can redistribute it and/or modify it under
@@ -16,7 +16,7 @@
 # The script have been modified and be coupled with a Makefile generate by
 # Ansible via Jinja templateb
 # see https://raw.githubusercontent.com/Tuuux/galaxie/master/roles/dns-server/templates/Makefile.j2
-# The Makefile is suppose to deal with ssh for transfert zone files to
+# The Makefile is suppose to deal with ssh for transfert zone templates to
 # secondary server. see https://cr.yp.to/djbdns/run-server-bind.html
 #
 # The script support multiple primary and secondary domains.
@@ -42,23 +42,23 @@
 # Any exisiting  'data' file MUST be moved into the ./zones/primary.d/
 # directory (or it will be lost).
 #
-# Place primary domain 'data' zone files into the ./zones/primary.d directory,
+# Place primary domain 'data' zone templates into the ./zones/primary.d directory,
 # with an extensions of '.data'. (e.g. ./zones/primary.d/domain.eu.org.data)
-# These files must be manually edited.
+# These templates must be manually edited.
 #
 # Domains for which the tinydns server will act as a secondary, should be
 # automatically be receive into the ./zones/secondary.d directory by a other
 # server via ssh.
 #
 # Prior to performing any things, the script will parse the ./zones/primary.d/
-# directory for search zone files (extensions '.data') and generate a
+# directory for search zone templates (extensions '.data') and generate a
 # SOA serial number with the epoch date of the last modification for each zone
-# files, and write a other file with extensions '.data.tosend' it will be use
+# templates, and write a other file with extensions '.data.tosend' it will be use
 # by the Makefile in case of ssh transfert.
 #
-# The primary zone files (e.g. ./zones/primary.d/*) SHOULD have a
+# The primary zone templates (e.g. ./zones/primary.d/*) SHOULD have a
 # SOA record ('Z') with the serial number field ('ser') empty. This script will
-# replace the serial number of each primary zone files with it own last
+# replace the serial number of each primary zone templates with it own last
 # modification epoch date.
 #
 # e.g. 'Zdomain.eu.org:a.ns.domain.eu.org.:hostmaster.domain.eu.org.::::::'
@@ -73,12 +73,12 @@
 # e.g. /etc/ndjbdns
 TINYDNS_DIR="{{ glx_tinydns_root_directory }}"
 
-# The location of directory where store primary zone files
+# The location of directory where store primary zone templates
 # e.g.  /etc/ndjbdns/zones/primary.d
 TINYDNS_ZONES_PRIMARY_DIR="{{ glx_tinydns_primary_directory }}"
 
 # e.g. /etc/ndjbdns/zones/secondary.d
-# The location of directory where store seconday zone files
+# The location of directory where store seconday zone templates
 TINYDNS_ZONES_SECONDARY_DIR="{{ glx_tinydns_secondary_directory }}"
 
 set -e
@@ -157,7 +157,7 @@ fi
 
 #############################################################
 # Create directories (if they don't exist) to store primary #
-# and secondary dns zone files.                             #
+# and secondary dns zone templates.                             #
 #############################################################
 
 [ -d "$TINYDNS_ZONES_PRIMARY_DIR"   ] || mkdir -p "$TINYDNS_ZONES_PRIMARY_DIR"
@@ -165,7 +165,7 @@ fi
 
 
 #################################################################
-# Concatenate all the primary and secondary zone files together #
+# Concatenate all the primary and secondary zone templates together #
 #################################################################
 
 # Clean previous .data.tmp file
@@ -174,7 +174,7 @@ rm -f "${TINYDNS_DIR}/.data.tmp"
 # Add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
 if [ $(ls -1A ${TINYDNS_ZONES_PRIMARY_DIR}/ | wc -l) -gt 0 ] ; then
-    echo "# Primary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
+    echo "# Primary zone templates:" >> "${TINYDNS_DIR}/.data.tmp"
     for PRIMARY in "$TINYDNS_ZONES_PRIMARY_DIR"/*.data ; do
         # Generate serial
         STAMP="`ls  --time-style=+%s -G  -o -g  ${PRIMARY} | awk '{ print $4 }'`"
@@ -191,7 +191,7 @@ fi
 # Add secondary file zone
 [ -n "$VERBOSE" ] && echo "Secondary zones:"
 if [ $(ls -1A ${TINYDNS_ZONES_SECONDARY_DIR}/ | wc -l) -gt 0 ] ; then
-    echo "# Secondary zone files:" >> "${TINYDNS_DIR}/.data.tmp"
+    echo "# Secondary zone templates:" >> "${TINYDNS_DIR}/.data.tmp"
     for file in "$TINYDNS_ZONES_SECONDARY_DIR"/*.data ; do
         [ -n "$VERBOSE" ] && echo "  $file"
         echo "# $file" >> "${TINYDNS_DIR}/.data.tmp"
@@ -204,7 +204,7 @@ fi
 ########################################################################
 # If the master 'data' file is not present, or is different to the one #
 # generated above, then use the new data from the concatenated zone    #
-# files, and compile it into a database.                               #
+# templates, and compile it into a database.                               #
 ########################################################################
 
 if [ ! -f "${TINYDNS_DIR}/data" ] || \

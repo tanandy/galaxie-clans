@@ -33,13 +33,13 @@
   when: inventory_hostname in groups["apt-cacher-ng-server"]
   register: apt_config
 
+- name: Activate service
+  service:
+    name=apt-cacher-ng
+    state=restarted
+    enabled=yes
+
 - name: Update apt cache
   apt:
     update_cache=yes
   when: apt_config|changed
-
-- name: Activate service
-  service:
-    name=apt-cacher-ng
-    state=started
-    enabled=yes

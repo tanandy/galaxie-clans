@@ -1,4 +1,4 @@
-- hosts: zfs-files-servers
+- hosts: zfs-templates-servers
 
   vars_files:
     - "galaxie-vars.yml"
