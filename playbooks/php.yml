@@ -1,0 +1,5 @@
+---
+- hosts: php-servers
+
+  roles:
+    - php

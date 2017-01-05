@@ -1,6 +1,6 @@
 ---
 # dpkg-reconfigure mysql-server-5.5 and copy/past content of ~/keystore-{{ ansible_hostname }}
-
+# dpkg-reconfigure mysql-server-core-5.6
 - name: Install MySQL
   apt: pkg={{ item }} state=latest
   with_items:
