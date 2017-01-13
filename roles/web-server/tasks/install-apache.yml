@@ -12,3 +12,18 @@
     - openssl
   notify:
     - service apache2 restart
+  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
+
+- name: apache2 | install Apache
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - apache2
+    - apache2-utils
+    - libapache2-mod-fcgid
+    - libcgi-fast-perl
+    - openssl
+  notify:
+    - service apache2 restart
+  when: ansible_distribution == "Debian" and ansible_lsb.codename == "stretch"

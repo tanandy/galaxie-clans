@@ -50,7 +50,7 @@ Personally i disable the sudo group, that because i configure everything from /e
 ## Configure the Ansible spawn host
 If the host is call "host01" generate a SSH key
 ```
-ssh-keygen -t rsa -b 4096 -f $HOME/Projets/galaxie/keys/id_rsa.host01
+ssh-keygen -t rsa -b 4096 -o -a 100 -f $HOME/Projets/galaxie/keys/id_rsa.host01
 ```
 ## Initial setup
 
