@@ -74,7 +74,7 @@
 
 # Prevente crasy developer's who not use they tools.
 # Yes a VIM or DEBIAN develloper thing for you and thing about you haven't to copy past from a terminal to a other.
-# You know why man ? is a suffisente raison for not use VIM any more ....
+# You know what man ? is a suffisente raison for not use VIM any more ....
 
 - name: Vim | Check mouse
   replace:
