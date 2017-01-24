@@ -66,8 +66,36 @@
     regexp='^\"set expandtab|^set expandtab'
     replace='set expandtab'
 
-- name: Vim | Using shiftwidth=4
+- name: Vim | Using expandtab
   lineinfile:
     dest=/etc/vim/vimrc
     line="set expandtab"
+    state=present
+
+# Prevente crasy developer's who not use they tools.
+# Yes a VIM or DEBIAN develloper thing for you and thing about you haven't to copy past from a terminal to a other.
+# You know why man ? is a suffisente raison for not use VIM any more ....
+
+- name: Vim | Check mouse
+  replace:
+    dest=/etc/vim/vimrc
+    regexp='^\"set mouse=a|^set mouse=a'
+    replace='set mouse='
+
+- name: Vim | Using mouse=
+  lineinfile:
+    dest=/etc/vim/vimrc
+    line="set mouse="
+    state=present
+
+- name: Vim | Check ttymouse
+  replace:
+    dest=/etc/vim/vimrc
+    regexp='^\"set ttymouse=[a-zA-Z0-9_]+|^set ttymouse=[a-zA-Z0-9_]+'
+    replace='set ttymouse='
+
+- name: Vim | Using ttymouse=
+  lineinfile:
+    dest=/etc/vim/vimrc
+    line="set ttymouse="
     state=present
