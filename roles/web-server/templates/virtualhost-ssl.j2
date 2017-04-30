@@ -21,7 +21,7 @@
 {% else %}
 		SSLCertificateFile	{{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.crt
 		SSLCertificateKeyFile {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.key
-		SSLCACertificateFile {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
+		SSLCertificateChainFile {{ glx_apache_privacerts_dir }}/ssl-cert-{{ item.ServerName }}.pem
 {% endif %}
 		#   Server Certificate Chain:
 		#   Point SSLCertificateChainFile at a file containing the

@@ -31,13 +31,13 @@
   tags: config, config-mysql
 
 ### PHP
-- include: install-php.yml
-  tags: install, install-php
-  when: install_php and ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
-
-- include: config-php.yml
-  tags: config, config-php
-  when: install_php and ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
+#- include: install-php.yml
+#  tags: install, install-php
+#  when: install_php and ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
+#
+#- include: config-php.yml
+#  tags: config, config-php
+#  when: install_php and ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
 
 ### WORDPRESS
 - include: install-wordpress.yml
