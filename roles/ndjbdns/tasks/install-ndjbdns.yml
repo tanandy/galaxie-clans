@@ -26,6 +26,15 @@
     dest="{{ glx_ndjbdns_source_dir }}"
     update=yes
 
+- name: ensure {{ glx_ndjbdns_source_dir }}/README file exists
+  copy:
+    content: ""
+    dest: "{{ glx_ndjbdns_source_dir }}/README"
+    force: no
+    group: root
+    owner: root
+    mode: 0555
+
 - name: fixe https://github.com/pjps/ndjbdns/issues/14
   shell: aclocal && autoconf && automake --add-missing
     chdir="{{ glx_ndjbdns_source_dir }}"
