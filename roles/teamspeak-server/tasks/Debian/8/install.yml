@@ -1,0 +1,75 @@
+---
+# pre-require
+- name: "Install: Create {{ glx.teamspeak_server.group }} group"
+  user:
+    name: "{{ glx.teamspeak_server.group }}"
+    state: present
+    system: yes
+
+- name: "Install: Create {{ glx.teamspeak_server.group }} system user"
+  user:
+    name: "{{ glx.teamspeak_server.user }}"
+    comment: "{{ glx.teamspeak_server.comment }}"
+    shell: "{{ glx.teamspeak_server.shell }}"
+    home: "{{ glx.teamspeak_server.home }}"
+    system: yes
+    group: "{{ glx.teamspeak_server.group }}"
+
+# Download
+- name: "Install: Download {{ glx.teamspeak_server.download_root }}/{{ glx.teamspeak_server.version }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}.tar.bz2"
+  get_url:
+    url: "{{ glx.teamspeak_server.download_root }}/{{ glx.teamspeak_server.version }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}.tar.bz2"
+    dest: "{{ glx.teamspeak_server.home }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}.tar.bz2"
+    checksum: "{{ glx.teamspeak_server.checksum }}"
+    owner: "{{ glx.teamspeak_server.user }}"
+    group: "{{ glx.teamspeak_server.group }}"
+
+- name: "Install : Create TeamSpeak {{ glx.teamspeak_server.version }} Server directory"
+  file:
+    path: "{{ glx.teamspeak_server.home }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}"
+    state: directory
+    owner: "{{ glx.teamspeak_server.user }}"
+    group: "{{ glx.teamspeak_server.group }}"
+  register: mkdir
+
+ # If a new directory has been created, check for (current) user data.
+- name: "Install : Checking for a currently installed TeamSpeak 3 Server with user data"
+  stat:
+    path: "{{ glx.teamspeak_server.home }}/{{ glx.teamspeak_server.symlink }}/teamspeak3-server_linux_amd64/files"
+  register: userdata
+  when: mkdir.changed
+
+# If user data has been found, this is an upgrade situation.
+- include: ts3update.yml
+  when: userdata.stat.exists is defined and userdata.stat.exists == True
+
+# Created a new directory? Extract the files into it. Overwrites existing.
+- name: "Install : Extract TeamSpeak {{ glx.teamspeak_server.version }} Server files"
+  unarchive:
+    copy: no
+    src: "{{ glx.teamspeak_server.home }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}.tar.bz2"
+    dest: "{{ glx.teamspeak_server.home }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}/"
+    owner: "{{ glx.teamspeak_server.user }}"
+    group: "{{ glx.teamspeak_server.group }}"
+  when: mkdir.changed
+
+- name: "Install : Create/Update symlink to TeamSpeak {{ glx.teamspeak_server.version }} Server"
+  file:
+    src: "{{ glx.teamspeak_server.home }}/teamspeak3-server_linux_amd64-{{ glx.teamspeak_server.version }}"
+    dest: "{{ glx.teamspeak_server.home }}/{{ glx.teamspeak_server.symlink }}"
+    state: link
+    owner: "{{ glx.teamspeak_server.user }}"
+    group: "{{ glx.teamspeak_server.user }}"
+  notify:
+    - Restart TeamSpeak 3 Server
+
+- name: "Install : Install TeamSpeak 3 systemctl service file"
+  template:
+    src: teamspeak3-server.service.{{ ansible_distribution }}.{{ ansible_distribution_major_version }}.j2
+    dest: "{{ systemd_service_file_path }}/teamspeak3-server.service"
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - Reload systemd
+    - Restart TeamSpeak 3 Server

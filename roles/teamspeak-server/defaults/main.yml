@@ -1,0 +1,30 @@
+---
+glx:
+  teamspeak_server:
+    user: "teamspeak"
+    group: "teamspeak"
+    comment: "Teamspeak 3 user"
+    home: "/opt/teamspeak"
+    shell: "/sbin/nologin"
+    symlink: "current"
+    version: "3.0.13.6"
+    download_root: "http://dl.4players.de/ts/releases"
+    checksum: "sha256:19ccd8db5427758d972a864b70d4a1263ebb9628fcc42c3de75ba87de105d179"
+    keep: 3
+
+teamspeak_ini_enabled: no
+teamspeak_ini_filename: ts3server.ini
+
+teamspeak_network:
+  voice:
+    default_port: 9987
+    ip: 0.0.0.0
+  filetransfer:
+    port: 30033
+    ip: 0.0.0.0
+  query:
+    port: 10011
+    ip: 0.0.0.0
+
+teamspeak_create_default_virtualserver: yes
+teamspeak_machine_id:
