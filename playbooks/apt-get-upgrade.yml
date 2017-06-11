@@ -2,18 +2,22 @@
 
   tasks:
 
-  - name: Apt-get update
+  - name: Update and upgrade apt packages
     apt:
+      upgrade=yes
       update_cache=yes
+      cache_valid_time=86400
+    changed_when: False
 
 #  - name: Apt-get upgrade
 #    apt:
 #      upgrade=yes
 
-  - name: Apt-get upgrade
-    command: aptitude -q -y upgrade
-    changed_when: False
+#  - name: Apt-get upgrade
+#    command: aptitude -q -y upgrade
+#    changed_when: False
+#
+#  - name: Apt-get Cleanup cache
+#    command: apt-get clean warn=no
+#    changed_when: False
 
-  - name: Apt-get Cleanup cache
-    command: apt-get clean warn=no
-    changed_when: False
