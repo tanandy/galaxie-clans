@@ -9,6 +9,7 @@
 #- include: apt-unattended.yml
 - include: common.yml
 - include: banner.yml
+- include: powertop.yml
 ###############
 ### Servers ###
 ###############

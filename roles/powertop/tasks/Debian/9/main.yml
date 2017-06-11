@@ -1,0 +1,15 @@
+---
+- name: "Load OS specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}/main.yml"
+        - main.yml
+      paths:
+        - ../vars
+
+# Installation of powertop
+- include: install.yml
+
+# Configuration of powertop
+- include: config.yml

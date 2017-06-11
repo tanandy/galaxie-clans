@@ -4,4 +4,3 @@
 - include: packages.yml
 - include: bashrc.yml
 - include: vim.yml
-#- include: powersave.yml
