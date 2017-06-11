@@ -10,7 +10,7 @@
 
 - name: "Copy powertop.service.j2 to {{ systemd_service_file_path }}/"
   template:
-    src: "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}/powertop.service.j2"
+    src: "{{ ansible_distribution }}/9/powertop.service.j2"
     dest: "{{ systemd_service_file_path }}/powertop.service"
     backup: no
   register: powertop_service
