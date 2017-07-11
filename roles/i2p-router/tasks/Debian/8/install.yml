@@ -1,0 +1,65 @@
+---
+# pre-require
+- name: import i2p key
+  apt_key:
+    url: "https://geti2p.net/_static/i2p-debian-repo.key.asc"
+    state: present
+
+- name: Download 2p-keyring_2016.10.01_all.deb
+  get_url:
+    url="https://deb.i2p2.de/pool/main/i/i2p-keyring/i2p-keyring_2016.10.01_all.deb"
+    dest="/tmp/i2p-keyring_2016.10.01_all.deb"
+
+- name: Install 2p-keyring_2016.10.01_all.deb
+  apt: deb="/tmp/i2p-keyring_2016.10.01_all.deb"
+
+# For jessie:
+- name: add i2p repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "deb http://deb.i2p2.de/ jessie main"
+    - "deb-src http://deb.i2p2.de/ jessie main"
+  changed_when: False
+
+- name: install i2p
+  apt:
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - i2p
+    - i2p-keyring
+
+- name: Configure I2P router to be started at boot
+  debconf:
+    name: i2p
+    question: i2p/daemon
+    value: true
+    vtype: select
+  changed_when: False
+
+- name: Configure the the account i2psvc when running as a daemon
+  debconf:
+    name: i2p
+    question: i2p/user
+    value: i2psvc
+    vtype: string
+  changed_when: False
+
+- name: Configure Memory that can be allocated to I2P
+  debconf:
+    name: i2p
+    question: i2p/memory
+    value: 128
+    vtype: string
+  changed_when: False
+
+- name: Configure I2P router to use AppArmor
+  debconf:
+    name: i2p
+    question: i2p/aa
+    value: true
+    vtype: select
+  changed_when: False

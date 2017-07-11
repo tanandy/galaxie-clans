@@ -1,0 +1,23 @@
+- name: "Load OS specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}.{{ ansible_distribution_major_version }}.yml"
+        - main.yml
+      paths:
+        - ../vars
+
+# Installation of I2P
+- include: install.yml
+
+
+# Perform the running of handlers now
+# So we can do "Reload systemd" (and possibly queued clean-up)
+# before we start using the new/changed .service file.
+- meta: flush_handlers
+# Make sure I2P Router is started and enabled
+- name: Enable and start I2P Router
+  service:
+    name: i2p
+    state: started
+    enabled: yes

@@ -1,0 +1,4 @@
+---
+glx:
+  i2p_server:
+    repository: "https://deb.i2p2.de/"

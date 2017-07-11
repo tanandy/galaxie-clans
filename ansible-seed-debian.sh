@@ -3,7 +3,8 @@
 set -e
 set -x
 
-if [ ! -d "/etc/ansible" ]; then
+#if [ ! -d "/etc/ansible" ]; then
+#
 
 export DEBIAN_FRONTEND=noninteractive
 echo "Updating APT cache"
@@ -48,4 +49,4 @@ pip install -U pip ansible
 
 mkdir -p /etc/ansible/
 
-fi
+#fi
