@@ -1,4 +1,13 @@
 ---
 glx:
-  i2p_server:
-    repository: "https://deb.i2p2.de/"
+  i2p:
+    apt_key_url: "https://geti2p.net/_static/i2p-debian-repo.key.asc"
+    repo_url: "http://deb.i2p2.de/"
+    keyring_deb_file: "i2p-keyring_2016.10.01_all.deb"
+    debconf_daemon: "true"
+    debconf_user: "i2psvc"
+    debconf_memory: "128"
+    debconf_apparmor: "true"
+    packages:
+      - "i2p"
+      - "i2p-keyring"
