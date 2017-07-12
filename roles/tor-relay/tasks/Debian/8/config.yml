@@ -1,0 +1,23 @@
+---
+- name: Ensure custom systemd generator is in place (Debian/Ubuntu only)
+  template:
+    src: tor-generator.j2
+    dest: "{{ systemd_service_maintainer_generator_path }}/tor-generator"
+    owner: root
+    mode: 0755
+  changed_when: False
+
+- name: Ensure custom systemd generator is in place
+  template:
+    src: "tor-generator.j2"
+    dest: "{{ systemd_service_maintainer_generator_path }}/relayor-generator"
+    owner: root
+    mode: 0755
+
+- name: "Remove previus statoverride"
+  command: "dpkg-statoverride --remove {{ systemd_service_maintainer_generator_path }}/tor-generator"
+  changed_when: False
+
+- name: Ensure the maintainer's generator is disabled
+  command: "dpkg-statoverride --update --add root root 644 {{ systemd_service_maintainer_generator_path }}/tor-generator"
+  changed_when: False

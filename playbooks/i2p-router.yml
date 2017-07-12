@@ -1,5 +1,0 @@
----
-- hosts: i2p-router
-
-  roles:
-     - i2p-router

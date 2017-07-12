@@ -1,0 +1,12 @@
+---
+glx:
+  tor:
+    apt_key_url: "https://geti2p.net/_static/i2p-debian-repo.key.asc"
+    repo_url: "http://deb.torproject.org/torproject.org"
+    keyring_deb_file: "deb.torproject.org-keyring_2016.08.22_all.deb"
+    service_name: "tor"
+    sysconfdir: "{{ sysconfdir }}/tor"
+    config_file: "torrc"
+    packages:
+      - "tor"
+      - "deb.torproject.org-keyring"

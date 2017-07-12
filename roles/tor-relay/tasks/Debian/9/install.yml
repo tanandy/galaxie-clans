@@ -1,0 +1,30 @@
+---
+- name: "Download {{ glx.tor.keyring_deb_file }} from {{ glx.tor.repo_url }}"
+  get_url:
+    url: "{{ glx.tor.repo_url }}/pool/main/d/deb.torproject.org-keyring/{{ glx.tor.keyring_deb_file }}"
+    dest: "/tmp/{{ glx.tor.keyring_deb_file }}"
+  changed_when: False
+
+- name: "Install {{ glx.tor.keyring_deb_file }}"
+  apt:
+    deb: "/tmp/{{ glx.tor.keyring_deb_file }}"
+
+- name: "remove /tmp/{{ glx.tor.keyring_deb_file }}"
+  file:
+    path: "/tmp/{{ glx.tor.keyring_deb_file }}"
+    state: absent
+  changed_when: False
+
+- name: "Ensure torproject.org repository is present (APT)"
+  apt_repository:
+    repo: 'deb {{ glx.tor.repo_url }} {{ ansible_lsb.codename }} main'
+    state: present
+    update_cache: yes
+  changed_when: False
+
+- name: "Install tor"
+  apt:
+    pkg: "{{ item }}"
+    state: latest
+  with_items: "{{ glx.tor.packages }}"
+

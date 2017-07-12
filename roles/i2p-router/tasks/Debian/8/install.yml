@@ -14,6 +14,7 @@
 - name: "Install {{ glx.i2p.keyring_deb_file }}"
   apt:
     deb: "/tmp/{{ glx.i2p.keyring_deb_file }}"
+  changed_when: False
 
 - name: "remove /tmp/{{ glx.i2p.keyring_deb_file }}"
   file:
@@ -28,8 +29,8 @@
     state: present
     update_cache: yes
   with_items:
-    - "deb {{ glx.i2p.repo_url }} stretch main"
-    - "deb-src {{ glx.i2p.repo_url }} stretch main"
+    - "deb {{ glx.i2p.repo_url }} {{ ansible_lsb.codename }} main"
+    - "deb-src {{ glx.i2p.repo_url }} {{ ansible_lsb.codename }} main"
   changed_when: False
 
 - name: "Install i2p"
