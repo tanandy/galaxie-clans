@@ -1,6 +1,6 @@
 ---
 glx:
-  share:
+  share_server:
     user: "zoe"
     group: "media"
     root_dir_1: "/data"
@@ -12,5 +12,6 @@ glx:
     music_dirname: "Music"
     photo_dirname: "Photos"
     sandbox: "Space"
-    server_directorys:
-      - "{{ glx.share. root_dir_1}}/parent_films_dirname"
+
+server_directorys:
+  - "{{ glx.share. root_dir_1}}/parent_films_dirname"

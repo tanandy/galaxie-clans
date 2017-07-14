@@ -1,1 +1,6 @@
 ---
+- name: "Create group {{ glx.share_server.group }}"
+  group:
+    name: "{{ glx.share_server.group }}"
+    system: no
+    state: present

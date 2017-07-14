@@ -4,8 +4,6 @@
     - files:
         - "{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml"
         - main.yml
-      paths:
-        - ../vars
 
 # Installation of tor
 - include: install.yml
