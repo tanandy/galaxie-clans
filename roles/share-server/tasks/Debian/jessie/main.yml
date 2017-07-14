@@ -1,0 +1,12 @@
+- name: "Load OS specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml"
+        - main.yml
+      paths:
+        - ../vars
+
+# Installation of tor
+- include: install.yml
+- include: config.yml
