@@ -2,3 +2,5 @@
 systemd_service_file_path: "/lib/systemd/system"
 systemd_service_maintainer_generator_path: "/lib/systemd/system-generators"
 sysconfdir: "/etc"
+packages:
+  - "tor"

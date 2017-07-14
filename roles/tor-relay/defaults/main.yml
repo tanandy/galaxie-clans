@@ -7,6 +7,3 @@ glx:
     service_name: "tor"
     sysconfdir: "{{ sysconfdir }}/tor"
     config_file: "torrc"
-    packages:
-      - "tor"
-      - "deb.torproject.org-keyring"

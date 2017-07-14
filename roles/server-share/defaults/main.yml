@@ -1,0 +1,16 @@
+---
+glx:
+  share:
+    user: "zoe"
+    group: "media"
+    root_dir_1: "/data"
+    root_dir_2: "/home/media"
+    root_dir_3: "/home/hts"
+    parent_films_dirname: "Films"
+    children_films_dirname: "Children"
+    tv_serie_dirname: "TV_Series"
+    music_dirname: "Music"
+    photo_dirname: "Photos"
+    sandbox: "Space"
+    server_directorys:
+      - "{{ glx.share. root_dir_1}}/parent_films_dirname"
