@@ -31,6 +31,7 @@ set_perm "{{ glx_share_server_path_tv_series }}/{{ glx_share_server_dirname_tv_s
 {% endif %}
 {% if glx_share_server_enable_concerts %}
 set_perm "{{ glx_share_server_path_concerts }}/{{ glx_share_server_dirname_concerts }}" "{{ glx_share_server_group }}"
+{% endif %}
 {% if glx_share_server_enable_spectacles %}
 set_perm "{{ glx_share_server_path_spectacles }}/{{ glx_share_server_dirname_spectacles }}" "{{ glx_share_server_group }}"
 {% endif %}

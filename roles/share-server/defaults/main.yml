@@ -32,6 +32,9 @@ glx_share_server_enable_sandbox: True
 glx_share_server_user: "zoe"
 glx_share_server_group: "media"
 
+glx_share_server_script_path: "/root/bin"
+glx_share_server_script_name: "check_perm.sh"
+
 glx_share_server_directory_list:
   - "{{ glx_share_server_path_root_media }}"
   - "{{ glx_share_server_path_parents_films }}/{{ glx_share_server_dirname_parents_films }}"
