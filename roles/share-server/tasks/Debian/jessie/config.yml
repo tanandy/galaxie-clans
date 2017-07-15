@@ -14,12 +14,84 @@
     append: yes
     state: present
 
-- name: Set dir permissions
+- name: "Configure root media directory {{ glx_share_server_path_root_media }}"
   file:
-    dest: "{{ item }}"
+    dest: "{{ glx_share_server_path_root_media }}"
     state: directory
     owner: "{{ glx_share_server_user }}"
     group: "{{ glx_share_server_group }}"
     mode: "2775"
-  with_items:
-    - "{{ glx_share_server_directory_list }}"
+  when: glx_share_server_enable_root_media == True
+
+- name: "Configure {{ glx_share_server_dirname_parents_films }} directory {{ glx_share_server_path_parents_films }}/{{ glx_share_server_dirname_parents_films }}"
+  file:
+    dest: "{{ glx_share_server_path_parents_films }}/{{ glx_share_server_dirname_parents_films }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_parents_films == True
+
+- name: "Configure {{ glx_share_server_dirname_children_films }} directory {{ glx_share_server_path_children_films }}/{{ glx_share_server_dirname_children_films }}"
+  file:
+    dest: "{{ glx_share_server_path_children_films }}/{{ glx_share_server_dirname_children_films }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_children_films == True
+
+- name: "Configure {{ glx_share_server_dirname_tv_series }} directory {{ glx_share_server_path_tv_series }}/{{ glx_share_server_dirname_tv_series }}"
+  file:
+    dest: "{{ glx_share_server_path_tv_series }}/{{ glx_share_server_dirname_tv_series }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_tv_series == True
+
+- name: "Configure {{ glx_share_server_dirname_concerts }} directory {{ glx_share_server_path_concerts }}/{{ glx_share_server_dirname_concerts }}"
+  file:
+    dest: "{{ glx_share_server_path_concerts }}/{{ glx_share_server_dirname_concerts }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_concerts == True
+
+- name: "Configure {{ glx_share_server_dirname_spectacles }} directory {{ glx_share_server_path_spectacles }}/{{ glx_share_server_dirname_spectacles }}"
+  file:
+    dest: "{{ glx_share_server_path_spectacles }}/{{ glx_share_server_dirname_spectacles }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_spectacles == True
+
+- name: "Configure {{ glx_share_server_dirname_music }} directory {{ glx_share_server_path_music }}/{{ glx_share_server_dirname_music }}"
+  file:
+    dest: "{{ glx_share_server_path_music }}/{{ glx_share_server_dirname_music }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_music == True
+
+- name: "Configure {{ glx_share_server_dirname_photo }} directory {{ glx_share_server_path_photo }}/{{ glx_share_server_dirname_photo }}"
+  file:
+    dest: "{{ glx_share_server_path_photo }}/{{ glx_share_server_dirname_photo }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_photo == True
+
+- name: "Configure {{ glx_share_server_dirname_sandbox }} directory {{ glx_share_server_path_root_media }}/{{ glx_share_server_dirname_sandbox }}"
+  file:
+    dest: "{{ glx_share_server_path_root_media }}/{{ glx_share_server_dirname_sandbox }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  when: glx_share_server_enable_sandbox == True
+
