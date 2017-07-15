@@ -1,17 +1,24 @@
 ---
-glx:
-  share_server:
-    user: "zoe"
-    group: "media"
-    root_dir_1: "/data"
-    root_dir_2: "/home/media"
-    root_dir_3: "/home/hts"
-    parent_films_dirname: "Films"
-    children_films_dirname: "Children"
-    tv_serie_dirname: "TV_Series"
-    music_dirname: "Music"
-    photo_dirname: "Photos"
-    sandbox: "Space"
+glx_share_server_path_root_media: "/home/media"
 
-server_directorys:
-  - "{{ glx.share. root_dir_1}}/parent_films_dirname"
+glx_share_server_path_parent_films: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_children_films: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_tv_serie: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_music: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_photo: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_sandbox: "{{ glx_share_server_path_root_media }}"
+
+glx_share_server_dirname_parent_films: "Films"
+glx_share_server_dirname_children_films: "Children"
+glx_share_server_dirname_tv_serie: "TV_Series"
+glx_share_server_dirname_music: "Music"
+glx_share_server_dirname_photo: "Photos"
+glx_share_server_dirname_sandbox: "Espace"
+
+glx_share_server_user: "zoe"
+glx_share_server_group: "media"
+
+glx_share_server_directory_list:
+  - "{{ glx_share_server_path_root_media }}"
+  - "{{ glx_share_server_path_parent_films }}/{{ glx_share_server_dirname_parent_films }}"
+  - "{{ glx_share_server_path_children_films }}/{{ glx_share_server_dirname_children_films }}"

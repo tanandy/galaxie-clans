@@ -1,8 +1,8 @@
-- name: "Load OS specific variables"
+- name: "Load OS jessie specific variables"
   include_vars: "{{ item }}"
   with_first_found:
     - files:
-        - "{{ ansible_distribution }}.{{ ansible_lsb.codename }}.yml"
+        - "{{ ansible_distribution }}.jessie.yml"
         - main.yml
 
 # Installation of tor

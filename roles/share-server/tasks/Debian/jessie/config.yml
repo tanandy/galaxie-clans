@@ -1,6 +1,25 @@
 ---
-- name: "Create group {{ glx.share_server.group }}"
+- name: "Create group {{ glx_share_server_group }}"
   group:
-    name: "{{ glx.share_server.group }}"
+    name: "{{ glx_share_server_group }}"
     system: no
     state: present
+
+- name: "Create user {{ glx_share_server_user }}"
+  user:
+    name: "{{ glx_share_server_user }}"
+    system: no
+    group: "{{ glx_share_server_user }}"
+    groups: "{{ glx_share_server_group }}"
+    append: yes
+    state: present
+
+- name: Set dir permissions
+  file:
+    dest: "{{ item }}"
+    state: directory
+    owner: "{{ glx_share_server_user }}"
+    group: "{{ glx_share_server_group }}"
+    mode: "2775"
+  with_items:
+    - "{{ glx_share_server_directory_list }}"
