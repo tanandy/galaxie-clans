@@ -1,35 +1,45 @@
 #! /bin/bash
 
-# CONFIG
-GROUP="media"
-WORK_DIR="/home/media"
-
-#Dessins_Animes
-DESSINS_ANIMES_DIR="$WORK_DIR/Dessins_Animes"
-
-#Espace
-ESPACE_DIR="$WORK_DIR/Espace"
-
-#Films
-FILMS_DIR="$WORK_DIR/Films"
-
-#Musique
-MUSIQUE_DIR="$WORK_DIR/Musique"
-
-#Photos
-PHOTOS_DIR="$WORK_DIR/Photos"
-
-#TV_Series
-TV_SERIES_DIR="$WORK_DIR/TV_Series"
-
-#APPS
-for DIR in {"$DESSINS_ANIMES_DIR","$ESPACE_DIR","$FILMS_DIR","$MUSIQUE_DIR","$PHOTOS_DIR","$TV_SERIES_DIR"}; do
+############
+# Function #
+############
+function set_perm {
+    DIR=$1
+    GROUP=$2
     if [[ -e $DIR ]]; then
-    #Remove Write permission to Others
+        #Remove Write permission to Others
         chmod -R o-w $DIR
-    #Set files to 664 and directory to 775
+        #Set files to 664 and directory to 775
         chmod -R u+rwX,g+rwX,o+rX $DIR
-    #Set files and dir to the group $GROUP
+        #Set files and dir to the group $GROUP
         chgrp -hR $GROUP $DIR
     fi
-done
+
+}
+
+############
+# The work #
+############
+{% if glx_share_server_enable_parents_films %}
+set_perm "{{ glx_share_server_path_parents_films }}/{{ glx_share_server_dirname_parents_films }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_children_films %}
+set_perm "{{ glx_share_server_path_children_films }}/{{ glx_share_server_dirname_children_films }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_tv_series %}
+set_perm "{{ glx_share_server_path_tv_series }}/{{ glx_share_server_dirname_tv_series }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_concerts %}
+set_perm "{{ glx_share_server_path_concerts }}/{{ glx_share_server_dirname_concerts }}" "{{ glx_share_server_group }}"
+{% if glx_share_server_enable_spectacles %}
+set_perm "{{ glx_share_server_path_spectacles }}/{{ glx_share_server_dirname_spectacles }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_music %}
+set_perm "{{ glx_share_server_path_music }}/{{ glx_share_server_dirname_music }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_photos %}
+set_perm "{{ glx_share_server_path_photos }}/{{ glx_share_server_dirname_photos }}" "{{ glx_share_server_group }}"
+{% endif %}
+{% if glx_share_server_enable_sandbox %}
+set_perm "{{ glx_share_server_path_sandbox }}/{{ glx_share_server_dirname_sandbox }}" "{{ glx_share_server_group }}"
+{% endif %}

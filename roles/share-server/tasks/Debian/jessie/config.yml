@@ -77,18 +77,18 @@
     mode: "2775"
   when: glx_share_server_enable_music == True
 
-- name: "Configure {{ glx_share_server_dirname_photo }} directory {{ glx_share_server_path_photo }}/{{ glx_share_server_dirname_photo }}"
+- name: "Configure {{ glx_share_server_dirname_photos }} directory {{ glx_share_server_path_photos }}/{{ glx_share_server_dirname_photos }}"
   file:
-    dest: "{{ glx_share_server_path_photo }}/{{ glx_share_server_dirname_photo }}"
+    dest: "{{ glx_share_server_path_photos }}/{{ glx_share_server_dirname_photos }}"
     state: directory
     owner: "{{ glx_share_server_user }}"
     group: "{{ glx_share_server_group }}"
     mode: "2775"
-  when: glx_share_server_enable_photo == True
+  when: glx_share_server_enable_photos == True
 
 - name: "Configure {{ glx_share_server_dirname_sandbox }} directory {{ glx_share_server_path_root_media }}/{{ glx_share_server_dirname_sandbox }}"
   file:
-    dest: "{{ glx_share_server_path_root_media }}/{{ glx_share_server_dirname_sandbox }}"
+    dest: "{{ glx_share_server_path_sandbox }}/{{ glx_share_server_dirname_sandbox }}"
     state: directory
     owner: "{{ glx_share_server_user }}"
     group: "{{ glx_share_server_group }}"

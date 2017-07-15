@@ -7,7 +7,7 @@ glx_share_server_path_tv_series: "{{ glx_share_server_path_root_media }}"
 glx_share_server_path_concerts: "{{ glx_share_server_path_root_media }}"
 glx_share_server_path_music: "{{ glx_share_server_path_root_media }}"
 glx_share_server_path_spectacles: "{{ glx_share_server_path_root_media }}"
-glx_share_server_path_photo: "{{ glx_share_server_path_root_media }}"
+glx_share_server_path_photos: "{{ glx_share_server_path_root_media }}"
 glx_share_server_path_sandbox: "{{ glx_share_server_path_root_media }}"
 
 glx_share_server_dirname_parents_films: "Films"
@@ -16,7 +16,7 @@ glx_share_server_dirname_tv_series: "TV_Series"
 glx_share_server_dirname_concerts: "Concerts"
 glx_share_server_dirname_spectacles: "Spectacles"
 glx_share_server_dirname_music: "Music"
-glx_share_server_dirname_photo: "Photos"
+glx_share_server_dirname_photos: "Photos"
 glx_share_server_dirname_sandbox: "Space"
 
 glx_share_server_enable_root_media: True
@@ -26,7 +26,7 @@ glx_share_server_enable_tv_series: True
 glx_share_server_enable_concerts: True
 glx_share_server_enable_spectacles: True
 glx_share_server_enable_music: True
-glx_share_server_enable_photo: True
+glx_share_server_enable_photos: True
 glx_share_server_enable_sandbox: True
 
 glx_share_server_user: "zoe"
@@ -38,4 +38,4 @@ glx_share_server_directory_list:
   - "{{ glx_share_server_path_children_films }}/{{ glx_share_server_dirname_children_films }}"
   - "{{ glx_share_server_path_tv_series }}/{{ glx_share_server_dirname_tv_series }}"
   - "{{ glx_share_server_path_music }}/{{ glx_share_server_dirname_music }}"
-  - "{{ glx_share_server_path_photo }}/{{ glx_share_server_dirname_photo }}"
+  - "{{ glx_share_server_path_photos }}/{{ glx_share_server_dirname_photos }}"
