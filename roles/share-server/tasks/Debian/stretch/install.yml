@@ -1,1 +1,25 @@
 ---
+
+- name: "Create {{ glx_share_server_script_path }} directory"
+  file:
+    dest: "{{ glx_share_server_script_path }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0775"
+
+- name: "Copy check_perm.sh.j2 to {{ glx_share_server_script_path }}/{{ glx_share_server_script_name }} script"
+  template:
+    src: "check_perm.sh.j2"
+    dest: "{{ glx_share_server_script_path }}/{{ glx_share_server_script_name }}"
+    owner: "root"
+    group: "root"
+    mode: "0770"
+
+- name: "Copy crontab file"
+  template:
+    src: "check_perm.crontab.j2"
+    dest: "/etc/cron.d/check_perm"
+    owner: "root"
+    group: "root"
+    mode: "0640"
