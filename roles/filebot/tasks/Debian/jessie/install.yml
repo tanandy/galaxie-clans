@@ -17,20 +17,25 @@
     - "openjdk-8-jdk-headless"
 
 # conf-ld -- loader options to be adjusted (for i386; AMD64 normalydefault)
-- name: Check DEB_BUILD_ARCH
+- name: Check DEB_BUILD_ARCH value
   shell: dpkg-architecture 2>&1 | grep '^DEB_BUILD_ARCH=' | cut -d'=' -f2
-  register: DEB_BUILD_ARCH
+  register: deb_build_arch
   changed_when: false
 
-- name: Check for last version
-  script: get_basename_by_url.sh 'https://app.filebot.net/download.php?type=deb&arch={{ DEB_BUILD_ARCH.stdout }}'
+# Ref Doc:
+- name: Check for last version of Filebot
+  script: get_basename_by_url.sh '{{ glx_filebot_download_script_url }}?type=deb&arch={{ deb_build_arch.stdout }}'
   register: glx_filebot_filename
   failed_when: not glx_filebot_filename.stdout
   changed_when: False
 
 # - debug: msg="{{ glx_filebot_filename.stdout_lines[0] }}"
 
-- name: "portable | download installer"
+- name: "Download {{ glx_filebot_filename.stdout_lines[0] }} to {{ glx_filebot_download_dir }}/"
   get_url:
-    url: "https://app.filebot.net/download.php?type=deb&arch={{ DEB_BUILD_ARCH.stdout }}"
-    dest: "/usr/src/{{ glx_filebot_filename.stdout_lines[0] }}"
+    url: "{{ glx_filebot_download_script_url }}?type=deb&arch={{ deb_build_arch.stdout }}"
+    dest: "{{ glx_filebot_download_dir }}/{{ glx_filebot_filename.stdout_lines[0] }}"
+
+- name: "Install {{ glx_filebot_download_dir }}/{{ glx_filebot_filename.stdout_lines[0] }}"
+  apt:
+    deb: "{{ glx_filebot_download_dir }}/{{ glx_filebot_filename.stdout_lines[0] }}"
