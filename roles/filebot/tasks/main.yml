@@ -1,0 +1,12 @@
+# pre-require
+- name: Ensure lsb-release requirement is installed
+  apt:
+    name: lsb-release
+  when: ansible_distribution == "Debian"
+
+
+- include: Debian/jessie/main.yml
+  when: ansible_distribution == "Debian" and ansible_lsb.codename == "jessie"
+
+- include: Debian/stretch/main.yml
+  when: ansible_distribution == "Debian" and ansible_lsb.codename == "stretch"
