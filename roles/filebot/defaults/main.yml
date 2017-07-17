@@ -1,4 +1,7 @@
 ---
 glx_backports_repository_url: "http://ftp.debian.org/debian"
 glx_filebot_download_dir: "/usr/src"
-glx_filebot_download_script_url: "https://app.filebot.net/download.php"
+glx_filebot_download_url: "https://app.filebot.net/download.php"
+glx_filebot_scripts_git_url: "https://github.com/filebot/scripts.git"
+glx_filebot_scripts_path: "/usr/share/filebot"
+glx_filebot_scripts_dirname: "scripts"

@@ -1,1 +1,8 @@
 ---
+
+- git:
+    repo: "{{ glx_filebot_scripts_git_url }}"
+    dest: "{{ glx_filebot_scripts_path }}/{{ glx_filebot_scripts_dirname }}"
+    clone: yes
+    update: yes
+    force: yes
