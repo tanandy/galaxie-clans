@@ -23,8 +23,8 @@
     - { key: "IgnoreRhosts",    value: "yes" }
     - { key: "PermitRootLogin",     value: "no" }
     - { key: "RSAAuthentication",   value: "no" }
-    - { key: "ClientAliveInterval", value: "120" }
-    - { key: "ClientAliveCountMax", value: "600" }
+    - { key: "ClientAliveInterval", value: "300" }
+    - { key: "ClientAliveCountMax", value: "2" }
     - { key: "PubkeyAuthentication",  value: "yes" }
     - { key: "AuthorizedKeysFile",    value: "%h/.ssh/authorized_keys" }
     - { key: "RhostsRSAAuthentication", value: "no" }

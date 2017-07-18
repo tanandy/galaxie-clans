@@ -1,4 +1,19 @@
 ---
+# Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
+- name: set ServerAliveInterval 2
+  lineinfile:
+    dest="/etc/ssh/ssh_config"
+    regexp="^ *ServerAliveCountMax.*|^# *ServerAliveCountMax.*"
+    line="    ServerAliveCountMax 2"
+  notify: restart ssh service
+
+# Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
+- name: set ServerAliveInterval 300
+  lineinfile:
+    dest="/etc/ssh/ssh_config"
+    regexp="^ *ServerAliveInterval.*|^# *ServerAliveInterval.*"
+    line="    ServerAliveInterval 300"
+  notify: restart ssh service
 
 - name: set CompressionLevel 9
   lineinfile:
