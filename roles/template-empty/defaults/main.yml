@@ -1,7 +1,4 @@
 ---
-glx:
-  template-empty:
-    name: "empty"
-
-a_list:
+glx_template-empty_name: "empty"
+glx_template-empty_list:
   - "a"

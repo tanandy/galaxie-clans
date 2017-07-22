@@ -12,7 +12,6 @@
     - wget
     - mc
     - rsync
-    - sshfs
     - screen
     - minicom
     - task-spooler

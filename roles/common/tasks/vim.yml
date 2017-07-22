@@ -72,6 +72,18 @@
     line="set expandtab"
     state=present
 
+- name: Vim | Check noautoindent
+  replace:
+    dest=/etc/vim/vimrc
+    regexp='^\"set noautoindent|^set noautoindent'
+    replace='set noautoindent'
+
+- name: Vim | Using noautoindent
+  lineinfile:
+    dest=/etc/vim/vimrc
+    line="set noautoindent"
+    state=present
+
 - name: Vim | Check mouse=
   replace:
     dest=/etc/vim/vimrc

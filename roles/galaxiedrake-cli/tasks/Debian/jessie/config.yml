@@ -1,0 +1,19 @@
+---
+- name: "Check directory {{ glx_drakecli_install_directory }}"
+  file:
+    path: "{{ glx_drakecli_install_directory }}"
+    state: directory
+
+- name: "Check directory {{ glx_drakecli_install_directory }}/{{ glx_drakecli_name }}"
+  file:
+    path: "{{ glx_drakecli_install_directory }}/{{ glx_drakecli_name }}"
+    state: directory
+    mode: 0755
+
+- name: "Download last {{ glx_drakecli_name }} version from github"
+  git:
+    repo: "{{ glx_drakecli_git_url }}"
+    dest: "{{ glx_drakecli_install_directory }}/{{ glx_drakecli_name }}"
+    clone: yes
+    update: yes
+    force: yes

@@ -1,0 +1,5 @@
+---
+- hosts: galaxiedrake
+
+  roles:
+     - galaxiedrake-cli

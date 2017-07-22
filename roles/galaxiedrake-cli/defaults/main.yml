@@ -1,0 +1,4 @@
+---
+glx_drakecli_name: "GalaxieDrakeCLI"
+glx_drakecli_install_directory: "/opt"
+glx_drakecli_git_url: "https://github.com/Tuuux/GalaxieDrakeCLI.git"
