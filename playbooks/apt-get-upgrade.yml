@@ -1,17 +1,18 @@
+---
 - hosts: galaxie
 
   tasks:
 
   - name: Update and upgrade apt packages
     apt:
-      upgrade=yes
-      update_cache=yes
-      cache_valid_time=86400
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400
     changed_when: False
 
 #  - name: Apt-get upgrade
 #    apt:
-#      upgrade=yes
+#      upgrade: yes
 
 #  - name: Apt-get upgrade
 #    command: aptitude -q -y upgrade

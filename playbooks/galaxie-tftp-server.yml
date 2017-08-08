@@ -1,3 +1,4 @@
+---
 - hosts: tftp-servers
 
   vars_files:
@@ -6,15 +7,17 @@
   tasks:
 
     - name: Install tftpd-hpa
-      action: apt pkg="{{item}}" state=installed
+      apt:
+        pkg: "{{item}}"
+        state: present
       with_items:
         - tftpd-hpa
 
     - name: Remove previus TFTP services version
       apt:
-        pkg="{{item}}"
-        state=absent
-        purge=yes
+        pkg: "{{item}}"
+        state: absent
+        purge: yes
       with_items:
         - atftpd
         - tftpd

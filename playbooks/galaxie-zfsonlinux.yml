@@ -1,3 +1,4 @@
+---
 - hosts: zfs-templates-servers
 
   vars_files:
@@ -9,10 +10,14 @@
   tasks:
 
     - name: Update Apt
-      apt: update_cache=yes cache_valid_time=3600
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
 
     - name: Install required software
-      action: apt pkg="{{item}}" state=installed
+      apt:
+        pkg: "{{item}}"
+        state: present
       with_items:
         - zlib1g-dev
         - uuid-dev
@@ -28,54 +33,62 @@
         - linux-headers-amd64
         - dh-autoreconf
 
-    - name: Check directory
+    - name: Check directories
       file:
-        path="{{item}}"
-        owner=root
-        group=root
-        state=directory
-        mode=0755
+        path: "{{item}}"
+        owner: "root"
+        group: "root"
+        state: directory
+        mode: 0755
       with_items:
         - "{{ galaxie.debs_dir }}"
         - "{{ build_dir  }}"
 
     - name: Download Git master of SPL
       git:
-        repo={{ galaxie.zfsonlinux.git_spl_url  }}
-        dest={{ build_dir  }}/spl
-        update=yes
+        repo: "{{ galaxie.zfsonlinux.git_spl_url  }}"
+        dest: "{{ build_dir }}/spl"
+        update: yes
       register: git_spl
 
-    - name: Building SPL (autogen) ...
-      shell:
-        chdir={{ build_dir  }}/spl ./autogen.sh
+    - name: Build SPL (autogen) ...
+      shell: >-
+         ./autogen.sh
+      args:
+        chdir: "{{ build_dir }}/spl"
       when: git_spl.changed
 
-    - name: Building SPL (configure) ...
-      shell:
-        chdir={{ build_dir  }}/spl ./configure
+    - name: Build SPL (configure) ...
+      shell: >-
+         ./configure
+      args:
+        chdir: "{{ build_dir }}/spl"
       when: git_spl.changed
 
     - name: Delete {{ galaxie.debs_dir }}/spl
       file:
-        path="{{ galaxie.debs_dir }}/spl"
-        state=absent
+        path: "{{ galaxie.debs_dir }}/spl"
+        state: absent
       ignore_errors: yes
       when: git_spl.changed
 
-    - name: Building SPL (make deb-utils deb-kmod) ...
-      shell:
-        chdir={{ build_dir  }}/spl make deb-utils deb-kmod
+    - name: Build SPL (make deb-utils deb-kmod) ...
+      shell: >-
+         make deb-utils deb-kmod
+      args:
+        chdir: "{{ build_dir }}/spl"
       when: git_spl.changed
       register: build_spl
 
-    - name: Creat {{ galaxie.debs_dir }}/spl
+
+
+    - name: Create {{ galaxie.debs_dir }}/spl
       file:
-        path="{{item}}"
-        owner=root
-        group=root
-        state=directory
-        mode=0755
+        path: "{{item}}"
+        owner: "root"
+        group: "root"
+        state: directory
+        mode: 0755
       with_items:
         - "{{ galaxie.debs_dir }}/spl"
       when: build_spl.changed
@@ -93,14 +106,14 @@
       when: build_spl.changed
 
     - name : Install SPL Packages
-      action: shell dpkg -i {{ galaxie.debs_dir }}/spl/*.deb
+      shell: dpkg -i {{ galaxie.debs_dir }}/spl/*.deb
       when: build_spl.changed
 
     - name: Download Git master of ZFS
       git:
-        repo={{ galaxie.zfsonlinux.git_zfs_url  }}
-        dest={{ build_dir  }}/zfs
-        update=yes
+        repo: "{{ galaxie.zfsonlinux.git_zfs_url  }}"
+        dest: "{{ build_dir  }}/zfs"
+        update: yes
       register: git_zfs
 
     - name: Building ZFS (autogen) ...
