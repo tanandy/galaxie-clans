@@ -17,3 +17,36 @@
     clone: yes
     update: yes
     force: yes
+
+- name: "Download last libdvdcss version from {{ glx_libdvdcss_git_url }}"
+  git:
+    repo: "{{ glx_libdvdcss_git_url }}"
+    dest: "{{ glx_libdvdcss_src_dir }}"
+    clone: yes
+    update: yes
+    force: yes
+  register: libcss_git_download
+
+- name: "libdvdcss: autoreconf -i"
+  shell: autoreconf -i
+    chdir="{{ glx_libdvdcss_src_dir }}"
+  changed_when: false
+  when: libcss_git_download.changed
+
+- name: "libdvdcss: configure --prefix=/usr"
+  shell: ./configure --prefix=/usr
+    chdir="{{ glx_libdvdcss_src_dir }}"
+  changed_when: false
+  when: libcss_git_download.changed
+
+- name: "libdvdcss: make"
+  shell: make
+    chdir="{{ glx_libdvdcss_src_dir }}"
+  changed_when: false
+  when: libcss_git_download.changed
+
+- name: "libdvdcss: make install"
+  shell: make install
+    chdir="{{ glx_libdvdcss_src_dir }}"
+  changed_when: false
+  when: libcss_git_download.changed
