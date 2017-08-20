@@ -1,12 +1,13 @@
+---
 - hosts: pabx-servers
 
   tasks:
     - name : Stop Asterisk
       service:
-        name=asterisk
-        state=stopped
+        name: "asterisk"
+        state: stopped
 
     - name : Start Asterisk
       service:
-        name=asterisk
-        state=started
+        name: "asterisk"
+        state: started

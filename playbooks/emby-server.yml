@@ -1,3 +1,4 @@
+---
 - hosts: emby-servers
 
   roles:
