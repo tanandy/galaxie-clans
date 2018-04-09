@@ -1,3 +1,4 @@
+---
 - hosts: desktops
 
   vars_files:
@@ -6,28 +7,30 @@
   tasks:
     - name: activate deb-multimedia jessie main non-free repository
       apt_repository:
-        repo="{{ item }}"
-        state=present
+        repo: "{{ item }}"
+        state: present
       with_items:
-        - deb http://www.deb-multimedia.org jessie main non-free
+        - "deb http://www.deb-multimedia.org jessie main non-free"
       register: deb_multimedia_activated
 
     - name: update apt
-      apt: update_cache=yes
+      apt:
+        update_cache: yes
 
     - name: Install deb-multimedia-keyring
       apt:
-        pkg=deb-multimedia-keyring
-        state=installed
-        force=yes
+        pkg: "deb-multimedia-keyring"
+        state: installed
+        force: yes
 
     - name: update apt
-      apt: update_cache=yes
+      apt:
+        update_cache: yes
 
     - name: Install desktop tools
       apt:
-        pkg="{{item}}"
-        state=installed
+        pkg: "{{item}}"
+        state: installed
       with_items:
         - alacarte
         - dconf-tools
@@ -70,9 +73,9 @@
 
     - name: Remove not require software
       apt:
-        pkg="{{item}}"
-        state=absent
-        purge=yes
+        pkg: "{{item}}"
+        state: absent
+        purge: yes
       with_items:
         - orage
         - abiword
@@ -92,7 +95,7 @@
         - libreoffice-style-tango
 
 
-# s'assurer de l'absence d'autre implem de JRE
+# TODO: s'assurer de l'absence d'autre implem de JRE
 
 
 
