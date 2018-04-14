@@ -4,14 +4,13 @@ glx_pycharm_community_prefix_dir: "/var/lib/galaxie"
 glx_pycharm_community_cache_dir: "{{ glx_pycharm_community_prefix_dir }}/src"
 glx_pycharm_community_opt_dir: "/opt"
 
-# inspirate by: https://github.com/archlinuxcn/repo/blob/master/pycharm-community/PKGBUILD
-# https://download.jetbrains.com/python/pycharm-community-5.0.4.tar.gz
+# https://download.jetbrains.com/python/pycharm-community-2018.1.tar.gz
 glx_pycharm_community_name: "pycharm-community"
-glx_pycharm_community_version: "5.0.4"
+glx_pycharm_community_version: "2018.1"
 glx_pycharm_community_desc: "Powerful Python and Django IDE. Community edition."
 glx_pycharm_community_url: "https://www.jetbrains.com/pycharm/"
 glx_pycharm_community_depends:
-  - "openjdk-7-jre"
+  - "openjdk-7-jre"cmd
   - "openjdk-7-jre-headless"
   - "libgif4"
 glx_pycharm_community_source: "https://download.jetbrains.com/python/{{ glx_pycharm_community_name }}-{{ glx_pycharm_community_version }}.tar.gz"
