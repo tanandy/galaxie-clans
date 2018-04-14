@@ -11,3 +11,4 @@ hosts
 Vagrantfile
 .vagrant
 test_mo.*
+*.retry
