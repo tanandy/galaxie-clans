@@ -1,5 +1,11 @@
 # Galaxie
 
+Once upon a time, this project was hosted on a 
+ancient platform called GitHub. Then came the Buyer.
+The Buyer bought GitHub, willing to rule over its community.
+I was not to sell, so here is the new home of "https://github.com/Tuuux/galaxie".
+
+
 Ansible toolbox aimed at managing a set of Debian servers. Originaly written for managing a Home Network with external services.
 
 That is a set of powerfull roles made by a senior system admin and reviewed by a senior developer.
