@@ -41,6 +41,7 @@ apt-get -o Dpkg::Options::="--force-confold" install \
 echo "Installing pip via easy_install"
 for i in 1 2 3 4 5; do easy_install pip && break || sleep 2; done
 
+pip3 install pip
 echo "Installing correct python crypto libs"
 pip install -U pyopenssl ndg-httpsclient pyasn1
 
