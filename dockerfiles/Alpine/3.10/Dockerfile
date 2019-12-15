@@ -1,8 +1,8 @@
 FROM alpine:3.10
 
-ENV CT_USER_NAME="dev" \
-    CT_USER_GROUP="dev" \
-    CT_USER_HOME="/home/dev"
+ENV CT_USER_NAME="zoe" \
+    CT_USER_GROUP="zoe" \
+    CT_USER_HOME="/home/zoe"
 
 # PACKAGES of the container
 ENV PACKAGES="\
@@ -54,10 +54,10 @@ RUN useradd --create-home --home-dir $CT_USER_HOME $CT_USER_NAME --shell /bin/ba
 #    rm -rf ~/.cache/pip/*
 
 # Setting
-ENV HOME=$CT_USER_HOME \
-    USER=$CT_USER_NAME \
-    PS1='\u@\h:\W \$ ' \
-    HISTTIMEFORMAT="%d/%m/%y %T "
+#ENV HOME=$CT_USER_HOME \
+#    USER=$CT_USER_NAME \
+#    PS1='\u@\h:\W \$ ' \
+#    HISTTIMEFORMAT="%d/%m/%y %T "
 
 
 WORKDIR $HOME
@@ -65,6 +65,9 @@ USER $CT_USER_NAME
 
 RUN python3 -m venv venv \
     && echo "###############################################################################" >>  $CT_USER_HOME/.bashrc\
+    && echo "export PS1='\u@\h:\W \$ '" >>  $CT_USER_HOME/.bashrc\
+    && echo "export HISTTIMEFORMAT='%d/%m/%y %T '" >>  $CT_USER_HOME/.bashrc\
+    && echo "alias docker='sudo docker'" >>  $CT_USER_HOME/.bashrc\
     && echo "alias docker='sudo docker'" >>  $CT_USER_HOME/.bashrc\
     && echo "alias docker-compose='sudo $HOME/venv/bin/docker-compose'" >>  $CT_USER_HOME/.bashrc\
     && echo "alias ls='ls --color=auto'" >>  $CT_USER_HOME/.bashrc\

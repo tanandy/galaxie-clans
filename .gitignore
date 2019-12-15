@@ -12,3 +12,6 @@ Vagrantfile
 .vagrant
 test_mo.*
 *.retry
+
+venv
+venv/
