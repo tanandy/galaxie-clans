@@ -2,7 +2,7 @@
 import datetime
 from seed.config import Config
 from seed.object import Object
-
+import os
 
 class Seed(Object, Config):
     def __init__(self):
@@ -12,6 +12,22 @@ class Seed(Object, Config):
         self.__date_format = None
 
         self.date_format = "%Y-%m-%d %H:%M:%S"
+
+    @property
+    def roles(self):
+        list_to_return = []
+        for item in os.listdir(self.roles_directory):
+            if os.path.isdir(os.path.join(self.roles_directory, item)):
+                list_to_return.append(item)
+        return list_to_return
+
+    @property
+    def roles_directory(self):
+        return os.path.join(self.working_directory, 'roles')
+
+    @property
+    def playbooks_directory(self):
+        return os.path.join(self.working_directory, 'playbooks')
 
     @property
     def date_format(self):
@@ -28,4 +44,3 @@ class Seed(Object, Config):
     @property
     def date(self):
         return datetime.datetime.now().strftime(self.date_format)
-

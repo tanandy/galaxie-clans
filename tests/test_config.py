@@ -12,6 +12,5 @@ class TestConfig(unittest.TestCase):
         config = Config()
         self.assertEqual('galaxie', os.path.basename(config.working_directory))
 
-
 if __name__ == '__main__':
     unittest.main()
