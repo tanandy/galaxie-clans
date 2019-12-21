@@ -30,16 +30,19 @@
     src=apt.conf.j2
     dest=/etc/apt/apt.conf
     backup=yes
-  when: inventory_hostname in groups["apt-cacher-ng-server"]
+  when: inventory_hostname in groups["apt_cacher_ng_server"]
   register: apt_config
+  changed_when: false
 
 - name: Activate service
   service:
     name=apt-cacher-ng
     state=restarted
     enabled=yes
+  changed_when: false
 
 - name: Update apt cache
   apt:
     update_cache=yes
-  when: apt_config|changed
+  changed_when: false
+  # when: apt_config|changed

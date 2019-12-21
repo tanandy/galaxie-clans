@@ -4,3 +4,6 @@
 
 - include: Debian/9/main.yml
   when: ansible_distribution == "Debian" and ansible_lsb.codename == "stretch"
+
+- include: Debian/10/main.yml
+  when: ansible_distribution == "Debian" and ansible_lsb.codename == "buster"

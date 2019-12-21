@@ -5,11 +5,40 @@ from seed.seed import Seed
 
 
 class TestSeed(unittest.TestCase):
+    def test_playbooks(self):
+        seed = Seed()
+        # self.assertEqual(list, type(seed.playbooks))
+        # self.assertTrue('banner.yml' in seed.playbooks)
+        # self.assertEqual(
+        #     len(seed.roles), len(seed.playbooks)
+        # )
+        # self.assertEqual(len(seed.roles), len(seed.playbooks))
+        self.assertTrue((len(seed.roles) >= len(seed.playbooks)))
+        # for playbook in seed.playbooks:
+        #     self.assertTrue(
+        #         os.path.isfile(
+        #             os.path.join(
+        #                 seed.roles_directory,
+        #                 playbook
+        #             )
+        #         )
+        #     )
+
     def test_roles(self):
         seed = Seed()
         self.assertEqual(list, type(seed.roles))
         self.assertTrue('banner' in seed.roles)
         self.assertEqual(39, len(seed.roles))
+
+        for role in seed.roles:
+            self.assertTrue(
+                os.path.isdir(
+                    os.path.join(
+                        seed.roles_directory,
+                        role
+                    )
+                )
+            )
 
     def test_roles_directory(self):
         seed = Seed()

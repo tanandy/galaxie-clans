@@ -17,7 +17,7 @@
       - findutils
       - grc
       - glances
-    state: present
+    state=present
 
 - name: Check undesired packages
   apt:

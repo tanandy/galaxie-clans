@@ -25,6 +25,8 @@ ENV BUILD_PACKAGES="\
     curl \
     gnupg2 \
     software-properties-common \
+    python3-dev \
+    libapt-pkg-dev \
     "
 
 RUN apt-get update && apt-get upgrade && apt-get dist-upgrade \

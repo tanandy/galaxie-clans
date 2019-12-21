@@ -14,6 +14,16 @@ class Seed(Object, Config):
         self.date_format = "%Y-%m-%d %H:%M:%S"
 
     @property
+    def playbooks(self):
+        list_to_return = []
+        for item in os.listdir(self.playbooks_directory):
+            if os.path.isfile(os.path.join(self.playbooks_directory, item)):
+                filename, file_extension = os.path.splitext(os.path.join(self.playbooks_directory, item))
+                if file_extension == '.yml':
+                    list_to_return.append(item)
+        return list_to_return
+
+    @property
     def roles(self):
         list_to_return = []
         for item in os.listdir(self.roles_directory):

@@ -1,109 +1,113 @@
 ---
 
 - name: Vim | Check if installed
-  action: apt pkg="{{item}}" state=present
-  with_items:
-    - vim
-    - vim-common
+  apt:
+    pkg:
+      - vim
+      - vim-common
+    state: present
+
 
 - name: Vim | Remove vim-tiny and nano
-  apt: pkg="{{item}}" state=absent purge=yes
-  with_items:
-    - vim-tiny
-    - nano
+  apt:
+    pkg:
+      - vim-tiny
+      - nano
+    state: absent
+    purge: yes
 
 - name: Vim | Check syntax highlighting
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"syntax\s[a-zA-Z0-9_]+|^syntax\s[a-zA-Z0-9_]+'
-    replace='syntax on'
+    dest: /etc/vim/vimrc
+    regexp: '^\"syntax\s[a-zA-Z0-9_]+|^syntax\s[a-zA-Z0-9_]+'
+    replace: 'syntax on'
 
 - name: Vim | Enable syntax highlighting
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="syntax on"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "syntax on"
+    state: present
 
 - name: Vim | Check dark background
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set background=[a-zA-Z0-9_]+|^set background=[a-zA-Z0-9_]+'
-    replace='set background=dark'
+    dest: /etc/vim/vimrc
+    regexp: '^\"set background=[a-zA-Z0-9_]+|^set background=[a-zA-Z0-9_]+'
+    replace: 'set background=dark'
 
 - name: Vim | Using set background=dark
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set background=dark"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set background=dark"
+    state: present
 
 - name: Vim | Check tabstop
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set tabstop=[0-9]+|^set tabstop=[0-9]+'
-    replace='set tabstop=4'
+    dest: /etc/vim/vimrc
+    regexp: '^\"set tabstop=[0-9]+|^set tabstop=[0-9]+'
+    replace: 'set tabstop=4'
 
 - name: Vim | Using tabstop=4
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set tabstop=4"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set tabstop=4"
+    state: present
 
 - name: Vim | Check shiftwidth
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set shiftwidth=[0-9]+|^set shiftwidth=[0-9]+'
-    replace='set shiftwidth=4'
+    dest: /etc/vim/vimrc
+    regexp: '^\"set shiftwidth=[0-9]+|^set shiftwidth=[0-9]+'
+    replace: 'set shiftwidth=4'
 
 - name: Vim | Using shiftwidth=4
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set shiftwidth=4"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set shiftwidth=4"
+    state: present
 
 - name: Vim | Check expandtab
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set expandtab|^set expandtab'
-    replace='set expandtab'
+    dest: /etc/vim/vimrc
+    regexp: '^\"set expandtab|^set expandtab'
+    replace: 'set expandtab'
 
 - name: Vim | Using expandtab
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set expandtab"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set expandtab"
+    state: present
 
 - name: Vim | Check noautoindent
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set noautoindent|^set noautoindent'
-    replace='set noautoindent'
+    dest: /etc/vim/vimrc
+    regexp: '^\"set noautoindent|^set noautoindent'
+    replace: 'set noautoindent'
 
 - name: Vim | Using noautoindent
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set noautoindent"
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set noautoindent"
+    state: present
 
 - name: Vim | Check mouse=
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set mouse=[a-zA-Z0-9_]+|^set mouse=[a-zA-Z0-9_]+'
-    replace='set mouse='
+    dest: /etc/vim/vimrc
+    regexp: '^\"set mouse=[a-zA-Z0-9_]+|^set mouse=[a-zA-Z0-9_]+'
+    replace: 'set mouse='
 
 - name: Vim | Using mouse=
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set mouse="
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set mouse="
+    state: present
 
 - name: Vim | Check ttymouse=
   replace:
-    dest=/etc/vim/vimrc
-    regexp='^\"set ttymouse=[a-zA-Z0-9_]+|^set ttymouse=[a-zA-Z0-9_]+'
-    replace='set ttymouse='
+    dest: /etc/vim/vimrc
+    regexp: '^\"set ttymouse=[a-zA-Z0-9_]+|^set ttymouse=[a-zA-Z0-9_]+'
+    replace: 'set ttymouse='
 
 - name: Vim | Using ttymouse=
   lineinfile:
-    dest=/etc/vim/vimrc
-    line="set ttymouse="
-    state=present
+    dest: /etc/vim/vimrc
+    line: "set ttymouse="
+    state: present

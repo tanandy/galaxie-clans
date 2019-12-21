@@ -18,10 +18,10 @@
 - name: Set timezone area {{ galaxie_common_tzdata_areas }}
   tags: locales
   debconf:
-    name=tzdata
-    question='tzdata/Areas'
-    value='{{ galaxie_common_tzdata_areas }}'
-    vtype='select'
+    name: tzdata
+    question: 'tzdata/Areas'
+    value: '{{ galaxie_common_tzdata_areas }}'
+    vtype: 'select'
   when: ansible_os_family == "Debian"
   notify:
     - update timezone
@@ -29,26 +29,27 @@
 - name: Set {{ galaxie_common_tzdata_areas }}/{{ galaxie_common_tzdata_zones }} to /etc/timezone file
   tags: locales
   template:
-    src=timezone.j2
-    dest=/etc/timezone
+    src: timezone.j2
+    dest: /etc/timezone
   notify:
     - update timezone
 
 - name: Set timezone
   tags: locales
   debconf:
-    name=tzdata
-    question='tzdata/Zones/{{ galaxie_common_tzdata_areas }}'
-    value='{{ galaxie_common_tzdata_zones }}'
-    vtype='select'
+    name: tzdata
+    question: 'tzdata/Zones/{{ galaxie_common_tzdata_areas }}'
+    value: '{{ galaxie_common_tzdata_zones }}'
+    vtype: 'select'
   when: ansible_os_family == "Debian"
   notify:
     - update timezone
 
 - name: desired manpages are present
   tags: locales
-  apt: pkg="{{item}}" state=present
-  with_items:
-    - manpages-fr
-    - manpages-fr-extra
-  when: galaxie_common_language == "fr" and ansible_os_family == "Debian"
+  apt:
+    pkg:
+      - manpages-fr
+      - manpages-fr-extra
+    state: present
+  when: galaxie_common_language == "fr" and ansible_os_family == "Debian" and ansible_lsb.codename == "stretch"
