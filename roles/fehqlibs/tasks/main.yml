@@ -1,0 +1,25 @@
+---
+
+- name: fehqlibs | check {{ glx_slashpackage_dir }} directory
+  file:
+    path: "{{ glx_slashpackage_dir }}"
+    state: directory
+    mode: 1755
+
+- name: fehqlibs | check {{ glx_fehqlibs_source_dir }} directory
+  file:
+    path: "{{ glx_fehqlibs_source_dir }}"
+    state: directory
+
+- name: fehqlibs | delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
+  file:
+    path: "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
+    state: absent
+  when: glx_cdb_force_install
+
+- name: fehqlibs | get "{{ glx_cdb_download_url }}"
+  get_url:
+    url: "{{ glx_cdb_download_url }}"
+    dest: "{{ glx_cdb_source_dir }}"
+    sha256sum: 1919577799a50c080a8a05a1cbfa5fa7e7abc823d8d7df2eeb181e624b7952c5
+  register: glx_cdb_source_download

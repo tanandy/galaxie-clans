@@ -1,46 +1,45 @@
 ---
 - name: cdb | uninstall libcdb1
   apt:
-    pkg={{ item }}
-    state=absent
-  with_items:
-    - libcdb1
+    pkg:
+      - libcdb1
+    state: absent
 
 - name: cdb | check {{ glx_slashpackage_dir }} directory
   file:
-    path="{{ glx_slashpackage_dir }}"
-    state=directory
-    mode=1755
+    path: "{{ glx_slashpackage_dir }}"
+    state: directory
+    mode: 1755
 
 - name: cdb | check {{ glx_cdb_source_dir }} directory
   file:
-    path="{{ glx_cdb_source_dir }}"
-    state=directory
+    path: "{{ glx_cdb_source_dir }}"
+    state: directory
 
 - name: cdb | delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
   file:
-    path="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
-    state=absent
+    path: "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}.{{ glx_cdb_extension }}"
+    state: absent
   when: glx_cdb_force_install
 
 - name: cdb | get "{{ glx_cdb_download_url }}"
   get_url:
-    url="{{ glx_cdb_download_url }}"
-    dest={{ glx_cdb_source_dir }}
-    sha256sum=1919577799a50c080a8a05a1cbfa5fa7e7abc823d8d7df2eeb181e624b7952c5
+    url: "{{ glx_cdb_download_url }}"
+    dest: "{{ glx_cdb_source_dir }}"
+    sha256sum: 1919577799a50c080a8a05a1cbfa5fa7e7abc823d8d7df2eeb181e624b7952c5
   register: glx_cdb_source_download
 
 - name: cdb | delete "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}" directory
   file:
-    path="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}"
-    state=absent
+    path: "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}"
+    state: absent
   when: glx_cdb_source_download.changed
 
 - name: cdb | unarchive {{ glx_cdb_source_download.dest }}
   unarchive:
-    src="{{ glx_cdb_source_download.dest }}"
-    dest="{{ glx_cdb_source_dir }}"
-    copy=no
+    src: "{{ glx_cdb_source_download.dest }}"
+    dest: "{{ glx_cdb_source_dir }}"
+    copy: no
   when: glx_cdb_source_download.changed
 
 # conf-ld -- loader options to be adjusted (for i386; AMD64 normalydefault)
@@ -53,8 +52,8 @@
 # send conf-* files
 - name: cdb | check conf-*
   template:
-    src="cdb/{{ item }}.j2"
-    dest="{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}/{{ item }}"
+    src: "cdb/{{ item }}.j2"
+    dest: "{{ glx_cdb_source_dir }}/{{ glx_cdb_app_name }}/{{ item }}"
   with_items:
     - "conf-cc"
     - "conf-home"

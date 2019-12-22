@@ -1,19 +1,20 @@
 ---
 - name: ucspi-ssl | install packages for ucspi-ssl building
   apt:
-    pkg="{{ item }}"
-    state=present
+    pkg:
+      - "build-essential"
+      - "libssl-dev"
+      - "libperl-dev"
+      - "libkrb5-dev"
+    state: present
   with_items:
-    - "build-essential"
-    - "libssl-dev"
-    - "libperl-dev"
-    - "libkrb5-dev"
+
 
 - name: ucspi-ssl | check {{ glx_slashpackage_dir }} directory
   file:
-    path="{{ glx_slashpackage_dir }}"
-    state=directory
-    mode=1755
+    path: "{{ glx_slashpackage_dir }}"
+    state: directory
+    mode: 1755
 
 - name: ucspi-ssl | check {{ glx_ucspi_ssl_source_dir }} directory
   file:
