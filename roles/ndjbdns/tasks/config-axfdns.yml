@@ -10,12 +10,12 @@
 
 - name: check if axfrdns is configured the good way
   lineinfile:
-    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/axfrdns.conf"
-    regexp="^{{ item.key }}="
-    line="{{ item.key }}={{ item.value }}"
-    insertafter="{{ item.key }}="
-    state=present
-    backup=no
+    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/axfrdns.conf"
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+    insertafter: "{{ item.key }}="
+    state: present
+    backup: no
   with_items:
     - { key: "AXF",           value: "{{ glx_axfdns_axfr }}" }
     - { key: "UID",           value: "{{ daemon_uid.stdout }}" }

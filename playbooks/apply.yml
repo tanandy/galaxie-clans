@@ -15,9 +15,9 @@
 ###############
 
 ### Frist deal with DNS / NTP / DHCP
-#- include: ndjbdns.yml
-#- include: dnscache-roots-update.yml
-#- include: ntp-server.yml
+- include: ndjbdns.yml
+- include: dnscache-roots-update.yml
+- include: ntp-server.yml
 
 ### Well done go to the Standard cher ###
 
@@ -34,9 +34,9 @@
 ### Setting ###
 ###############
 ### Frist deal with DNS / NTP / DHCP
-#- include: dns-resolver.yml
-#- include: ntp-client.yml
-#- include: apt-cacher-ng-client.yml
+- include: dns-resolver.yml
+- include: ntp-client.yml
+- include: apt-cacher-ng-client.yml
 
 
 

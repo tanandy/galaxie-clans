@@ -3,7 +3,7 @@
 ###############################################################################
 - name: test {{ glx_service_dir }}/{{ glx_ndjbdns_dnscache_service.name }}
   stat:
-    path="{{ glx_service_dir }}/{{ glx_ndjbdns_dnscache_service.name}}"
+    path: "{{ glx_service_dir }}/{{ glx_ndjbdns_dnscache_service.name}}"
   register: dnscache
   when: glx_ndjbdns_dnscache_service.enable
 
@@ -15,8 +15,8 @@
 
 - name: remove {{ glx_ndjbdns_dnscache_service.name }} files and directory
   file:
-    path="{{ item }}"
-    state=absent
+    path: "{{ item }}"
+    state: absent
   with_items:
     - "{{ glx_service_dir }}/{{ glx_ndjbdns_dnscache_service.name }}/log"
     - "{{ glx_service_dir }}/{{ glx_ndjbdns_dnscache_service.name }}"
@@ -36,18 +36,18 @@
 
 - name: enable dnscache
   service:
-    name=dnscache
-    enabled=yes
+    name: dnscache
+    enabled: yes
   when: glx_ndjbdns_dnscache_service.enable
 
 - name: check if dnscache is configured the good way
   lineinfile:
-    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/dnscache.conf"
-    regexp="^{{ item.key }}="
-    line="{{ item.key }}={{ item.value }}"
-    insertafter="{{ item.key }}="
-    state=present
-    backup=no
+    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/dnscache.conf"
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+    insertafter: "{{ item.key }}="
+    state: present
+    backup: no
   with_items:
     - { key: "DATALIMIT",     value: "8000000" }
     - { key: "CACHESIZE",     value: "5000000" }
@@ -66,19 +66,19 @@
 # Deal with LAN things
 - name: Write {{ glx_ndjbdns_internal_nameserver }} in {{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_domain }}
   template:
-    src=local-domain-server.j2
-    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_domain }}"
-    backup=no
-  when: inventory_hostname in groups["internal-machines"]
+    src: local-domain-server.j2
+    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_domain }}"
+    backup: no
+  when: inventory_hostname in groups["internal_machines"]
   notify:
     - restart dnscache
 
 # Deal with LAN reverse things
 - name: Write {{ glx_ndjbdns_internal_nameserver }} in {{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_reserse_nameserver }}
   template:
-    src=local-domain-server.j2
-    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_reserse_nameserver }}"
-    backup=no
-  when: inventory_hostname in groups["internal-machines"]
+    src: local-domain-server.j2
+    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/servers/{{ glx_ndjbdns_internal_reserse_nameserver }}"
+    backup: no
+  when: inventory_hostname in groups["internal_machines"]
   notify:
     - restart dnscache

@@ -2,11 +2,11 @@
 
 - name: Check bashrc
   copy:
-    src="{{ item.src }}"
-    dest="{{ item.dest }}"
-    owner=root
-    group=root
-    mode=0644
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
   with_items:
     - { src: "bash.bashrc", dest: "/etc/bash.bashrc" }
     - { src: "etc_skel_bashrc", dest: "/etc/skel/.bashrc" }

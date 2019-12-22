@@ -1,34 +1,36 @@
 ---
 
-- name: ntpdate is absent
+- name: Check if ntpdate package is absent
   apt:
-    pkg=ntpdate
-    state=absent
-    purge=yes
+    pkg:
+      - ntpdate
+    state: absent
+    purge: yes
 
-- name: ntp is present
+- name: Check id ntpd is present
   apt:
-    pkg=ntp
-    state=present
+    pkg:
+      - ntp
+    state: present
 
 - name: ntp time source {{ galaxie_ntp_server_ntp_referrals }}
-  when: "{{ 'internal-machines' in group_names }}"
+  when: "'internal_machines' in group_names"
   template:
-    src="ntp-server-internal.conf.j2"
-    dest="/etc/ntp.conf"
+    src: "ntp-server-internal.conf.j2"
+    dest: "/etc/ntp.conf"
   notify: restart ntp
 
 - name: ntp time source {{ galaxie_ntp_server_ntp_pool }}
-  when: "{{ 'external-machines' in group_names }}"
+  when: "'external_machines' in group_names"
   template:
-    src=ntp-server-external.conf.j2
-    dest=/etc/ntp.conf
+    src: ntp-server-external.conf.j2
+    dest: /etc/ntp.conf
   notify: restart ntp
 
 - name: remove dhcp-ntp files
   file:
-    path="{{ item }}"
-    state=absent
+    path: "{{ item }}"
+    state: absent
   with_items:
     - "/etc/dhcp/dhclient-exit-hooks.d/ntp"
     - "/var/lib/ntp/ntp.conf.dhcp"
