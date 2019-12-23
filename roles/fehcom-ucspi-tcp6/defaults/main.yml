@@ -1,9 +1,9 @@
 ---
-glx_slashpackage_dir: "/packages"
+glx_slashpackage_dir: "/package"
 glx_prefix_dir: "/usr/local"
 
 # http://www.fehcom.de/ipnet/ucspi-tcp6/ucspi-tcp6-1.11.0.tgz
-glx_ucspi_tcp6_force_install: false
+glx_ucspi_tcp6_force_install: true
 glx_ucspi_tcp6_app_name: "ucspi-tcp6"
 glx_ucspi_tcp6_app_version: "1.11.0"
 glx_ucspi_tcp6_archive_extension: "tgz"
