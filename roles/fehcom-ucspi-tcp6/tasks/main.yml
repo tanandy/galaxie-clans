@@ -27,9 +27,9 @@
     path: "{{ glx_ucspi_tcp6_source_dir }}"
     state: directory
 
-- name: ucspi-tcp-ipv6 | delete "{{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_archive_filename }}"
+- name: ucspi-tcp-ipv6 | delete "{{ glx_ucspi_tcp6_archive_path }}"
   file:
-    path: "{{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_archive_filename }}"
+    path: "{{ glx_ucspi_tcp6_archive_path }}"
     state: absent
   when: glx_ucspi_tcp6_force_install
 
@@ -40,22 +40,22 @@
     sha256sum: "{{ glx_ucspi_tcp6_download_file_sha256sum }}"
   register: glx_ucspi_tcp6_download
 
-- name: ucspi-tcp-ipv6 | delete "{{ glx_slashpackage_dir }}/net/{{ glx_ucspi_tcp6_app_name }}/{{ glx_ucspi_tcp6_app_name }}-{{ glx_ucspi_tcp6_app_version }}" directory
+- name: ucspi-tcp-ipv6 | delete "{{ glx_ucspi_tcp6_build_directory }}" directory
   file:
-    path: "{{ glx_slashpackage_dir }}/net/{{ glx_ucspi_tcp6_app_name }}/{{ glx_ucspi_tcp6_app_name }}-{{ glx_ucspi_tcp6_app_version }}"
+    path: "{{ glx_ucspi_tcp6_build_directory }}"
     state: absent
   when: glx_ucspi_tcp6_download.changed
 
-- name: ucspi-tcp-ipv6 | unarchive {{ glx_ucspi_tcp6_source_dir }}/{{ glx_ucspi_tcp6_archive_filename }}
+- name: ucspi-tcp-ipv6 | unarchive {{ glx_ucspi_tcp6_downloaded_file }}
   unarchive:
-    src: "{{ glx_ucspi_tcp6_download.dest }}"
+    src: "{{ glx_ucspi_tcp6_downloaded_file }}"
     dest: "{{ glx_slashpackage_dir }}"
     copy: no
   when: glx_ucspi_tcp6_download.changed
 
 - name: ucspi-tcp-ipv6 | fixe permissions
   file:
-    path: "{{ glx_slashpackage_dir }}/net/{{ glx_ucspi_tcp6_app_name }}/{{ glx_ucspi_tcp6_app_name }}-{{ glx_ucspi_tcp6_app_version }}"
+    path: "{{ glx_ucspi_tcp6_build_directory }}"
     owner: "root"
     group: "root"
     recurse: yes
@@ -65,12 +65,12 @@
 - name: ucspi-tcp-ipv6 | check conf-*
   template:
     src: "{{ item }}.j2"
-    dest: "{{ glx_slashpackage_dir }}/net/{{ glx_ucspi_tcp6_app_name }}/{{ glx_ucspi_tcp6_app_name }}-{{ glx_ucspi_tcp6_app_version }}/{{ item }}"
+    dest: "{{ glx_ucspi_tcp6_build_directory }}/{{ item }}"
   with_items:
     - "conf-home"
     - "conf-qlibs"
 
 - name: ucspi-tcp-ipv6 | package/install
   shell: package/install
-    chdir="{{ glx_slashpackage_dir }}/net/{{ glx_ucspi_tcp6_app_name }}/{{ glx_ucspi_tcp6_app_name }}-{{ glx_ucspi_tcp6_app_version }}"
+    chdir="{{ glx_ucspi_tcp6_build_directory }}"
   when: glx_ucspi_tcp6_download.changed

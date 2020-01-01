@@ -1,0 +1,13 @@
+glx_ucspi_ssl_force_install: true
+glx_ucspi_ssl_source_repository: "https://gitlab.com/Tuuux/galaxie/raw/a99e80b6472dc8bad9583dc3c3d375e70ac1f382/roles/sqmail/files"
+#glx_ucspi_ssl_source_repository: "http://www.fehcom.de/ipnet/ucspi-ssl"
+glx_ucspi_ssl_source_name: "ucspi-ssl-0.95b"
+glx_ucspi_ssl_source_extension: "tgz"
+glx_ucspi_ssl_source_sha256sum: "9f3bcf66546b433b089f6f340d243065beb801b97d4026e54dd586f0022b5f1e"
+glx_ucspi_ssl_source_url: "{{ glx_ucspi_ssl_source_repository }}/{{ glx_ucspi_ssl_source_name }}.{{ glx_ucspi_ssl_source_extension }}"
+glx_ucspi_ssl_source_dir: "/usr/src"
+
+glx_ucspi_ssl_certificates_dir: "/etc/ssl/certs"
+glx_ucspi_ssl_dh_parameter_file: "{{ glx_ucspi_ssl_certificates_dir }}/dhparam.pem"
+glx_ucspi_ssl_kerberos_include_dir: "/usr/include/krb5"
+glx_ucspi_ssl_rsa_key_size: "1024"
