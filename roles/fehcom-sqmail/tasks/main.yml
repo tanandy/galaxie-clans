@@ -1,0 +1,150 @@
+---
+- name: sqmail | uninstall qmails debian packages
+  apt:
+    pkg:
+      - "qmail-run"
+      - "qmail-tools"
+      - "qmail"
+      - "qmail-uids-gids"
+      - "dot-forward"
+      - "exim4-base"
+      - "exim4-config"
+      - "exim4-daemon-light"
+    state: absent
+
+- name: sqmail | install require packages for s/qmail building
+  apt:
+    pkg:
+      - "build-essential"
+      - "libssl-dev"
+      - "libperl-dev"
+    state: present
+
+- name: sqmail | check {{ glx_slashpackage_dir }} directory
+  file:
+    path: "{{ glx_slashpackage_dir }}"
+    state: directory
+    mode: 1755
+
+- name: sqmail | check {{ glx_sqmail_source_dir }} directory
+  file:
+    path: "{{ glx_sqmail_source_dir }}"
+    state: directory
+
+- name: sqmail | delete "{{ glx_sqmail_downloaded_file }}"
+  file:
+    path: "{{ glx_sqmail_downloaded_file }}"
+    state: absent
+  when: glx_sqmail_force_install
+
+#- name: sqmail | get "{{ glx_sqmail_source_url }}"
+#  get_url:
+#    url="{{ glx_sqmail_source_url }}"
+#    dest={{ glx_sqmail_source_dir }}
+#    sha256sum=5501a984d83d9f0826c2d497522090f6335049be1442be74d6492dee76c735a7
+#  register: glx_sqmail_download
+#
+##- name: sqmail | send sqmail source
+##  file:
+##    source="{{ glx_sqmail_source_name }}.{{ glx_sqmail_source_extension }}"
+#
+#- name: sqmail | delete "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}" directory
+#  file:
+#    path="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#    state=absent
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | unarchive {{ glx_sqmail_download.dest }}
+#  unarchive:
+#    src="{{ glx_sqmail_download.dest }}"
+#    dest="{{ glx_slashpackage_dir }}"
+#    copy=no
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | fixe permissions
+#  file:
+#    path="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#    owner="root"
+#    group="root"
+#    recurse=yes
+#  when: glx_sqmail_download.changed
+#
+## conf-ld -- loader options to be adjusted (for i386; AMD64 normaly default)
+#- name: sqmail | check DEB_BUILD_ARCH
+#  shell: dpkg-architecture 2>&1 | grep '^DEB_BUILD_ARCH=' | cut -d'=' -f2
+#  when: ansible_os_family == "Debian"
+#  register: DEB_BUILD_ARCH
+#  changed_when: false
+#
+## send conf-* files
+#- name: sqmail | check conf-*
+#  template:
+#    src="sqmail/{{ item }}.j2"
+#    dest="{{ glx_sqmail_conf_thing_dir }}/{{ item }}"
+#  with_items:
+#    - "conf-break"
+#    - "conf-cc"
+#    - "conf-delivery"
+#    - "conf-djbdns"
+#    - "conf-groups"
+#    - "conf-home"
+#    - "conf-ids"
+#    - "conf-instances"
+#    - "conf-ld"
+#    - "conf-log"
+#    - "conf-man"
+#    - "conf-patrn"
+#    - "conf-qmq"
+#    - "conf-spawn"
+#    - "conf-split"
+#    - "conf-svcdir"
+#    - "conf-ucspissl"
+#    - "conf-users"
+#
+#- name: sqmail | check scripts
+#  template:
+#    src="sqmail/service/{{ item }}.j2"
+#    dest="{{ glx_sqmail_service_scripts_dir }}/{{ item }}"
+#  with_items:
+#    - "ssl.env"
+#
+#- name: sqmail | package/dir -- sets up the directories
+#  shell: package/dir
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/ids -- sets up the s/qmail users
+#  shell: package/ids
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/ucspissl -- hooks up the required sources and libs with package ucspi-ssl
+#  shell: package/ucspissl
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/compile -- compiles the sources
+#  shell: package/compile
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/upgrade -- potentially does the upgrade
+#  shell: package/upgrade
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/legacy -- installs the binaries in the qmail directory
+#  shell: package/legacy
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/man -- installes the man pages
+#  shell: package/man
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#
+#- name: sqmail | package/sslenv -- sets up the SSL/TLS environments together with X.509 certs and key files (from ucspi-ssl)
+#  shell: package/sslenv
+#    chdir="{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_source_name }}"
+#  when: glx_sqmail_download.changed
+#

@@ -1,0 +1,15 @@
+# s/qmail
+glx_sqmail_source_dir: "/usr/src"
+glx_slashpackage_dir: "/package"
+glx_prefix_dir: "/usr/local"
+
+glx_sqmail_force_install: True
+glx_sqmail_app_name: "sqmail"
+glx_sqmail_app_version: "3.3.25"
+glx_sqmail_archive_extension: "tgz"
+glx_sqmail_archive_filename: "{{ glx_sqmail_app_name }}-{{ glx_sqmail_app_version }}.{{ glx_sqmail_archive_extension }}"
+glx_sqmail_archive_path: "{{ glx_sqmail_source_dir }}/{{ glx_sqmail_archive_filename }}"
+glx_sqmail_download_repository: "https://gitlab.com/Tuuux/galaxie/raw/master/roles/fehcom-sqmail/files"
+glx_sqmail_download_file: "{{ glx_sqmail_download_repository }}/{{ glx_sqmail_archive_filename }}"
+glx_sqmail_download_file_sha256sum: "213f7b384ca90c52e04bed154cb244667d849787242740a6cec2629f4f3ed56d"
+glx_sqmail_downloaded_file: "{{ glx_sqmail_source_dir }}/{{ glx_sqmail_archive_filename }}"

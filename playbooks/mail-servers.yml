@@ -4,4 +4,5 @@
   roles:
     - fehcom-fehqlibs
     - fehcom-ucspi-tcp6
+    - fehcom-ucspi-ssl
     # - sqmail
