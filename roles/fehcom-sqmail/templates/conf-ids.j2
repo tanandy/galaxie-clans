@@ -1,0 +1,15 @@
+# sqmail Unix group-ids and user-ids
+# Change ids on your own behalf; 
+# sqmail user names require change of conf-users in addition
+#
+{{ glx_sqmail_groups.nofiles.gid }}:{{ glx_sqmail_groups.nofiles.gname }}:{{ glx_sqmail_groups.nofiles.description }}:
+{{ glx_sqmail_groups.sqmail.gid }}:{{ glx_sqmail_groups.sqmail.gname }}:{{ glx_sqmail_groups.sqmail.description }}:
+#
+{{ glx_sqmail_ids.alias.uid }}:{{ glx_sqmail_ids.alias.uname }}:{{ glx_sqmail_ids.alias.description }}:{{ glx_sqmail_groups.nofiles.gname }}:alias
+{{ glx_sqmail_ids.qmaild.uid }}:{{ glx_sqmail_ids.qmaild.uname }}:{{ glx_sqmail_ids.qmaild.description }}:{{ glx_sqmail_groups.nofiles.gname }}
+{{ glx_sqmail_ids.qmaill.uid }}:{{ glx_sqmail_ids.qmaill.uname }}:{{ glx_sqmail_ids.qmaill.description }}:{{ glx_sqmail_groups.nofiles.gname }}
+{{ glx_sqmail_ids.qmailp.uid }}:{{ glx_sqmail_ids.qmailp.uname }}:{{ glx_sqmail_ids.qmailp.description }}:{{ glx_sqmail_groups.nofiles.gname }}
+{{ glx_sqmail_ids.qmailq.uid }}:{{ glx_sqmail_ids.qmailq.uname }}:{{ glx_sqmail_ids.qmailq.description }}:{{ glx_sqmail_groups.sqmail.gname }}:queue
+{{ glx_sqmail_ids.qmailr.uid }}:{{ glx_sqmail_ids.qmailr.uname }}:{{ glx_sqmail_ids.qmailr.description }}:{{ glx_sqmail_groups.sqmail.gname }}
+{{ glx_sqmail_ids.qmails.uid }}:{{ glx_sqmail_ids.qmails.uname }}:{{ glx_sqmail_ids.qmails.description }}:{{ glx_sqmail_groups.sqmail.gname }}
+{{ glx_sqmail_ids.sqmtls.uid }}:{{ glx_sqmail_ids.sqmtls.uname }}:{{ glx_sqmail_ids.sqmtls.description }}:{{ glx_sqmail_groups.nofiles.gname }}:ssl

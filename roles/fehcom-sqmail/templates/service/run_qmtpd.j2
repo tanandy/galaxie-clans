@@ -1,0 +1,9 @@
+#!/bin/sh
+QMAILU=`id -u {{ glx_sqmail_ids.qmaild.uname }}`
+QMAILG=`id -g {{ glx_sqmail_ids.qmaild.uname }}`
+HOSTNAME=`hostname`
+exec env PATH="{{ glx_sqmail_dir }}/bin:{{ glx_prefix_dir }}/bin:$PATH" \
+     tcpserver -v -Rp -l $HOSTNAME \
+     -Xx {{ glx_sqmail_dir }}/control/rules.smtpd.cdb \
+     -u $QMAILU -g $QMAILG {{ glx_sqmail_inet_bind_info }} qmtp \
+     qmail-qmtpd 2>&1 &
