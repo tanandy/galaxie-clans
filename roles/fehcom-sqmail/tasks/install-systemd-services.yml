@@ -1,0 +1,125 @@
+---
+# [inspired_by] http://mario.raval.li/category/linux/qmail/
+
+- name: check {{ glx_sqmail_dir }}/bin/run* scripts
+  template:
+    src: "services/{{ item }}.j2"
+    dest: "{{ glx_sqmail_dir }}/bin/{{ item }}"
+    owner: "root"
+    group: "{{ glx_sqmail_groups.sqmail.gname }}"
+    mode: 0755
+  with_items:
+    - "run_pop3d"
+    - "run_pop3sd"
+    - "run_qmqpd"
+    - "run_qmtpd"
+    - "run_qmtpsd"
+    - "run_smtpd"
+    - "run_smtpsd"
+    - "run_smtpsub"
+
+- name: check sqmailctl
+  template:
+    src: "sqmailctl.j2"
+    dest: "{{ glx_prefix_dir }}/bin/sqmailctl"
+    owner: "root"
+    group: "root"
+    mode: 0755
+    backup: no
+
+- name: check qmail-pop3d service
+  template:
+    src: "services/qmail-pop3d.service.j2"
+    dest: "/lib/systemd/system/qmail-pop3d.service"
+    backup: no
+  register: qmail_pop3d_service
+
+- name: check qmail-pop3sd service
+  template:
+    src: "services/qmail-pop3sd.service.j2"
+    dest: "/lib/systemd/system/qmail-pop3sd.service"
+    backup: no
+  register: qmail_pop3sd_service
+
+- name: check qmail-qmqpd service
+  template:
+    src: "services/qmail-qmqpd.service.j2"
+    dest: "/lib/systemd/system/qmail-qmqpd.service"
+    backup: no
+  register: qmail_qmqpd_service
+
+- name: check qmail-qmtpd service
+  template:
+    src: "services/qmail-qmtpd.service.j2"
+    dest: "/lib/systemd/system/qmail-qmtpd.service"
+    backup: no
+  register: qmail_qmtpd_service
+
+- name: check qmail-qmtpsd service
+  template:
+    src: "services/qmail-qmtpsd.service.j2"
+    dest: "/lib/systemd/system/qmail-qmtpsd.service"
+    backup: no
+  register: qmail_qmtpsd_service
+
+- name: check qmail-send service
+  template:
+    src: "services/qmail-send.service.j2"
+    dest: "/lib/systemd/system/qmail-send.service"
+    backup: no
+  register: qmail_send_service
+
+- name: check qmail-smtpd service
+  template:
+    src: "services/qmail-smtpd.service.j2"
+    dest: "/lib/systemd/system/qmail-smtpd.service"
+    backup: no
+  register: qmail_smtpd_service
+
+- name: check qmail-smtpsd service
+  template:
+    src: "services/qmail-smtpsd.service.j2"
+    dest: "/lib/systemd/system/qmail-smtpsd.service"
+    backup: no
+  register: qmail_smtpsd_service
+
+- name: check qmail-smtpsub service
+  template:
+    src: "services/qmail-smtpsub.service.j2"
+    dest: "/lib/systemd/system/qmail-smtpsub.service"
+    backup: no
+  register: qmail_smtpsub_service
+
+- name: regen unit files
+  shell: systemctl daemon-reload
+#  when: qmail_pop3d_service.changed is defined and qmail_pop3d_service.changed is True or
+#    qmail_pop3sd_service.changed is defined and qmail_pop3sd_service.changed is True or
+#    qmail_qmqpd_service.changed is defined or
+#    qmail_qmtpd_service.changed is defined or
+#    qmail_qmtpsd_service.changed is defined or
+#    qmail_send_service.changed is defined or
+#    qmail_smtpd_service.changed is defined or
+#    qmail_smtpsd_service.changed is defined or
+#    qmail_smtpsub_service.changed is defined
+
+- name: check rsyslog setting
+  template:
+    src: "etc/rsyslog.d/20-sqmail.conf.j2"
+    dest: "/etc/rsyslog.d/20-sqmail.conf"
+    backup: no
+  register: rsyslog_sqmail_status
+
+- name: restart rsyslog service
+  service:
+    name: rsyslog
+    state: restarted
+  when: rsyslog_sqmail_status.changed
+
+- name: check logrotate /etc/logrotate.d/sqmail file
+  template:
+    src: "etc/logrotate.d/sqmail.j2"
+    dest: "/etc/logrotate.d/sqmail"
+    backup: no
+
+
+

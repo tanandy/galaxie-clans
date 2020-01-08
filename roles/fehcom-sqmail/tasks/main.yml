@@ -29,3 +29,15 @@
 
 - include: config-alias.yml
   tags: alias, config, install-sqmail, install
+
+- include: config-openssl.yml
+  tags: config, install-sqmail, install
+
+- include: install-mta.yml
+  tags: config, install-sqmail, install, mta
+
+- include: install-systemd-services.yml
+  tags: config, install-sqmail, install, systemd-services
+
+- include: services-enable.yml
+  tags: config, install-sqmail, install, systemd-services

@@ -1,0 +1,328 @@
+#!/usr/bin/env bash
+#
+# sqmailctl  start the s/qmail MTA
+# (c) Jérôme Ornech <tuux@rtnp.org>
+#
+#   This package is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+### BEGIN INIT INFO
+# Provides:          sqmailctl
+# Short-Description: s/qmail MTA
+# Description:       Controls the s/qmail MTA
+### END INIT INFO
+
+
+
+SERVICE_TEXT="s/qmail"
+QMAIL_DIRECTORY="{{ glx_sqmail_dir }}"
+
+QMAILDUID=`id -u qmaild`
+NOFILESGID=`id -g qmaild`
+
+export PATH="$QMAIL_DIRECTORY/bin:${PATH:+$PATH:}/usr/sbin:/sbin"
+
+# Screen fun thing
+COLOR_GREEN="\e[92m"
+COLOR_YELLOW="\e[93m"
+COLOR_RED="\e[91m"
+COLOR_DEFAULT="\e[39m"
+
+BOLD="\e[1m"
+BOLD_RST="\e[22m"
+
+
+
+case "$1" in
+  start)
+{% if glx_sqmail_service_delivery.enable %}
+    service qmail-send start
+{% endif %}
+{% if glx_sqmail_service_smtp.enable %}
+    service qmail-smtpd start
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    service qmail-smtpsd start
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    service qmail-smtpsub start
+{% endif %}
+{% if glx_sqmail_service_pop3.enable %}
+    service qmail-pop3d start
+{% endif %}
+{% if glx_sqmail_service_pop3s.enable %}
+    service qmail-pop3sd start
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    service qmail-qmqpd start
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    service qmail-qmtpd start
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    service qmail-qmtpsd start
+{% endif %}
+    if [ -d /var/lock/subsys ]; then
+      touch /var/lock/subsys/sqmail
+    fi
+    ;;
+  stop)
+{% if glx_sqmail_service_delivery.enable %}
+    service qmail-send stop
+{% endif %}
+{% if glx_sqmail_service_smtp.enable %}
+    service qmail-smtpd stop
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    service qmail-smtpsd stop
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    service qmail-smtpsub stop
+{% endif %}
+{% if glx_sqmail_service_pop3.enable %}
+    service qmail-pop3d stop
+{% endif %}
+{% if glx_sqmail_service_pop3s.enable %}
+    service qmail-pop3sd stop
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    service qmail-qmqpd stop
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    service qmail-qmtpd stop
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    service qmail-qmtpsd stop
+{% endif %}
+    if [ -f /var/lock/subsys/sqmail ]; then
+      rm /var/lock/subsys/sqmail
+    fi
+    ;;
+  stat)
+    printf "Show statistics of $BOLD%s$BOLD_RST service(s)\n" "$SERVICE_TEXT"
+{% if glx_sqmail_service_delivery.enable %}
+    service qmail-send status
+{% endif %}
+{% if glx_sqmail_service_smtp.enable %}
+    service qmail-smtpd status
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    service qmail-smtpsd status
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    service qmail-smtpsub status
+{% endif %}
+{% if glx_sqmail_service_pop3.enable %}
+    service qmail-pop3d status
+{% endif %}
+{% if glx_sqmail_service_pop3s.enable %}
+    service qmail-pop3sd status
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    service qmail-qmqpd status
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    service qmail-qmtpd status
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    service qmail-qmtpsd status
+{% endif %}
+	qmail-qstat
+    ;;
+  reload)
+    printf "Flushing timeout table and sending ALRM signal to $BOLD%s$BOLD_RST service(s)\n" "$SERVICE_TEXT"
+{% if glx_sqmail_service_delivery.enable %}
+    service qmail-send reload
+{% endif %}
+{% if glx_sqmail_service_smtp.enable %}
+    service qmail-smtpd reload
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    service qmail-smtpsd reload
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    service qmail-smtpsub reload
+{% endif %}
+{% if glx_sqmail_service_pop3.enable %}
+    service qmail-pop3d reload
+{% endif %}
+{% if glx_sqmail_service_pop3s.enable %}
+    service qmail-pop3sd reload
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    service qmail-qmqpd reload
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    service qmail-qmtpd reload
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    service qmail-qmtpsd reload
+{% endif %}
+    printf "\n"
+    ;;
+  queue)
+    printf "$BOLD%s$BOLD_RST queue informations\n" "$SERVICE_TEXT"
+    qmail-qstat
+    qmail-qread
+    ;;
+  restart)
+{% if glx_sqmail_service_delivery.enable %}
+    service qmail-send restart
+{% endif %}
+{% if glx_sqmail_service_smtp.enable %}
+    service qmail-smtpd restart
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    service qmail-smtpsd restart
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    service qmail-smtpsub restart
+{% endif %}
+{% if glx_sqmail_service_pop3.enable %}
+    service qmail-pop3d restart
+{% endif %}
+{% if glx_sqmail_service_pop3s.enable %}
+    service qmail-pop3sd restart
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    service qmail-qmqpd restart
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    service qmail-qmtpd restart
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    service qmail-qmtpsd restart
+{% endif %}
+    ;;
+  cdb)
+    # badloadertypes.cdb see qmail-smtpd manual
+    if [ -f $QMAIL_DIRECTORY/control/badloadertypes ]; then
+        printf "Update $QMAIL_DIRECTORY/control/badloadertypes.cdb\n"
+        qmail-badloadertypes
+    fi
+    #badmimetypes.cdb see qmail-smtpd manual
+    if [ -f $QMAIL_DIRECTORY/control/badmimetypes ]; then
+        printf "Update $QMAIL_DIRECTORY/control/badmimetypes.cdb\n"
+        qmail-badmimetypes
+    fi
+    #mailfromrules.cdb see qmail-smtpd manual
+    if [ -f $QMAIL_DIRECTORY/control/mailfromrules ]; then
+        printf "Update $QMAIL_DIRECTORY/control/mailfromrules.cdb\n"
+        qmail-mfrules
+    fi
+    #morercpthosts.cdb see qmail-smtpd manual
+    if [ -f $QMAIL_DIRECTORY/control/morercpthosts ]; then
+        printf "Update $QMAIL_DIRECTORY/control/morercpthosts.cdb\n"
+        qmail-newmrh
+    fi
+{% if glx_sqmail_service_smtp.enable %}
+    #qmail-smtpd on port 25: rules.smtpd.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.smtpd.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.smtpd.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.smtpd.cdb rules.smtpd.tmp < rules.smtpd.txt
+    fi
+{% endif %}
+{% if glx_sqmail_service_smtps.enable %}
+    #qmail-smtpd on port 465: rules.smtpsd.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.smtpsd.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.smtpsd.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.smtpsd.cdb rules.smtpsd.tmp < rules.smtpsd.txt
+    fi
+{% endif %}
+{% if glx_sqmail_service_submission.enable %}
+    #qmail-smtpd on port 578: rules.sub.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.sub.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.sub.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.sub.cdb rules.sub.tmp < rules.sub.txt
+    fi
+{% endif %}
+{% if glx_sqmail_service_qmtp.enable %}
+    #qmail-qmtpd on port 209: rules.qmtpd.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.qmtpd.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.qmtpd.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.qmtpd.cdb rules.qmtpd.tmp < rules.qmtpd.txt
+    fi
+{% endif %}
+{% if glx_sqmail_service_qmtps.enable %}
+    #qmail-qmtpd on port 6209: rules.qmtpsd.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.qmtpsd.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.qmtpsd.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.qmtpsd.cdb rules.qmtpsd.tmp < rules.qmtpsd.txt
+    fi
+{% endif %}
+{% if glx_sqmail_service_qmqp.enable %}
+    #qmail-qmqpd on port 628: rules.qmqpd.cdb
+    if [ -f $QMAIL_DIRECTORY/control/rules.qmqpd.txt ]; then
+        printf "Update $QMAIL_DIRECTORY/control/rules.qmqpd.cdb\n"
+        cd $QMAIL_DIRECTORY/control/
+        tcprules rules.qmqpd.cdb rules.qmqpd.tmp < rules.qmqpd.txt
+    fi
+{% endif %}
+    ;;
+  delqueue)
+    find $QMAIL_DIRECTORY/queue/mess -type f -exec rm {} \;
+    find $QMAIL_DIRECTORY/queue/info -type f -exec rm {} \;
+    find $QMAIL_DIRECTORY/queue/local -type f -exec rm {} \;
+    find $QMAIL_DIRECTORY/queue/intd -type f -exec rm {} \;
+    find $QMAIL_DIRECTORY/queue/todo -type f -exec rm {} \;
+    find $QMAIL_DIRECTORY/queue/remote -type f -exec rm {} \;
+    ;;
+  users)
+    echo "Build local user data base ..."
+    # for cdb auth
+    /usr/local/bin/mkauth | /usr/local/bin/cdbmake-12 $QMAIL_DIRECTORY/control/new.cdb $QMAIL_DIRECTORY/control/new.tmp
+    chown root:nofiles $QMAIL_DIRECTORY/control/new.cdb
+    chmod 0640 $QMAIL_DIRECTORY/control/new.cdb
+    mv $QMAIL_DIRECTORY/control/new.cdb $QMAIL_DIRECTORY/control/auth.cdb
+    # for checkpassword
+    #$QMAIL_DIRECTORY/bin/qmail-pw2u < /etc/passwd > $QMAIL_DIRECTORY/users/assign && $QMAIL_DIRECTORY/bin/qmail-newu
+    ;;
+  help)
+    cat <<HELP
+   stop  -- stops mail service (smtp connections refused, nothing goes out)
+  start  -- starts mail service (smtp connection accepted, mail can go out)
+   stat  -- displays status of mail service
+    cdb  -- rebuild the tcpserver cdb file for smtp smtps pop3 pop3s
+  users  -- rebuild cdb file for local users
+restart  -- stops and restarts smtp, sends {{ glx_sqmail_service_qmtps.name }} a TERM & restarts it
+delqueue -- delete all queue after a relay attack
+ reload  -- sends qmail HUP, rereading locals and virtualdomains
+  queue  -- shows status of queue
+
+version  -- displays information about version and license
+HELP
+    ;;
+  version|-v|--version)
+    cat <<VERSION
+sqmailctl v0.5 by Tuux <tuux@rtnp.org> originaly qmailctl lifewithqmail script.
+This script "sqmailctl" is part of Galaxie.
+
+    sqmailctl is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    sqmailctl is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with sqmailctl.  If not, see <https://www.gnu.org/licenses/gpl.txt>
+VERSION
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|delqueue|reload|stat|cdb|users|queue|help|version|-v|--version}"
+    exit 1
+    ;;
+esac
+
+exit 0

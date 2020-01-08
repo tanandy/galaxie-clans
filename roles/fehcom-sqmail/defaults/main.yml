@@ -1,5 +1,7 @@
 # s/qmail
 # services
+glx_sqmail_inet_bind_info: "0"
+
 glx_sqmail_service_delivery:
   enable: true
   name: "send"
@@ -244,6 +246,20 @@ glx_sqmail_ids:
 glx_sqmail_service_scripts_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_app_name }}-{{ glx_sqmail_app_version }}/service"
 glx_sqmail_conf_thing_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_app_name }}-{{ glx_sqmail_app_version }}"
 glx_sqmail_package_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_app_name }}-{{ glx_sqmail_app_version }}/package"
+
+# certificate
+glx_sqmail_openssl_use_self_signed_cert: true
+glx_sqmail_openssl_key_gen: true
+glx_sqmail_openssl_key_bit: "1024"
+glx_sqmail_openssl_key_days: "3650"
+glx_sqmail_openssl_cert_C: "FR"
+glx_sqmail_openssl_cert_ST: "Ile-de-France"
+glx_sqmail_openssl_cert_L: "Paris"
+glx_sqmail_openssl_cert_O: "Galaxie"
+glx_sqmail_openssl_cert_OU: "IT"
+glx_sqmail_openssl_cert_CN: "{{ ansible_hostname }}.{{ glx_sqmail_domain }}"
+glx_sqmail_openssl_subj: "/C={{ glx_sqmail_openssl_cert_C }}/ST={{ glx_sqmail_openssl_cert_ST }}/L={{ glx_sqmail_openssl_cert_L }}/O={{ glx_sqmail_openssl_cert_O }}/OU={{ glx_sqmail_openssl_cert_OU }}/CN={{ glx_sqmail_openssl_cert_CN }}"
+
 
 # Alias creation
 # http://www.qmail.org/man/man5/dot-qmail.html

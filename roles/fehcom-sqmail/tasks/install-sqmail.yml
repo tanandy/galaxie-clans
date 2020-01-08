@@ -72,7 +72,7 @@
 # send conf-* files
 - name: sqmail | check conf-*
   template:
-    src: "{{ item }}.j2"
+    src: "conf/{{ item }}.j2"
     dest: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_app_name }}-{{ glx_sqmail_app_version }}/{{ item }}"
   with_items:
     - "conf-break"
