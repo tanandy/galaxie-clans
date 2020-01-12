@@ -17,3 +17,8 @@ Acquire::http::Proxy {
 Acquire::http::Proxy {peu
         obs.kolabsys.com DIRECT;
         };
+{% if inventory_hostname in groups["jellyfin"] %}
+Acquire::https::Proxy {
+        repo.jellyfin.org DIRECT;
+        };
+{% endif %}

@@ -1,0 +1,39 @@
+---
+# https://jellyfin.org/docs/general/administration/installing.html
+
+- name: Install HTTPS transport for APT
+  apt:
+    pkg:
+      - apt-transport-https
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "Debian"
+
+- name: Import the GPG signing key signed by the Jellyfin Team
+  apt_key:
+    url: https://repo.jellyfin.org/debian/jellyfin_team.gpg.key
+    state: present
+  when: ansible_distribution == "Debian"
+
+- name: Add a repository
+  apt_repository:
+    filename: "jellyfin.list"
+    repo: "deb https://repo.jellyfin.org/debian {{ ansible_lsb.codename }} main"
+    update_cache: no
+    state: present
+  when: ansible_distribution == "Debian"
+
+- name: Update APT repositories and Install Jellyfin
+  apt:
+    pkg:
+      - jellyfin
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "Debian"
+
+- name: Manage the Jellyfin system service
+  service:
+    name: "jellyfin"
+    state: started
+    enabled: yes
+

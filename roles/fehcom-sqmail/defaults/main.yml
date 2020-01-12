@@ -250,7 +250,8 @@ glx_sqmail_package_dir: "{{ glx_slashpackage_dir }}/mail/sqmail/{{ glx_sqmail_ap
 # certificate
 glx_sqmail_openssl_use_self_signed_cert: true
 glx_sqmail_openssl_key_gen: true
-glx_sqmail_openssl_key_bit: "1024"
+glx_sqmail_openssl_dhparam: "1024"
+glx_sqmail_openssl_key_bit: "2048"
 glx_sqmail_openssl_key_days: "3650"
 glx_sqmail_openssl_cert_C: "FR"
 glx_sqmail_openssl_cert_ST: "Ile-de-France"

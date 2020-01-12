@@ -2,7 +2,7 @@
 
 # Stop everything for permit to overwrite fews binarys
 - include: services-stop.yml
-  tags: install, test
+  tags: install, systemd-services
 
 ### Intall the requirements
 #- include: install-cdb.yml

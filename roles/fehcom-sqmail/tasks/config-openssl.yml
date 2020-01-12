@@ -1,6 +1,13 @@
 ---
 # Openssl auto signed certificate
 # http://www.xfiles.dk/guide-on-how-to-run-qmail-with-smtp-ssl/
+- name: sqmail | check scripts
+  template:
+    src: "services/{{ item }}.j2"
+    dest: "{{ glx_sqmail_service_scripts_dir }}/{{ item }}"
+  with_items:
+    - "ssl.env"
+
 - name: previous SSL keys and setting"
   file:
     path: "{{ item }}"
@@ -8,29 +15,60 @@
   with_items:
     - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.key"
     - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.pem"
+    - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.crt"
+    - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.csr"
     - "{{ glx_sqmail_dir }}/control/servercert.pem"
   when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
 
-- name: generate {{ glx_sqmail_openssl_key_bit }} bits dh parameter "{{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_key_bit }}.pem" fle
-  shell: openssl dhparam -out {{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_key_bit }}.pem {{ glx_sqmail_openssl_key_bit }}
-  args:
-    creates: "{{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_key_bit }}.pem"
-  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
-
-- name: auto signed rsa:{{ glx_sqmail_openssl_key_bit }} key, valide for {{ glx_sqmail_openssl_key_days }} days , to "{{ glx_sqmail_dir }}/control/servercert.pem"
-  shell:  openssl req -newkey rsa:{{ glx_sqmail_openssl_key_bit }} -x509 -nodes -days {{ glx_sqmail_openssl_key_days }} -out {{ glx_sqmail_control_me }}.pem -keyout {{ glx_sqmail_control_me }}.key -subj "{{ glx_sqmail_openssl_subj }}"
+- name:  generates a 2048-bit (recommended) RSA private key
+  shell: openssl genrsa -out {{ glx_sqmail_control_me }}.key 2048
   args:
     chdir: "{{ glx_sqmail_ssl_dir }}"
+    creates: "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.key"
   when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
+
+- name:  generates a Certificate Signing Request, which you could instead use to generate a CA-signed certificate.
+  shell: openssl req -new -sha256 -key {{ glx_sqmail_control_me }}.key -out {{ glx_sqmail_control_me }}.csr  -subj "{{ glx_sqmail_openssl_subj }}"
+  args:
+    chdir: "{{ glx_sqmail_ssl_dir }}"
+    creates: "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.csr"
+  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
+
+- name:  generates a self-signed x509 certificate suitable for use on mail servers.
+  shell: openssl req -x509 -sha256 -days 365 -key {{ glx_sqmail_control_me }}.key -in {{ glx_sqmail_control_me }}.csr -out {{ glx_sqmail_control_me }}.pem
+  args:
+    chdir: "{{ glx_sqmail_ssl_dir }}"
+    creates: "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.pem"
+  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
+
+#- name: generate {{ glx_sqmail_openssl_key_bit }} bits dh parameter "{{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_key_bit }}.pem" fle
+#  shell: openssl dhparam -out {{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_key_bit }}.pem {{ glx_sqmail_openssl_key_bit }}
+#  args:
+#    creates: "{{ glx_sqmail_ssl_dir }}/dh{{ glx_sqmail_openssl_dhparam }}.pem"
+#  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
+
+# shell:  openssl req -newkey rsa:{{ glx_sqmail_openssl_key_bit }} -x509 -nodes -days {{ glx_sqmail_openssl_key_days }} -out {{ glx_sqmail_control_me }}.pem -keyout {{ glx_sqmail_control_me }}.key -subj "{{ glx_sqmail_openssl_subj }}"
+#- name: auto signed rsa:{{ glx_sqmail_openssl_key_bit }} key, valide for {{ glx_sqmail_openssl_key_days }} days , to "{{ glx_sqmail_dir }}/control/servercert.pem"
+#  shell:  openssl req -x509 -sha256 -nodes -days {{ glx_sqmail_openssl_key_days }} -newkey rsa:{{ glx_sqmail_openssl_key_bit }} -keyout {{ glx_sqmail_control_me }}.key -out {{ glx_sqmail_control_me }}.pem -subj "{{ glx_sqmail_openssl_subj }}"
+#  args:
+#    chdir: "{{ glx_sqmail_ssl_dir }}"
+#  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
+
+#- name: convert "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.crt" to "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.pem"
+#  shell: openssl x509 -inform der -in {{ glx_sqmail_control_me }}.crt -out {{ glx_sqmail_control_me }}.pem
+#  args:
+#    chdir: "{{ glx_sqmail_ssl_dir }}"
+#  when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert
 
 - name: check {{ glx_sqmail_ssl_dir }}/ keys permissions
   file:
     path: "{{ item }}"
     owner: "root"
-    group: "{{ glx_sqmail_groups.sqmail.gname }}"
-    mode: 0640
+    group: "{{ glx_sqmail_ids.sqmtls.group }}"
+    mode: 0644
   with_items:
     - "{{ glx_sqmail_ssl_dir }}/dh{{ glx_ucspi_ssl_rsa_key_size }}.pem"
     - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.pem"
     - "{{ glx_sqmail_ssl_dir }}/{{ glx_sqmail_control_me }}.key"
+    - "{{ glx_sqmail_ssl_dir }}/ssl.env"
   when: glx_sqmail_openssl_key_gen and glx_sqmail_openssl_use_self_signed_cert

@@ -95,13 +95,6 @@
     - "conf-ucspissl"
     - "conf-users"
 
-- name: sqmail | check scripts
-  template:
-    src: "service/{{ item }}.j2"
-    dest: "{{ glx_sqmail_service_scripts_dir }}/{{ item }}"
-  with_items:
-    - "ssl.env"
-
 - name: sqmail | package/dir -- sets up the directories
   shell: package/dir
   args:

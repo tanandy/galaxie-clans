@@ -9,7 +9,7 @@ ConditionFileIsExecutable={{ glx_sqmail_dir }}/bin/qmail-smtpd
 WantedBy=multi-user.target
 
 [Service]
-Type=forking
+Type=simple
 Restart=always
 StandardOutput=syslog
 StandardError=inherit
@@ -17,4 +17,4 @@ SyslogFacility=mail
 SyslogIdentifier={{ glx_sqmail_service_smtp.identifier }}
 Environment=PATH={{ glx_sqmail_dir }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStart={{ glx_sqmail_dir }}/bin/{{ glx_sqmail_service_smtp.script }}
-ExecReload={{ glx_sqmail_dir }}/bin/qmail-tcpto ; /bin/kill -ALRM ${MAINPID}
+ExecReload={{ glx_sqmail_dir }}/bin/qmail-tcpok ; /bin/kill -ALRM ${MAINPID}
