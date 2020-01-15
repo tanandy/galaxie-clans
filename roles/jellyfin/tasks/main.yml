@@ -1,5 +1,6 @@
 ---
 # https://jellyfin.org/docs/general/administration/installing.html
+# https://jellyfin.org/docs/general/administration/migrate-from-emby.html
 
 - name: Install HTTPS transport for APT
   apt:

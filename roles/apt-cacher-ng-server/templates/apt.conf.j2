@@ -4,3 +4,13 @@ Acquire::http {
 Acquire::http::Proxy {
         download.oracle.com DIRECT;
         };
+{% if inventory_hostname in groups["jellyfin"] %}
+Acquire::https::Proxy {
+        repo.jellyfin.org DIRECT;
+        };
+{% endif %}
+{% if inventory_hostname in groups["tor_relay"] %}
+Acquire::https::Proxy {
+        deb.torproject.org DIRECT;
+        };
+{% endif %}

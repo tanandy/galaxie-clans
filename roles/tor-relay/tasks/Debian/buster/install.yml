@@ -34,7 +34,15 @@
     pkg:
       - tor
       - deb.torproject.org-keyring
+      - nyx
+      - tor-geoipdb
     state: present
     update_cache: yes
   when: ansible_distribution == "Debian"
+
+#- name: Manage the Jellyfin system service
+#  service:
+#    name: "tor"
+#    state: started
+#    enabled: yes
 

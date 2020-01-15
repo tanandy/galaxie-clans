@@ -1,5 +1,5 @@
 ---
-- hosts: tor-relay
+- hosts: tor_relay
 
   roles:
      - tor-relay
