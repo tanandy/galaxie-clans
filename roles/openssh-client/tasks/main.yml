@@ -2,37 +2,37 @@
 # Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
 - name: set ServerAliveInterval 2
   lineinfile:
-    dest="/etc/ssh/ssh_config"
-    regexp="^ *ServerAliveCountMax.*|^# *ServerAliveCountMax.*"
-    line="    ServerAliveCountMax 2"
+    dest: "/etc/ssh/ssh_config"
+    regexp: "^ *ServerAliveCountMax.*|^# *ServerAliveCountMax.*"
+    line: "    ServerAliveCountMax 2"
   notify: restart ssh service
 
 # Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
 - name: set ServerAliveInterval 300
   lineinfile:
-    dest="/etc/ssh/ssh_config"
-    regexp="^ *ServerAliveInterval.*|^# *ServerAliveInterval.*"
-    line="    ServerAliveInterval 300"
+    dest: "/etc/ssh/ssh_config"
+    regexp: "^ *ServerAliveInterval.*|^# *ServerAliveInterval.*"
+    line: "    ServerAliveInterval 300"
   notify: restart ssh service
 
 - name: set CompressionLevel 9
   lineinfile:
-    dest="/etc/ssh/ssh_config"
-    regexp="^ *CompressionLevel.*|^# *CompressionLevel.*"
-    line="    CompressionLevel 9"
+    dest: "/etc/ssh/ssh_config"
+    regexp: "^ *CompressionLevel.*|^# *CompressionLevel.*"
+    line: "    CompressionLevel 9"
   notify: restart ssh service
 
 - name: set Protocole 2
   lineinfile:
-    dest="/etc/ssh/ssh_config"
-    regexp="^ *Protocol.*|^# *Protocol.*"
-    line="    Protocol 2"
+    dest: "/etc/ssh/ssh_config"
+    regexp: "^ *Protocol.*|^# *Protocol.*"
+    line: "    Protocol 2"
   notify: restart ssh service
 
 - name: fixe bug CVE-2016-0777
   lineinfile:
-    dest="/etc/ssh/ssh_config"
-    regexp="^ *UseRoaming.*"
-    line="    UseRoaming no"
-    insertafter="^Host \*"
+    dest: "/etc/ssh/ssh_config"
+    regexp: "^ *UseRoaming.*"
+    line: "    UseRoaming no"
+    insertafter: "^Host *"
   notify: restart ssh service

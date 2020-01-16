@@ -2,13 +2,13 @@
 
 - name: sshd is configured the good way
   lineinfile:
-    dest=/etc/ssh/sshd_config
-    regexp="^{{ item.key }} "
-    line="{{ item.key }} {{ item.value }}"
-    insertafter="{{ item.key }} "
-    state=present
-    backup=yes
-    validate="/usr/sbin/sshd -T -f %s"
+    dest: /etc/ssh/sshd_config
+    regexp: "^{{ item.key }} "
+    line: "{{ item.key }} {{ item.value }}"
+    insertafter: "{{ item.key }} "
+    state: present
+    backup: yes
+    validate: "/usr/sbin/sshd -T -f %s"
   with_items:
     - { key: "ListenAddress",   value: "0.0.0.0" }
     - { key: "Protocol",        value: "2" }
@@ -38,8 +38,8 @@
 
 - name: disable check local mail after login
   lineinfile:
-    dest=/etc/pam.d/sshd
-    backrefs=yes
-    state=present
-    regexp="^session    optional     pam_mail.so standard noenv"
-    line="#session    optional     pam_mail.so standard noenv \\# [1]"
+    dest: /etc/pam.d/sshd
+    backrefs: yes
+    state: present
+    regexp: "^session    optional     pam_mail.so standard noenv"
+    line: "#session    optional     pam_mail.so standard noenv \\# [1]"
