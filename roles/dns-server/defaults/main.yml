@@ -11,7 +11,7 @@ glx_tinydns_primary_directory: "{{ glx_tinydns_zones_directory }}/primary.d"
 glx_tinydns_secondary_directory: "{{ glx_tinydns_zones_directory }}/secondary.d"
 
 
-glx_domain_list: false
+glx_domain_list: []
 #glx_domain_list:
 #  - name: "galaxie.ici"
 #    ansible_port: "22"

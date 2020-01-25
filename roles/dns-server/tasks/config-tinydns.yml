@@ -11,13 +11,13 @@
 
 - name: check if tinydns is configured the good way
   lineinfile:
-    dest="{{ glx_ndjbdns_sysconfdir }}/ndjbdns/tinydns.conf"
-    regexp="^{{ item.key }}="
-    line="{{ item.key }}={{ item.value }}"
-    insertafter="{{ item.key }}="
+    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/tinydns.conf"
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+    insertafter: "{{ item.key }}="
     state=present
     backup=no
-  with_items:
+  loop:
     - { key: "DATALIMIT",     value: "300000" }
     - { key: "IP",            value: "{{ ansible_default_ipv4.address }}" }
     - { key: "UID",           value: "{{ daemon_uid.stdout }}" }
@@ -27,6 +27,6 @@
 
 - name: service tinydns start
   service:
-    name=tinydns
-    state=started
-    enabled=yes
+    name: tinydns
+    state: started
+    enabled: yes
