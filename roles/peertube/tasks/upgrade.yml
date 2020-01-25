@@ -1,0 +1,124 @@
+---
+
+- name: Fetch package.json file
+  fetch:
+    dest: remote
+    src: "{{directory_latest }}/package.json"
+
+- name: Get version
+  include_vars:
+    file: "remote/{{ inventory_hostname }}/{{directory_latest }}/package.json"
+    name: peertube_package
+
+- name: determine latest version
+  shell: curl -s "{{ peer_version_url }}" | jq -r .tag_name 
+  args:
+    warn: no
+  register: last_version
+
+- name: set last version variable
+  set_fact:
+    peer_version: '{{ last_version.stdout | regex_replace( "v(.*)","\1")  }}'
+
+- name: Same Version
+  pause:
+    seconds: 1
+    prompt: |
+      .
+      .
+      .
+      . You're version - {{ peertube_package.version }}
+      . Last version   - {{ peer_version }}
+      .
+      . Nothing to do...
+      .
+  when: peertube_package is defined and peertube_package.version == peer_version
+
+- name: Stop
+  meta: end_play
+  when: peertube_package is defined and peertube_package.version == peer_version
+
+- name: Ask user for upgrade
+  pause:
+    prompt: |
+      .
+      .
+      .
+      . Your version : {{ peertube_package.version }}
+      . Last version : {{ peer_version }}
+      .
+      . Warning : This upgrade method is still under active developpement
+      . ! Absolut no warranty is given !
+      .
+      .
+      . Do you still want to continue upgrade ? (y/n)
+      .
+  register: user_choice
+  when: peertube_package is defined and peertube_package.version != peer_version
+
+- name: Stop
+  meta: end_play
+  when: user_choice is defined and user_choice.user_input not in ["y","Y"]
+
+- name: Stop Peertube service
+  systemd:
+    name: "{{ peertube_service_name }}"
+    state: stopped
+
+- name: Backup database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ app_pg_db }}"
+    state: dump
+    target: "/tmp/backup_pg_ansible_upgrade_{{ peertube_package.version }}_to_{{ peer_version }}.sql"
+    login_user: "postgres"
+
+- debug:
+    msg:  "{{ directory_latest }}/scripts"
+
+- name: Execute Upgrade
+  become: true
+  become_user: peertube
+  expect:
+    command: ./scripts/upgrade.sh
+    timeout: 600
+    args:
+      chdir: "{{ directory_latest }}"
+    responses:
+      (?i)password: "{{ app_pg_user_password }}"
+  register: upgrade_results
+  changed_when: False
+  ignore_errors: yes
+
+- name: Stop Peertube service
+  systemd:
+    name: "{{ peertube_service_name }}"
+    state: started
+
+- import_tasks: 8_info.yml
+  tags: info
+
+- name: Final upgrade Notice
+  pause:
+    seconds: 30
+    prompt: |
+      .   
+      .
+      .
+      .   Ok now everything is set,
+      .
+      .   Apparently, Upgrade went smoothly
+      .
+      .   Relax yourself, take a bier
+      .
+      .   Choose among your best videos, and 
+      . 
+      .   UPLOAD THEM ALL !!!!!
+      .
+      .
+
+#- name: Pause
+#  pause:
+#    prompt: Pause, Everything Ok ?
+#

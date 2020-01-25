@@ -1,0 +1,50 @@
+---
+
+- name: debug app_domain
+  debug:
+    var: app_domain
+
+- name: ask domain if not defined
+  pause:
+    prompt: Full qualified domain name for you Peertube instance? (cannot be changed once Peertube is started, so choose carefully).
+  register: entry
+  when: app_domain is undefined or app_domain is none
+
+- name: set app_domain
+  set_fact:
+    app_domain: "{{ entry.user_input }}"
+  when: app_domain is none
+
+- import_tasks: 1_install-nodejs.yml
+  tags: install_nodejs
+
+- import_tasks: 2_former-install.yml
+  tags: former_install
+
+- import_tasks: 3_postgresql.yml
+  tags: postgresql
+
+- import_tasks: 4_install-peertube.yml
+  tags: install_peertube
+
+- import_tasks: 5_config.yml
+  tags: config
+
+- import_tasks: 6_nginx.yml
+  tags: nginx
+
+- import_tasks: 7_start-peertube.yml
+  tags: start_peertube
+
+- import_tasks: 8_info.yml
+  tags: info
+
+- import_tasks: upgrade.yml
+  tags:
+    - never
+    - upgrade
+
+  #- name: Pause
+  #  pause:
+  #    prompt: Pause, Everything Ok ?
+

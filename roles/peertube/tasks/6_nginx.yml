@@ -1,0 +1,16 @@
+---
+
+- name: set up nginx config file (behind reverse proxy)
+  template:
+    src: nginx-behind-reverse.conf
+    dest:  "{{ nginx_config_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create symbolic link to sites-enable for nginx config file
+  file:
+    state: link
+    src: "{{ nginx_config_dest }}"
+    path: "{{ nginx_config_dest_enable }}"
+  notify: reload nginx

@@ -1,0 +1,21 @@
+---
+
+- name: set up default config file
+  copy:
+    remote_src: yes
+    src: "{{ config_default_src }}"
+    dest: "{{ directory_config }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0644
+
+- name: set up main config file
+  template:
+    src: production.yaml.j2
+    dest: "{{ config_dest }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0600
+
+    
+

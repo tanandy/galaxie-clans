@@ -1,0 +1,56 @@
+---
+
+- name: determine latest version
+  shell: curl -s "{{ peer_version_url }}" | jq -r .tag_name 
+  args:
+    warn: no
+  register: last_version
+  when: peer_version is not defined or peer_version is none
+  changed_when: False
+  tags: unzip
+
+- name: set version variable
+  set_fact:
+    peer_version: '{{ last_version.stdout }}'
+  when: peer_version is not defined or peer_version is none
+  tags: unzip
+
+- name: Debug version variable
+  debug:
+    var: peer_version
+  tags: unzip
+
+## As per install doc, we have to use some gymnastic with zip file
+- name: download and extract archive
+  unarchive:
+    creates: "{{ app_user_home }}/versions/peertube-{{ peer_version }}"
+    dest: "{{ app_user_home }}/versions/"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    remote_src: yes
+    src: "{{ peer_src_url }}"
+  tags: unzip
+    
+- name: create link to latest
+  file:
+    state: link
+    src: "{{ directory_version }}"
+    dest: "{{ directory_latest }}"
+  tags: unzip
+
+- name: ensure all belongs to {{ app_user }}
+  file:
+    state: directory 
+    recurse: yes
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    follow: yes
+    path: "{{ directory_latest }}"
+  tags: install
+
+- name: install peertube
+  become: true
+  become_user: "{{ app_user }}"
+  shell: cd "{{ directory_latest }}" && yarn install "{{ yarn_options }}"
+  tags: install
+

@@ -1,0 +1,42 @@
+---
+
+- name: Fetch package.json file
+  fetch:
+    dest: remote
+    src: "{{directory_latest }}/package.json"
+
+- name: Get version
+  include_vars:
+    file: "remote/{{ inventory_hostname }}/{{directory_latest }}/package.json"
+    name: peertube_package
+  notify: reload peertube
+
+- name: Get Log username
+  shell: journalctl -u peertube | grep 'Username' | sed 's/.* info. \(.*\)/\1/'
+  register: peer_log_username
+
+- name: Get Log user password
+  shell: journalctl -u peertube | grep 'User password' | sed 's/.* info. \(.*\)/\1/'
+  register: peer_log_userpass
+
+- name: Final notice
+  pause:
+    seconds: 1
+    prompt: |
+      .
+      .
+      .
+      .
+      .   Backend Peertube {{ peertube_package.version }} is Up and ready to serve ! (￣^￣)ゞ
+      .
+      .   Upstream : 
+      .     - ipv4 : {{ ansible_default_ipv4.address }}:80
+      {% if  ansible_default_ipv6 is none %}.     - ipv6 - {{ ansible_default_ipv6 }}:80{% endif %}
+      .
+      .
+      .   Admin account :
+      .      {{ peer_log_username.stdout }}
+      .      {{ peer_log_userpass.stdout }}
+      .     
+      .
+      .
