@@ -1,5 +1,5 @@
 ---
-- name: send master zone files to {{ glx_tinydns_primary_directory }}
+- name: Send master zone files to {{ glx_tinydns_primary_directory }}
   copy:
     src: "../zone_files/{{ item.name }}.data"
     dest: "{{ glx_tinydns_primary_directory }}/{{ item.name }}.data"
@@ -8,10 +8,9 @@
     mode: 0640
     backup: no
   loop: glx_domain_list
-  when: glx_domain_list
 
-- name: try a make remote
-  shell: make remote
+- name: Try a make remote
+  command: make remote
   args:
     chdir: "{{ glx_tinydns_root_directory }}"
   changed_when: false
