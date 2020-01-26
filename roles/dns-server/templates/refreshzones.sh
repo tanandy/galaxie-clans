@@ -173,13 +173,16 @@ rm -f "${TINYDNS_DIR}/.data.tmp"
 
 # Add primary file zone
 [ -n "$VERBOSE" ] && echo "Primary zones:"
-if [ $(ls -1A ${TINYDNS_ZONES_PRIMARY_DIR}/ | wc -l) -gt 0 ] ; then
+# shellcheck disable=SC2046
+# shellcheck disable=SC2012
+if [ $(ls -1A "${TINYDNS_ZONES_PRIMARY_DIR}"/ | wc -l) -gt 0 ] ; then
     echo "# Primary zone templates:" >> "${TINYDNS_DIR}/.data.tmp"
     for PRIMARY in "$TINYDNS_ZONES_PRIMARY_DIR"/*.data ; do
         # Generate serial
-        STAMP="`ls  --time-style=+%s -G  -o -g  ${PRIMARY} | awk '{ print $4 }'`"
+        # shellcheck disable=SC2006
+        STAMP="`ls  --time-style=+%s -G  -o -g  "${PRIMARY}" | awk '{ print $4 }'`"
         [ -n "$VERBOSE" ] && echo "  ${PRIMARY} serial ${STAMP}"
-        sed -r -e  "s/^(Z[^:]*:[^:]*:[^:]*)::(.*)$/\1:${STAMP}:\2/g" < ${PRIMARY} > "$PRIMARY.tosend"
+        sed -r -e  "s/^(Z[^:]*:[^:]*:[^:]*)::(.*)$/\1:${STAMP}:\2/g" < "${PRIMARY}" > "$PRIMARY.tosend"
         echo "# Primary zone file $PRIMARY with timestamp of $STAMP" >> "${TINYDNS_DIR}/.data.tmp"
         chmod 640 "$PRIMARY.tosend"
         cat "$PRIMARY.tosend" >> "${TINYDNS_DIR}/.data.tmp"
@@ -190,7 +193,9 @@ fi
 
 # Add secondary file zone
 [ -n "$VERBOSE" ] && echo "Secondary zones:"
-if [ $(ls -1A ${TINYDNS_ZONES_SECONDARY_DIR}/ | wc -l) -gt 0 ] ; then
+# shellcheck disable=SC2046
+# shellcheck disable=SC2012
+if [ $(ls -1A "${TINYDNS_ZONES_SECONDARY_DIR}"/ | wc -l) -gt 0 ] ; then
     echo "# Secondary zone templates:" >> "${TINYDNS_DIR}/.data.tmp"
     for file in "$TINYDNS_ZONES_SECONDARY_DIR"/*.data ; do
         [ -n "$VERBOSE" ] && echo "  $file"
