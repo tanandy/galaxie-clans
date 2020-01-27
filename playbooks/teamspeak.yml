@@ -1,4 +1,0 @@
-- hosts: teamspeak-servers
-
-  roles:
-    - teamspeak-server
