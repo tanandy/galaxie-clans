@@ -1,5 +1,0 @@
----
-- hosts: openmeetings-server
-
-  roles:
-    - openmeetings-server

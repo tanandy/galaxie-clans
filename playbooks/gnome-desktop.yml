@@ -1,7 +1,0 @@
-- hosts: desktops
-
-  vars_files:
-    - "galaxie-vars.yml"
-
-  roles:
-    - gnome
