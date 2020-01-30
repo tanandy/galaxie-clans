@@ -1,5 +1,5 @@
 glx_ucspi_ssl_source_dir: "/usr/src"
-C
+glx_slashpackage_dir: "/package"
 glx_prefix_dir: "/usr/local"
 
 glx_ucspi_ssl_force_install: true
