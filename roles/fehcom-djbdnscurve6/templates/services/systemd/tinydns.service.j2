@@ -1,0 +1,15 @@
+[Unit]
+Description=A DNS server daemon
+Documentation=man:tinydns(8)
+Requires=network.target
+After=network.target
+
+[Service]
+Restart=always
+PIDFile=/var/run/tinydns.pid
+ExecStart={{ glx_prefix_dir }}/bin/tinydns
+WorkingDirectory={{ glx_djbdnscurses6_sysprefix_dir }}/tinydns
+Environment="IP={{ ansible_default_ipv4.address }}" "ROOT={{ glx_djbdnscurses6_sysprefix_dir }}/tinydns/root" "UID=tinydns" "GID=dnslog"
+
+[Install]
+WantedBy=multi-user.target

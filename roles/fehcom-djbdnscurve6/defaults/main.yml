@@ -2,6 +2,7 @@
 # Common and path
 glx_prefix_dir: "/usr/local"
 glx_sysprefix_dir: "/etc"
+glx_djbdnscurses6_sysprefix_dir: "{{ glx_sysprefix_dir }}/djbdnscurses6"
 glx_slashpackage_dir: "/package"
 
 # fehqlibs
@@ -14,3 +15,21 @@ glx_djbdnscurses6_download_repository: "https://gitlab.com/Tuuux/galaxie/raw/mas
 glx_djbdnscurses6_download_file: "{{ glx_djbdnscurses6_download_repository }}/{{ glx_djbdnscurses6_archive_filename }}"
 glx_djbdnscurses6_download_file_sha256sum: "e4a0944f5c2de08d38e5d78e9bb3593269277d149bf26656116ba33dcc3328e5"
 glx_djbdnscurses6_source_dir: "/usr/src"
+
+glx_djbdnscurses6_tinydns_user: "tinydns"
+glx_djbdnscurses6_tinydns_group: "tinydns"
+glx_djbdnscurses6_dnscache_user: "dnscache"
+glx_djbdnscurses6_dnscache_group: "dnscache"
+glx_djbdnscurses6_dnslog_user: "dnslog"
+glx_djbdnscurses6_dnslog_group: "dnslog"
+
+glx_djbdnscurses6_tinydns_env_IP: "{{ ansible_default_ipv4.address }}"
+glx_djbdnscurses6_tinydns_env_ROOT: "{{ glx_djbdnscurses6_sysprefix_dir }}/tinydns/root"
+glx_djbdnscurses6_tinydns_env_UID: "{{ glx_djbdnscurses6_tinydns_user }}"
+glx_djbdnscurses6_tinydns_env_GID: "{{ glx_djbdnscurses6_dnslog_group }}"
+
+glx_djbdnscurses6_dnscache_env_CACHESIZE: "1000000"
+glx_djbdnscurses6_dnscache_env_DATALIMIT: "30000000"
+glx_djbdnscurses6_dnscache_env_FLAGEDSERVER: "1"
+glx_djbdnscurses6_dnscache_env_IP: "127.0.0.1"
+glx_djbdnscurses6_dnscache_env_IPSEND: "127.0.0.1"

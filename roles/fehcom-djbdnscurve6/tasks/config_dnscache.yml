@@ -1,0 +1,20 @@
+---
+- name: Ensure group "{{ glx_djbdnscurses6_dnscache_group }}" exists
+  group:
+    name: "{{ glx_djbdnscurses6_dnscache_group }}"
+    state: present
+
+- name: Add the user "{{ glx_djbdnscurses6_dnscache_user }}"
+  user:
+    name: "{{ glx_djbdnscurses6_dnscache_user }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group }}"
+    shell: /usr/sbin/nologin
+
+- name: Check directory {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache.
+  stat:
+    path: "{{ glx_djbdnscurses6_sysprefix_dir }}/dnscache"
+  register: dnscache_conf_directory
+
+- name: Create setting inside {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache
+  command: "/usr/local/bin/dnscache-conf {{ glx_djbdnscurses6_dnscache_user }} {{ glx_djbdnscurses6_dnslog_group }} {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache 127.0.0.1"
+  when: dnscache_conf_directory.stat.exists == false

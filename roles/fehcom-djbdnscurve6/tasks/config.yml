@@ -1,0 +1,26 @@
+---
+- name: Ensure group "{{ glx_djbdnscurses6_dnslog_group }}" exists
+  group:
+    name: "{{ glx_djbdnscurses6_dnslog_group }}"
+    state: present
+  tags: config
+
+- name: Add the user "{{ glx_djbdnscurses6_dnslog_user }}"
+  user:
+    name: "{{ glx_djbdnscurses6_dnslog_user }}"
+    group: "{{ glx_djbdnscurses6_dnslog_group }}"
+    shell: /usr/sbin/nologin
+  tags: config
+
+- name: Create "{{ glx_djbdnscurses6_sysprefix_dir }}" directory
+  file:
+    path: "{{ glx_djbdnscurses6_sysprefix_dir }}"
+    state: directory
+    mode: '0755'
+  tags: config
+
+- include: config_tinydns.yml
+  tags: config, config-tinydns
+
+- include: config_dnscache.yml
+  tags: config, config-dnscache
