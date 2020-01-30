@@ -41,7 +41,7 @@ test-debian-9:
     - pip install -U -r requirements.txt
     - which python3
 
- test-debian-10:
+test-debian-10:
   stage: tests
   image: "$CI_REGISTRY_IMAGE:Debian-10"
   variables:
