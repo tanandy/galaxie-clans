@@ -1,0 +1,16 @@
+---
+# Common and path
+glx_prefix_dir: "/usr/local"
+glx_sysprefix_dir: "/etc"
+glx_slashpackage_dir: "/package"
+
+# fehqlibs
+glx_djbdnscurses6_force_install: false
+glx_djbdnscurses6_app_name: "djbdnscurve6"
+glx_djbdnscurses6_app_version: "36a"
+glx_djbdnscurses6_archive_extension: "tgz"
+glx_djbdnscurses6_archive_filename: "{{ glx_djbdnscurses6_app_name }}-{{ glx_djbdnscurses6_app_version }}.{{ glx_djbdnscurses6_archive_extension }}"
+glx_djbdnscurses6_download_repository: "https://gitlab.com/Tuuux/galaxie/raw/master/roles/fehcom-djbdnscurses6/files"
+glx_djbdnscurses6_download_file: "{{ glx_djbdnscurses6_download_repository }}/{{ glx_djbdnscurses6_archive_filename }}"
+glx_djbdnscurses6_download_file_sha256sum: "e4a0944f5c2de08d38e5d78e9bb3593269277d149bf26656116ba33dcc3328e5"
+glx_djbdnscurses6_source_dir: "/usr/src"

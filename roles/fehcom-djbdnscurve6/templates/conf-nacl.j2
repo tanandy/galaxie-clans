@@ -1,0 +1,17 @@
+{{ glx_prefix_dir }}/lib/nacl-20110221/build/{{ ansible_hostname }}/include/{% if "64" in ansible_userspace_bits %}amd64
+{% else %}x86
+{% endif %}
+{{ glx_prefix_dir }}/lib/nacl-20110221/build/{{ ansible_hostname }}/lib/{% if "64" in ansible_userspace_bits %}amd64
+{% else %}x86
+{% endif %}
+
+# For NACl:
+# Replace HOSTNAME with the `hostname`
+# and `ARCH` with your HW architecture listed in that path;
+# typically 'amd64' or 'x86'
+
+/usr/local/include/sodium
+/usr/local/lib
+
+# For libsodium:
+# use these two lines for libsodium; if installed at default location

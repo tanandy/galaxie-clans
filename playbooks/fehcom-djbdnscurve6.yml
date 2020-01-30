@@ -1,0 +1,8 @@
+---
+- hosts: galaxie
+
+  roles:
+     - {
+     role: fehcom-djbdnscurve6,
+     glx_djbdnscurses6_force_install: false
+     }
