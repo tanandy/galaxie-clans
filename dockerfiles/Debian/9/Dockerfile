@@ -17,20 +17,14 @@ ENV PACKAGES="\
     python3 \
     python3-venv \
     "
-# PACKAGES needed to built
-ENV BUILD_PACKAGES="\
-    apt-utils \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg2 \
-    software-properties-common \
-    "
 
-RUN apt-get update && apt-get upgrade && apt-get dist-upgrade \
-    && apt-get install --no-install-recommends -y $PACKAGES $BUILD_PACKAGES \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
+RUN apt-get update && apt-get upgrade && apt-get dist-upgrade
+
+RUN apt-get install --no-install-recommends -y $PACKAGES
+
+RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
+ && dpkg-reconfigure --fronted=$DEBIAN_FRONTEND locales \
+ && update-locale LANG=fr_FR.UTF-8
 
 ENV LANG fr_FR.utf8
 
@@ -43,13 +37,9 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
     && systemctl enable docker
 
 # Remove installation packages
-RUN apt-get purge --auto-remove -y $BUILD_PACKAGES \
-    && apt-get install --no-install-recommends -y $PACKAGES \
-    && apt-get autoremove \
+RUN apt-get autoremove \
     && apt-get autoclean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/apt/sources.list \
-    && mv /etc/apt/sources.list.save /etc/apt/sources.list
+    && rm -rf /var/lib/apt/lists/*
 
 # User creation
 RUN useradd --create-home --home-dir $CT_USER_HOME $CT_USER_NAME \
