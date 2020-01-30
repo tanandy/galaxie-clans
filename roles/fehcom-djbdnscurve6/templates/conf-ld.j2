@@ -1,5 +1,3 @@
-cc -s -L`head -1 ../conf-qlibs` -L{{ glx_prefix_dir }}/lib/nacl-20110221/build/{{ ansible_hostname }}/lib/{% if "64" in ansible_userspace_bits %}amd64
-{% else %}x86
-{% endif %}
+cc -s -L`head -1 ../conf-qlibs` -L{{ glx_prefix_dir }}/lib/nacl-20110221/build/{{ ansible_hostname }}/lib/{% if "64" in ansible_userspace_bits %}amd64{% else %}x86{% endif %}
 
 This will be used to link .o files into an executable.

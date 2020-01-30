@@ -10,8 +10,10 @@
 # and `ARCH` with your HW architecture listed in that path;
 # typically 'amd64' or 'x86'
 
-/usr/local/include/sodium
-/usr/local/lib
+{% if "64" in ansible_userspace_bits %}/usr/lib/x86_64-linux-gnu
+{% else %}/usr/lib/i386-linux-gnu
+{% endif %}
+/usr/include/sodium
 
 # For libsodium:
 # use these two lines for libsodium; if installed at default location
