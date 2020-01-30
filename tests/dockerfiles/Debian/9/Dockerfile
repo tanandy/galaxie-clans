@@ -29,11 +29,11 @@ RUN apt-get update && apt-get upgrade && apt-get dist-upgrade
 
 RUN apt-get install --no-install-recommends -y $PACKAGES
 
-RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
- && dpkg-reconfigure --fronted=noninteractive locales \
- && update-locale LANG=fr_FR.UTF-8
-
-ENV LANG fr_FR.utf8
+#RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
+# && dpkg-reconfigure --fronted=noninteractive locales \
+# && update-locale LANG=fr_FR.UTF-8
+#
+#ENV LANG fr_FR.utf8
 
 # Add Docker’s official GPG key and repository:
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
