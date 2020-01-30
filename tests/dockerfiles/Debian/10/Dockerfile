@@ -21,7 +21,7 @@ ENV PACKAGES="\
     gnupg2 \
     lsb-release \
     software-properties-common \
-    apt-tranasport-https \
+    apt-transport-https \
     apt-utils \
     "
 
