@@ -11,19 +11,20 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 # PACKAGES of the container
 ENV PACKAGES="\
-    bash \
-    locales \
-    python3 \
-    python3-venv \
-    make \
-    curl \
-    systemd \
-    gnupg2 \
-    lsb-release \
-    software-properties-common \
-    apt-transport-https \
-    apt-utils \
-    "
+bash \
+locales \
+python3 \
+python3-venv \
+make \
+curl \
+systemd \
+gnupg2 \
+lsb-release \
+software-properties-common \
+apt-transport-https \
+apt-utils \
+tzdata \
+"
 
 RUN apt-get update && apt-get upgrade && apt-get dist-upgrade
 
