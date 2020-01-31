@@ -1,0 +1,28 @@
+---
+- name: Check for empty /etc/apt/sources.list
+  template:
+    src: sources.list.j2
+    dest: /etc/apt/sources.list
+    backup: yes
+  changed_when: false
+
+- name: Activate debian buster main contrib non-free repository
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop:
+    - "deb http://ftp.fr.debian.org/debian/ {{ ansible_lsb.codename | lower }} main non-free contrib"
+    - "deb-src http://ftp.fr.debian.org/debian/ {{ ansible_lsb.codename | lower }} main non-free contrib"
+    - "deb http://security.debian.org/ {{ ansible_lsb.codename | lower }}/updates main non-free contrib"
+    - "deb-src http://security.debian.org/ {{ ansible_lsb.codename | lower }}/updates main non-free contrib"
+    - "deb http://ftp.fr.debian.org/debian/ {{ ansible_lsb.codename | lower }}-updates main non-free contrib"
+    - "deb-src http://ftp.fr.debian.org/debian/ {{ ansible_lsb.codename | lower }}-updates main non-free contrib"
+
+- name: Cleanup apt cache
+  command: apt-get clean warn=no
+  changed_when: False
+
+- name: Upgrade system
+  apt:
+    update_cache: yes
+    upgrade: full
