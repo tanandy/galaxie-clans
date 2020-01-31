@@ -1,6 +1,5 @@
 ---
-
-- name: sshd is configured the good way
+- name: Fine tune openssh server configuration
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^{{ item.key }} "
@@ -9,7 +8,7 @@
     state: present
     backup: yes
     validate: "/usr/sbin/sshd -T -f %s"
-  with_items:
+  loop:
     - { key: "ListenAddress",   value: "0.0.0.0" }
     - { key: "Protocol",        value: "2" }
     - { key: "DebianBanner",    value: "no" }
@@ -36,7 +35,7 @@
   notify:
     - restart sshd service
 
-- name: disable check local mail after login
+- name: Disable local mail checking after login
   lineinfile:
     dest: /etc/pam.d/sshd
     backrefs: yes

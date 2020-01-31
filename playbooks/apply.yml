@@ -24,12 +24,6 @@
 ### Configure Apt
 - include: apt-cacher-ng-server.yml
 
-### Configure a LAMP (Linux Apache MySQL PHP)
-# PHP is manage inside apache-server role
-#- include: mysql-server.yml
-#- include: web-server.yml
-
-
 ###############
 ### Setting ###
 ###############
@@ -37,12 +31,3 @@
 - include: dns-resolver.yml
 - include: ntp-client.yml
 - include: apt-cacher-ng-client.yml
-
-
-
-
-# Desktops
-#- include: desktops-base.yml
-#- include: gnome-setting.yml
-#- include: mozilla-firefox.yml
-#- include: mozilla-thunderbird.yml
