@@ -1,14 +1,14 @@
 ---
 - name: Check for empty /etc/apt/sources.list
   template:
-    src=sources.list.j2
-    dest=/etc/apt/sources.list
-    backup=yes
+    src: sources.list.j2
+    dest: /etc/apt/sources.list
+    backup: yes
 
 - name: activate debian stretch main contrib non-free repository
   apt_repository:
-    repo="{{ item }}"
-    state=present
+    repo: "{{ item }}"
+    state: present
   with_items:
     - "deb http://ftp.fr.debian.org/debian/ stretch main non-free contrib"
     - "deb-src http://ftp.fr.debian.org/debian/ stretch main non-free contrib"
@@ -20,15 +20,15 @@
 # DEBMULTIMEDIA
 - name: activate ded-multimedia key
   apt_key:
-    keyserver="pgp.mit.edu"
-    id="5C808C2B65558117"
-    state=present
+    keyserver: "pgp.mit.edu"
+    id: "5C808C2B65558117"
+    state: present
   when: "{{ 'multimedia' in group_names }}"
 
 - name: activate debian deb-multimedia repository
   apt_repository:
-    repo="{{ item }}"
-    state=present
+    repo: "{{ item }}"
+    state: present
   when: "{{ 'multimedia' in group_names }}"
   with_items:
     - "deb http://www.deb-multimedia.org stretch main non-free"
@@ -41,8 +41,8 @@
 
 - name: run apt-get update
   apt:
-    update_cache=yes
+    update_cache: yes
 
 - name: run apt-get upgrade
   apt:
-    upgrade=full
+    upgrade: full
