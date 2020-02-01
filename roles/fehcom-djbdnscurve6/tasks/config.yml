@@ -1,26 +1,26 @@
 ---
-- name: Ensure group "{{ glx_djbdnscurses6_dnslog_group }}" exists
-  group:
-    name: "{{ glx_djbdnscurses6_dnslog_group }}"
-    state: present
-  tags: config
+- name: check /etc/rsyslog.d/20-djbdnscurses6.conf
+  template:
+    src: etc/rsyslog.d/20-djbdnscurses6.conf.j2
+    dest: "/etc/rsyslog.d/20-djbdnscurses6.conf"
+    backup: no
+  notify:
+    - restart rsyslog
 
-- name: Add the user "{{ glx_djbdnscurses6_dnslog_user }}"
-  user:
-    name: "{{ glx_djbdnscurses6_dnslog_user }}"
-    group: "{{ glx_djbdnscurses6_dnslog_group }}"
-    shell: /usr/sbin/nologin
-  tags: config
-
-- name: Create "{{ glx_djbdnscurses6_sysprefix_dir }}" directory
-  file:
-    path: "{{ glx_djbdnscurses6_sysprefix_dir }}"
-    state: directory
-    mode: '0755'
-  tags: config
+- name: check /etc/logrotate.d/djbdnscurses6
+  template:
+    src: etc/logrotate.d/djbdnscurses6.j2
+    dest: "/etc/logrotate.d/djbdnscurses6"
+    backup: no
 
 - include: config_tinydns.yml
   tags: config, config-tinydns
 
 - include: config_dnscache.yml
   tags: config, config-dnscache
+
+- include: config_dnscache_seed_file.yml
+  tags: config, config-dnscache
+
+#- include: config_dnscache_update_@.yml
+#  tags: update

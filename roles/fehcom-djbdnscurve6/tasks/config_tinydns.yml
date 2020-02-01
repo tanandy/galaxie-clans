@@ -1,23 +1,22 @@
 ---
-- name: Ensure group "{{ glx_djbdnscurses6_tinydns_group }}" exists
-  group:
-    name: "{{ glx_djbdnscurses6_tinydns_group }}"
-    state: present
 
-- name: Add the user "{{ glx_djbdnscurses6_tinydns_user }}"
-  user:
-    name: "{{ glx_djbdnscurses6_tinydns_user }}"
-    group: "{{ glx_djbdnscurses6_tinydns_group }}"
-    shell: /usr/sbin/nologin
+- name: Ensure {{ glx_djbdnscurses6_tinydns_env_ROOT }} directory exit
+  file:
+    path: "{{ glx_djbdnscurses6_tinydns_env_ROOT }}"
+    state: directory
 
-- name: Check directory {{ glx_djbdnscurses6_sysprefix_dir }}/tinydns.
-  stat:
-    path: "{{ glx_djbdnscurses6_sysprefix_dir }}/tinydns"
-  register: tinydns_conf_directory
+- name: Ensure {{ glx_djbdnscurses6_tinydns_env_ROOT }}/zone directory exist
+  file:
+    path: "{{ glx_djbdnscurses6_tinydns_env_ROOT }}/zones"
+    state: directory
 
-- name: Create setting inside {{ glx_djbdnscurses6_sysprefix_dir }}/tinydns
-  command: "/usr/local/bin/tinydns-conf {{ glx_djbdnscurses6_tinydns_user }} {{ glx_djbdnscurses6_dnslog_group }} {{ glx_djbdnscurses6_sysprefix_dir }}/tinydns {{ ansible_default_ipv4.address }}"
-  when: tinydns_conf_directory.stat.exists == false
+- name: Copy tinydns.conf in {{ glx_djbdnscurses6_tinydns_env_ROOT }}
+  template:
+    src: "etc/tinydns/{{ item }}.j2"
+    dest: "{{ glx_djbdnscurses6_tinydns_env_ROOT }}/{{ item }}"
+  with_items:
+    - "tinydns.conf"
+    - "Makefile"
 
 - name: Copy tinydns.service in /lib/systemd/system/
   template:
@@ -28,3 +27,4 @@
 
 - name: Reload systemd
   command: systemctl daemon-reload
+  changed_when: false

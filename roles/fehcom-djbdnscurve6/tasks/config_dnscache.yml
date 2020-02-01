@@ -1,20 +1,55 @@
 ---
-- name: Ensure group "{{ glx_djbdnscurses6_dnscache_group }}" exists
-  group:
-    name: "{{ glx_djbdnscurses6_dnscache_group }}"
-    state: present
 
-- name: Add the user "{{ glx_djbdnscurses6_dnscache_user }}"
-  user:
-    name: "{{ glx_djbdnscurses6_dnscache_user }}"
-    group: "{{ glx_djbdnscurses6_dnscache_group }}"
-    shell: /usr/sbin/nologin
+- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }} directory exit
+  file:
+    path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '3755'
 
-- name: Check directory {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache.
-  stat:
-    path: "{{ glx_djbdnscurses6_sysprefix_dir }}/dnscache"
-  register: dnscache_conf_directory
+- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip directory exist
+  file:
+    path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip"
+    state: directory
+    owner: root
+    group: root
+    mode: '2755'
 
-- name: Create setting inside {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache
-  command: "/usr/local/bin/dnscache-conf {{ glx_djbdnscurses6_dnscache_user }} {{ glx_djbdnscurses6_dnslog_group }} {{ glx_djbdnscurses6_sysprefix_dir }}/dnscache 127.0.0.1"
-  when: dnscache_conf_directory.stat.exists == false
+- name: Copy files in {{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip
+  template:
+    src: "etc/dnscache/ip/{{ item }}.j2"
+    dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip/{{ item }}"
+    mode: '0644'
+  with_items:
+    - "127.0.0.1"
+    - "::1"
+
+- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers directory exist
+  file:
+    path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers"
+    state: directory
+    owner: root
+    group: root
+    mode: '2755'
+
+- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers/@
+  template:
+    src: "etc/dnscache/servers/@.j2"
+    dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers/@"
+    mode: '0644'
+
+- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/dnscache.conf
+  template:
+    src: "etc/dnscache/dnscache.conf.j2"
+    dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/dnscache.conf"
+    mode: '0644'
+
+- name: Ensure /lib/systemd/system/dnscache.service
+  template:
+    src: "services/systemd/dnscache.service.j2"
+    dest: "/lib/systemd/system/dnscache.service"
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  changed_when: false

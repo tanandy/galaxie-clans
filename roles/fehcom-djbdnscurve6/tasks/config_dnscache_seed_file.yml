@@ -1,0 +1,16 @@
+---
+- name: check if {{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed file exists
+  stat:
+    path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed"
+  register: seed_file
+
+- name: generate seed file
+  command: "dd if=/dev/urandom of={{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed bs=128 count=1"
+  when: seed_file.stat.exists == False
+
+- name: Ensure permissions of {{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed file
+  file:
+    path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed"
+    owner: root
+    group: root
+    mode: '0600'

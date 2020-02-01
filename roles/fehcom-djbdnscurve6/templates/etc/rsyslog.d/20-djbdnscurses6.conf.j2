@@ -1,0 +1,18 @@
+$template CustumRawFormat1, "%TIMESTAMP% %HOSTNAME% %syslogtag% %msg:R,ERE,1,FIELD:[A-Z][a-z][a-z] [0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9] (.*)--end%\n"
+$template CustumRawFormat2, "%TIMESTAMP% %HOSTNAME% %syslogtag% %msg:R,ERE,1,FIELD:: (.*)--end%\n"
+
+if $programname startswith 'axfrdns' and $msg startswith ' axfrdns:' then /var/log/axfrdns.log;CustumRawFormat2
+if $programname startswith 'axfrdns' and not ($msg startswith ' axfrdns:') then /var/log/axfrdns.log;CustumRawFormat1
+
+if $programname startswith 'dnscache' and $msg startswith ' dnscache:' then /var/log/dnscache.log;CustumRawFormat2
+if $programname startswith 'dnscache' and not ($msg startswith ' dnscache:') then /var/log/dnscache.log;CustumRawFormat1
+
+if $programname startswith 'rbldns' and $msg startswith ' rbldns:' then /var/log/rbldns.log;CustumRawFormat2
+if $programname startswith 'rbldns' and not ($msg startswith ' rbldns:') then /var/log/rbldns.log;CustumRawFormat1
+
+if $programname startswith 'tinydns' and $msg startswith ' tinydns:' then /var/log/tinydns.log;CustumRawFormat2
+if $programname startswith 'tinydns' and not ($msg startswith ' tinydns:') then /var/log/tinydns.log;CustumRawFormat1
+
+if $programname startswith 'walldns' and $msg startswith ' walldns:' then /var/log/walldns.log;CustumRawFormat2
+if $programname startswith 'walldns' and not ($msg startswith ' walldns:') then /var/log/walldns.log;CustumRawFormat1
+& ~

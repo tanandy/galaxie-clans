@@ -5,6 +5,8 @@ glx_sysprefix_dir: "/etc"
 glx_djbdnscurses6_sysprefix_dir: "{{ glx_sysprefix_dir }}/djbdnscurses6"
 glx_slashpackage_dir: "/package"
 
+glx_djbdnscurses6_host_for_test: "github.com"
+
 # fehqlibs
 glx_djbdnscurses6_force_install: false
 glx_djbdnscurses6_app_name: "djbdnscurve6"
@@ -24,12 +26,31 @@ glx_djbdnscurses6_dnslog_user: "dnslog"
 glx_djbdnscurses6_dnslog_group: "dnslog"
 
 glx_djbdnscurses6_tinydns_env_IP: "{{ ansible_default_ipv4.address }}"
-glx_djbdnscurses6_tinydns_env_ROOT: "{{ glx_djbdnscurses6_sysprefix_dir }}/tinydns/root"
-glx_djbdnscurses6_tinydns_env_UID: "{{ glx_djbdnscurses6_tinydns_user }}"
-glx_djbdnscurses6_tinydns_env_GID: "{{ glx_djbdnscurses6_dnslog_group }}"
+glx_djbdnscurses6_tinydns_env_ROOT: "{{ glx_sysprefix_dir }}/tinydns"
+# A non-root user whose privileges should be acquired by tinydns.
+# Default: daemon
+# See: $ id -u daemon
+glx_djbdnscurses6_tinydns_env_UID: "1"
+# A non-root group whose privileges should be acquired by tinydns.
+# Default: daemon
+# See: $ id -g daemon
+glx_djbdnscurses6_tinydns_env_GID: "1"
 
+glx_djbdnscurses6_dnscache_env_ROOT: "{{ glx_sysprefix_dir }}/dnscache"
+# A non-root user whose privileges should be acquired by tinydns.
+# Default: daemon
+# See: $ id -u daemon
+glx_djbdnscurses6_dnscache_env_UID: "1"
+# A non-root group whose privileges should be acquired by tinydns.
+# Default: daemon
+# See: $ id -g daemon
+glx_djbdnscurses6_dnscache_env_GID: "1"
+glx_djbdnscurses6_dnscache_env_USETEXTFORMAT: "1"
+glx_djbdnscurses6_dnscache_env_UZ5FALLBACK: "2"
 glx_djbdnscurses6_dnscache_env_CACHESIZE: "1000000"
 glx_djbdnscurses6_dnscache_env_DATALIMIT: "30000000"
 glx_djbdnscurses6_dnscache_env_FLAGEDSERVER: "1"
 glx_djbdnscurses6_dnscache_env_IP: "127.0.0.1"
-glx_djbdnscurses6_dnscache_env_IPSEND: "127.0.0.1"
+#glx_djbdnscurses6_dnscache_env_IPSEND: "0.0.0.0"
+#glx_djbdnscurses6_dnscache_env_IP: "::1"
+glx_djbdnscurses6_dnscache_env_IPSEND: "::"

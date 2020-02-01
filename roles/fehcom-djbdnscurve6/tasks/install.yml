@@ -1,7 +1,19 @@
 ---
+- name: Install groff-base
+  apt:
+    name:
+      - groff-base
+    update_cache: yes
+
 - name: Check {{ glx_djbdnscurses6_source_dir }} directory
   file:
     path: "{{ glx_djbdnscurses6_source_dir }}"
+    state: directory
+  changed_when: false
+
+- name: Check {{ glx_slashpackage_dir }} directory
+  file:
+    path: "{{ glx_slashpackage_dir }}"
     state: directory
   changed_when: false
 
