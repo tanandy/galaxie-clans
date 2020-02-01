@@ -1,0 +1,6 @@
+---
+- name: Restart powertop service
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: powertop

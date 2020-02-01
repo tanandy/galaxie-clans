@@ -1,5 +1,0 @@
----
-- name: "Install package"
-  apt:
-    pkg=powertop
-    state=present

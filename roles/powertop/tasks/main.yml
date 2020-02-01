@@ -1,6 +1,18 @@
 ---
-- include: Debian/8/main.yml
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "8" or ansible_distribution_release == "jessie"
+- name: Install powertop
+  apt:
+    name: powertop
 
-- include: Debian/9/main.yml
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "9" or ansible_distribution_release == "stretch"
+- name: Render powertop systemd service
+  template:
+    src: powertop.service.j2
+    dest: "{{ powertop_systemd_service_file_path }}"
+    backup: no
+  notify: Restart powertop service
+
+- name: Enable powertop service
+  systemd:
+    daemon_reload: yes
+    name: powertop
+    state: started
+    enabled: yes
