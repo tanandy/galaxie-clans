@@ -1,0 +1,4 @@
+- hosts: pycharm-professional
+
+  roles:
+    - pycharm-professional

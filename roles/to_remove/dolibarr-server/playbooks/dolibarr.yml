@@ -1,0 +1,5 @@
+---
+- hosts: dolibarr-servers
+
+  roles:
+    - dolibarr-server

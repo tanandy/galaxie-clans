@@ -1,0 +1,5 @@
+- hosts: desktops
+
+
+  roles:
+    - xonotic-client

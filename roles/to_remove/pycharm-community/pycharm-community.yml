@@ -1,0 +1,4 @@
+- hosts: pycharm-community
+
+  roles:
+    - pycharm-community
