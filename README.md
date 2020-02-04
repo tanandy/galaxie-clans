@@ -62,11 +62,17 @@ That will give you:
 After this you can move your host out of the `[galaxie_staging]` group and put it in its right place in your inventory and start hacking around with it.
 
 ### Migration plan
+#### Critical - Galaxie Core
+* **NTP**: ``ntpd`` - Refresh our ?
+* **DNS**: ``named`` - https://github.com/bertvv/ansible-role-bind
+* **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
+* **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
+* **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
+* **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
 
-NTP: Ntpd - 
-DNS: Bind - https://github.com/bertvv/ansible-role-bind
-TFP: tfpd - https://github.com/bertvv/ansible-role-tftp
-DHCP: 
-MAIL: Postfix / Dovecot - https://github.com/bertvv/ansible-role-mailserver
-SQL: Mariadb - https://github.com/bertvv/ansible-role-mariadb
-PHONE: Asterisk 
+#### Require - Galaxie Media
+* **TELEPHONY**: ``asterisk``
+* **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
+* **WEBSERVER** ``ngnx``
+* **MEETING**: ``jitsit``
+* **WEBSITE**: ``peertube``
