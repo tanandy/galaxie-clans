@@ -65,6 +65,8 @@ After this you can move your host out of the `[galaxie_staging]` group and put i
 
 NTP: Ntpd - 
 DNS: Bind - https://github.com/bertvv/ansible-role-bind
+TFP: tfpd - https://github.com/bertvv/ansible-role-tftp
+DHCP: 
 MAIL: Postfix / Dovecot - https://github.com/bertvv/ansible-role-mailserver
 SQL: Mariadb - https://github.com/bertvv/ansible-role-mariadb
 PHONE: Asterisk 
