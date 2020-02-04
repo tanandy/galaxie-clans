@@ -1,49 +1,82 @@
 ---
+- name: Ensure group "{{ glx_djbdnscurses6_dnscache_group_name }}" exists
+  group:
+    name: "{{ glx_djbdnscurses6_dnscache_group_name }}"
+    state: present
+    system: yes
 
-- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }} directory exit
+- name: Ensure user "{{ glx_djbdnscurses6_dnscache_user_name }}" exists
+  user:
+    name: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    system: yes
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
+    shell: /usr/sbin/nologin
+    home: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}"
+
+- name: Ensure directory {{ glx_djbdnscurses6_dnscache_env_ROOT }} exists
   file:
     path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '3755'
 
-- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip directory exist
+- name: Ensure directory {{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip exists
   file:
     path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '2755'
 
 - name: Copy files in {{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip
   template:
-    src: "etc/dnscache/ip/{{ item }}.j2"
+    src: "var/lib/dnscache/ip/{{ item }}.j2"
     dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/ip/{{ item }}"
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '0644'
   with_items:
     - "127.0.0.1"
     - "::1"
 
-- name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers directory exist
+- name: Ensure directory {{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers exists
   file:
     path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '2755'
 
 - name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers/@
   template:
-    src: "etc/dnscache/servers/@.j2"
+    src: "var/lib/dnscache/servers/@.j2"
     dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/servers/@"
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '0644'
+  notify:
+    - restart dnscache
+
+- name: Check {{ glx_djbdnscurses6_dnscache_user_name }} uid
+  shell: "id -u {{ glx_djbdnscurses6_dnscache_user_name }}"
+  register: UID
+  changed_when: false
+
+- name: Check {{ glx_djbdnscurses6_dnscache_group_name }} gid
+  shell: "cat /etc/group | grep {{ glx_djbdnscurses6_dnscache_group_name }} | cut -d ':' -f 3"
+  register: GID
+  changed_when: false
 
 - name: Ensure {{ glx_djbdnscurses6_dnscache_env_ROOT }}/dnscache.conf
   template:
-    src: "etc/dnscache/dnscache.conf.j2"
-    dest: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/dnscache.conf"
+    src: "etc/dnscache.conf.j2"
+    dest: "{{ glx_sysprefix_dir }}/dnscache.conf"
+    owner: root
+    group: root
     mode: '0644'
+  notify:
+    - restart dnscache
 
 - name: Ensure /lib/systemd/system/dnscache.service
   template:

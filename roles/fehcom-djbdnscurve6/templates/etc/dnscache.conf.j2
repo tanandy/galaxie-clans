@@ -1,0 +1,80 @@
+# dnscache.conf: this file is part of the Galaxie project.
+#   - Lines starting with `#' are comments, thus ignored.
+#   - Blank lines are blank, thus ignored.
+#   - Do not leave blank spaces around `=' sign while defining a variable.
+
+# Dnscache runs chrooted in the directory specified by the $ROOT
+# environment variable, under the uid and gid specified by the $UID and
+# $GID environment variables.
+# This is where `ip/' and `servers/' directories should reside.
+ROOT={{ glx_djbdnscurses6_dnscache_env_ROOT }}
+UID={{ UID.stdout }}
+GID={{ GID.stdout }}
+
+# In case $USETEXTFORMAT is set, dnscache will send queries even for CurveDNS
+# enabled name servers using standard DNS TXT headers.
+{% if glx_djbdnscurses6_dnscache_env_USETEXTFORMAT %}
+USETEXTFORMAT={{ glx_djbdnscurses6_dnscache_env_USETEXTFORMAT }}
+{% else %}
+# USETEXTFORMAT=
+{% endif %}
+
+# Dnscache can be adviced to go to unencrypted fallback mode, if hostname
+# of the name server starts with uz5 but don't respond to encrypted UDP
+# queries for this lookup.
+#
+# This behavior can be changed using the
+# environment variable $UZ5FALLBACK=n.  The value n=2 is the default
+# value initally set-up be dnscache-conf.  A value like n=1 might impact
+# correctly behaving CurveDNS name servers which do not respond to the
+# initial query, while larger values like n=3 delays name resolution for
+# those name servers significantely.  Setting $UZ5FALLBACK=0 disables
+# fallback mode, which is the default.
+{% if glx_djbdnscurses6_dnscache_env_UZ5FALLBACK %}
+UZ5FALLBACK={{ glx_djbdnscurses6_dnscache_env_UZ5FALLBACK }}
+{% else %}
+# UZ5FALLBACK=
+{% endif %}
+
+# If dnscache recognizes the environment variable $FLAGEDSERVER, name
+# server listed under ip/ are treated in the following way: Servers
+# included as ip/%1.2.3.4 or ip/%2001::a:b:c:d and given their dotted-
+# decimal IPv4 or compactified IPv6 addresses are omitted for name
+# resolution in case the IP address is prepended with a %.  If the IP
+# addresses is prepended with a -, rather instead of a CurveDNS query a
+# standard query will be used, irrespectively if the server's FQDN starts
+# with the magic uz5.  Example: ip/-131.193.32.108.
+{% if glx_djbdnscurses6_dnscache_env_FLAGEDSERVER %}
+FLAGEDSERVER={{ glx_djbdnscurses6_dnscache_env_FLAGEDSERVER }}
+{% else %}
+# FLAGEDSERVER=
+{% endif %}
+
+# Maximum number of bytes that could be allocated if required.
+DATALIMIT={{ glx_djbdnscurses6_dnscache_env_DATALIMIT }}
+
+# No of bytes to allocate for the cache. This may not exceed DATALIMIT
+CACHESIZE={{ glx_djbdnscurses6_dnscache_env_CACHESIZE }}
+
+# Address to listen on for incoming connections.
+IP={{ glx_djbdnscurses6_dnscache_env_IP }}
+
+# Address to use while sending out-going requests. 0.0.0.0 means machines
+# primary IP address.
+#
+{% if glx_djbdnscurses6_dnscache_env_IPSEND %}
+IPSEND={{ glx_djbdnscurses6_dnscache_env_IPSEND }}
+{% else %}
+# IPSEND=
+{% endif %}
+
+# If FORWARDONLY is set, dnscache treats the servers/@ as a list of IP
+# addresses for other caches, not root servers. It forwards queries to those
+# caches the same way a client does, rather than contacting a chain of servers
+# according to NS records.
+#
+{% if glx_djbdnscurses6_dnscache_env_FORWARDONLY %}
+FORWARDONLY={{ glx_djbdnscurses6_dnscache_env_FORWARDONLY }}
+{% else %}
+# FORWARDONLY=
+{% endif %}

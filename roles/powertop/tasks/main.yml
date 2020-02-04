@@ -13,6 +13,6 @@
 - name: Enable powertop service
   systemd:
     daemon_reload: yes
-    name: powertop
+    name: powertop*
     state: started
     enabled: yes

@@ -1,10 +1,13 @@
 ---
+glx_prefix_dir: "/usr/local"
+glx_sysprefix_dir: "/etc"
+glx_var_lib_dir: "/var/lib"
+glx_man_dir: "/usr/share/man"
 glx_ndjbdns_force_install: false
 glx_ndjbdns_upgrade_roots: false
 glx_ndjbdns_git_repo: "https://github.com/pjps/ndjbdns.git"
 glx_ndjbdns_source_dir: "/usr/src/ndjbdns"
-glx_ndjbdns_prefix: "/usr/local"
-glx_ndjbdns_sysconfdir: "/etc"
+
 
 glx_ndjbdns_host_for_test: "github.com"
 
@@ -33,6 +36,23 @@ glx_ndjbdns_walldns_service:
   name: "walldns"
 
 glx_axfdns_axfr: ""
+
+
+# TINYDNS
+glx_ndjbdns_tinydns_env_IP: "{{ ansible_default_ipv4.address }}"
+glx_ndjbdns_tinydns_env_ROOT: "{{ glx_var_lib_dir }}/tinydns"
+glx_ndjbdns_tinydns_user_name: "tinydns"
+glx_ndjbdns_tinydns_group_name: "dnslog"
+
+# DNSCACHE
+glx_ndjbdns_dnscache_env_ROOT: "{{ glx_var_lib_dir }}/dnscache"
+glx_ndjbdns_dnscache_user_name: "dnscache"
+glx_ndjbdns_dnscache_group_name: "dnslog"
+glx_ndjbdns_dnscache_env_CACHESIZE: "1000000"
+glx_ndjbdns_dnscache_env_DATALIMIT: "30000000"
+glx_ndjbdns_dnscache_env_IP: "127.0.0.1"
+glx_ndjbdns_dnscache_env_IPSEND: "::"
+glx_ndjbdns_dnscache_env_FORWARDONLY: ""
 
 ### Clean previus design Debian dnscache ###
 glx_supervise_dir: "/var/lib/supervise"

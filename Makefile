@@ -4,6 +4,14 @@ help:
 	@echo "USAGE"
 	@echo "	make env - Create the virtual environement"
 	@echo "	make requirements - Install requirements"
+update:
+	@wget -O named.root https://www.internic.net/domain/named.root;\
+	cat /tmp/named.root | grep "A " | tr -s ' ' | cut -d ' ' -f 4 > /tmp/@.tmp;\
+	if [ $$(cat /tmp/@.tmp | grep -c ".") -eq 26 ]; then \
+		echo "Update roles/fehcom-djbdnscurve6/templates/etc/dnscache/servers/@.j2";\
+		cat /tmp/@.tmp > roles/fehcom-djbdnscurve6/templates/etc/dnscache/servers/@.j2;\
+	fi
+#	rm @.tmp named.root
 
 test:
 	. venv/bin/activate;\

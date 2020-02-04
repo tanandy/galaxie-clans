@@ -1,0 +1,20 @@
+# tinydns.conf: this file is part of the Galaxie project.
+#   - Lines starting with `#' are comments, thus ignored.
+#   - Blank lines are blank, thus ignored.
+#   - Do not leave blank spaces around `=' sign while defining a variable.
+
+# Tinydns runs chrooted in the directory specified by the $ROOT
+# environment variable, under the uid and gid specified by the $UID and
+# $GID environment variables.
+# This is where 'data','data.cdb'  and 'Makefile' files should reside.
+ROOT={{ glx_djbdnscurses6_tinydns_env_ROOT }}
+UID={{ UID.stdout }}
+GID={{ GID.stdout }}
+
+# Tinydns listens for incoming UDP packets addressed to port 53 of $IP.
+# It does not listen for TCP queries.  Specifying 0.0.0.0 or :: results
+# in listing to all available IP adresses and interfaces (for IPv6)
+# respectively. In case $IP is specified as the pseudo IP address :0
+# tinydns is forced to bind to all available IPv4 and IPv6 addresses
+# simultaneously.
+IP={{ glx_djbdnscurses6_tinydns_env_IP }}

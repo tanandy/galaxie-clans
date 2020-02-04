@@ -11,6 +11,6 @@
 - name: Ensure permissions of {{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed file
   file:
     path: "{{ glx_djbdnscurses6_dnscache_env_ROOT }}/seed"
-    owner: root
-    group: root
+    owner: "{{ glx_djbdnscurses6_dnscache_user_name }}"
+    group: "{{ glx_djbdnscurses6_dnscache_group_name }}"
     mode: '0600'

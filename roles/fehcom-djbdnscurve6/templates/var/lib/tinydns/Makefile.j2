@@ -1,0 +1,4 @@
+data.cdb: data
+		{{ glx_prefix_dir }}/bin/tinydns-data
+		chmod 640 data.cdb
+		chown {{ glx_djbdnscurses6_tinydns_user_name }}:{{ glx_djbdnscurses6_tinydns_group_name }} data.cdb

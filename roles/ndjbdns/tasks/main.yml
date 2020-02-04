@@ -11,5 +11,5 @@
   tags: config, config-tinydns
   when: not glx_ndjbdns_upgrade_roots
 
-- include: update-roots.yml
-  tags: config, upgrade-roots
+#- include: update-roots.yml
+#  tags: config, upgrade-roots

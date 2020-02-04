@@ -1,5 +1,5 @@
 #
-# dnscache.conf: this file is part of the Galaxie project.
+# dnscache.conf: this file is part of the djbdns project.
 #
 # Here we define some variables vital for running dnscache.
 #
@@ -10,43 +10,34 @@
 #   - Do not leave blank spaces around `=' sign while defining a variable.
 #
 
-# Now, both queries and responses are encrypted using either the propriatory CurveDNS stream format,
-# or if the environment variable $USETEXTFORMAT is set.
-#
-# In case $USETEXTFORMAT is set, dnscache will send queries even for CurveDNS enabled name servers
-# using standard DNS TXT headers.
-USETEXTFORMAT={{ glx_djbdnscurses6_dnscache_env_USETEXTFORMAT }}
-
-UZ5FALLBACK={{ glx_djbdnscurses6_dnscache_env_UZ5FALLBACK }}
-
 # Maximum number of bytes that could be allocated if required.
 #
-DATALIMIT={{ glx_djbdnscurses6_dnscache_env_DATALIMIT }}
+DATALIMIT=8000000
 
 # No of bytes to allocate for the cache. This may not exceed DATALIMIT
 #
-CACHESIZE={{ glx_djbdnscurses6_dnscache_env_CACHESIZE }}
+CACHESIZE=5000000
 
 # Address to listen on for incoming connections.
 #
-IP={{ glx_djbdnscurses6_dnscache_env_IP }}
+IP=127.0.0.1
 
 # Address to use while sending out-going requests. 0.0.0.0 means machines
 # primary IP address.
 #
-IPSEND={{ glx_djbdnscurses6_dnscache_env_IPSEND }}
+IPSEND=0.0.0.0
 
 # A non-root user whose privileges should be acquired by dnscache.
 # Default: daemon
 # See: $ id -u daemon
 #
-UID={{ glx_djbdnscurses6_dnscache_env_UID }}
+UID=1
 
 # A non-root group whose privileges should be acquired by dnscache.
 # Default: daemon
 # See: $ id -g daemon
 #
-GID={{ glx_djbdnscurses6_dnscache_env_GID }}
+GID=1
 
 # ROOT: is the new root & working directory for dnscache.
 # Obviously, the user whose ID is mentioned above MUST be able to read from
@@ -54,13 +45,13 @@ GID={{ glx_djbdnscurses6_dnscache_env_GID }}
 #
 # Also, this is where `ip/' and `servers/' directories should reside.
 #
-ROOT={{ glx_djbdnscurses6_dnscache_env_ROOT }}
+ROOT=/etc/ndjbdns
 
 # If HIDETTL is set, dnscache uses a TTL of 0 in its responses.
 #
 HIDETTL=
 
-# If FORWARDONLY is set, dnscache treats the servers/@ as a list of IP
+# If FORWARDONLY is set, dnscache treats the servers/roots as a list of IP
 # addresses for other caches, not root servers. It forwards queries to those
 # caches the same way a client does, rather than contacting a chain of servers
 # according to NS records.

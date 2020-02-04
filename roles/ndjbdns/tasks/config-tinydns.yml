@@ -1,26 +1,96 @@
 ---
-- name: check daemon uid
-  shell: id -u daemon
-  register: daemon_uid
-  changed_when: false
-
-- name: check daemon gid
-  shell: id -g daemon
-  register: daemon_gid
-  changed_when: false
-
-- name: check if tinydns is configured the good way
-  lineinfile:
-    dest: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns/tinydns.conf"
-    regexp: "^{{ item.key }}="
-    line: "{{ item.key }}={{ item.value }}"
-    insertafter: "{{ item.key }}="
+- name: Ensure group "{{ glx_ndjbdns_tinydns_group_name }}" exists
+  group:
+    name: "{{ glx_ndjbdns_tinydns_group_name }}"
     state: present
-    backup: no
+    system: yes
+
+- name: Ensure user "{{ glx_ndjbdns_tinydns_user_name }}" exists
+  user:
+    name: "{{ glx_ndjbdns_tinydns_user_name }}"
+    system: yes
+    group: "{{ glx_ndjbdns_tinydns_group_name }}"
+    shell: /usr/sbin/nologin
+    home:  "{{ glx_ndjbdns_tinydns_env_ROOT }}"
+
+- name: Ensure directory {{ glx_ndjbdns_tinydns_env_ROOT }} exits
+  file:
+    path: "{{ glx_ndjbdns_tinydns_env_ROOT }}"
+    state: directory
+    owner: "{{ glx_ndjbdns_tinydns_user_name }}"
+    group: "{{ glx_ndjbdns_tinydns_group_name }}"
+    mode: '3755'
+
+- name: Check {{ glx_ndjbdns_tinydns_user_name }} uid
+  shell: "id -u {{ glx_ndjbdns_tinydns_user_name }}"
+  register: UID
+  changed_when: false
+
+- name: Check {{ glx_ndjbdns_tinydns_group_name }} gid
+  shell: "cat /etc/group | grep {{ glx_ndjbdns_tinydns_group_name }} | cut -d ':' -f 3"
+  register: GID
+  changed_when: false
+
+- name: Copy tinydns.conf in {{ glx_ndjbdns_sysconfdir }}
+  template:
+    src: "etc/tinydns.conf.j2"
+    dest: "{{ glx_sysprefix_dir }}/ndjbdns/tinydns.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart tinydns
+
+- name: Copy Makefile in {{ glx_ndjbdns_tinydns_env_ROOT }}
+  template:
+    src: "var/lib/tinydns/Makefile.j2"
+    dest: "{{ glx_ndjbdns_tinydns_env_ROOT }}/Makefile"
+    owner: "{{ glx_ndjbdns_tinydns_user_name }}"
+    group: "{{ glx_ndjbdns_tinydns_group_name }}"
+    mode: '0640'
+ 
+- name: Check if {{ glx_ndjbdns_tinydns_env_ROOT }}/data file exists
+  stat:
+    path: "{{ glx_ndjbdns_tinydns_env_ROOT }}/data"
+  register: data_file
+
+- name: Create empty {{ glx_ndjbdns_tinydns_env_ROOT }}/data file
+  template:
+    src: "var/lib/tinydns/data.j2"
+    dest: "{{ glx_ndjbdns_tinydns_env_ROOT }}/data"
+    owner: "{{ glx_ndjbdns_tinydns_user_name }}"
+    group: "{{ glx_ndjbdns_tinydns_group_name }}"
+    mode: '0640'
+  when: data_file.stat.exists == False
+
+- name: Ensure permissions of {{ glx_ndjbdns_tinydns_env_ROOT }}/data file
+  file:
+    path: "{{ glx_ndjbdns_tinydns_env_ROOT }}/data"
+    owner: "{{ glx_ndjbdns_tinydns_user_name }}"
+    group: "{{ glx_ndjbdns_tinydns_group_name }}"
+    mode: '0640'
+  when: data_file.stat.exists == True
+
+- name: Check if {{ glx_ndjbdns_tinydns_env_ROOT }}/data.cdb file exists
+  stat:
+    path: "{{ glx_ndjbdns_tinydns_env_ROOT }}/data.cdb"
+  register: data_cdb_file
+
+- name: Try to generate {{ glx_ndjbdns_tinydns_env_ROOT }}/data.cdb file
+  command: make
+  args:
+    chdir: "{{ glx_ndjbdns_tinydns_env_ROOT }}"
+  when: data_cdb_file.stat.exists == False
+  notify:
+    - restart tinydns
+
+- name: Copy tinydns.service in /lib/systemd/system/
+  template:
+    src: "lib/systemd/system/{{ item }}.j2"
+    dest: "/lib/systemd/system/{{ item }}"
   with_items:
-    - { key: "DATALIMIT",     value: "300000" }
-    - { key: "IP",            value: "{{ ansible_default_ipv4.address }}" }
-    - { key: "UID",           value: "{{ daemon_uid.stdout }}" }
-    - { key: "GID",           value: "{{ daemon_gid.stdout }}" }
-    - { key: "ROOT",          value: "{{ glx_ndjbdns_sysconfdir }}/ndjbdns" }
-    - { key: "DEBUG_LEVEL",   value: "1" }
+    - "tinydns.service"
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  changed_when: false

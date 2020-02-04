@@ -77,11 +77,11 @@
     chdir: "{{ glx_slashpackage_dir }}/net/{{ glx_djbdnscurses6_app_name }}/{{ glx_djbdnscurses6_app_name }}-{{ glx_djbdnscurses6_app_version }}"
   changed_when: false
 
-- name: Legacy {{ glx_djbdnscurses6_app_name }}
-  command: package/legacy
-  args:
-    chdir: "{{ glx_slashpackage_dir }}/net/{{ glx_djbdnscurses6_app_name }}/{{ glx_djbdnscurses6_app_name }}-{{ glx_djbdnscurses6_app_version }}"
-  changed_when: false
+#- name: Legacy {{ glx_djbdnscurses6_app_name }}
+#  command: package/legacy
+#  args:
+#    chdir: "{{ glx_slashpackage_dir }}/net/{{ glx_djbdnscurses6_app_name }}/{{ glx_djbdnscurses6_app_name }}-{{ glx_djbdnscurses6_app_version }}"
+#  changed_when: false
 
 - name: Clean Man
   file:

@@ -1,5 +1,5 @@
 [Unit]
-Description=DJB tinydns server daemon
+Description=DNS content server
 Documentation=man:tinydns(8)
 Requires=network.target
 After=network.target
@@ -7,7 +7,7 @@ After=network.target
 [Service]
 Restart=always
 PIDFile=/run/tinydns.pid
-EnvironmentFile={{ glx_djbdnscurses6_tinydns_env_ROOT }}/tinydns.conf
+EnvironmentFile={{ glx_sysprefix_dir }}/tinydns.conf
 ExecStart={{ glx_prefix_dir }}/bin/tinydns
 
 [Install]
