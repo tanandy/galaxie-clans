@@ -70,9 +70,15 @@ After this you can move your host out of the `[galaxie_staging]` group and put i
 * **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
 * **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
 
-#### Require - Galaxie Media
-* **TELEPHONY**: ``asterisk``
+#### Broadcasting - Galaxie Media
 * **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
-* **WEBSERVER** ``ngnx``
+* **WEBSERVER** ``ngnx / lighthttpd / httpd`` - ?
 * **MEETING**: ``jitsit``
 * **WEBSITE**: ``peertube``
+
+### Family - Galaxie Home
+* **TELEPHONY**: ``asterisk``
+* **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
+* **RPITVOS**: ``Libreelec`` - 
+* **MEDIASERVER**: ``Jellufin`` - 
+* **PVR**: ``TVHeadend`` - 
