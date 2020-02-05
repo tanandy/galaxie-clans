@@ -2,14 +2,12 @@
 ###############
 ### * Hosts ###
 ###############
-- include: openssh-server.yml
-- include: openssh-client.yml
+- include: ssh.yml
 - include: apt-get-client.yml
 - include: apt-get-upgrade.yml
 #- include: apt-unattended.yml
 - include: common.yml
 - include: banner.yml
-- include: powertop.yml
 ###############
 ### Servers ###
 ###############

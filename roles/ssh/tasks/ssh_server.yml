@@ -34,11 +34,3 @@
     - { key: "ChallengeResponseAuthentication", value: "no" }
   notify:
     - restart sshd service
-
-- name: Disable local mail checking after login
-  lineinfile:
-    dest: /etc/pam.d/sshd
-    backrefs: yes
-    state: present
-    regexp: "^session    optional     pam_mail.so standard noenv"
-    line: "#session    optional     pam_mail.so standard noenv \\# [1]"

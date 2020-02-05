@@ -1,5 +1,0 @@
----
-- hosts: wordpress
-
-  roles:
-     - { role: web-server, install_wordpress: true }
