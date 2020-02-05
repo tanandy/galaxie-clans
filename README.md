@@ -1,5 +1,48 @@
 # Galaxie
 
+### Migration plan
+* Fork bests existing Ansible, convert it for support Debian and Alpine.
+* Migrate ou config files to yaml format
+
+#### Criteria
+* Each projects choose should be really popular
+* Roles should have a maximum of variables
+* Roles should permit big setting via yaml files
+* The design must permit easy upgrade
+* Roles mono action
+
+### Why it migration?
+The winner is definitively **Bert Van Vreckem** where almost all the Galaxie core will be migrate to him ansible roles.
+https://github.com/bertvv . Here we fork for our needs and save time, because we'll trash our preview DJBWay design.
+
+Just a note about DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools``, The author haven't maintain a community, or keep upgrade any software from many time, the Free software if good when it have a community ...<BR><BR>
+Forget that part of you life, it was a mirage, nothing was true. We haven't mush time on earth ... No way to lost our time on that lost dream anymore.<BR><BR>
+With it migration we'll trash a tonne of work, and that is why we start from a big fork of **Bert Van Vreckem** ansible roles, with goal to back to Galaxie way one day.<BR>
+
+#### Critical - Galaxie Core
+* **NTP**: ``ntpd`` - Refresh our ?
+* **DNS**: ``named`` - https://github.com/bertvv/ansible-role-bind
+* **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
+* **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
+* **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
+* **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
+
+#### Broadcasting - Galaxie Media
+* **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
+* **WEBSERVER** ``ngnx / lighthttpd / httpd`` - ?
+* **MEETING**: ``jitsit``
+* **WEBSITE**: ``peertube``
+
+### Family - Galaxie Home
+Look nothing but that really important for family members
+* **TELEPHONY**: ``asterisk``
+* **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
+* **RPITVOS**: ``Libreelec`` - 
+* **MEDIASERVER**: ``Jellyfin`` - 
+* **PVR**: ``TVHeadend`` - 
+* **FIREWALL** ``OPNSense`` - 
+* **VPN** ``OPNSense`` - 
+
 Once upon a time, this project was hosted on a 
 ancient platform called GitHub. Then came the Buyer.
 The Buyer bought GitHub, willing to rule over its community.
@@ -61,24 +104,4 @@ That will give you:
 
 After this you can move your host out of the `[galaxie_staging]` group and put it in its right place in your inventory and start hacking around with it.
 
-### Migration plan
-#### Critical - Galaxie Core
-* **NTP**: ``ntpd`` - Refresh our ?
-* **DNS**: ``named`` - https://github.com/bertvv/ansible-role-bind
-* **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
-* **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
-* **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
-* **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
 
-#### Broadcasting - Galaxie Media
-* **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
-* **WEBSERVER** ``ngnx / lighthttpd / httpd`` - ?
-* **MEETING**: ``jitsit``
-* **WEBSITE**: ``peertube``
-
-### Family - Galaxie Home
-* **TELEPHONY**: ``asterisk``
-* **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
-* **RPITVOS**: ``Libreelec`` - 
-* **MEDIASERVER**: ``Jellufin`` - 
-* **PVR**: ``TVHeadend`` - 
