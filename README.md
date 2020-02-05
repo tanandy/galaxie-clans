@@ -13,12 +13,9 @@
 * Roles mono action
 
 ### Why it migration?
-The winner is definitively **Bert Van Vreckem** where almost all the Galaxie core will be migrate to him ansible roles.
-https://github.com/bertvv . Here we fork for our needs and save time, because we'll trash our preview DJBWay design.
-
-Just a note about DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools``, The author haven't maintain a community, or keep upgrade any software from many time, the Free software if good when it have a community ...<BR><BR>
-Forget that part of you life, it was a mirage, nothing was true. We haven't mush time on earth ... No way to lost our time on that lost dream anymore.<BR><BR>
-With it migration we'll trash a tonne of work, and that is why we start from a big fork of **Bert Van Vreckem** ansible roles, with goal to back to Galaxie way one day.<BR>
+Unfortunally for us DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools`` are dead without true IPV6, DNSSEC support, The author haven't maintain a community, or keep upgrade any software from many time, the Free software if good when it have a community ...<BR><BR>
+Forget that part of you life, be serious, it was a mirage, nothing was true. We haven't mush time on earth ... No way to lost time on that lost dream anymore.<BR><BR>
+With it migration we'll trash a tonne of work, and that is why we start from a big fork of **Bert Van Vreckem** ansible roles (https://github.com/bertvv), with goal to back to Galaxie way one day.<BR>
 
 #### Critical - Galaxie Core
 * **NTP**: ``ntpd`` - Refresh our ?
