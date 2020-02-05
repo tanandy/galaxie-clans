@@ -1,8 +1,9 @@
 # Galaxie
 
 ### Migration plan
-* Fork bests existing Ansible, convert it for support Debian and Alpine.
-* Migrate ou config files to yaml format
+* Fork bests existing Ansible, convert it to support Debian and Alpine.
+* Migrate our config files to YAML format
+* Limit the number of Galaxie roles to maintain
 
 #### Criteria
 * Each projects choose should be really popular
