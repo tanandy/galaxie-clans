@@ -6,7 +6,7 @@
 * Limit the number of Galaxie roles to maintain
 
 #### Criteria
-* Each projects choose should be really popular
+* Each projects selected must be really popular
 * Roles should have a maximum of variables
 * Roles should permit big setting via yaml files
 * The design must permit easy upgrade
