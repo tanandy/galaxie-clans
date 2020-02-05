@@ -30,5 +30,6 @@
     state=absent
   with_items:
     - "/etc/dhcp/dhclient-exit-hooks.d/ntp"
+    - "/etc/dhcp/dhclient-exit-hooks.d/ntpdate"
     - "/var/lib/ntp/ntp.conf.dhcp"
   notify: restart ntp

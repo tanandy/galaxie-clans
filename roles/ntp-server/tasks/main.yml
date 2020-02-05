@@ -1,17 +1,23 @@
 ---
 
-- name: Check if ntpdate package is absent
+- name: Ensure ntpdate is absent
   apt:
     pkg:
       - ntpdate
     state: absent
     purge: yes
 
-- name: Check id ntpd is present
+- name: Ensure id ntpd is present
   apt:
     pkg:
       - ntp
     state: present
+
+- name: Ensure tzdata package is installed.
+  package:
+    name: "{{ ntp_tzdata_package }}"
+    state: present
+  when: ansible_system == "Linux"
 
 - name: ntp time source {{ galaxie_ntp_server_ntp_referrals }}
   when: "'internal_machines' in group_names"

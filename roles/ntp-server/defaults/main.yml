@@ -12,3 +12,8 @@ galaxie_ntp_server_ntp_pool:
   - '3.pool.ntp.org'
 galaxie_ntp_server_ntp_local:
   - 'nabu.galaxie.ici'
+
+#ntp_public
+#ntp_local
+# Server ntp pool
+# Client ntp pool
