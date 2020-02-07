@@ -12,7 +12,7 @@ Vagrantfile
 .vagrant
 test_mo.*
 *.retry
-
+.direnv
 venv
 venv/
 __pycache__

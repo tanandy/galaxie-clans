@@ -25,9 +25,9 @@ test:
 	done;\
 	cd $$PREV_DIR
 
-requirements: | env
+requirements:
 	@echo "Make: Install requirements"
-	. venv/bin/activate ;\
+
 	pip install -U -r requirements.txt
 
 env:
