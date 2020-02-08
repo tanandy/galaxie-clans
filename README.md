@@ -103,3 +103,15 @@ That will give you:
 After this you can move your host out of the `[galaxie_staging]` group and put it in its right place in your inventory and start hacking around with it.
 
 
+# Notes
+
+* terminal d'admin opérable depuis une clé live Tails
+avec les clés d'accès vers l'instance qui porte
+* session de génération de clé sur un host deconnecté du reseau depuis une live usb tail
+prereq: host avec 2 port usb un pour demarrer tail l'autre pour récupérer se clé perso
+
+etablir un lien passe par une clé rsa de connexion sur une home avec un minimum de droits, contenant directement
+les variables et un trigger ssh
+
+prereq: exposition d'un enregistrement clan.<domain> sur la zone DNS publique
+ pointe vers un host qui expose le port SSH d'admin
