@@ -1,0 +1,63 @@
+---
+- hosts: clans
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: Update package cache (RAW)
+      raw: apt-get update
+
+    - name: Update package cache (RAW)
+      raw: >-
+        apt-get install -y {{ clan_establish_system_packages | join(' ') }}
+
+    - name: Safe-upgrade system
+      apt:
+        update_cache: yes
+        upgrade: safe
+
+    - name: Upgrade dist
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Create zoe system group
+      group:
+        name: "{{ clan_caretaker_name }}"
+        gid: "{{ clan_caretaker_gid }}"
+
+    - name: Create zoe system user
+      user:
+        name: "{{ clan_caretaker_name }}"
+        group: "{{ clan_caretaker_name }}"
+        home: "{{ clan_caretaker_home }}"
+        uid: "{{ clan_caretaker_uid }}"
+        shell: /bin/bash
+
+    - name: Add sudo capabilities to zoe
+      copy:
+        dest: "/etc/sudoers.d/{{ clan_caretaker_name }}"
+        content: |-
+          {{ clan_caretaker_name }} ALL=(ALL) NOPASSWD: ALL
+        validate: /usr/sbin/visudo -csf %s
+
+    - name: Create dot-ssh directory
+      file:
+        path: "{{ clan_caretaker_home }}/.ssh"
+        state: directory
+
+    - name: Authorize key for caretaker user connections
+      lineinfile:
+        dest: "{{ clan_caretaker_home }}/.ssh/authorized_keys"
+        create: yes
+        line: >-
+          {{ lookup('file', public_key_file_to_inject) }}
+      when:
+        - public_key_file_to_inject is defined
+
+- hosts: clans
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - ssh

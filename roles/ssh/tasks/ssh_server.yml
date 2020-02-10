@@ -34,3 +34,8 @@
     - { key: "ChallengeResponseAuthentication", value: "no" }
   notify:
     - restart sshd service
+
+- include_tasks: ssh_allies.yml
+  when:
+    - groups[clan_allies_group] is defined
+    - groups[clan_allies_group] | length > 0

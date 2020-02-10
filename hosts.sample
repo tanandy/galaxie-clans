@@ -1,0 +1,14 @@
+#
+# Host definition
+#
+# Reserved group names:
+#     [clans:children] -- base scope for every playbook, should only contain group list of single clan group
+#     [<clan>]    -- groups for hosts of a clan you manage, should be a domain you own with dot replaced by underscores (rtnp.org -> rtnp_org)
+#     [<clan>_allies]  -- groups containing names of allies clan, should be the domain they own with dot replaced by underscores (galaxie.eu.org -> galaxie_eu_org)
+#
+
+[clans:children]
+clan_rtnp_org
+
+[clan_rtnp_org]
+vana

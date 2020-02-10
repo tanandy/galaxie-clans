@@ -1,0 +1,4 @@
+---
+- debug:
+    msg: Special config for {{ item }} ssh triggers accepting {{ lookup('file', clan_allies_keystore_path + '/' + item + '.pub') }}
+  loop: "{{ groups[clan_allies_group] }}"

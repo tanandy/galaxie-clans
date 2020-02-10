@@ -35,13 +35,13 @@ With it migration we'll trash a tonne of work, and that is why we start from a b
 Look nothing but that really important for family members
 * **TELEPHONY**: ``asterisk``
 * **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
-* **RPITVOS**: ``Libreelec`` - 
-* **MEDIASERVER**: ``Jellyfin`` - 
-* **PVR**: ``TVHeadend`` - 
-* **FIREWALL** ``OPNSense`` - 
-* **VPN** ``OPNSense`` - 
+* **RPITVOS**: ``Libreelec`` -
+* **MEDIASERVER**: ``Jellyfin`` -
+* **PVR**: ``TVHeadend`` -
+* **FIREWALL** ``OPNSense`` -
+* **VPN** ``OPNSense`` -
 
-Once upon a time, this project was hosted on a 
+Once upon a time, this project was hosted on a
 ancient platform called GitHub. Then came the Buyer.
 The Buyer bought GitHub, willing to rule over its community.
 I was not to sell, so here is the new home of "https://github.com/Tuuux/galaxie".
@@ -62,7 +62,7 @@ It will be an honnor if you take our work as an example, our roles are correct i
 
 All our Work is published under GPLv3.
 
-The Galaxie system is also used as an Action Layer for an AI called Alfred: 
+The Galaxie system is also used as an Action Layer for an AI called Alfred:
 
 * https://github.com/aurelienmaury/alfred
 * https://github.com/aurelienmaury/alfred-brain
@@ -115,3 +115,12 @@ les variables et un trigger ssh
 
 prereq: exposition d'un enregistrement clan.<domain> sur la zone DNS publique
  pointe vers un host qui expose le port SSH d'admin
+
+## Making a clan alliance
+
+* New ally clan gives you a public ssh key.
+* Put it under `keys/<YOUR_CLAN_NAME>/allies/<THEIR_CLAN_NAME>.pub`
+* Add THEIR_CLAN_NAME to the host inventory under the group `[<YOU_CLAN_NAME>_allies]`
+* Run `ansible-playbook playbooks/clan-establish.yml`
+
+Now they can connect via ssh to get the minimal infos to configure themselves as your secondary on several services.
