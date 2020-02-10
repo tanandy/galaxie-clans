@@ -55,6 +55,16 @@
       when:
         - public_key_file_to_inject is defined
 
+    - name: Create ansible HQ
+      file:
+        path: "/etc/ansible/"
+        state: directory
+
+    - name: Create clan alliance variables
+      file:
+        path: "/etc/ansible/alliance.vars.yml"
+        state: touch
+
 - hosts: clans
   become: yes
   gather_facts: yes
