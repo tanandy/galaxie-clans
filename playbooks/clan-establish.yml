@@ -23,12 +23,12 @@
         update_cache: yes
         upgrade: dist
 
-    - name: Create zoe system group
+    - name: Create caretaker system group
       group:
         name: "{{ clan_caretaker_name }}"
         gid: "{{ clan_caretaker_gid }}"
 
-    - name: Create zoe system user
+    - name: Create caretaker system user
       user:
         name: "{{ clan_caretaker_name }}"
         group: "{{ clan_caretaker_name }}"
@@ -36,7 +36,7 @@
         uid: "{{ clan_caretaker_uid }}"
         shell: /bin/bash
 
-    - name: Add sudo capabilities to zoe
+    - name: Add sudo capabilities to caretaker
       copy:
         dest: "/etc/sudoers.d/{{ clan_caretaker_name }}"
         content: |-

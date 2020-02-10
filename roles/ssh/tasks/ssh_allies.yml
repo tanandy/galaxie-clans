@@ -27,7 +27,6 @@
     path: "/home/{{ ally_clan_name }}/.hushlogin"
     state: touch
 
-
 - name: Match alliance user with var file
   blockinfile:
     path: "/etc/ssh/sshd_config"
