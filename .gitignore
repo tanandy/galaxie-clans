@@ -16,3 +16,4 @@ test_mo.*
 venv
 venv/
 __pycache__
+.vscode
