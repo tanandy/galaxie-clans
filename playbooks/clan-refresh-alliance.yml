@@ -1,0 +1,21 @@
+---
+- hosts: allies
+  become: no
+  gather_facts: no
+
+  tasks:
+    - name: Query informations on ally
+      command: >-
+        ssh {{ ansible_host }}
+        -T
+        -l {{ ansible_user }}
+        -i {{ playbook_dir }}/../keys/rtnp_org/allies/{{ inventory_hostname }}
+      register: alliance_query
+      delegate_to: localhost
+
+    - name: Persist alliance information to host {{ inventory_hostname }} vars
+      copy:
+        dest: "{{ playbook_dir }}/../host_vars/{{ inventory_hostname }}.yml"
+        content: |-
+          {{ alliance_query.stderr }}
+      delegate_to: localhost

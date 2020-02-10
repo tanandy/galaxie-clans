@@ -39,3 +39,6 @@
   when:
     - groups[clan_allies_group] is defined
     - groups[clan_allies_group] | length > 0
+  loop: "{{ groups[clan_allies_group] }}"
+  loop_control:
+    loop_var: ally_clan_name

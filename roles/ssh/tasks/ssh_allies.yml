@@ -1,4 +1,38 @@
 ---
-- debug:
-    msg: Special config for {{ item }} ssh triggers accepting {{ lookup('file', clan_allies_keystore_path + '/' + item + '.pub') }}
-  loop: "{{ groups[clan_allies_group] }}"
+- name: Create alliance group
+  group:
+    name: "{{ clan_allies_os_group }}"
+
+- name: Create alliance user
+  user:
+    name: "{{ ally_clan_name }}"
+    group: "{{ clan_allies_os_group }}"
+    home: "/home/{{ ally_clan_name }}"
+    shell: /bin/true
+
+- name: Create alliance dot-ssh directory
+  file:
+    path: "/home/{{ ally_clan_name }}/.ssh"
+    state: directory
+
+- name: Authorize key for alliance user connections
+  lineinfile:
+    dest: "/home/{{ ally_clan_name }}/.ssh/authorized_keys"
+    create: yes
+    line: >-
+      {{ lookup('file', clan_allies_keystore_path + '/' + ally_clan_name + '.pub') }}
+
+- name: Shut system motd for alliance user
+  file:
+    path: "/home/{{ ally_clan_name }}/.hushlogin"
+    state: touch
+
+
+- name: Match alliance user with var file
+  blockinfile:
+    path: "/etc/ssh/sshd_config"
+    marker: "{{ clan_allies_block_marker }}"
+    block: |-
+      Match User {{ ally_clan_name }}
+        Banner /etc/ansible/allies/{{ ally_clan_name }}.vars.yml
+  notify: restart sshd service

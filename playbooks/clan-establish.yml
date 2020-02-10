@@ -2,6 +2,8 @@
 - hosts: clans
   become: yes
   gather_facts: yes
+  tags:
+    - init-caretaker
 
   tasks:
     - name: Update package cache (RAW)
@@ -57,13 +59,8 @@
 
     - name: Create ansible HQ
       file:
-        path: "/etc/ansible/"
+        path: "/etc/ansible/allies"
         state: directory
-
-    - name: Create clan alliance variables
-      file:
-        path: "/etc/ansible/alliance.vars.yml"
-        state: touch
 
 - hosts: clans
   become: yes
