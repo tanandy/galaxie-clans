@@ -1,17 +1,22 @@
 ---
-- hosts: clans
+- name: Init host for management
+  hosts: clans
   become: yes
   gather_facts: yes
   tags:
-    - init-caretaker
+    - system
 
   tasks:
-    - name: Update package cache (RAW)
+    - name: "Update package cache (RAW: ALWAYS CHANGED)"
       raw: apt-get update
+      tags:
+        - raw
 
-    - name: Update package cache (RAW)
+    - name: "Update package cache (RAW: ALWAYS CHANGED)"
       raw: >-
         apt-get install -y {{ clan_establish_system_packages | join(' ') }}
+      tags:
+        - raw
 
     - name: Safe-upgrade system
       apt:
@@ -23,6 +28,17 @@
         update_cache: yes
         upgrade: dist
 
+    - import_role:
+        name: ssh
+
+- name: Prepare clan caretaker access
+  hosts: clans
+  become: yes
+  gather_facts: yes
+  tags:
+    - caretaker
+
+  tasks:
     - name: Create caretaker system group
       group:
         name: "{{ clan_caretaker_name }}"
@@ -57,14 +73,29 @@
       when:
         - public_key_file_to_inject is defined
 
+- name: Prepare clan alliance system
+  hosts: clans
+  become: yes
+  gather_facts: yes
+  tags:
+    - allies
+
+  tasks:
     - name: Create ansible HQ
       file:
         path: "/etc/ansible/allies"
         state: directory
 
-- hosts: clans
-  become: yes
-  gather_facts: yes
-
-  roles:
-    - ssh
+    - name: Export infos to allies
+      copy:
+        dest: "/etc/ansible/allies/{{ item }}.vars.yml"
+        content: |-
+          ---
+          {{
+            clan_allies_export[item]
+            | default(clan_allies_export['all'], true)
+            | to_nice_yaml
+          }}
+      loop: "{{ groups[clan_allies_group] }}"
+      tags:
+        - refresh

@@ -22,10 +22,16 @@
     line: >-
       {{ lookup('file', clan_allies_keystore_path + '/' + ally_clan_name + '.pub') }}
 
-- name: Shut system motd for alliance user
+- name: Get info about user motd shutter
+  stat:
+    path: "/home/{{ ally_clan_name }}/.hushlogin"
+  register: ssh_motd_shutter
+
+- name: Create user motd shutter
   file:
     path: "/home/{{ ally_clan_name }}/.hushlogin"
     state: touch
+  when: not ssh_motd_shutter.stat.exists
 
 - name: Match alliance user with var file
   blockinfile:
