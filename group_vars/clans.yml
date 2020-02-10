@@ -1,0 +1,36 @@
+---
+clan_establish_system_packages:
+  - python3
+  - python3-apt
+  - python3-venv
+  - python3-distutils-extra
+  - python3-setuptools
+  - python-apt-dev
+  - sudo
+  - aptitude
+  - git
+  - apt-transport-https
+  - libssl-dev
+  - libffi-dev
+  - build-essential
+  - libperl-dev
+  - direnv
+  - vim
+  - bash
+  - bash-completion
+
+clan_caretaker_name: zoe
+clan_caretaker_uid: 4200
+clan_caretaker_gid: 4200
+clan_caretaker_home: "/home/{{ clan_caretaker_name }}"
+
+clan_allies_group: "{{ clan_name }}_allies"
+clan_allies_os_group: "allies"
+clan_allies_keystore_path: "{{ playbook_dir }}/../keys/{{ clan_name }}/allies"
+clan_allies_block_marker: "# {mark} ANSIBLE MANAGED - ALLIANCE WITH {{ ally_clan_name }}"
+
+clan_allies_export:
+  all:
+    clan_name: "{{ clan_name }}"
+    clan_engage_secondary:
+      - ntp
