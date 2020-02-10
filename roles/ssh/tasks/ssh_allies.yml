@@ -20,7 +20,7 @@
     dest: "/home/{{ ally_clan_name }}/.ssh/authorized_keys"
     create: yes
     line: >-
-      {{ lookup('file', clan_allies_keystore_path + '/' + ally_clan_name + '.pub') }}
+      {{ lookup('file', clan_allies_keystore_path + '/from-' + ally_clan_name + '.pub') }}
 
 - name: Get info about user motd shutter
   stat:

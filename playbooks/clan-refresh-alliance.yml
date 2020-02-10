@@ -9,7 +9,7 @@
         ssh {{ ansible_host }}
         -T
         -l {{ ansible_user }}
-        -i {{ playbook_dir }}/../keys/{{ clan_name }}/allies/{{ inventory_hostname }}
+        -i {{ playbook_dir }}/../keys/{{ clan_name }}/allies/to-{{ inventory_hostname }}
       register: alliance_query
       delegate_to: localhost
 
