@@ -99,3 +99,6 @@
       loop: "{{ groups[clan_allies_group] }}"
       tags:
         - refresh
+
+    - import_role:
+        name: ssh
