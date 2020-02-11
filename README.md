@@ -124,3 +124,7 @@ prereq: exposition d'un enregistrement clan.<domain> sur la zone DNS publique
 * Run `ansible-playbook playbooks/clan-establish.yml`
 
 Now they can connect via ssh to get the minimal infos to configure themselves as your secondary on several services.
+
+## TODO
+
+* playbook pour initier un nouveau clan et preparer les repertoire, generer les keys, les fichier de group vars

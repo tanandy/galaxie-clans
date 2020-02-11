@@ -32,5 +32,3 @@ clan_allies_block_marker: "# {mark} ANSIBLE MANAGED - ALLIANCE WITH {{ ally_clan
 clan_allies_export:
   all:
     clan_name: "{{ clan_name }}"
-    clan_engage_secondary:
-      - ntp
