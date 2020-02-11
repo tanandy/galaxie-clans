@@ -1,24 +1,31 @@
 # Galaxie
 
 ### Migration plan
-* Fork bests existing Ansible, convert it to support Debian and Alpine.
+* Fork bests existing Ansible, convert it to support Debian stable.
 * Migrate our config files to YAML format
 * Limit the number of Galaxie roles to maintain
 
-#### Criteria
-* Each projects selected must be really popular
-* Roles should have a maximum of variables
-* Roles should permit big setting via yaml files
-* The design must permit easy upgrade
-* Roles mono action
+#### Criterias
 
-### Why it migration?
-Unfortunally for us DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools`` are dead without true IPV6, DNSSEC support, The author haven't maintain a community, or keep upgrade any software from many time, the Free software if good when it have a community ...<BR><BR>
-Forget that part of you life, be serious, it was a mirage, nothing was true. We haven't mush time on earth ... No way to lost time on that lost dream anymore.<BR><BR>
-With it migration we'll trash a tonne of work, and that is why we start from a big fork of **Bert Van Vreckem** ansible roles (https://github.com/bertvv), with goal to back to Galaxie way one day.<BR>
+* Each projects selected must have strong and active maintainer community
+* Roles should be highly customizable by variables
+* The design must permit easy upgrade
+
+### Why this migration?
+
+Unfortunately for us, DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools`` are dead without true IPV6, DNSSEC support.
+The original author haven't gathered a community of maintainers, nor kept upgrading its softwares for a long time.
+Free software is only as good as its community...
+
+We choose to erase that part of you life and try to be serious. It was a mirage, nothing was true.
+We don't have much time to spend on earth... We have no time to loose on that lost dream anymore.
+
+With this migration we'll trash a ton of work, and that's why we start from a big fork of [Bert Van Vreckem](https://github.com/bertvv) ansible roles,
+with goal to back to Galaxie way one day.
 
 #### Critical - Galaxie Core
-* **NTP**: ``ntpd`` - Refresh our ?
+
+* **NTP**: ``ntpd`` -
 * **DNS**: ``named`` - https://github.com/bertvv/ansible-role-bind
 * **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
 * **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
@@ -26,13 +33,16 @@ With it migration we'll trash a tonne of work, and that is why we start from a b
 * **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
 
 #### Broadcasting - Galaxie Media
+
 * **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
 * **WEBSERVER** ``ngnx / lighthttpd / httpd`` - ?
 * **MEETING**: ``jitsit``
 * **WEBSITE**: ``peertube``
 
 ### Family - Galaxie Home
-Look nothing but that really important for family members
+
+Look like it's not that important, but that really matters for family members.
+
 * **TELEPHONY**: ``asterisk``
 * **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
 * **RPITVOS**: ``Libreelec`` -
@@ -41,10 +51,8 @@ Look nothing but that really important for family members
 * **FIREWALL** ``OPNSense`` -
 * **VPN** ``OPNSense`` -
 
-Once upon a time, this project was hosted on a
-ancient platform called GitHub. Then came the Buyer.
-The Buyer bought GitHub, willing to rule over its community.
-I was not to sell, so here is the new home of "https://github.com/Tuuux/galaxie".
+Once upon a time, this project was hosted on a ancient platform called GitHub. Then came the Buyer.
+The Buyer bought GitHub, willing to rule over its community. We were not to sell, so here is the new home of "https://github.com/Tuuux/galaxie".
 
 
 Ansible toolbox aimed at managing a set of Debian servers. Originaly written for managing a Home Network with external services.
@@ -58,7 +66,7 @@ Do you know a lot of Ansible roles which verify your DHCP client settings after 
 - Pure System Admin compliance
 - Pure Syntax Devs compliance
 
-It will be an honnor if you take our work as an example, our roles are correct if regarding system admin point of view, that unfortunally not the case for many Ansible Roles.
+It will be an honor if you take our work as an example, our roles are correct from a sysadmin point of view.
 
 All our Work is published under GPLv3.
 
@@ -85,7 +93,7 @@ The Galaxie system is also used as an Action Layer for an AI called Alfred:
 └── zone_files     (Directory where is store primary and secondary DNS zone files)
 ```
 
-## Bootstrap
+## Bootstrap - DEPRECATED
 
 We use a bootstrap playbook for new host addition.
 
