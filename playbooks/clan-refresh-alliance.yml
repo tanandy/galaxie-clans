@@ -3,13 +3,19 @@
   become: no
   gather_facts: no
 
+
   tasks:
+    - name: Reality check
+      assert:
+        that:
+          - clan is defined
+
     - name: Query informations on ally
       command: >-
         ssh {{ ansible_host }}
         -T
-        -l {{ ansible_user }}
-        -i {{ playbook_dir }}/../keys/{{ clan_name }}/allies/to-{{ inventory_hostname }}
+        -l {{ clan }}
+        -i {{ playbook_dir }}/../keys/{{ clan }}/allies/to-{{ inventory_hostname }}
       register: alliance_query
       delegate_to: localhost
 
