@@ -11,3 +11,5 @@
     state: present
     regexp: "^session    optional     pam_mail.so standard noenv"
     line: "#session    optional     pam_mail.so standard noenv \\# [1]"
+
+- meta: flush_handlers

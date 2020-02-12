@@ -136,3 +136,5 @@ Now they can connect via ssh to get the minimal infos to configure themselves as
 ## TODO
 
 * playbook pour initier un nouveau clan et preparer les repertoire, generer les keys, les fichier de group vars
+
+# Ansible coding guidelines

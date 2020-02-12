@@ -4,3 +4,4 @@ ipaddr
 mitogen
 green
 molecule
+ansible-lint

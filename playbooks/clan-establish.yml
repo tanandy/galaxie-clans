@@ -28,9 +28,6 @@
         update_cache: yes
         upgrade: dist
 
-    - import_role:
-        name: ssh
-
 - name: Prepare clan caretaker access
   hosts: clans
   become: yes
@@ -100,5 +97,12 @@
       tags:
         - refresh
 
-    - import_role:
-        name: ssh
+- name: Fine-tune ssh
+  hosts: clans
+  become: yes
+  gather_facts: yes
+  tags:
+    - ssh
+
+  roles:
+    - ssh
