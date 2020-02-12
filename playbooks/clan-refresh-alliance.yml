@@ -13,6 +13,11 @@
         that:
           - with_clan is defined
 
+    - name: "Create directory for var files"
+      file:
+        path: "/etc/ansible/allies"
+        state: directory
+
     - name: "Export vars for ally clan {{ with_clan }}"
       copy:
         dest: "/etc/ansible/allies/{{ with_clan }}.vars.yml"
@@ -24,7 +29,7 @@
             | to_nice_yaml
           }}
 
-    - name: Build ssh command to contact
+    - name: "Build ssh command to contact"
       set_fact:
         cmd_ssh_to_ally: >-
           ssh {{ hostvars[with_clan].ansible_host }}

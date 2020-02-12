@@ -6,7 +6,7 @@
   tags:
     - system
 
-  tasks:
+  pre_tasks:
     - name: "Update package cache (RAW: ALWAYS CHANGED)"
       raw: apt-get update
       tags:
@@ -27,6 +27,10 @@
       apt:
         update_cache: yes
         upgrade: dist
+
+  roles:
+    - ssh
+
 
 - name: Prepare clan caretaker access
   hosts: clans
@@ -69,40 +73,3 @@
           {{ lookup('file', public_key_file_to_inject) }}
       when:
         - public_key_file_to_inject is defined
-
-- name: Prepare clan alliance system
-  hosts: clans
-  become: yes
-  gather_facts: yes
-  tags:
-    - allies
-
-  tasks:
-    - name: Create ansible HQ
-      file:
-        path: "/etc/ansible/allies"
-        state: directory
-
-    - name: Export infos to allies
-      copy:
-        dest: "/etc/ansible/allies/{{ item }}.vars.yml"
-        content: |-
-          ---
-          {{
-            clan_allies_export[item]
-            | default(clan_allies_export['all'], true)
-            | to_nice_yaml
-          }}
-      loop: "{{ groups[clan_allies_group] }}"
-      tags:
-        - refresh
-
-- name: Fine-tune ssh
-  hosts: clans
-  become: yes
-  gather_facts: yes
-  tags:
-    - ssh
-
-  roles:
-    - ssh

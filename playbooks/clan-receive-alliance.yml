@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  become: no
+  gather_facts: no
+
+  vars:
+    alliance_key_directory: "{{ playbook_dir }}/../keys/{{ receiver }}/allies"
+    alliance_emitter_public_key_name: "from-{{ emitter }}.pub"
+
+  tasks:
+    - name: "Sanity checks"
+      assert:
+        that:
+          - clan_public_key_path is defined
+          - emitter is defined
+          - receiver is defined
+
+    - name: "Sanity checks"
+      assert:
+        that:
+          - groups[receiver] is defined
+        msg: >-
+          Inconsistent inventory: no group '{{ receiver }}' is defined.
+
+    - name: "Sanity checks"
+      assert:
+        that:
+          - emitter in groups[emitter + '_allies']
+        msg: >-
+          Inconsistent inventory: '{{ emitter }}' is not in the '{{ receiver }}_allies' group.
+
+    - name: Create alliance key directory
+      file:
+        path: "{{ alliance_key_directory }}"
+        state: directory
+
+    - name: Receive public key from {{ emitter }}
+      copy:
+        src: "{{ clan_public_key_path }}"
+        dest: "{{ alliance_key_directory }}/{{ alliance_emitter_public_key_name }}"
