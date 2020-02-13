@@ -1,9 +1,10 @@
 exclude_paths:
-  - ./keys
-  - ./secrets
-  - ./tests
+  - keys/
+  - secrets/
+  - tests/
+  - roles/to_remove/
 parseable: true
-quiet: true
+quiet: false
 #rulesdir:
 #  - ./rule/directory/
 #skip_list:

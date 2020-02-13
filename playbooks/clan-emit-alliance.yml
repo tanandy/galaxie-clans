@@ -35,7 +35,7 @@
         path: "{{ alliance_key_directory }}"
         state: directory
 
-    - name: "Generate key for {{ emitter}} to contact {{ receiver }}"
+    - name: "Generate key for {{ emitter }} to contact {{ receiver }}"
       shell: >-
         ssh-keygen -t ed25519
         -N ""
