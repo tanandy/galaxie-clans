@@ -29,6 +29,15 @@ clan_allies_os_group: "allies"
 clan_allies_keystore_path: "{{ playbook_dir }}/../keys/{{ clan_name }}/allies"
 clan_allies_block_marker: "# {mark} ANSIBLE MANAGED - ALLIANCE WITH {{ ally_clan_name }}"
 
+clan_allies_export_default_key: "all"
+clan_allies_export_default: "{{ clan_allies_export[ clan_allies_export_default_key ] }}"
 clan_allies_export:
   all:
     clan_name: "{{ clan_name }}"
+
+clan_alliance_export_content: >-
+  {{
+    clan_allies_export[with_clan]
+    | default(clan_allies_export_default, true)
+    | to_nice_yaml
+  }}
