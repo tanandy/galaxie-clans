@@ -50,7 +50,7 @@
           Keys are ready, now share your alliance public key with your the '{{ receiver }}' clan.
 
           File to give away:
-            {{ alliance_giveaway_public_key_path }}
+            {{ alliance_giveaway_public_key_path | realpath }}
 
           When they have the public key file they must execute:
 

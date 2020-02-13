@@ -40,4 +40,5 @@
     block: |-
       Match User {{ ally_clan_name }}
         Banner /etc/ansible/allies/{{ ally_clan_name }}.vars.yml
+    state: absent
   notify: restart sshd service
