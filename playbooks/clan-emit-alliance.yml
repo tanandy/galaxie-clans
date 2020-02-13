@@ -7,10 +7,7 @@
     alliance_key_directory: "{{ playbook_dir }}/../keys/{{ emitter }}/allies"
     alliance_private_key_name: "to-{{ receiver }}"
     alliance_public_key_name: "to-{{ receiver }}.pub"
-    alliance_giveaway_public_key_name: "from-{{ emitter }}.pub"
-    shell_helper: >-
-      cp {{ alliance_key_directory }}/{{ alliance_public_key_name }}
-      ${% raw %}{{% endraw %}{{ receiver|upper }}_DEST{% raw %}}{% endraw %}/{{ alliance_giveaway_public_key_name }}
+    alliance_giveaway_public_key_path: "{{ alliance_key_directory }}/{{ alliance_public_key_name }}"
 
   tasks:
     - name: "Sanity checks"
@@ -52,8 +49,8 @@
 
           Keys are ready, now share your alliance public key with your the '{{ receiver }}' clan.
 
-          Hint:
-            {{ shell_helper }}
+          File to give away:
+            {{ alliance_giveaway_public_key_path }}
 
           When they have the public key file they must execute:
 
