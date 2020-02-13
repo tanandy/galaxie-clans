@@ -32,13 +32,3 @@
     path: "/home/{{ ally_clan_name }}/.hushlogin"
     state: touch
   when: not ssh_motd_shutter.stat.exists
-
-- name: Match alliance user with var file
-  blockinfile:
-    path: "/etc/ssh/sshd_config"
-    marker: "{{ clan_allies_block_marker }}"
-    block: |-
-      Match User {{ ally_clan_name }}
-        Banner /etc/ansible/allies/{{ ally_clan_name }}.vars.yml
-    state: absent
-  notify: restart sshd service

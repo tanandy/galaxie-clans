@@ -38,3 +38,17 @@
       copy:
         src: "{{ clan_public_key_path }}"
         dest: "{{ alliance_key_directory }}/{{ alliance_emitter_public_key_name }}"
+
+
+- hosts: "{{ receiver }}"
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - include_tasks: "{{ playbook_dir }}/inc/_alliances.yml"
+      when:
+        - groups[clan_allies_group] is defined
+        - groups[clan_allies_group] | length > 0
+      loop: "{{ groups[clan_allies_group] }}"
+      loop_control:
+        loop_var: ally_clan_name
