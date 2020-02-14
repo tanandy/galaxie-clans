@@ -135,6 +135,7 @@ Now they can connect via ssh to get the minimal infos to configure themselves as
 
 ## TODO
 
-* playbook pour initier un nouveau clan et preparer les repertoire, generer les keys, les fichier de group vars
+* playbook pour initier un nouveau clan et preparer les repertoire, generer les keys,
+* les fichier de group vars : guide pour savoir où surcharger 'clan_allies_export' (à savoir dans le fichier de group_var du clan qui exporte
 
 # Ansible coding guidelines

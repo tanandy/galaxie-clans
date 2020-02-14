@@ -38,6 +38,6 @@ clan_allies_export:
 clan_alliance_export_content: >-
   {{
     clan_allies_export[with_clan]
-    | default(clan_allies_export_default, true)
+    | default({})
     | to_nice_yaml
   }}

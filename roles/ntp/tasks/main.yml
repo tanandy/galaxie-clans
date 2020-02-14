@@ -10,10 +10,10 @@
   apt:
     pkg:
       - ntp
-      - "{{ ntp_tzdata_package }}"
+      - tzdata
     state: present
 
-- name: ntp time source {{ galaxie_ntp_server_ntp_pool }}
+- name: ntp time source 
   template:
     src: ntp-server-external.conf.j2
     dest: /etc/ntp.conf
