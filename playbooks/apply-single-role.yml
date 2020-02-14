@@ -1,8 +1,8 @@
 ---
 - name: Apply a single role
-  hosts: clans
+  hosts: "{{ inventory_scope }}"
   become: yes
   gather_facts: yes
 
   roles:
-    - "{{ name }}"
+    - "{{ role_name }}"

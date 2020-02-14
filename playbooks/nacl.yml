@@ -2,7 +2,6 @@
 - hosts: galaxie
 
   roles:
-     - {
-     role: nacl,
-     glx_nacl_force_install: false
-     }
+    - role: nacl
+      vars:
+        glx_nacl_force_install: false

@@ -1,10 +1,12 @@
+---
 - hosts: little_alice-voices
+  become: yes
+  gather_facts: yes
 
   vars_files:
     - "galaxie-vars.yml"
 
   vars:
-
      project_dir: "{{ galaxie.prefix_dir }}/zoe_voice"
      source_dir: "{{ galaxie.cache_dir }}"
      pocketsphinx_pkg_config_path: "/usr/share/pocketsphinx/model"
@@ -21,12 +23,12 @@
   tasks:
     - name: Check directory
       file:
-        path="{{item}}"
-        owner=root
-        group=root
-        state=directory
-        mode=0755
-      with_items:
+        path: "{{ item }}"
+        owner: root
+        group: root
+        state: directory
+        mode: 0755
+      loop:
         - "{{ project_dir }}"
         - "{{ source_dir  }}"
 
@@ -34,53 +36,54 @@
       apt: update_cache=yes cache_valid_time=3600
 
     - name: Install required software
-      action: apt pkg={{item}} state=installed
-      with_items:
-       - alsa-base
-       - pocketsphinx
-       - libpocketsphinx1
-       - python-pyaudio
-       #- python-aiml
-       - python-pocketsphinx
-       - gstreamer0.10-pulseaudio
-       - gstreamer0.10-pocketsphinx
-       - libao4
-       - libasound2-plugins
-       - libgconfmm-2.6-1c2
-       - libglademm-2.4-1c2a
-       - libpulse-mainloop-glib0
-       - libpulse0
-       - libsox-fmt-pulse
-       - paman
-       - paprefs
-       - pavucontrol
-       - pavumeter
-       - pulseaudio
-       - pulseaudio-esound-compat
-       - pulseaudio-module-bluetooth
-       - pulseaudio-module-gconf
-       - pulseaudio-module-jack
-       - pulseaudio-module-lirc
-       - pulseaudio-module-x11
-       - pulseaudio-module-zeroconf
-       - pulseaudio-utils
-       #- oss-compat
-       - speech-dispatcher
-       - espeak
-       - mbrola
-       - mbrola-fr1
-       - mbrola-fr4
+      apt:
+        name:
+          - alsa-base
+          - pocketsphinx
+          - libpocketsphinx1
+          - python-pyaudio
+          #- python-aiml
+          - python-pocketsphinx
+          - gstreamer0.10-pulseaudio
+          - gstreamer0.10-pocketsphinx
+          - libao4
+          - libasound2-plugins
+          - libgconfmm-2.6-1c2
+          - libglademm-2.4-1c2a
+          - libpulse-mainloop-glib0
+          - libpulse0
+          - libsox-fmt-pulse
+          - paman
+          - paprefs
+          - pavucontrol
+          - pavumeter
+          - pulseaudio
+          - pulseaudio-esound-compat
+          - pulseaudio-module-bluetooth
+          - pulseaudio-module-gconf
+          - pulseaudio-module-jack
+          - pulseaudio-module-lirc
+          - pulseaudio-module-x11
+          - pulseaudio-module-zeroconf
+          - pulseaudio-utils
+          #- oss-compat
+          - speech-dispatcher
+          - espeak
+          - mbrola
+          - mbrola-fr1
+          - mbrola-fr4
 
     - name: Remove unrequired software
-      action: apt pkg={{item}} state=absent
-      with_items:
-        - pulseaudio-module-lirc-dbg
-        - pulseaudio-dbg
-        - libpulse0-dbg
-        - libpulse-dev
-        - pulseaudio-module-zeroconf-dbg
-        - libpulse-mainloop-glib0-dbg
-        - pulseaudio-esound-compat-dbg
+      apt:
+        state: absent
+        name:
+          - pulseaudio-module-lirc-dbg
+          - pulseaudio-dbg
+          - libpulse0-dbg
+          - libpulse-dev
+          - pulseaudio-module-zeroconf-dbg
+          - libpulse-mainloop-glib0-dbg
+          - pulseaudio-esound-compat-dbg
 
 ### accoustic model ###
 

@@ -1,5 +1,0 @@
----
-- hosts: share-server
-
-  roles:
-     - share-server

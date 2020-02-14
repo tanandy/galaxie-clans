@@ -1,7 +1,0 @@
----
-- name: Set up Bind
-  hosts: all
-  gather_facts: true
-
-  roles:
-    - bind

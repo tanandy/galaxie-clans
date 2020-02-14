@@ -1,5 +1,0 @@
----
-- hosts: pvr-servers
-
-  roles:
-     - tvheadend-server
