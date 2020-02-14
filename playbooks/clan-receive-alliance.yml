@@ -25,7 +25,7 @@
     - name: "Sanity checks"
       assert:
         that:
-          - emitter in groups[emitter + '_allies']
+          - emitter in groups[(receiver + '_allies')]
         msg: >-
           Inconsistent inventory: '{{ emitter }}' is not in the '{{ receiver }}_allies' group.
 

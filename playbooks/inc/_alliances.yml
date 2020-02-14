@@ -8,7 +8,18 @@
     name: "{{ ally_clan_name }}"
     group: "{{ clan_allies_os_group }}"
     home: "/home/{{ ally_clan_name }}"
-    shell: /bin/true
+    shell: "/home/{{ ally_clan_name }}/get.sh"
+
+- name: Create default shell script for alliance user
+  copy:
+    dest: "/home/{{ ally_clan_name }}/get.sh"
+    content: |-
+      #!/usr/bin/env bash
+      cat /home/{{ ally_clan_name }}/galaxie_eu_org.vars.yml 0>/dev/null 2>/dev/null || exit 1
+      exit 0
+    owner: "{{ ally_clan_name }}"
+    group: "{{ clan_allies_os_group }}"
+    mode: 0700
 
 - name: Create alliance dot-ssh directory
   file:
@@ -32,3 +43,15 @@
     path: "/home/{{ ally_clan_name }}/.hushlogin"
     state: touch
   when: not ssh_motd_shutter.stat.exists
+
+- name: Get info about clan variables file
+  stat:
+    path: "/home/{{ ally_clan_name }}/{{ ally_clan_name }}.vars.yml"
+  register: clan_var_file_stat
+
+- name: Create clan variables file
+  copy:
+    dest: "/home/{{ ally_clan_name }}/{{ ally_clan_name }}.vars.yml"
+    content: |-
+      ---
+  when: not clan_var_file_stat.stat.exists

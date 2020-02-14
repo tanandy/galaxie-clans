@@ -20,7 +20,7 @@
 
     - name: "Export vars for ally clan {{ with_clan }}"
       copy:
-        dest: "/etc/ansible/allies/{{ with_clan }}.vars.yml"
+        dest: "/home/{{ with_clan }}/{{ with_clan }}.vars.yml"
         content: |-
           ---
           {{ clan_alliance_export_content }}
