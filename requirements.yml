@@ -1,0 +1,20 @@
+---
+- name: "bertvv.bind"
+  src: "git+https://github.com/bertvv/ansible-role-bind.git"
+  version: "v4.1.0"
+
+- name: "bertvv.dhcp"
+  src: "git+https://github.com/bertvv/ansible-role-dhcp.git"
+  version: "v3.0.2"
+
+- name: "bertvv.tftp"
+  src: "git+https://github.com/bertvv/ansible-role-tftp.git"
+  version: "v2.0.1"
+
+- name: "bertvv.pxeserver"
+  src: "git+https://github.com/bertvv/ansible-role-pxeserver.git"
+  version: "v1.0.0"
+
+- name: "bertvv.mailserver"
+  src: "git+https://github.com/bertvv/ansible-role-mailserver.git"
+  version: "master"

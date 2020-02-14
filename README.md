@@ -26,7 +26,7 @@ with goal to back to Galaxie way one day.
 #### Critical - Galaxie Core
 
 * **NTP**: ``ntp`` -
-* **DNS**: ``named`` - https://github.com/bertvv/ansible-role-bind
+* **DNS**: ``bind`` - https://github.com/bertvv/ansible-role-bind
 * **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
 * **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
 * **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
