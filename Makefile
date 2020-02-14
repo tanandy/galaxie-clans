@@ -28,6 +28,9 @@ first-date: sys-requirements hook-bash requirements
 apply-role:
 	ansible-playbook playbooks/clan-apply-single-role.yml -e role_name=${role} -e inventory_scope=${to}
 
+refresh:
+	ansible-playbook playbooks/clan-refresh-alliance.yml -e with_clan=${with}
+
 
 update:
 	@wget -O named.root https://www.internic.net/domain/named.root;\
