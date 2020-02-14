@@ -27,11 +27,6 @@ clan_caretaker_home: "/home/{{ clan_caretaker_name }}"
 clan_allies_group: "{{ clan_name }}_allies"
 clan_allies_os_group: "allies"
 clan_allies_keystore_path: "{{ playbook_dir }}/../keys/{{ clan_name }}/allies"
-clan_allies_block_marker: "# {mark} ANSIBLE MANAGED - ALLIANCE WITH {{ ally_clan_name }}"
-
-clan_allies_export:
-  all:
-    clan_name: "{{ clan_name }}"
 
 clan_alliance_export_content: >-
   {{
