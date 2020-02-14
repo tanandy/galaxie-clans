@@ -1,7 +1,7 @@
 ## Les serveurs externes qui seront utilisés pour se synchroniser (strate 1 et 1)
 
 {% for ntp_server in ntp_server_upper_stratum %}
-server {{ address }} iburst
+server {{ ntp_server }} iburst
 {% endfor %}
 
 ## Contrôle des accès

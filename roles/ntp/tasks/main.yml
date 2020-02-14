@@ -13,9 +13,9 @@
       - tzdata
     state: present
 
-- name: ntp time source 
+- name: ntp time source
   template:
-    src: ntp-server-external.conf.j2
+    src: ntp-server.conf.j2
     dest: /etc/ntp.conf
   notify: Restart ntp service
 
