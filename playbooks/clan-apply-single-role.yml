@@ -1,0 +1,8 @@
+---
+- name: Apply a single role
+  hosts: clans
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - "{{ name }}"

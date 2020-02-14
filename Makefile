@@ -25,6 +25,8 @@ requirements:
 
 first-date: sys-requirements hook-bash requirements
 
+apply-role:
+	ansible-playbook playbooks/clan-apply-single-role.yml -e name=${name}
 
 
 update:

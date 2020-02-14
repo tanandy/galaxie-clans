@@ -29,6 +29,7 @@
         upgrade: dist
 
   roles:
+    - banner
     - ssh
 
 
