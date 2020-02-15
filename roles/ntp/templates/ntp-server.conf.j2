@@ -19,8 +19,9 @@ restrict -4 default kod nomodify notrap nopeer noquery limited
 restrict -6 default kod nomodify notrap nopeer noquery limited
 
 # ... et en local (on peut tout faire)
-restrict 127.0.0.1
-restrict ::1
+{% for item in ntp_restrict %}
+restrict {{ item }}
+{% endfor %}
 
 #server 127.127.1.0
 #fudge 127.127.1.0 stratum 10
@@ -30,4 +31,4 @@ restrict ::1
 # l'heure en cas de coupures du net. Ne pas placer ce fichier dans un répertoire
 # temporaire : cela évite aussi ?|  ntpd d'avoir ?|  refaire les calculs permettant
 # de déterminer la dérive de l'horloge après chaque redémarrage.
-driftfile  /var/lib/ntp/ntp.drift
+driftfile {{ ntp_driftfile }}
