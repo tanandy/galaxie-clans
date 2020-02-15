@@ -28,10 +28,18 @@
     - "/var/lib/ntp/ntp.conf.dhcp"
   notify: Restart ntp service
 
-- name: Enable ntp service
+- name: Ensure NTP is running and enabled as configured.
+  service:
+    name: nrp
+    state: started
+    enabled: true
+  when: ntp_enabled | bool
+
+- name: Ensure NTP is stopped and disabled as configured.
   service:
     name: ntp
-    state: started
-    enabled: yes
+    state: stopped
+    enabled: false
+  when: not (ntp_enabled | bool)
 
 - meta: flush_handlers
