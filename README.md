@@ -1,11 +1,12 @@
-# Galaxie
+# Galaxie (to be renamed)
 
 ### Migration plan
+
 * Fork bests existing Ansible, convert it to support Debian stable.
 * Migrate our config files to YAML format
 * Limit the number of Galaxie roles to maintain
 
-#### Criterias
+### Criterias
 
 * Each projects selected must have strong and active maintainer community
 * Roles should be highly customizable by variables
@@ -23,20 +24,20 @@ We don't have much time to spend on earth... We have no time to loose on that lo
 With this migration we'll trash a ton of work, and that's why we start from a big fork of [Bert Van Vreckem](https://github.com/bertvv) ansible roles,
 with goal to back to Galaxie way one day.
 
-#### Critical - Galaxie Core
+#### Core services
 
-* **NTP**: ``ntp`` -
-* **DNS**: ``bind`` - https://github.com/bertvv/ansible-role-bind
-* **TFP**: ``tfpd`` - https://github.com/bertvv/ansible-role-tftp
-* **PXE** ``pxelinux`` - https://github.com/bertvv/ansible-role-pxeserver
-* **DHCP**: ``dpcpd`` - https://github.com/bertvv/ansible-role-dhcp
-* **MAIL**: ``Postfix / Dovecot`` - https://github.com/bertvv/ansible-role-mailserver
+* **NTP**: Based on `ntpd`. Home made.
+* **DNS**: Based on `bind`. Using the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
+* **TFTP**: Based on `tfpd`. Using the role [Bert Van Vreckem tftp role](https://github.com/bertvv/ansible-role-tftp).
+* **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
+* **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
+* **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
 
 #### Broadcasting - Galaxie Media
 
-* **SQL**: ``mariadb`` - https://github.com/bertvv/ansible-role-mariadb
-* **WEBSERVER** ``ngnx / lighthttpd / httpd`` - ?
-* **MEETING**: ``jitsit``
+* **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).
+* **WEBSERVER** ``nginx / lighthttpd / httpd / traefik`` - to
+* **MEETING**: ``jitsi``
 * **WEBSITE**: ``peertube``
 
 ### Family - Galaxie Home
@@ -113,9 +114,9 @@ After this you can move your host out of the `[galaxie_staging]` group and put i
 
 # Notes
 
-* terminal d'admin opérable depuis une clé live Tails
-avec les clés d'accès vers l'instance qui porte
+* terminal d'admin opérable depuis une clé live Tails avec les clés d'accès vers l'instance qui porte
 * session de génération de clé sur un host deconnecté du reseau depuis une live usb tail
+
 prereq: host avec 2 port usb un pour demarrer tail l'autre pour récupérer se clé perso
 
 etablir un lien passe par une clé rsa de connexion sur une home avec un minimum de droits, contenant directement
@@ -133,9 +134,9 @@ prereq: exposition d'un enregistrement clan.<domain> sur la zone DNS publique
 
 Now they can connect via ssh to get the minimal infos to configure themselves as your secondary on several services.
 
-## Apply a role to 'clans'
+## Tools
 
-`make apply-role -e name=<role_name>`
+* **Apply a role to 'clans'**: `make apply-role -e name=<role_name> -e to=`
 
 ## TODO
 

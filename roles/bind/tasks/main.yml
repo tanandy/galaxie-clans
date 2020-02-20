@@ -31,8 +31,20 @@
   with_items:
     - "{{ bind_dir }}/dynamic"
     - "{{ bind_dir }}/data"
+
     - "{{ bind_zone_dir }}"
   tags: bind
+
+
+- name: Slave | ensure directory for cached slaves zones
+  file:
+    path: "{{ bind_dir }}/slaves"
+    state: directory
+    owner: "{{ bind_owner }}"
+    group: "{{ bind_group }}"
+    mode: '0770'
+    setype: named_cache_t
+
 
 - name: Create serial, based on UTC UNIX time
   command: date -u +%s
@@ -67,3 +79,7 @@
     state: started
     enabled: true
   tags: bind
+
+
+  # assert that allow-transfer existe dans la liste des NS fournis
+  # SOA unique

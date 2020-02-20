@@ -19,6 +19,7 @@ options {
   statistics-file "{{ bind_dir }}/data/named_stats.txt";
   memstatistics-file "{{ bind_dir }}/data/named_mem_stats.txt";
   allow-query     { {{ bind_allow_query|join('; ') }}; };
+// IMPROVEMENTS - allow-transfer should be set to none and overriden if necessary at the zone level
 {% if bind_acls|length != 0 %}
   allow-transfer  { {% for acl in bind_acls %}"{{ acl.name }}"; {% endfor %}};
 {% endif %}
@@ -48,6 +49,8 @@ options {
 
   querylog yes;
 {% endif %}
+
+// IMPROVEMENTS - version should be set to none so this info is hidden
 };
 
 {% if bind_statistics_channels %}
@@ -91,7 +94,7 @@ include "{{ file }}";
 {% endfor %}
 
 {% if bind_zone_domains is defined %}
-{% for bind_zone in bind_zone_domains %}
+{% for bind_zone in bind_master_zone_domains %}
 zone "{{ bind_zone.name }}" IN {
   type master;
   file "{{ bind_zone_dir }}/{{ bind_zone.name }}";
@@ -106,6 +109,11 @@ zone "{{ bind_zone.name }}" IN {
 {% endif %}
 {% if bind_zone.delegate is defined %}
   forwarders {};
+{% endif %}
+{% if bind_zone.allow_transfer is defined %}
+  allow-transfer { {{ bind_zone.allow_transfer|join('; ') }}; };
+{% else %}
+  allow-transfer { none; };
 {% endif %}
 };
 
@@ -145,4 +153,46 @@ zone "{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)
 {% endfor %}
 {% endif %}
 {% endfor %}
+
+
+
+
+
+
+
+
+
+
+{% for bind_zone in bind_slave_zone_domains %}
+zone "{{ bind_zone.name }}" IN {
+  type slave;
+  masters { {{ bind_zone.master_server_ip }}; }; // IMPROVE - new attribute
+  file "slaves/{{ bind_zone.name }}";
+{% if bind_zone.delegate is defined %}
+  forwarders {};
+{% endif %}
+};
+
+{% if bind_zone.networks is defined %}
+{% for network in bind_zone.networks %}
+zone "{{ ('.'.join(network.replace(network+'.','').split('.')[::-1])) }}.in-addr.arpa" IN {
+  type slave;
+  masters { {{ bind_zone.master_server_ip }}; };
+  file "slaves/{{ ('.'.join(network.replace(network+'.','').split('.')[::-1])) }}.in-addr.arpa";
+};
+{% endfor %}
+{% endif %}
+
+{% if bind_zone.ipv6_networks is defined %}
+{% for network in bind_zone.ipv6_networks %}
+zone "{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)//2):] }}" IN {
+  type slave;
+  masters { {{ bind_zone.master_server_ip }}; };
+  file "slaves/{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)//2):-1] }}";
+};
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+
 {% endif %}

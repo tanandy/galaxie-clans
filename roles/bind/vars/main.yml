@@ -1,0 +1,4 @@
+---
+bind_master_zone_domains: "{{ bind_zone_domains | selectattr('type', 'equalto', 'master') | list }}"
+
+bind_slave_zone_domains: "{{ bind_zone_domains | selectattr('type', 'equalto', 'slave') | list }}"

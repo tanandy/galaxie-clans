@@ -2,16 +2,19 @@ help:
 	@echo "--------------------------------------------------------------------"
 	@echo "Galaxie Ansible Toolkit"
 	@echo ""
-	@echo "USAGE"
+	@echo "INSTALLATION"
 	@echo "	make sys-requirements  -- Install system requirements"
 	@echo "	make hook-bash         -- Add direnv hook to ~/.bashrc"
 	@echo "	make requirements      -- Install workspace requirements"
 	@echo "	make first-date        -- Do sys-requirements + hook-bash + requirements"
 	@echo ""
 	@echo "FIRST DATE TOGETHER?"
-	@echo ""
 	@echo "	make first-date"
 	@echo ""
+	@echo "DAY-TO-DAY TOOLING"
+	@echo "	make apply-role -e role=<role_name> -e to=<inventory scope>     -- Applies a role to an inventory scope"
+	@echo ""
+
 
 sys-requirements:
 	sudo apt-get install python3 python3-venv direnv -y
@@ -27,7 +30,7 @@ requirements:
 first-date: sys-requirements hook-bash requirements
 
 apply-role:
-	ansible-playbook playbooks/clan-apply-single-role.yml -e role_name=${role} -e inventory_scope=${to}
+	ansible-playbook playbooks/apply-single-role.yml -e role_name=${role} -e inventory_scope=${to}
 
 refresh:
 	ansible-playbook playbooks/clan-refresh-alliance.yml -e with_clan=${with}
