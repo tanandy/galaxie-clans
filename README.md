@@ -1,4 +1,4 @@
-# Galaxie (to be renamed)
+# Galaxie - Clans
 
 ### Migration plan
 
