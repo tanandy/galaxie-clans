@@ -1,3 +1,0 @@
----
-powertop_systemd_service_file_path: "/lib/systemd/system/powertop.service"
-powertop_bin_path: "/usr/sbin/powertop"

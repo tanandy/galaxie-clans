@@ -1,5 +1,0 @@
----
-- name: check if dolibarr is present
-  apt:
-    pkg=dolibarr
-    state=present

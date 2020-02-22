@@ -1,7 +1,0 @@
----
-
-- name: install required software
-  action: apt pkg="{{item}}" state=installed
-  with_items:
-    - dovecot-imapd
-

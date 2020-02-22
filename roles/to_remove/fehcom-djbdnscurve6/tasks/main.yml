@@ -1,9 +1,0 @@
-#- include: install.yml
-#  tags: install
-#
-#- include: config.yml
-#  tags: config, config-tinydns, config-dnscache
-
-- include: uninstall.yml
-  tags: uninstall
-  when: uninstall|bool

@@ -1,4 +1,0 @@
-- hosts: desktops
-
-  roles:
-    - mozilla-firefox

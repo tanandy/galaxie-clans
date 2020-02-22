@@ -1,8 +1,0 @@
----
-# [inspired_by] Oracle Java 8: http://www.webupd8.org/2014/03/how-to-install-oracle-java-8-in-debian.html
-- include: Debian/8/install-java.yml
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "8"
-
-# [inspired_by] Oracle Java 7: http://www.webupd8.org/2012/06/how-to-install-oracle-java-7-in-debian.html
-- include: Debian/7/install-java.yml
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "7"

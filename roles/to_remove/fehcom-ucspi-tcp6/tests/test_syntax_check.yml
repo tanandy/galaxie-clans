@@ -1,5 +1,0 @@
----
-
-- name: Syntax Check
-  shell: ansible-playbook --syntax-check ../../../playbooks/fehcom-ucspi-tcp6.yml
-  changed_when: false

@@ -37,7 +37,7 @@ with goal to back to Galaxie way one day.
 
 * **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).
 * **WEBSERVER** ``nginx / lighthttpd / httpd / traefik`` - to
-* **MEETING**: ``jitsi``
+* **MEETING**: ``Riot.im`` - 
 * **WEBSITE**: ``peertube``
 
 ### Family - Galaxie Home
