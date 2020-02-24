@@ -1,4 +1,9 @@
 ---
+- name: Gather facts about all hosts
+  hosts: "all:!allies"
+  become: yes
+  gather_facts: yes
+
 - name: Apply a single role
   hosts: "{{ inventory_scope }}"
   become: yes

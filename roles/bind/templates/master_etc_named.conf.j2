@@ -171,6 +171,11 @@ zone "{{ bind_zone.name }}" IN {
 {% if bind_zone.delegate is defined %}
   forwarders {};
 {% endif %}
+{% if bind_zone.allow_update is defined %}
+  allow-update { {{ bind_zone.allow_update|join('; ') }}; };
+{% else %}
+  allow-update { none; };
+{% endif %}
 };
 
 {% if bind_zone.networks is defined %}

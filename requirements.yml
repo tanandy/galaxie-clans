@@ -1,7 +1,10 @@
 ---
-- name: "bertvv.bind"
-  src: "git+https://github.com/bertvv/ansible-role-bind.git"
-  version: "master"
+#
+# NOTE: Copied and modified under the 'bind' role
+#
+#- name: "bertvv.bind"
+#  src: "git+https://github.com/bertvv/ansible-role-bind.git"
+#  version: "master"
 
 - name: "bertvv.dhcp"
   src: "git+https://github.com/bertvv/ansible-role-dhcp.git"
