@@ -94,6 +94,7 @@ include "{{ file }}";
 {% endfor %}
 
 {% if bind_zone_domains is defined %}
+// --- MASTER ZONES ---
 {% for bind_zone in bind_master_zone_domains %}
 zone "{{ bind_zone.name }}" IN {
   type master;
@@ -154,27 +155,17 @@ zone "{{ (network | ipaddr('revdns'))[-(9+(network|regex_replace('^.*/','')|int)
 {% endif %}
 {% endfor %}
 
-
-
-
-
-
-
-
-
-
+// --- SLAVE ZONES ---
 {% for bind_zone in bind_slave_zone_domains %}
 zone "{{ bind_zone.name }}" IN {
   type slave;
-  masters { {{ bind_zone.master_server_ip }}; }; // IMPROVE - new attribute
+
+  masters { {{ bind_zone.master_server_ip }}; };
+  allow-update { {{ bind_zone.master_server_ip }}; };
+
   file "slaves/{{ bind_zone.name }}";
 {% if bind_zone.delegate is defined %}
   forwarders {};
-{% endif %}
-{% if bind_zone.allow_update is defined %}
-  allow-update { {{ bind_zone.allow_update|join('; ') }}; };
-{% else %}
-  allow-update { none; };
 {% endif %}
 };
 
