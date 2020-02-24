@@ -1,7 +1,7 @@
 help:
-	@echo "--------------------------------------------------------------------"
-	@echo "Galaxie Ansible Toolkit"
-	@echo ""
+	@echo "____________________________________________________________________"
+	@echo "Galaxie Clans Ansible Toolkit ______________________________________"
+	@echo "                                                                v0.1"
 	@echo "INSTALLATION"
 	@echo "	make sys-requirements  -- Install system requirements"
 	@echo "	make hook-bash         -- Add direnv hook to ~/.bashrc"
