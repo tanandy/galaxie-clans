@@ -1,0 +1,12 @@
+---
+nginx_user: "www-data"
+nginx_config_file: "/etc/nginx/nginx.conf"
+nginx_modular_conf_directory_modules_available: /etc/nginx/modules-available
+nginx_modular_conf_directory_modules_enabled: /etc/nginx/modules-enabled
+
+nginx_modular_conf_directory_http: "/etc/nginx/conf.d"
+nginx_modular_conf_directory_sites_available: "/etc/nginx/sites-available"
+nginx_modular_conf_directory_sites_enabled: "/etc/nginx/sites-enabled"
+
+nginx_modular_conf_directory_streams_available: "/etc/nginx/streams-available"
+nginx_modular_conf_directory_streams_enabled: "/etc/nginx/streams-enabled"

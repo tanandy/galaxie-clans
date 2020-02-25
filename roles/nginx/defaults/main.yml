@@ -1,0 +1,2 @@
+---
+raw_nginx_stream_conf_directory: "/etc/nginx/streams.conf.d"

@@ -1,0 +1,9 @@
+---
+nginx_modular_config_directories:
+  - "{{ nginx_modular_conf_directory_modules_available }}"
+  - "{{ nginx_modular_conf_directory_modules_enabled }}"
+  - "{{ nginx_modular_conf_directory_http }}"
+  - "{{ nginx_modular_conf_directory_sites_available }}"
+  - "{{ nginx_modular_conf_directory_sites_enabled }}"
+  - "{{ nginx_modular_conf_directory_streams_available }}"
+  - "{{ nginx_modular_conf_directory_streams_enabled }}"
