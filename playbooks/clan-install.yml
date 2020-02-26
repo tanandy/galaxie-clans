@@ -1,7 +1,6 @@
 ---
 - name: Init host for management
   hosts: clans
-  become: no
   gather_facts: no
   tags:
     - system
