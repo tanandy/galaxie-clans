@@ -30,16 +30,8 @@
 
 - name: Ensure NTP is running and enabled as configured.
   service:
-    name: nrp
+    name: ntp
     state: started
     enabled: true
-  when: ntp_enabled | bool
-
-- name: Ensure NTP is stopped and disabled as configured.
-  service:
-    name: ntp
-    state: stopped
-    enabled: false
-  when: not (ntp_enabled | bool)
 
 - meta: flush_handlers

@@ -7,19 +7,19 @@
       - figlet
     state: present
 
-- name: Copy {{ galaxie_banner_font_filename }} to {{ galaxie_banner_figlet_font_dir }}/
+- name: Copy {{ banner_font_filename }} to {{ banner_figlet_font_dir }}/
   tags: banner
   copy:
-    src: "{{ galaxie_banner_font_filename }}"
-    dest: "{{ galaxie_banner_figlet_font_dir }}/{{ galaxie_banner_font_filename }}"
+    src: "{{ banner_font_filename }}"
+    dest: "{{ banner_figlet_font_dir }}/{{ banner_font_filename }}"
     owner: root
     group: root
     mode: 0644
 
 - name: Generate figlet banner
   tags: banner
-  command: /usr/bin/figlet -c -w 80 -f {{ galaxie_banner_font_name }} '{{ galaxie_banner_text }}'
-  register: galaxie_banner_figlet_result
+  command: /usr/bin/figlet -c -w 80 -f {{ banner_font_name }} '{{ banner_text }}'
+  register: banner_figlet_result
   changed_when: false
 
 - name: Configure message of the day
@@ -43,4 +43,3 @@
     - /etc/issue
     - /etc/issue.net
     - /etc/banner.dynamic
-

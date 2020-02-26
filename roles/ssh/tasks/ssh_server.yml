@@ -33,4 +33,4 @@
     - { key: "GSSAPIAuthentication",    value: "no" }
     - { key: "ChallengeResponseAuthentication", value: "no" }
   notify:
-    - restart sshd service
+    - Restart ssh service

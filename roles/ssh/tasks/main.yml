@@ -1,7 +1,7 @@
 ---
-- include_tasks: ssh_client.yml
+- import_tasks: ssh_client.yml
 
-- include_tasks: ssh_server.yml
+- import_tasks: ssh_server.yml
 
 - name: Disable local mail checking after login
   lineinfile:

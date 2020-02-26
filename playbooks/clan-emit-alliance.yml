@@ -44,6 +44,8 @@
         -C {{ emitter }}@{{ receiver }} <<< y
       args:
         executable: /bin/bash
+      tags:
+        - keygen
 
     - debug:
         msg: |-

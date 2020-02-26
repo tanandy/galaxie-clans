@@ -1,8 +1,8 @@
 ---
 - name: Init host for management
   hosts: clans
-  become: yes
-  gather_facts: yes
+  become: no
+  gather_facts: no
   tags:
     - system
 
@@ -12,7 +12,7 @@
       tags:
         - raw
 
-    - name: "Update package cache (RAW: ALWAYS CHANGED)"
+    - name: "Install mandatory packages (RAW: ALWAYS CHANGED)"
       raw: >-
         apt-get install -y {{ clan_establish_system_packages | join(' ') }}
       tags:
@@ -28,19 +28,23 @@
         update_cache: yes
         upgrade: dist
 
-  roles:
-    - banner
-    - ssh
-
-
 - name: Prepare clan caretaker access
   hosts: clans
-  become: yes
-  gather_facts: yes
+  become: no
+  gather_facts: no
   tags:
     - caretaker
 
   tasks:
+    - name: Sanity check
+      assert:
+        that:
+          - public_key_file_to_inject is defined
+          - clan_caretaker_name is defined
+          - clan_caretaker_uid is defined
+          - clan_caretaker_gid is defined
+          - clan_caretaker_home is defined
+
     - name: Create caretaker system group
       group:
         name: "{{ clan_caretaker_name }}"
@@ -72,5 +76,16 @@
         create: yes
         line: >-
           {{ lookup('file', public_key_file_to_inject) }}
-      when:
-        - public_key_file_to_inject is defined
+
+- name: Base server configuration
+  hosts: clans
+  become: yes
+  gather_facts: yes
+  tags:
+    - base
+
+  roles:
+    - common
+    - banner
+    - ssh
+    - ntp

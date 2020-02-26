@@ -20,4 +20,4 @@
     - regexp: "^ *UseRoaming.*"
       line: "    UseRoaming no"
       insertafter: "^Host *"
-  notify: restart ssh service
+  notify: Restart ssh service
