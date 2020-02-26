@@ -161,7 +161,7 @@ zone "{{ bind_zone.name }}" IN {
   type slave;
 
   masters { {{ bind_zone.master_server_ip }}; };
-  allow-update { {{ bind_zone.master_server_ip }}; };
+  allow-notify { {{ bind_zone.master_server_ip }}; };
 
   file "slaves/{{ bind_zone.name }}";
 {% if bind_zone.delegate is defined %}
