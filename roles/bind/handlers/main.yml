@@ -4,3 +4,4 @@
   service:
     name: "{{ bind_service }}"
     state: restarted
+    enabled: yes
