@@ -26,14 +26,14 @@
 {% set _zone = {'hash': _zone_data | string | hash('md5')} %}
 {% for _result in reverse_hashes if _result.network == item.1 %}
 {%   set _hash_serial = _result.hash.split(' ')[2:] %}
-{%   if _hash_serial and _hash_serial[0] == _zone['hash'] %}
-{%     set _ = _zone.update({'serial': _hash_serial[1]}) %}
-{%   else %}
-{%     if _hash_serial %}
-{%       set _ = _zone.update({'serial': (_hash_serial[1]|int) + 1 }) %}
+{%   if _hash_serial %}
+{%     if _hash_serial[0] == _zone['hash'] %}
+{%       set _ = _zone.update({'serial': _hash_serial[1]}) %}
 {%     else %}
-{%       set _ = _zone.update({'serial': (item.init_serial | default(timestamp.stdout)) }) %}
+{%       set _ = _zone.update({'serial': (_hash_serial[1] | int) + 1 }) %}
 {%     endif %}
+{%   else %}
+{%       set _ = _zone.update({'serial': (item.init_serial | default(timestamp.stdout)) }) %}
 {%   endif %}
 {% endfor %}
 {#
