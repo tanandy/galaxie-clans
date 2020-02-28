@@ -44,9 +44,17 @@
       delegate_to: localhost
       become: no
 
+    - name: "Create directory for clan vars"
+      file:
+        path: "{{ playbook_dir }}/../host_vars/{{ with_clan }}"
+        state: directory
+      when: alliance_query.rc == 0
+      delegate_to: localhost
+      become: no
+
     - name: "Persist vars from ally clan {{ with_clan }}"
       copy:
-        dest: "{{ playbook_dir }}/../host_vars/{{ with_clan }}.yml"
+        dest: "{{ playbook_dir }}/../host_vars/{{ with_clan }}/imported.yml"
         content: |-
           {{ alliance_query.stdout }}
       when: alliance_query.rc == 0
