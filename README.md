@@ -27,7 +27,7 @@ with goal to back to Galaxie way one day.
 #### Core services
 
 * **NTP**: Based on `ntpd`. Home made.
-* **DNS**: Based on `bind`. Using the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
+* **DNS**: Based on `bind`. Inspired by the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
 * **TFTP**: Based on `tfpd`. Using the role [Bert Van Vreckem tftp role](https://github.com/bertvv/ansible-role-tftp).
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
@@ -35,10 +35,11 @@ with goal to back to Galaxie way one day.
 
 #### Broadcasting - Galaxie Media
 
+* **WEBSERVER** ``nginx``
+* **MEETING**: ``Riot.im``
+* **MEDIA-STREAMING**: ``peertube``
 * **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).
-* **WEBSERVER** ``nginx / lighthttpd / httpd / traefik`` - to
-* **MEETING**: ``Riot.im`` - 
-* **WEBSITE**: ``peertube``
+
 
 ### Family - Galaxie Home
 

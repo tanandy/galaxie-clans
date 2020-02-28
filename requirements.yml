@@ -18,10 +18,6 @@
   src: "git+https://github.com/bertvv/ansible-role-pxeserver.git"
   version: "master"
 
-- name: "bertvv.mailserver"
-  src: "git+https://github.com/bertvv/ansible-role-mailserver.git"
-  version: "master"
-
 - name: "bertvv.mariadb"
   src: "git+https://github.com/bertvv/ansible-role-mariadb.git"
   version: "master"
