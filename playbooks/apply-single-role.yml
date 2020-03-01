@@ -3,11 +3,13 @@
   hosts: "all:!allies"
   become: yes
   gather_facts: yes
+  tags: always
 
 - name: Apply a single role
   hosts: "{{ inventory_scope }}"
   become: yes
   gather_facts: yes
+  tags: always
 
   roles:
     - "{{ role_name }}"
