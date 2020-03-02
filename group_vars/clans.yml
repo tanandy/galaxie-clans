@@ -18,6 +18,18 @@ clan_establish_system_packages:
   - vim
   - bash
   - bash-completion
+  - dnsutils
+  - htop
+  - screen
+  - git
+  - wget
+  - rsync
+  - glances
+  - rng-tools5
+  - grc
+  - cron
+  - findutils
+  - haveged
 
 clan_caretaker_name: zoe
 clan_caretaker_uid: 4200
@@ -28,7 +40,7 @@ clan_allies_group: "{{ clan_name }}_allies"
 clan_allies_os_group: "allies"
 clan_allies_keystore_path: "{{ playbook_dir }}/../keys/{{ clan_name }}/allies"
 
-clan_alliance_export_content: >-
+clan_alliance_export_content: |-
   {{
     clan_allies_export[with_clan]
     | default({})
