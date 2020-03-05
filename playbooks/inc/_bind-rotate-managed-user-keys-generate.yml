@@ -1,0 +1,39 @@
+---
+#
+# loop_var: bind_managed_user_key_specs
+#
+- name: Create directory for key generation
+  tempfile:
+    state: directory
+    suffix: build
+  register: bind_user_key_generate_directory
+
+- name: Generate key
+  shell: >-
+    dnssec-keygen
+    -a {{ bind_managed_user_key_specs.algorithm | default(bind_user_keys_algorithm) }}
+    -b {{ bind_managed_user_key_specs.size | default(bind_user_keys_size) }}
+    -n USER
+    -K {{ bind_user_key_generate_directory.path }}
+    {{ bind_managed_user_key_specs.name }}
+  register: bind_user_key_generation
+
+- debug:
+    var: bind_user_key_generation
+
+- name: Collect key value
+  shell: >-
+    cat {{ bind_user_key_generate_directory.path }}/{{ bind_user_key_generation.stdout }}.private | grep Key
+  register: bind_user_key_collect
+
+- set_fact:
+    bind_dns_keys: >-
+      {{
+        bind_dns_keys|default([])
+        + [{
+            'name': bind_managed_user_key_specs.name,
+            'algorithm': bind_managed_user_key_specs.algorithm | default(bind_user_keys_algorithm),
+            'secret': bind_user_key_collect.stdout.split(' ')[1]
+          }]
+      }}
+

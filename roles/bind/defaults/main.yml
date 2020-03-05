@@ -70,3 +70,7 @@ bind_zone_minimum_ttl: "1D"
 bind_zone_dir: "{{ bind_dir }}"
 # File mode for master zone files (needs to be something like 0660 for dynamic updates)
 bind_zone_file_mode: "0640"
+
+bind_user_keys_algorithm: HMAC-SHA512
+bind_user_keys_size: 512
+bind_user_keys_directory: /etc/bind/keys
