@@ -172,7 +172,6 @@
   loop_control:
     label: "{{ item.1 }}"
   notify: Restart bind
-  tags: bind
 
 
 # file to set keys for XFR authentication
@@ -185,6 +184,7 @@
     owner: root
     group: "{{ bind_group }}"
   when: bind_dns_keys is defined and bind_dns_keys|length > 0
+  notify: Restart bind
 
 - name: Start BIND service
   service:

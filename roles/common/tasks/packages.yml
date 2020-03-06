@@ -17,8 +17,15 @@
       - findutils
       - grc
       - glances
+      - python3-pip
     state: present
 
+- name: Install recommended python packages
+  pip:
+    name:
+      - dnspython
+      - cryptography
+      - galaxie-curses
 #- name: Check undesired packages
 #  apt:
 #    pkg:

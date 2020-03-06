@@ -5,7 +5,6 @@
   gather_facts: yes
 
   tasks:
-
     - name: Reset bind_dns_keys variable
       set_fact:
         bind_dns_keys: []
