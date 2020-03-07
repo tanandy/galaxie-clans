@@ -1,0 +1,83 @@
+---
+- name: Sanity checks
+  assert:
+    that:
+      - ssl_private_key_directory is defined
+      - domain_to_certify is defined
+
+- name: Cooking variables
+  set_fact:
+    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ domain_to_certify }}"
+    acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
+    domain_private_key_filename: "{{ ssl_private_key_path_basename }}.key"
+    csr_filename: "{{ ssl_private_key_path_basename }}.csr"
+    crt_filename: "{{ ssl_private_key_path_basename }}.crt"
+
+- name: "Generate private keys"
+  openssl_privatekey:
+    path: "{{ item }}"
+    state: present
+    mode: 0640
+    owner: root
+    group: ssl-cert
+  loop:
+    - "{{ acme_private_key_filename }}"
+    - "{{ domain_private_key_filename }}"
+  register: private_key_generation
+
+- name: "Generate CSR for {{ domain_to_certify }}"
+  openssl_csr:
+    path: "{{ csr_filename }}"
+    privatekey_path: "{{ domain_private_key_filename }}"
+    country_name: FR
+    organization_name: galaxie-clans
+    email_address: aurelien.maury@gmail.com
+    common_name: "{{ domain_to_certify }}"
+    subject_alt_name:
+      - "DNS:www.{{ domain_to_certify }}"
+
+- name: "Create acme account"
+  acme_account:
+    acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+    acme_version: 2
+    account_key_src: "{{ acme_private_key_filename }}"
+    state: present
+    terms_agreed: yes
+    contact:
+      - "mailto:{{ acme_account_email }}"
+  when: private_key_generation is changed
+
+- name: Create a challenge for {{ domain_to_certify }} using a account key from a variable.
+  acme_certificate:
+    acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+    acme_version: 2
+    account_key_src: "{{ acme_private_key_filename }}"
+    csr: "{{ csr_filename }}"
+    dest: "{{ crt_filename }}"
+    challenge: "dns-01"
+  register: domain_to_certify_challenge
+
+- debug:
+    var: domain_to_certify_challenge
+
+- name: Create record for acme challenge
+  nsupdate:
+    server: "127.0.0.1"
+    zone: "{{ domain_to_certify }}"
+    record: >-
+      {{ item.key | regex_replace('\.' + domain_to_certify, '') }}
+    type: TXT
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ domain_to_certify_challenge.challenge_data_dns | dict2items }}"
+
+- name: Let the challenge be validated and retrieve the cert and intermediate certificate
+  acme_certificate:
+    acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+    acme_version: 2
+    account_key_src: "{{ acme_private_key_filename }}"
+    csr: "{{ csr_filename }}"
+    cert: "{{ crt_filename }}"
+    challenge: "dns-01"
+    data: "{{ domain_to_certify_challenge }}"
+  when: domain_to_certify_challenge is changed

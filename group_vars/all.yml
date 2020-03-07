@@ -2,3 +2,29 @@
 bind_user_keys_algorithm: HMAC-SHA512
 bind_user_keys_size: 512
 bind_user_keys_directory: /etc/bind/keys
+
+ssl_private_key_directory: "/etc/ssl/private"
+
+common_system_packages:
+  - bash-completion
+  - dnsutils
+  - htop
+  - git
+  - wget
+  - mc
+  - rsync
+  - screen
+  - minicom
+  - task-spooler
+  - cron
+  - findutils
+  - grc
+  - glances
+  - python3-pip
+  - python-pip
+  - openssl
+  - ssl-cert
+
+common_pip_packages:
+  - dnspython
+  - cryptography

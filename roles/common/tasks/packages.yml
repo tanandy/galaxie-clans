@@ -2,39 +2,10 @@
 
 - name: Check desired packages
   apt:
-    pkg:
-      - bash-completion
-      - dnsutils
-      - htop
-      - git
-      - wget
-      - mc
-      - rsync
-      - screen
-      - minicom
-      - task-spooler
-      - cron
-      - findutils
-      - grc
-      - glances
-      - python3-pip
+    pkg: "{{ common_system_packages }}"
     state: present
 
 - name: Install recommended python packages
   pip:
-    name:
-      - dnspython
-      - cryptography
-      - galaxie-curses
-#- name: Check undesired packages
-#  apt:
-#    pkg:
-#      - ntpdate
-#      - nfs-common
-#      - nfs-kernel-server
-#      - rpcbind
-#      - emacs
-#      - samba
-#      - samba-co
-#    state: absent
-    # purge: yes
+    name: "{{ common_pip_packages }}"
+

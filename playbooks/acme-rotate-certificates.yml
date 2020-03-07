@@ -1,0 +1,36 @@
+---
+- hosts: "{{ scope }}"
+  become: true
+  gather_facts: yes
+  strategy: linear
+
+  vars:
+    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ domain_to_certify }}"
+    acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
+    domain_private_key_filename: "{{ ssl_private_key_path_basename }}.key"
+    csr_filename: "{{ ssl_private_key_path_basename }}.csr"
+    crt_filename: "{{ ssl_private_key_path_basename }}.crt"
+
+
+  tasks:
+    - name: Sanity checks
+      assert:
+        that:
+          - ssl_private_key_directory is defined
+          - domains_to_certify is defined
+
+    - name: Create acme key directory
+      file:
+        path: "{{ ssl_private_key_directory }}"
+        state: directory
+        mode: 0710
+        owner: root
+        group: ssl-cert
+
+    - include_tasks: "{{ playbook_dir }}/inc/_acme-rotate-certificate.yml"
+      loop: "{{ domains_to_certify }}"
+      loop_control:
+        loop_var: domain_to_certify
+
+
+
