@@ -1,0 +1,4 @@
+---
+bind_user_keys_algorithm: HMAC-SHA512
+bind_user_keys_size: 512
+bind_user_keys_directory: /etc/bind/keys
