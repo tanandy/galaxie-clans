@@ -13,4 +13,4 @@
   tags: always
 
   roles:
-    - "{{ name }}"
+    - "{{ role_name }}"
