@@ -31,6 +31,9 @@ first-date: sys-requirements hook-bash requirements
 apply-role:
 	ansible-playbook playbooks/apply-single-role.yml -e role_name=${role} -e inventory_scope=${to}
 
+refresh/mo:
+	ansible-playbook playbooks/clan-refresh-alliance.yml -e with_clan=rtnp_org
+
 refresh:
 	ansible-playbook playbooks/clan-refresh-alliance.yml -e with_clan=${with}
 

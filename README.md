@@ -32,6 +32,7 @@ with goal to back to Galaxie way one day.
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
 * **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
+* **BACKUP**: Based on [Borg](https://www.borgbackup.org/). Role is be written.
 
 #### Broadcasting - Galaxie Media
 
