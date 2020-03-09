@@ -4,10 +4,15 @@
     that:
       - ssl_private_key_directory is defined
       - domain_to_certify is defined
+      - domain_to_certify.cn is defined
+      - domain_to_certify.zone is defined
 
 - name: Cooking variables
   set_fact:
-    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ domain_to_certify }}"
+    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ domain_to_certify.cn }}"
+
+- name: Cooking variables
+  set_fact:
     acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
     domain_private_key_filename: "{{ ssl_private_key_path_basename }}.key"
     csr_filename: "{{ ssl_private_key_path_basename }}.csr"
@@ -25,16 +30,15 @@
     - "{{ domain_private_key_filename }}"
   register: private_key_generation
 
-- name: "Generate CSR for {{ domain_to_certify }}"
+- name: "Generate CSR for {{ domain_to_certify.cn }}"
   openssl_csr:
     path: "{{ csr_filename }}"
     privatekey_path: "{{ domain_private_key_filename }}"
-    country_name: FR
-    organization_name: galaxie-clans
-    email_address: aurelien.maury@gmail.com
-    common_name: "{{ domain_to_certify }}"
-    subject_alt_name:
-      - "DNS:www.{{ domain_to_certify }}"
+    country_name: "{{ domain_to_certify.country | default('FR') }}"
+    organization_name: "{{ domain_to_certify.org | default('galaxie-clans') }}"
+    email_address: "{{ domain_to_certify.email | default(acme_account_email) }}"
+    common_name: "{{ domain_to_certify.cn }}"
+    subject_alt_name: "{{ domain_to_certify.alt | default(omit) }}"
 
 - name: "Create acme account"
   acme_account:
@@ -47,7 +51,7 @@
       - "mailto:{{ acme_account_email }}"
   when: private_key_generation is changed
 
-- name: Create a challenge for {{ domain_to_certify }} using a account key from a variable.
+- name: Create a challenge for {{ domain_to_certify.cn }}
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
@@ -60,18 +64,20 @@
 - debug:
     var: domain_to_certify_challenge
 
-- name: Create record for acme challenge
+- name: Create record _acme-challenge.{{ domain_to_certify.cn }}
   nsupdate:
     server: "127.0.0.1"
-    zone: "{{ domain_to_certify }}"
+    zone: "{{ domain_to_certify.zone }}"
     record: >-
-      {{ item.key | regex_replace('\.' + domain_to_certify, '') }}
+      {{ item.key | regex_replace('\.' + domain_to_certify.zone, '') }}
     type: TXT
     value: "{{ item.value }}"
     state: present
-  loop: "{{ domain_to_certify_challenge.challenge_data_dns | dict2items }}"
+  loop: "{{ domain_to_certify_challenge.challenge_data_dns | default({}) | dict2items }}"
+  when:
+    - domain_to_certify_challenge is changed
 
-- name: Let the challenge be validated and retrieve the cert and intermediate certificate
+- name: Respond acme challenge and store {{ crt_filename }}
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
@@ -80,4 +86,5 @@
     cert: "{{ crt_filename }}"
     challenge: "dns-01"
     data: "{{ domain_to_certify_challenge }}"
-  when: domain_to_certify_challenge is changed
+  when:
+    - domain_to_certify_challenge is changed

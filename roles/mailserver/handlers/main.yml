@@ -4,9 +4,11 @@
 - name: Restart postfix service
   service:
     name: "{{ mailserver_postfix_service }}"
+    enabled: yes
     state: restarted
 
 - name: Restart dovecot service
   service:
     name: "{{ mailserver_dovecot_service }}"
+    enabled: yes
     state: restarted

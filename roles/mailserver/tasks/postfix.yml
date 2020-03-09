@@ -1,5 +1,19 @@
 # tasks/postfix.yml -- Install and configure Postfix
 ---
+- name: Create group for mail ownership
+  group:
+    name: "{{ postfix_mail_keeper_group_name }}"
+    gid: "{{ postfix_mail_keeper_gid }}"
+
+- name: Create user for mail ownership
+  user:
+    name: "{{ postfix_mail_keeper_user_name }}"
+    uid: "{{ postfix_mail_keeper_uid }}"
+    home: "{{ postfix_mail_keeper_home }}"
+    create_home: yes
+    shell: "{{ postfix_mail_keeper_shell }}"
+    group: "{{ postfix_mail_keeper_group_name }}"
+
 - name: Preseed postfix with debconf
   debconf:
     name: postfix

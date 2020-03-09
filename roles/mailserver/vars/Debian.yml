@@ -10,7 +10,10 @@ mailserver_postfix_packages:
 mailserver_postfix_service: postfix
 
 mailserver_dovecot_packages:
-  - dovecot
+  - dovecot-core
+  - dovecot-dev
+  - dovecot-imapd
+  - dovecot-sqlite
 
 mailserver_dovecot_service: dovecot
 
@@ -22,12 +25,10 @@ spamassassin_packages:
   - spamassassin
 
 clamav_packages:
-  - clamav-server
-  - clamav-data
-  - clamav-update
-  - clamav-filesystem
+  - clamav-daemon
   - clamav
-  - clamav-scanner-systemd
-  - clamav-devel
-  - clamav-lib
-  - clamav-server-systemd
+  - clamav-freshclam
+  - clamav-milter
+  - clamdscan
+  - libclamav9
+  - libclamav9-dev

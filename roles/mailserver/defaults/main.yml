@@ -17,6 +17,14 @@ clamav_packages:
   - clamav-devel
   - clamav-lib
   - clamav-server-systemd
+
 postfix_mynetwork:
   - 172.16.0.0/16
-postfix_ldap: false
+
+postfix_mail_keeper_group_name: vmail
+postfix_mail_keeper_gid: 5000
+
+postfix_mail_keeper_user_name: vmail
+postfix_mail_keeper_uid: 5000
+postfix_mail_keeper_home: /home/vmail
+postfix_mail_keeper_shell: /usr/bin/nologin
