@@ -4,7 +4,6 @@
 - name: Install Dovecot
   package:
     name: "{{ item }}"
-    state: installed
   with_items: "{{ mailserver_dovecot_packages }}"
   tags:
     - mailserver
@@ -21,9 +20,9 @@
 
 - name: Setting dovecot mail location
   template:
-    src: 10-mail.conf.j2
+    src: dovecot-mail.conf.j2
     dest: /etc/dovecot/conf.d/10-mail.conf
-  notify: restart dovecot
+  notify: Restart dovecot
   tags:
     - mailserver
     - dovecot
@@ -50,7 +49,7 @@
 
 - name: Now configure Dovecot SASL for SMTP Auth
   template:
-    src: 10-master.conf.j2
+    src: dovecot-master.conf.j2
     dest: "{{ dovecot_config_dir }}/10-master.conf"
   notify: restart dovecot
   tags:
@@ -59,7 +58,7 @@
 
 - name: Setting dovecot authentication mechanisms
   template:
-    src: 10-auth.conf.j2
+    src: dovecot-auth.conf.j2
     dest: "{{ dovecot_config_dir }}/10-auth.conf"
   notify: restart dovecot
   tags:

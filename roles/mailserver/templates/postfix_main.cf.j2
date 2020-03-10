@@ -689,7 +689,7 @@ virtual_uid_maps = {{ postfix_virtual_uid_maps }}
 virtual_gid_maps = {{ postfix_virtual_gid_maps }}
 local_transport = virtual
 local_recipient_maps = $virtual_mailbox_maps
-transport_maps = hash:/etc/postfix/transport
+transport_maps = {{ postfix_transport_maps }}
 
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_type = dovecot

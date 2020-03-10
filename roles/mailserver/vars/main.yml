@@ -1,3 +1,1 @@
 ---
-postfix_virtual_alias_maps_filename: /etc/postfix/virtual_alias_maps
-postfix_virtual_mailbox_maps_filename: /etc/postfix/virtual_mailbox_maps

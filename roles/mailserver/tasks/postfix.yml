@@ -80,3 +80,48 @@
     src: postfix_master.cf.j2
     dest: "{{ postfix_config_dir }}/master.cf"
   notify: Restart postfix service
+
+- name: Render virtual mailboxes
+  copy:
+    dest: "{{ postfix_virtual_mailbox_maps_file }}"
+    content: |-
+      {% for alias in postfix_virtual_mailboxes %}
+      {{ alias.email }} {{ alias.recipient }}
+      {% endfor %}
+  notify: Restart postfix service
+
+- name: Render virtual aliases
+  copy:
+    dest: "{{ postfix_virtual_alias_maps_file }}"
+    content: |-
+      {% for alias in postfix_virtual_aliases %}
+      {{ alias.alias }} {{ alias.email }}
+      {% endfor %}
+  notify: Restart postfix service
+
+- name: Render transports
+  copy:
+    dest: "{{ postfix_transport_maps_file }}"
+    content: |-
+      {% for transport in postfix_transports %}
+      {{ transport.domain }} {{ transport.transport }}
+      {% endfor %}
+  notify: Restart postfix service
+
+- name: Init virtual aliases
+  shell: >-
+    postmap hash:{{ postfix_virtual_alias_maps_file }}
+  args:
+    creates: "{{ postfix_virtual_alias_maps_file }}.db"
+
+- name: Init virtual mailboxes
+  shell: >-
+    postmap hash:{{ postfix_virtual_mailbox_maps_file }}
+  args:
+    creates: "{{ postfix_virtual_mailbox_maps_file }}.db"
+
+- name: Init transport
+  shell: >-
+    postmap hash:/etc/postfix/transport
+  args:
+    creates: "/etc/postfix/transport.db"

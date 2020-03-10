@@ -29,11 +29,20 @@ postfix_virtual_mailbox_uid: 5000
 postfix_virtual_mailbox_home: /home/vmail
 postfix_virtual_mailbox_shell: /usr/bin/nologin
 
-postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_filename }}"
-postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_filename }}"
+postfix_virtual_alias_maps_file: /etc/postfix/virtual_alias_maps
+postfix_virtual_mailbox_maps_file: /etc/postfix/virtual_mailbox_maps
+postfix_transport_maps_file: /etc/postfix/transport
 
-postfix_relay_domains: []
+postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_file }}"
+postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_file }}"
+postfix_transport_maps: "hash:{{ postfix_transport_maps_file }}"
 
+postfix_relay_domains:
+  - localhost
+
+postfix_transports: []
+# - domain: "example.com"
+#   transport: "smtp:internal.example.com"
 postfix_virtual_aliases: []
 # - alias: "info-alias@example.com"
 #   email: "info@example.com"
