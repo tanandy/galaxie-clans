@@ -25,3 +25,5 @@
       loop: "{{ domains_to_certify }}"
       loop_control:
         loop_var: domain_to_certify
+
+# TODO: freeze or clean bind9

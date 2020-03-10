@@ -39,7 +39,7 @@ command_directory = /usr/sbin
 # daemon programs (i.e. programs listed in the master.cf file). This
 # directory must be owned by root.
 #
-daemon_directory = /usr/libexec/postfix
+daemon_directory = /usr/lib/postfix/sbin
 
 # The data_directory parameter specifies the location of Postfix-writable
 # data files (caches, random numbers). This directory must be owned
@@ -676,36 +676,34 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 
 # readme_directory: The location of the Postfix README files.
 #
-readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
+shlib_directory = no
+relay_domains = {{ postfix_relay_domains | join(', ') }}
+virtual_alias_maps = {{ postfix_virtual_alias_maps }}
+virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
+virtual_mailbox_maps = {{ postfix_virtual_mailbox_maps }}
+virtual_mailbox_base = {{ postfix_mailbox_base }}
+virtual_mailbox_limit = {{ postfix_virtual_mailbox_limit }}
+virtual_minimum_uid = {{ postfix_virtual_minimum_uid }}
+virtual_transport = virtual
+virtual_uid_maps = {{ postfix_virtual_uid_maps }}
+virtual_gid_maps = {{ postfix_virtual_gid_maps }}
+local_transport = virtual
+local_recipient_maps = $virtual_mailbox_maps
+transport_maps = hash:/etc/postfix/transport
 
-virtual_mailbox_domains = example.com ...more domains...
-virtual_mailbox_base = /var/mail/vhosts
-virtual_mailbox_maps = hash:/etc/postfix/vmailbox
-virtual_minimum_uid = 100
-virtual_uid_maps = static:5000
-virtual_gid_maps = static:5000
-virtual_alias_maps = hash:/etc/postfix/virtual
-
-myhostname= {{ postfix_myhostname }}
-mydomain = {{ postfix_mydomain }}
-myorigin = $mydomain
-home_mailbox = {{ postfix_home_mailbox }}
-mynetworks = {{ postfix_mynetwork }} 127.0.0.0/8
-inet_interfaces = all
-mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
-smtpd_sasl_type = dovecot
-smtpd_sasl_path = private/auth
-smtpd_sasl_local_domain =
-smtpd_sasl_security_options = noanonymous
-broken_sasl_auth_clients = yes
 smtpd_sasl_auth_enable = yes
-smtpd_recipient_restrictions = permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination
-smtp_tls_security_level = may
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = /var/run/dovecot/auth-client
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_tls_security_options = $smtpd_sasl_security_options
 smtpd_tls_security_level = may
-smtp_tls_note_starttls_offer = yes
-smtpd_tls_loglevel = 1
-smtpd_tls_key_file = /etc/postfix/ssl/server.key
-smtpd_tls_cert_file = /etc/postfix/ssl/server.crt
+smtpd_tls_auth_only = yes
 smtpd_tls_received_header = yes
-smtpd_tls_session_cache_timeout = 3600s
-tls_random_source = dev:/dev/urandom
+smtpd_tls_cert_file = {{ postfix_smtpd_tls_cert_file }}
+smtpd_tls_key_file = {{ postfix_smtpd_tls_key_file }}
+smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
+smtpd_tls_loglevel = 1
+smtp_tls_security_level = may
+smtp_tls_loglevel = 1

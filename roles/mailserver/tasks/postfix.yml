@@ -1,18 +1,44 @@
 # tasks/postfix.yml -- Install and configure Postfix
 ---
+- name: Sanity checks
+  assert:
+    that:
+      - "{{ postfix_relay_domains | intersect(postfix_virtual_mailboxes|map(attribute='email')) | length == 0 }}"
+    msg: >-
+      NEVER list a virtual MAILBOX domain name as a relay domain!
+
+- name: Sanity checks
+  assert:
+    that:
+      - "{{ postfix_virtual_mailboxes | map(attribute='email') | intersect(postfix_virtual_aliases|map(attribute='alias')) | length == 0 }}"
+    msg: >-
+       NEVER list a virtual MAILBOX domain name as a virtual ALIAS domain!
+
+- name: Sanity checks
+  assert:
+    that:
+      - >-
+        {{
+          postfix_virtual_mailboxes | selectattr('email', 'match', '@.*') | map(attribute='email')
+          | intersect(postfix_virtual_aliases|map(attribute='alias') | map('regex_replace', '^', '@'))
+          | length == 0
+        }}
+    msg: >-
+       NEVER list a virtual MAILBOX domain name as a virtual ALIAS domain!
+
 - name: Create group for mail ownership
   group:
-    name: "{{ postfix_mail_keeper_group_name }}"
-    gid: "{{ postfix_mail_keeper_gid }}"
+    name: "{{ postfix_virtual_mailbox_gname }}"
+    gid: "{{ postfix_virtual_mailbox_gid }}"
 
 - name: Create user for mail ownership
   user:
-    name: "{{ postfix_mail_keeper_user_name }}"
-    uid: "{{ postfix_mail_keeper_uid }}"
-    home: "{{ postfix_mail_keeper_home }}"
+    name: "{{ postfix_virtual_mailbox_uname }}"
+    uid: "{{ postfix_virtual_mailbox_uid }}"
+    home: "{{ postfix_virtual_mailbox_home }}"
     create_home: yes
-    shell: "{{ postfix_mail_keeper_shell }}"
-    group: "{{ postfix_mail_keeper_group_name }}"
+    shell: "{{ postfix_virtual_mailbox_shell }}"
+    group: "{{ postfix_virtual_mailbox_gname }}"
 
 - name: Preseed postfix with debconf
   debconf:
@@ -53,10 +79,4 @@
   template:
     src: postfix_master.cf.j2
     dest: "{{ postfix_config_dir }}/master.cf"
-  notify: Restart postfix service
-
-- name: Create file local-host-names
-  copy:
-    dest: /etc/postfix/local-host-names
-    content: "{{ postfix_mydomain }}"
   notify: Restart postfix service

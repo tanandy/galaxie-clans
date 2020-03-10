@@ -21,10 +21,35 @@ clamav_packages:
 postfix_mynetwork:
   - 172.16.0.0/16
 
-postfix_mail_keeper_group_name: vmail
-postfix_mail_keeper_gid: 5000
+postfix_virtual_mailbox_gname: vmail
+postfix_virtual_mailbox_gid: 5000
 
-postfix_mail_keeper_user_name: vmail
-postfix_mail_keeper_uid: 5000
-postfix_mail_keeper_home: /home/vmail
-postfix_mail_keeper_shell: /usr/bin/nologin
+postfix_virtual_mailbox_uname: vmail
+postfix_virtual_mailbox_uid: 5000
+postfix_virtual_mailbox_home: /home/vmail
+postfix_virtual_mailbox_shell: /usr/bin/nologin
+
+postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_filename }}"
+postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_filename }}"
+
+postfix_relay_domains: []
+
+postfix_virtual_aliases: []
+# - alias: "info-alias@example.com"
+#   email: "info@example.com"
+postfix_virtual_mailboxes: []
+# - email: "info@example.com"
+#   recipient: "example.com/info"
+
+
+postfix_virtual_mailbox_domains: "{{ postfix_relay_domains }}"
+postfix_mailbox_base: "{{ postfix_virtual_mailbox_home }}"
+
+postfix_virtual_uid_maps: "static:{{ postfix_virtual_mailbox_uid }}"
+postfix_virtual_gid_maps: "static:{{ postfix_virtual_mailbox_gid }}"
+postfix_virtual_minimum_uid: "{{ postfix_virtual_mailbox_uid }}"
+
+postfix_virtual_mailbox_limit: 512000000
+
+# postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
+# postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
