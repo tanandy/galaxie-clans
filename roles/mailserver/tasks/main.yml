@@ -4,25 +4,11 @@
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags:
-    - mailserver
 
 - include_tasks: postfix.yml
-  tags:
-    - mailserver
-    - postfix
 
 - include_tasks: dovecot.yml
-  tags:
-    - mailserver
-    - dovecot
 
-- include_tasks: spamassassin.yml
-  tags:
-    - mailserver
-    - spamassassin
+#- include_tasks: spamassassin.yml
 
-- include_tasks: clamav.yml
-  tags:
-    - mailserver
-    - clamav
+#- include_tasks: clamav.yml

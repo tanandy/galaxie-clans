@@ -1,0 +1,26 @@
+protocols = imap
+auth_mechanisms = plain
+
+passdb {
+    driver = file
+    args = /etc/dovecot/passdb
+}
+userdb {
+    driver =
+    args = /etc/dovecot/userdb
+}
+
+service auth {
+    unix_listener auth-client {
+        group = vmail
+        mode = 0660
+        user = vmail
+    }
+    user = root
+}
+
+mail_home = /home/vmail/%u
+mail_location = maildir:~
+
+ssl_cert = {{ postfix_smtpd_tls_cert_file }}
+ssl_key = {{ postfix_smtpd_tls_key_file }}

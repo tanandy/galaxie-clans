@@ -5,15 +5,15 @@
 
 mailserver_postfix_packages:
   - postfix
-  - postfix-sqlite
+  - opendkim
+  - opendkim-tools
 
 mailserver_postfix_service: postfix
 
 mailserver_dovecot_packages:
   - dovecot-core
-  - dovecot-dev
   - dovecot-imapd
-  - dovecot-sqlite
+  - pwgen
 
 mailserver_dovecot_service: dovecot
 

@@ -5,62 +5,58 @@
   package:
     name: "{{ item }}"
   with_items: "{{ mailserver_dovecot_packages }}"
-  tags:
-    - mailserver
-    - dovecot
+
+- name: Add dovecot user to ssl-cert group
+  user:
+    name: dovecot
+    append: yes
+    groups:
+      - ssl-cert
 
 - name: Ensure Dovecot is started
   service:
     name: "{{ mailserver_dovecot_service }}"
     state: started
     enabled: true
-  tags:
-    - mailserver
-    - dovecot
 
 - name: Setting dovecot mail location
   template:
-    src: dovecot-mail.conf.j2
+    src: dovecot.conf.j2
     dest: /etc/dovecot/conf.d/10-mail.conf
-  notify: Restart dovecot
-  tags:
-    - mailserver
-    - dovecot
+  notify: Restart dovecot service
 
 - name: Applying thunderbird fix
   lineinfile:
     path: "{{ dovecot_config_dir }}/20-imap.conf"
     regexp: '^#imap_client_workarounds'
     line: 'imap_client_workarounds = tb-extra-mailbox-sep'
-  notify: restart dovecot
-  tags:
-    - mailserver
-    - dovecot
-
-- name: Applying Outlook 2003 fix
-  lineinfile:
-    path: "{{ dovecot_config_dir }}/20-pop3.conf"
-    regexp: '^#pop3_uidl_format'
-    line: 'pop3_uidl_format = %08Xu%08Xv'
-  notify: restart dovecot
-  tags:
-    - mailserver
-    - dovecot
-
-- name: Now configure Dovecot SASL for SMTP Auth
-  template:
-    src: dovecot-master.conf.j2
-    dest: "{{ dovecot_config_dir }}/10-master.conf"
-  notify: restart dovecot
-  tags:
-    - mailserver
-    - dovecot
+  notify: Restart dovecot service
 
 - name: Setting dovecot authentication mechanisms
   template:
     src: dovecot-auth.conf.j2
     dest: "{{ dovecot_config_dir }}/10-auth.conf"
-  notify: restart dovecot
-  tags:
-    - mailserver
-    - dovecot
+  notify: Restart dovecot service
+
+- name: Setting dovecot mail mechanisms
+  template:
+    src: dovecot-mail.conf.j2
+    dest: "{{ dovecot_config_dir }}/10-mail.conf"
+  notify: Restart dovecot service
+
+- name: Setting dovecot master mechanisms
+  template:
+    src: dovecot-master.conf.j2
+    dest: "{{ dovecot_config_dir }}/10-master.conf"
+  notify: Restart dovecot service
+
+- name: Setting dovecot ssl mechanisms
+  template:
+    src: dovecot-ssl.conf.j2
+    dest: "{{ dovecot_config_dir }}/10-ssl.conf"
+  notify: Restart dovecot service
+
+
+# userdb file format:
+# username:{SCHEME}pass:<uid>:<gid>:<home>
+# glx@clans.galaxie.family:{CRYPT}$2y$05$4/rmr0jebS.pRkEmBYLxRuE2bJfjjdL8x/.YFJOd5olBJSsG1CCBe:::

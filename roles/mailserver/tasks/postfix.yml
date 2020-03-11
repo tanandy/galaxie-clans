@@ -108,20 +108,27 @@
       {% endfor %}
   notify: Restart postfix service
 
+- name: Render domains
+  copy:
+    dest: "{{ postfix_domain_maps_file }}"
+    content: |-
+      {% for domain in postfix_domains %}
+      {{ domain }}
+      {% endfor %}
+  notify: Restart postfix service
+
+- name: Init domains
+  shell: >-
+    postmap hash:{{ postfix_domain_maps_file }}
+
 - name: Init virtual aliases
   shell: >-
     postmap hash:{{ postfix_virtual_alias_maps_file }}
-  args:
-    creates: "{{ postfix_virtual_alias_maps_file }}.db"
 
 - name: Init virtual mailboxes
   shell: >-
     postmap hash:{{ postfix_virtual_mailbox_maps_file }}
-  args:
-    creates: "{{ postfix_virtual_mailbox_maps_file }}.db"
 
 - name: Init transport
   shell: >-
     postmap hash:/etc/postfix/transport
-  args:
-    creates: "/etc/postfix/transport.db"

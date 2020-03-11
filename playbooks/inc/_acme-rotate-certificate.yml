@@ -77,6 +77,12 @@
   when:
     - domain_to_certify_challenge is changed
 
+- name: Sync dynamic record with zone file
+  command: >-
+    rndc sync -clean {{ domain_to_certify.zone }}
+  when:
+    - domain_to_certify_challenge is changed
+
 - name: Respond acme challenge and store {{ crt_filename }}
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"

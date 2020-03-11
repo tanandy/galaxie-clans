@@ -677,7 +677,8 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 # readme_directory: The location of the Postfix README files.
 #
 shlib_directory = no
-relay_domains = {{ postfix_relay_domains | join(', ') }}
+
+virtual_alias_domains = hash:{{ postfix_domain_maps_file }}
 virtual_alias_maps = {{ postfix_virtual_alias_maps }}
 virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
 virtual_mailbox_maps = {{ postfix_virtual_mailbox_maps }}
@@ -691,9 +692,11 @@ local_transport = virtual
 local_recipient_maps = $virtual_mailbox_maps
 transport_maps = {{ postfix_transport_maps }}
 
+# relay_domains = $virtual_mailbox_domains
+
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_type = dovecot
-smtpd_sasl_path = /var/run/dovecot/auth-client
+smtpd_sasl_path = private/auth
 smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 smtpd_sasl_security_options = noanonymous

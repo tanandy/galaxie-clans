@@ -5,3 +5,4 @@ mitogen
 green
 molecule
 ansible-lint
+passlib
