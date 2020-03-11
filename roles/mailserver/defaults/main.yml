@@ -1,9 +1,5 @@
 # roles/mailserver/defaults/main.yml
 ---
-postfix_main_domain: 'mail.localhost.local'
-
-postfix_home_mailbox: 'mail/'
-
 spamassassin_packages:
   - spamassassin
 
@@ -18,41 +14,49 @@ clamav_packages:
   - clamav-lib
   - clamav-server-systemd
 
-postfix_mynetwork:
-  - 172.16.0.0/16
-
+#
+# System user owning the virtual mailboxes
+#
 postfix_virtual_mailbox_gname: vmail
 postfix_virtual_mailbox_gid: 5000
-
 postfix_virtual_mailbox_uname: vmail
 postfix_virtual_mailbox_uid: 5000
 postfix_virtual_mailbox_home: /home/vmail
 postfix_virtual_mailbox_shell: /usr/bin/nologin
-
+#
+# Path to K/V files olding multiple values
+#
+postfix_domain_maps_file: /etc/postfix/mapsdomains
+postfix_transport_maps_file: /etc/postfix/transport
+postfix_virtual_alias_domains_file: /etc/postfix/virtual_domains
 postfix_virtual_alias_maps_file: /etc/postfix/virtual_alias_maps
 postfix_virtual_mailbox_maps_file: /etc/postfix/virtual_mailbox_maps
-postfix_transport_maps_file: /etc/postfix/transport
-postfix_domain_maps_file: /etc/postfix/virtual_domains
-
+#
+# Configuration values to point at K/V files
+#
+postfix_transport_maps: "hash:{{ postfix_transport_maps_file }}"
+postfix_virtual_alias_domains: "hash:{{ postfix_virtual_alias_domains_file }}"
 postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_file }}"
 postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_file }}"
-postfix_transport_maps: "hash:{{ postfix_transport_maps_file }}"
-
-postfix_relay_domains:
-  - localhost
-postfix_mydestination: ""
+#
+# K/V content
+#
 postfix_transports: []
-# - domain: "example.com"
-#   transport: "smtp:internal.example.com"
+  # - domain: "example.com"
+  #   transport: "smtp:internal.example.com"
 postfix_virtual_aliases: []
-# - alias: "info-alias@example.com"
-#   email: "info@example.com"
+  # - alias: "info-alias@example.com"
+  #   email: "info@example.com"
 postfix_virtual_mailboxes: []
-# - email: "info@example.com"
-#   recipient: "example.com/info"
+  # - email: "info@example.com"
+  #   recipient: "example.com/info"
+postfix_virtual_mailbox_domains: []
+  # - example.com
+  # - localhost
+postfix_virtual_aliases_domains: []
+  # - example.com
+  # - localhost
 
-
-postfix_virtual_mailbox_domains: "{{ postfix_relay_domains }}"
 postfix_mailbox_base: "{{ postfix_virtual_mailbox_home }}"
 
 postfix_virtual_uid_maps: "static:{{ postfix_virtual_mailbox_uid }}"

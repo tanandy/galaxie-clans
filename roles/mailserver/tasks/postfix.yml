@@ -3,13 +3,6 @@
 - name: Sanity checks
   assert:
     that:
-      - "{{ postfix_relay_domains | intersect(postfix_virtual_mailboxes|map(attribute='email')) | length == 0 }}"
-    msg: >-
-      NEVER list a virtual MAILBOX domain name as a relay domain!
-
-- name: Sanity checks
-  assert:
-    that:
       - "{{ postfix_virtual_mailboxes | map(attribute='email') | intersect(postfix_virtual_aliases|map(attribute='alias')) | length == 0 }}"
     msg: >-
        NEVER list a virtual MAILBOX domain name as a virtual ALIAS domain!
@@ -40,34 +33,10 @@
     shell: "{{ postfix_virtual_mailbox_shell }}"
     group: "{{ postfix_virtual_mailbox_gname }}"
 
-- name: Preseed postfix with debconf
-  debconf:
-    name: postfix
-    vtype: string
-    question: "{{ item.question }}"
-    value: "{{ item.value }}"
-  loop:
-    - question: "postfix/mailname"
-      value: "{{ postfix_main_domain }}"
-
-    - question: "postfix/main_mailer_type"
-      value: "Internet Site"
-
 - name: Install Postfix
   package:
     name: "{{ mailserver_postfix_packages }}"
     state: present
-
-- name: Make SSL directory
-  file:
-    path: /etc/postfix/ssl
-    state: directory
-    mode: 0755
-
-- name: Copy SSL key to directory
-  copy:
-    src: files/
-    dest: "{{ postfix_config_dir }}/ssl"
 
 - name: Install postfix main configuration
   template:
@@ -81,13 +50,19 @@
     dest: "{{ postfix_config_dir }}/master.cf"
   notify: Restart postfix service
 
-- name: Render virtual mailboxes
+- name: Render virtual alias domains
   copy:
-    dest: "{{ postfix_virtual_mailbox_maps_file }}"
+    dest: "{{ postfix_virtual_alias_domains_file }}"
     content: |-
-      {% for alias in postfix_virtual_mailboxes %}
-      {{ alias.email }} {{ alias.recipient }}
+      {% for domain in postfix_virtual_aliases_domains %}
+      {{ domain }}
       {% endfor %}
+  register: _render_virtual_alias_domains
+
+- name: Update virtual alias domains db
+  shell: >-
+    postmap {{ postfix_virtual_alias_domains }}
+  when: _render_virtual_alias_domains is changed
   notify: Restart postfix service
 
 - name: Render virtual aliases
@@ -97,6 +72,27 @@
       {% for alias in postfix_virtual_aliases %}
       {{ alias.alias }} {{ alias.email }}
       {% endfor %}
+  register: _render_virtual_alias
+
+- name: Update virtual aliases db
+  shell: >-
+    postmap {{ postfix_virtual_alias_maps }}
+  when: _render_virtual_alias is changed
+  notify: Restart postfix service
+
+- name: Render virtual mailboxes
+  copy:
+    dest: "{{ postfix_virtual_mailbox_maps_file }}"
+    content: |-
+      {% for alias in postfix_virtual_mailboxes %}
+      {{ alias.email }} {{ alias.recipient }}
+      {% endfor %}
+  register: _render_virtual_mailboxes
+
+- name: Update virtual mailboxes db
+  shell: >-
+    postmap {{ postfix_virtual_mailbox_maps }}
+  when: _render_virtual_mailboxes is changed
   notify: Restart postfix service
 
 - name: Render transports
@@ -106,29 +102,11 @@
       {% for transport in postfix_transports %}
       {{ transport.domain }} {{ transport.transport }}
       {% endfor %}
+  register: _render_transports
+
+
+- name: Update transports db
+  shell: >-
+    postmap {{ postfix_transport_maps }}
+  when: _render_transports is changed
   notify: Restart postfix service
-
-- name: Render domains
-  copy:
-    dest: "{{ postfix_domain_maps_file }}"
-    content: |-
-      {% for domain in postfix_domains %}
-      {{ domain }}
-      {% endfor %}
-  notify: Restart postfix service
-
-- name: Init domains
-  shell: >-
-    postmap hash:{{ postfix_domain_maps_file }}
-
-- name: Init virtual aliases
-  shell: >-
-    postmap hash:{{ postfix_virtual_alias_maps_file }}
-
-- name: Init virtual mailboxes
-  shell: >-
-    postmap hash:{{ postfix_virtual_mailbox_maps_file }}
-
-- name: Init transport
-  shell: >-
-    postmap hash:/etc/postfix/transport

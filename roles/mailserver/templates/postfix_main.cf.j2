@@ -678,7 +678,7 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 #
 shlib_directory = no
 
-virtual_alias_domains = hash:{{ postfix_domain_maps_file }}
+virtual_alias_domains = {{ postfix_virtual_alias_domains }}
 virtual_alias_maps = {{ postfix_virtual_alias_maps }}
 virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
 virtual_mailbox_maps = {{ postfix_virtual_mailbox_maps }}
@@ -691,8 +691,6 @@ virtual_gid_maps = {{ postfix_virtual_gid_maps }}
 local_transport = virtual
 local_recipient_maps = $virtual_mailbox_maps
 transport_maps = {{ postfix_transport_maps }}
-
-# relay_domains = $virtual_mailbox_domains
 
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_type = dovecot
