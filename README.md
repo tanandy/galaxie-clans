@@ -57,7 +57,6 @@ Look like it's not that important, but that really matters for family members.
 Once upon a time, this project was hosted on a ancient platform called GitHub. Then came the Buyer.
 The Buyer bought GitHub, willing to rule over its community. We were not to sell, so here is the new home of "https://github.com/Tuuux/galaxie".
 
-
 Ansible toolbox aimed at managing a set of Debian servers. Originaly written for managing a Home Network with external services.
 
 That is a set of powerfull roles made by a senior system admin and reviewed by a senior developer.
@@ -73,13 +72,6 @@ It will be an honor if you take our work as an example, our roles are correct fr
 
 All our Work is published under GPLv3.
 
-The Galaxie system is also used as an Action Layer for an AI called Alfred:
-
-* https://github.com/aurelienmaury/alfred
-* https://github.com/aurelienmaury/alfred-brain
-* https://github.com/aurelienmaury/alfred-spine
-* https://github.com/aurelienmaury/alfred-muscles (Galaxie is used here)
-* https://github.com/aurelienmaury/alfred-cli
 
 ## How the Magic happen
 
