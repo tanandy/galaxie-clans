@@ -1,7 +1,0 @@
----
-- hosts: galaxie
-
-  roles:
-    - role: ndjbdns
-      vars:
-        glx_ndjbdns_upgrade_roots: true
