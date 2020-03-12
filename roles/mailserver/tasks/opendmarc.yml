@@ -1,0 +1,51 @@
+---
+- name: Install opendmarc
+  package:
+    name: "{{ mailserver_opendmarc_packages }}"
+
+- name: Enable service
+  systemd:
+    name: opendmarc
+    state: started
+    enabled: yes
+
+- name: Adjust opendmarc config
+  lineinfile:
+    path: /etc/opendmarc.conf
+    regexp: >-
+      {{ item.config_key }} .*
+    line: >-
+      {{ item.config_key }} {{ item.config_value }}
+  loop:
+    - config_key: "AuthservID"
+      config_value: "OpenDMARC"
+
+    - config_key: "IgnoreAuthenticatedClients"
+      config_value: "true"
+
+    - config_key: "RejectFailures"
+      config_value: "true"
+
+    - config_key: "RequiredHeaders"
+      config_value: "true"
+
+    - config_key: "SPFSelfValidate"
+      config_value: "true"
+  notify: Restart opendmarc service
+
+- name: "Create DNS record"
+  nsupdate:
+    server: "127.0.0.1"
+    zone: "{{ item }}"
+    record: "_dmarc"
+    type: TXT
+    value: "v=DMARC1;p=reject;pct=20;rua=mailto:hostmaster@{{ item }};ruf=mailto:hostmaster@{{ item }};rf=afrf;aspf=r;adkim=r"
+    state: present
+  loop: "{{ opendmarc_domains }}"
+
+- name: Sync dynamic record with zone file
+  shell: >-
+    rndc sync -clean {{ item }}
+  loop: "{{ opendmarc_domains }}"
+
+- meta: flush_handlers

@@ -1,0 +1,36 @@
+---
+- name: Install opendkim
+  package:
+    name: "{{ mailserver_opendkim_packages }}"
+
+- name: Create dkim key directories
+  file:
+    path: "{{ opendkim_key_directory }}/{{ item }}"
+    state: directory
+    owner: opendkim
+    group: opendkim
+  loop: "{{ opendkim_keys }}"
+
+- name: Create dkim key directories
+  file:
+    path: "{{ opendkim_conf_directory }}"
+    state: directory
+    owner: opendkim
+    group: opendkim
+
+- name: Adjust opendkim configuration
+  blockinfile:
+    path: "{{ opendkim_conf_file }}"
+    block: |-
+      KeyTable           {{ opendkim_key_table_file }}
+      SigningTable       {{ opendkim_signing_table_file }}
+      ExternalIgnoreList {{ opendkim_trusted_hosts_file }}
+      InternalHosts      {{ opendkim_trusted_hosts_file }}
+  notify: Restart opendkim service
+
+- include_tasks: "_opendkim_domain.yml"
+  loop: "{{ opendkim_keys }}"
+  loop_control:
+    loop_var: _opendkim_domain
+
+- meta: flush_handlers

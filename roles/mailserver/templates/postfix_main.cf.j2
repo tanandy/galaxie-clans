@@ -708,3 +708,18 @@ smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
 smtpd_tls_loglevel = 1
 smtp_tls_security_level = may
 smtp_tls_loglevel = 1
+
+milter_default_action = accept
+milter_protocol = 6
+smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock
+non_smtpd_milters = $smtpd_milters
+
+# Matt : NOT TOO FAST COWBOY!
+# This means that postfix will up to two concurrent
+# connections per receiving domains. The default value is 20.
+default_destination_concurrency_limit = 2
+# Postfix will add a delay between each message to the same receiving domain.
+default_destination_rate_delay = 5s
+# Limit the number of recipients of each message.
+# If a message had 20 recipients on the same domain, postfix will break it out
+default_extra_recipient_limit = 3

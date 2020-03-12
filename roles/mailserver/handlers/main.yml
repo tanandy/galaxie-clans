@@ -12,3 +12,15 @@
     name: "{{ mailserver_dovecot_service }}"
     enabled: yes
     state: restarted
+
+- name: Restart opendkim service
+  service:
+    name: "opendkim"
+    enabled: yes
+    state: restarted
+
+- name: Restart opendmarc service
+  service:
+    name: "opendmarc"
+    enabled: yes
+    state: restarted

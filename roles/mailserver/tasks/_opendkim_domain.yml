@@ -1,0 +1,79 @@
+---
+- name: Sanity checks
+  assert:
+    that:
+      - _opendkim_domain is defined
+
+- name: Delete dkim keys to force rotation
+  shell: >-
+    rm -f {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private
+    {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.txt
+  when: rotate_dkim_key is defined and rotate_dkim_key | bool
+
+- name: Generate dkim keys
+  shell: >-
+    opendkim-genkey -D {{ opendkim_key_directory }}/{{ _opendkim_domain }} -d {{ _opendkim_domain }} -s mail
+    && chown opendkim: {{ opendkim_key_directory }} -R
+  args:
+    creates: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private"
+
+- name: Render key table
+  lineinfile:
+    dest: "{{ opendkim_key_table_file }}"
+    line: >-
+      mail._domainkey.{{ _opendkim_domain }} {{ _opendkim_domain }}:mail:{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private
+    owner: opendkim
+    group: opendkim
+    create: yes
+  notify: Restart opendkim service
+
+- name: Render signing table
+  lineinfile:
+    dest: "{{ opendkim_signing_table_file }}"
+    line: >-
+      {{ _opendkim_domain }} mail._domainkey.{{ _opendkim_domain }}
+    owner: opendkim
+    group: opendkim
+    create: yes
+  notify: Restart opendkim service
+
+- name: Render trusted hosts table
+  lineinfile:
+    dest: "{{ opendkim_trusted_hosts_file }}"
+    line: >-
+      {{ _opendkim_domain }}
+    owner: opendkim
+    group: opendkim
+    create: yes
+  notify: Restart opendkim service
+
+- name: Find out what the remote machine's mounts are
+  slurp:
+    src: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.txt"
+  register: _opendkim_domain_key
+
+- name: Opendkim key extraction
+  set_fact:
+    _opendkim_domain_full_record: >-
+      {{
+        _opendkim_domain_key['content'] | b64decode
+        | regex_replace('.*\( ', '')
+        | regex_replace(' \) .*', '')
+        | regex_replace('[\n\t\(\)\" ]', '')
+      }}
+
+
+- name: "Create record mail._domainkey.{{ _opendkim_domain }}"
+  nsupdate:
+    server: "127.0.0.1"
+    zone: "{{ _opendkim_domain }}"
+    record: "mail._domainkey"
+    type: TXT
+    value:
+      - "{{ _opendkim_domain_full_record[:250] }}"
+      - "{{ _opendkim_domain_full_record[250:] }}"
+    state: present
+
+- name: Sync dynamic record with zone file
+  shell: >-
+    rndc sync -clean {{ _opendkim_domain }}

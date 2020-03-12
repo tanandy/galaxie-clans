@@ -38,6 +38,14 @@
     name: "{{ mailserver_postfix_packages }}"
     state: present
 
+- name: Add postfix to opendkim and opendmarc groups
+  user:
+    name: postfix
+    groups:
+      - opendkim
+      - opendmarc
+    append: yes
+
 - name: Install postfix main configuration
   template:
     src: postfix_main.cf.j2
@@ -110,3 +118,5 @@
     postmap {{ postfix_transport_maps }}
   when: _render_transports is changed
   notify: Restart postfix service
+
+- meta: flush_handlers

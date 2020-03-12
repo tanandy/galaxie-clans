@@ -5,6 +5,10 @@
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
 
+- include_tasks: opendkim.yml
+
+- include_tasks: opendmarc.yml
+
 - include_tasks: postfix.yml
 
 - include_tasks: dovecot.yml

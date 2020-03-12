@@ -1,6 +1,5 @@
 # tasks/dovecot.yml -- Install and configure Dovecot
 ---
-
 - name: Install Dovecot
   package:
     name: "{{ item }}"
@@ -18,12 +17,6 @@
     name: "{{ mailserver_dovecot_service }}"
     state: started
     enabled: true
-
-- name: Setting dovecot mail location
-  template:
-    src: dovecot.conf.j2
-    dest: /etc/dovecot/conf.d/10-mail.conf
-  notify: Restart dovecot service
 
 - name: Applying thunderbird fix
   lineinfile:
@@ -56,7 +49,4 @@
     dest: "{{ dovecot_config_dir }}/10-ssl.conf"
   notify: Restart dovecot service
 
-
-# userdb file format:
-# username:{SCHEME}pass:<uid>:<gid>:<home>
-# glx@clans.galaxie.family:{CRYPT}$2y$05$4/rmr0jebS.pRkEmBYLxRuE2bJfjjdL8x/.YFJOd5olBJSsG1CCBe:::
+- meta: flush_handlers

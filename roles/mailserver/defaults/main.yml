@@ -67,3 +67,12 @@ postfix_virtual_mailbox_limit: 512000000
 
 # postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
 # postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
+
+opendkim_conf_file: "/etc/opendkim.conf"
+opendkim_conf_directory: "/etc/opendkim"
+opendkim_key_directory: "/etc/dkimkeys"
+
+
+opendkim_key_table_file: "{{ opendkim_conf_directory }}/key_table"
+opendkim_signing_table_file: "{{ opendkim_conf_directory }}/signing_table"
+opendkim_trusted_hosts_file: "{{ opendkim_conf_directory }}/trusted_hosts"

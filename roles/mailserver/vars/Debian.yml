@@ -5,8 +5,13 @@
 
 mailserver_postfix_packages:
   - postfix
+
+mailserver_opendkim_packages:
   - opendkim
   - opendkim-tools
+
+mailserver_opendmarc_packages:
+  - opendmarc
 
 mailserver_postfix_service: postfix
 
