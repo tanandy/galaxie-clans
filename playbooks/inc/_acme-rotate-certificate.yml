@@ -3,13 +3,13 @@
   assert:
     that:
       - ssl_private_key_directory is defined
-      - domain_to_certify is defined
-      - domain_to_certify.cn is defined
-      - domain_to_certify.zone is defined
+      - _domain_to_certify is defined
+      - _domain_to_certify.cn is defined
+      - _domain_to_certify.zone is defined
 
 - name: Cooking variables
   set_fact:
-    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ domain_to_certify.cn }}"
+    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ _domain_to_certify.cn }}"
 
 - name: Cooking variables
   set_fact:
@@ -30,15 +30,15 @@
     - "{{ domain_private_key_filename }}"
   register: private_key_generation
 
-- name: "Generate CSR for {{ domain_to_certify.cn }}"
+- name: "Generate CSR for {{ _domain_to_certify.cn }}"
   openssl_csr:
     path: "{{ csr_filename }}"
     privatekey_path: "{{ domain_private_key_filename }}"
-    country_name: "{{ domain_to_certify.country | default('FR') }}"
-    organization_name: "{{ domain_to_certify.org | default('galaxie-clans') }}"
-    email_address: "{{ domain_to_certify.email | default(acme_account_email) }}"
-    common_name: "{{ domain_to_certify.cn }}"
-    subject_alt_name: "{{ domain_to_certify.alt | default(omit) }}"
+    country_name: "{{ _domain_to_certify.country | default('FR') }}"
+    organization_name: "{{ _domain_to_certify.org | default('galaxie-clans') }}"
+    email_address: "{{ _domain_to_certify.email | default(acme_account_email) }}"
+    common_name: "{{ _domain_to_certify.cn }}"
+    subject_alt_name: "{{ _domain_to_certify.alt | default(omit) }}"
 
 - name: "Create acme account"
   acme_account:
@@ -51,7 +51,7 @@
       - "mailto:{{ acme_account_email }}"
   when: private_key_generation is changed
 
-- name: Create a challenge for {{ domain_to_certify.cn }}
+- name: Create a challenge for {{ _domain_to_certify.cn }}
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
@@ -59,29 +59,29 @@
     csr: "{{ csr_filename }}"
     dest: "{{ crt_filename }}"
     challenge: "dns-01"
-  register: domain_to_certify_challenge
+  register: _domain_to_certify_challenge
 
 - debug:
-    var: domain_to_certify_challenge
+    var: _domain_to_certify_challenge
 
-- name: Create record _acme-challenge.{{ domain_to_certify.cn }}
+- name: Create record _acme-challenge.{{ _domain_to_certify.cn }}
   nsupdate:
     server: "127.0.0.1"
-    zone: "{{ domain_to_certify.zone }}"
+    zone: "{{ _domain_to_certify.zone }}"
     record: >-
-      {{ item.key | regex_replace('\.' + domain_to_certify.zone, '') }}
+      {{ item.key | regex_replace('\.' + _domain_to_certify.zone, '') }}
     type: TXT
     value: "{{ item.value }}"
     state: present
-  loop: "{{ domain_to_certify_challenge.challenge_data_dns | default({}) | dict2items }}"
+  loop: "{{ _domain_to_certify_challenge.challenge_data_dns | default({}) | dict2items }}"
   when:
-    - domain_to_certify_challenge is changed
+    - _domain_to_certify_challenge is changed
 
 - name: Sync dynamic record with zone file
   command: >-
-    rndc sync -clean {{ domain_to_certify.zone }}
+    rndc sync -clean {{ _domain_to_certify.zone }}
   when:
-    - domain_to_certify_challenge is changed
+    - _domain_to_certify_challenge is changed
 
 - name: Respond acme challenge and store {{ crt_filename }}
   acme_certificate:
@@ -91,6 +91,6 @@
     csr: "{{ csr_filename }}"
     cert: "{{ crt_filename }}"
     challenge: "dns-01"
-    data: "{{ domain_to_certify_challenge }}"
+    data: "{{ _domain_to_certify_challenge }}"
   when:
-    - domain_to_certify_challenge is changed
+    - _domain_to_certify_challenge is changed

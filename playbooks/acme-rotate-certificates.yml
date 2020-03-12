@@ -11,7 +11,7 @@
       assert:
         that:
           - ssl_private_key_directory is defined
-          - domains_to_certify is defined
+          - amce_domains is defined
 
     - name: Create acme key directory
       file:
@@ -22,8 +22,8 @@
         group: ssl-cert
 
     - include_tasks: "{{ playbook_dir }}/inc/_acme-rotate-certificate.yml"
-      loop: "{{ domains_to_certify }}"
+      loop: "{{ amce_domains }}"
       loop_control:
-        loop_var: domain_to_certify
+        loop_var: _domain_to_certify
 
 # TODO: freeze or clean bind9

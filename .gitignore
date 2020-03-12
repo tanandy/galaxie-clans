@@ -20,3 +20,4 @@ __pycache__
 .galaxy_install_info
 *.data
 draft.yml
+ssh.cfg

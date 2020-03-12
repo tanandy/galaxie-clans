@@ -13,7 +13,7 @@
 
     - name: "Install mandatory packages (RAW: ALWAYS CHANGED)"
       raw: >-
-        apt-get install -y {{ clan_establish_system_packages | join(' ') }}
+        apt-get install -y {{ clan_install_system_packages | join(' ') }}
       tags:
         - raw
 
