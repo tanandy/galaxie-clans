@@ -7,18 +7,19 @@
       - _domain_to_certify.cn is defined
       - _domain_to_certify.zone is defined
 
-- name: Cooking variables
+- name: "{{ _domain_to_certify.cn }} - Cooking variables"
   set_fact:
     ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ _domain_to_certify.cn }}"
 
-- name: Cooking variables
+- name: "{{ _domain_to_certify.cn }} - Cooking variables"
   set_fact:
     acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
     domain_private_key_filename: "{{ ssl_private_key_path_basename }}.key"
     csr_filename: "{{ ssl_private_key_path_basename }}.csr"
     crt_filename: "{{ ssl_private_key_path_basename }}.crt"
+    full_crt_filename: "{{ ssl_private_key_path_basename }}.fullchain.crt"
 
-- name: "Generate private keys"
+- name: "{{ _domain_to_certify.cn }} - Generate private keys"
   openssl_privatekey:
     path: "{{ item }}"
     state: present
@@ -30,7 +31,7 @@
     - "{{ domain_private_key_filename }}"
   register: private_key_generation
 
-- name: "Generate CSR for {{ _domain_to_certify.cn }}"
+- name: "{{ _domain_to_certify.cn }} - Generate CSR"
   openssl_csr:
     path: "{{ csr_filename }}"
     privatekey_path: "{{ domain_private_key_filename }}"
@@ -40,7 +41,7 @@
     common_name: "{{ _domain_to_certify.cn }}"
     subject_alt_name: "{{ _domain_to_certify.alt | default(omit) }}"
 
-- name: "Create acme account"
+- name: "{{ _domain_to_certify.cn }} - Create acme account"
   acme_account:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
@@ -51,20 +52,18 @@
       - "mailto:{{ acme_account_email }}"
   when: private_key_generation is changed
 
-- name: Create a challenge for {{ _domain_to_certify.cn }}
+- name: "{{ _domain_to_certify.cn }} - Create a challenge"
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
     account_key_src: "{{ acme_private_key_filename }}"
     csr: "{{ csr_filename }}"
     dest: "{{ crt_filename }}"
+    fullchain_dest: "{{ full_crt_filename }}"
     challenge: "dns-01"
   register: _domain_to_certify_challenge
 
-- debug:
-    var: _domain_to_certify_challenge
-
-- name: Create record _acme-challenge.{{ _domain_to_certify.cn }}
+- name: "{{ _domain_to_certify.cn }} - Create _acme-challenge record"
   nsupdate:
     server: "127.0.0.1"
     zone: "{{ _domain_to_certify.zone }}"
@@ -77,19 +76,20 @@
   when:
     - _domain_to_certify_challenge is changed
 
-- name: Sync dynamic record with zone file
+- name: "{{ _domain_to_certify.cn }} - Sync dynamic record with zone file"
   command: >-
     rndc sync -clean {{ _domain_to_certify.zone }}
   when:
     - _domain_to_certify_challenge is changed
 
-- name: Respond acme challenge and store {{ crt_filename }}
+- name: "{{ _domain_to_certify.cn }} - Respond acme challenge and save certificate"
   acme_certificate:
     acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
     acme_version: 2
     account_key_src: "{{ acme_private_key_filename }}"
     csr: "{{ csr_filename }}"
-    cert: "{{ crt_filename }}"
+    dest: "{{ crt_filename }}"
+    fullchain_dest: "{{ full_crt_filename }}"
     challenge: "dns-01"
     data: "{{ _domain_to_certify_challenge }}"
   when:

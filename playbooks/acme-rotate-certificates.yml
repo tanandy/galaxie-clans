@@ -4,8 +4,6 @@
   gather_facts: yes
   strategy: linear
 
-
-
   tasks:
     - name: Sanity checks
       assert:
@@ -25,5 +23,3 @@
       loop: "{{ amce_domains }}"
       loop_control:
         loop_var: _domain_to_certify
-
-# TODO: freeze or clean bind9

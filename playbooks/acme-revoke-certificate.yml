@@ -1,0 +1,28 @@
+---
+- hosts: "{{ scope }}"
+  become: true
+  gather_facts: yes
+
+  tasks:
+    - name: Sanity checks
+      assert:
+        that:
+          - ssl_private_key_directory is defined
+          - acme_revoke is defined
+
+    - name: Cooking variables
+      set_fact:
+        ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ acme_revoke }}"
+
+    - name: Cooking variables
+      set_fact:
+        acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
+        crt_filename: "{{ ssl_private_key_path_basename }}.crt"
+
+
+    - name: Revoke certificate with account key
+      acme_certificate_revoke:
+        account_key_src: "{{ acme_private_key_filename }}"
+        certificate: "{{ crt_filename }}"
+        acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+        acme_version: 2

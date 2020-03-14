@@ -1,0 +1,10 @@
+---
+- name: Install netdata package
+  package:
+    name: "{{ monitoring_system_packages }}"
+
+- name: Activate netdata service
+  service:
+    name: netdata
+    state: started
+    enabled: yes

@@ -1,0 +1,6 @@
+---
+monitoring_system_packages:
+  - netdata-core
+  - netdata-plugins-bash
+  - netdata-plugins-python
+  - netdata-web
