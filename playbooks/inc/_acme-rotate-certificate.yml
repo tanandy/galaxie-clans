@@ -94,3 +94,16 @@
     data: "{{ _domain_to_certify_challenge }}"
   when:
     - _domain_to_certify_challenge is changed
+
+- name: Adjust file ownership and permissions
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: ssl-cert
+    mode: 0640
+  loop:
+    - "{{ acme_private_key_filename }}"
+    - "{{ domain_private_key_filename }}"
+    - "{{ csr_filename }}"
+    - "{{ crt_filename }}"
+    - "{{ full_crt_filename }}"

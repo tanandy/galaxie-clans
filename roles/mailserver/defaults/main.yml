@@ -1,4 +1,3 @@
-# roles/mailserver/defaults/main.yml
 ---
 spamassassin_packages:
   - spamassassin
@@ -56,23 +55,21 @@ postfix_virtual_mailbox_domains: []
 postfix_virtual_aliases_domains: []
   # - example.com
   # - localhost
-
 postfix_mailbox_base: "{{ postfix_virtual_mailbox_home }}"
-
 postfix_virtual_uid_maps: "static:{{ postfix_virtual_mailbox_uid }}"
 postfix_virtual_gid_maps: "static:{{ postfix_virtual_mailbox_gid }}"
 postfix_virtual_minimum_uid: "{{ postfix_virtual_mailbox_uid }}"
-
 postfix_virtual_mailbox_limit: 512000000
-
 # postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
 # postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
 
+#
+# OpenDKIM
+#
 opendkim_conf_file: "/etc/opendkim.conf"
 opendkim_conf_directory: "/etc/opendkim"
 opendkim_key_directory: "/etc/dkimkeys"
-
-
 opendkim_key_table_file: "{{ opendkim_conf_directory }}/key_table"
 opendkim_signing_table_file: "{{ opendkim_conf_directory }}/signing_table"
 opendkim_trusted_hosts_file: "{{ opendkim_conf_directory }}/trusted_hosts"
+opendkim_key_size: 1024

@@ -4,24 +4,28 @@
     that:
       - _opendkim_domain is defined
 
+- name: Cooking variables
+  set_fact:
+    _opendkim_domain_directory: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}"
+
 - name: Delete dkim keys to force rotation
   shell: >-
     rm -f {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private
     {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.txt
-  when: rotate_dkim_key is defined and rotate_dkim_key | bool
+  when: opendkim_rotate_key is defined and opendkim_rotate_key | bool
 
 - name: Generate dkim keys
   shell: >-
-    opendkim-genkey -D {{ opendkim_key_directory }}/{{ _opendkim_domain }} -d {{ _opendkim_domain }} -s mail
+    opendkim-genkey -b {{ opendkim_key_size }} -D {{ _opendkim_domain_directory }} -d {{ _opendkim_domain }} -s mail
     && chown opendkim: {{ opendkim_key_directory }} -R
   args:
-    creates: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private"
+    creates: "{{ _opendkim_domain_directory }}/mail.private"
 
 - name: Render key table
   lineinfile:
     dest: "{{ opendkim_key_table_file }}"
     line: >-
-      mail._domainkey.{{ _opendkim_domain }} {{ _opendkim_domain }}:mail:{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private
+      mail._domainkey.{{ _opendkim_domain }} {{ _opendkim_domain }}:mail:{{ _opendkim_domain_directory }}/mail.private
     owner: opendkim
     group: opendkim
     create: yes
@@ -49,7 +53,7 @@
 
 - name: Find out what the remote machine's mounts are
   slurp:
-    src: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.txt"
+    src: "{{ _opendkim_domain_directory }}/mail.txt"
   register: _opendkim_domain_key
 
 - name: Opendkim key extraction
@@ -62,7 +66,6 @@
         | regex_replace('[\n\t\(\)\" ]', '')
       }}
 
-
 - name: "Create record mail._domainkey.{{ _opendkim_domain }}"
   nsupdate:
     server: "127.0.0.1"
@@ -70,10 +73,12 @@
     record: "mail._domainkey"
     type: TXT
     value:
-      - "{{ _opendkim_domain_full_record[:250] }}"
-      - "{{ _opendkim_domain_full_record[250:] }}"
+      - "{{ _opendkim_domain_full_record }}"
     state: present
+  register: _domainkey_record_creation
 
 - name: Sync dynamic record with zone file
   shell: >-
     rndc sync -clean {{ _opendkim_domain }}
+  when:
+    - _domainkey_record_creation is changed
