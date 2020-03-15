@@ -95,7 +95,7 @@
   when:
     - _domain_to_certify_challenge is changed
 
-- name: Adjust file ownership and permissions
+- name: "{{ _domain_to_certify.cn }} - Adjust file ownership and permissions"
   file:
     path: "{{ item }}"
     owner: root
