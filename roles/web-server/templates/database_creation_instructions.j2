@@ -1,6 +1,0 @@
-CREATE DATABASE {{ glx_wordpress_db_name }};
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER
-ON {{ glx_wordpress_db_name }}.*
-TO {{ glx_wordpress_db_user }}@localhost
-IDENTIFIED BY '{{ glx_wordpress_db_password }}';
-FLUSH PRIVILEGES;

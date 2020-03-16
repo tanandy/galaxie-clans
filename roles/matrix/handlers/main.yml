@@ -1,0 +1,12 @@
+---
+- name: Restart matrix service
+  systemd:
+    name: matrix-synapse
+    state: restarted
+    enabled: yes
+
+- name: Restart nginx service
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
