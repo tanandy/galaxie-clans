@@ -62,7 +62,6 @@ postfix_virtual_minimum_uid: "{{ postfix_virtual_mailbox_uid }}"
 postfix_virtual_mailbox_limit: 512000000
 # postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
 # postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
-
 #
 # OpenDKIM
 #

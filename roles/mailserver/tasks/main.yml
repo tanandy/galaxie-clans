@@ -6,12 +6,17 @@
     - "{{ ansible_os_family }}.yml"
 
 - include_tasks: opendkim.yml
+  when: opendkim_keys is defined
 
 - include_tasks: opendmarc.yml
+  when: opendmarc_keys is defined
 
 - include_tasks: postfix.yml
 
 - include_tasks: dovecot.yml
+  when:
+    - mailserver_is_recipient_server is defined
+    - mailserver_is_recipient_server | bool
 
 #- include_tasks: spamassassin.yml
 

@@ -11,6 +11,7 @@
     group: opendkim
   loop: "{{ opendkim_keys }}"
 
+
 - name: Create dkim key directories
   file:
     path: "{{ opendkim_conf_directory }}"

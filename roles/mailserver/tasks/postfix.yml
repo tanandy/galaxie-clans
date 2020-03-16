@@ -38,13 +38,21 @@
     name: "{{ mailserver_postfix_packages }}"
     state: present
 
-- name: Add postfix to opendkim and opendmarc groups
+- name: Add postfix to opendmarc groups
+  user:
+    name: postfix
+    groups:
+      - opendmarc
+    append: yes
+  when: opendmarc_keys is defined
+
+- name: Add postfix to opendkim groups
   user:
     name: postfix
     groups:
       - opendkim
-      - opendmarc
     append: yes
+  when: opendkim_keys is defined
 
 - name: Install postfix main configuration
   template:
@@ -81,6 +89,7 @@
       {{ alias.alias }} {{ alias.email }}
       {% endfor %}
   register: _render_virtual_alias
+  when: postfix_has_virtual_aliases
 
 - name: Update virtual aliases db
   shell: >-
@@ -96,6 +105,7 @@
       {{ alias.email }} {{ alias.recipient }}
       {% endfor %}
   register: _render_virtual_mailboxes
+  when: postfix_has_virtual_mailboxes
 
 - name: Update virtual mailboxes db
   shell: >-
@@ -111,7 +121,7 @@
       {{ transport.domain }} {{ transport.transport }}
       {% endfor %}
   register: _render_transports
-
+  when: postfix_has_transports
 
 - name: Update transports db
   shell: >-

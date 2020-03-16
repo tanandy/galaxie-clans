@@ -19,10 +19,20 @@
         acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
         crt_filename: "{{ ssl_private_key_path_basename }}.crt"
 
-
     - name: Revoke certificate with account key
       acme_certificate_revoke:
         account_key_src: "{{ acme_private_key_filename }}"
         certificate: "{{ crt_filename }}"
         acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
         acme_version: 2
+
+    - name: Delete old files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ ssl_private_key_path_basename }}.csr"
+        - "{{ ssl_private_key_path_basename }}.crt"
+        - "{{ ssl_private_key_path_basename }}.fullchain.crt"
+        - "{{ ssl_private_key_path_basename }}.key"
+        - "{{ ssl_private_key_path_basename }}.acme.key"

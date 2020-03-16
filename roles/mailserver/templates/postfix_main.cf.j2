@@ -678,24 +678,35 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 #
 shlib_directory = no
 
+{% if mailserver_is_recipient_server is defined and mailserver_is_recipient_server | bool %}
 virtual_alias_domains = {{ postfix_virtual_alias_domains }}
 virtual_alias_maps = {{ postfix_virtual_alias_maps }}
 virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
 virtual_mailbox_maps = {{ postfix_virtual_mailbox_maps }}
 virtual_mailbox_base = {{ postfix_mailbox_base }}
 virtual_mailbox_limit = {{ postfix_virtual_mailbox_limit }}
+local_recipient_maps = $virtual_mailbox_maps
+local_transport = virtual
+
+smtpd_sasl_type = dovecot
+smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+{% endif %}
+
+{% if postfix_relay_domains is defined and postfix_relay_domains|length > 0 %}
+relay_domains = {{ postfix_relay_domains | join(', ') }}
+{% endif %}
 virtual_minimum_uid = {{ postfix_virtual_minimum_uid }}
 virtual_transport = virtual
 virtual_uid_maps = {{ postfix_virtual_uid_maps }}
 virtual_gid_maps = {{ postfix_virtual_gid_maps }}
-local_transport = virtual
-local_recipient_maps = $virtual_mailbox_maps
 transport_maps = {{ postfix_transport_maps }}
 
 smtpd_sasl_auth_enable = yes
-smtpd_sasl_type = dovecot
+
+
 smtpd_sasl_path = private/auth
-smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+
 smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 smtpd_sasl_security_options = noanonymous
 smtpd_sasl_tls_security_options = $smtpd_sasl_security_options
@@ -704,13 +715,14 @@ smtpd_tls_auth_only = yes
 smtpd_tls_received_header = yes
 smtpd_tls_cert_file = {{ postfix_smtpd_tls_cert_file }}
 smtpd_tls_key_file = {{ postfix_smtpd_tls_key_file }}
-smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
+
 smtpd_tls_loglevel = 1
 smtp_tls_security_level = may
 smtp_tls_loglevel = 1
 
 milter_default_action = accept
 milter_protocol = 6
+
 smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock
 non_smtpd_milters = $smtpd_milters
 
