@@ -1,0 +1,15 @@
+---
+#
+# Based on https://github.com/jitsi/docker-jitsi-meet
+#
+- import_tasks: "checks.yml"
+  when:
+    - not _jitsi_meet_uninstall
+
+- include_tasks: "install.yml"
+  when:
+    - not _jitsi_meet_uninstall
+
+- include_tasks: "uninstall.yml"
+  when:
+    - _jitsi_meet_uninstall

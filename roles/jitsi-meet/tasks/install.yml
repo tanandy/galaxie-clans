@@ -1,0 +1,46 @@
+---
+- name:
+  apt:
+    name: docker-compose
+
+- name: Pre-pull images
+  docker_image:
+    name: "{{ item.value }}"
+    source: pull
+  loop: "{{ jitsi_meet_docker_images | dict2items }}"
+
+- name: Create jitsi-meet directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop: "{{ jitsi_meet_expected_directories }}"
+
+- name: Render docker-compose file
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{ jitsi_meet_docker_compose_file }}"
+  notify:
+    - Restart jitsi-meet service
+
+- name: Render docker-compose environment file
+  template:
+    src: "config.env.j2"
+    dest: "{{ jitsi_meet_configuration_file }}"
+  notify:
+    - Restart jitsi-meet service
+
+- name: Render jitsi-meet systemd service
+  template:
+    src: "systemd.service.j2"
+    dest: "{{ jitsi_meet_systemd_service_file }}"
+  register: _jitsi_meet_systemd_service_render
+  notify:
+    - Restart jitsi-meet service
+
+- name: Start jitsi-meet service
+  systemd:
+    name: jitsi-meet
+    state: started
+    daemon_reload: "{{ _jitsi_meet_systemd_service_render is changed }}"
+
+#- name: Render nginx configuration file

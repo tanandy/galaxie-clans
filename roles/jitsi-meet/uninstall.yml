@@ -1,0 +1,4 @@
+stop
+ service: jicofo jitsi-video-bridge prosody
+
+ 

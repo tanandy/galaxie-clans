@@ -1,0 +1,9 @@
+---
+#- name: Check nginx is installed
+#- name: Check docker is installed
+#- name: Check certificate exists
+
+- name: DHparams key should exist
+  file:
+    path: "{{ jitsi_meet_nginx_dhparams_key_file }}"
+    state: file
