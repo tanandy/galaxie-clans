@@ -21,3 +21,4 @@ __pycache__
 *.data
 draft.yml
 ssh.cfg
+roles/tmp-*
