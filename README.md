@@ -29,7 +29,9 @@ with goal to back to Galaxie way one day.
 * **NTP**: Based on `ntpd`. Home made.
 * **DNS**: Based on `bind`. Inspired by the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
 * **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
+* **WEBSERVER** ``nginx``
 * **BACKUP**: Based on [Borg](https://www.borgbackup.org/). Role is be written.
+
 ##### Branch Stub
 * **TFTP**: Based on `tfpd`. Using the role [Bert Van Vreckem tftp role](https://github.com/bertvv/ansible-role-tftp).
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
@@ -37,8 +39,8 @@ with goal to back to Galaxie way one day.
 
 #### Broadcasting - Galaxie Media
 
-* **WEBSERVER** ``nginx``
-* **MEETING**: ``Riot.im``
+
+* **MEETING**: ``Jitsi + Mattermost``
 * **MEDIA-STREAMING**: ``peertube``
 * **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).
 
@@ -139,3 +141,8 @@ Now they can connect via ssh to get the minimal infos to configure themselves as
 * les fichier de group vars : guide pour savoir où surcharger 'clan_allies_export' (à savoir dans le fichier de group_var du clan qui exporte
 
 # Ansible coding guidelines
+
+# Prerequisites
+
+* Debian 10 with ipv4 and ipv6 interface
+* SSH access: root or full sudo

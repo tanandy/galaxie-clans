@@ -13,7 +13,8 @@
 
 - pip:
     name: docker
-- name: Ensure Dimension base path exists
+
+    - name: Ensure Dimension base path exists
   file:
     path: "{{ matrix_dimension_base_path }}"
     state: directory
