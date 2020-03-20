@@ -1,0 +1,18 @@
+---
+- hosts: vana
+  become: yes
+  gather_facts: no
+
+  vars:
+    _matrix_user:
+      name: dimension
+      password: mesgenoux
+
+  tasks:
+    #- include_tasks: "{{ playbook_dir }}/../roles/matrix/tasks/_create_user.yml"
+
+    - include_tasks: "{{ playbook_dir }}/../roles/matrix/tasks/_get_access_token.yml"
+
+
+    - debug:
+        msg: "{{ matrix_access_tokens[_matrix_user.name] }}"

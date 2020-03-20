@@ -1,0 +1,18 @@
+---
+- name: "Matrix create user - Sanity checks"
+  assert:
+    that:
+      - _matrix_user is defined
+      - _matrix_user.name is defined
+      - _matrix_user.password is defined
+
+- name: "Matrix create user - {{ _matrix_user.name }}"
+  command: >-
+    register_new_matrix_user --config /etc/matrix-synapse/homeserver.yaml
+    --user {{ _matrix_user.name }}
+    --password {{ _matrix_user.password }}
+    {% if _matrix_user.is_admin is defined and _matrix_user.is_admin | bool %}
+    --admin
+    {% else %}
+    --no-admin
+    {% endif %}

@@ -1,0 +1,14 @@
+- name: Fail if required Dimension settings not defined
+  assert:
+    that:
+      - matrix_dimension_access_token is defined
+      - matrix_dimension_access_token | length > 0
+    msg: >-
+      You need to define a required configuration setting 'matrix_dimension_access_token' for using Dimension.
+
+- name: Assert federation
+  assert:
+    that:
+      - matrix_synapse_federation_enabled | bool
+    msg: >-
+      You need to enable Matrix Federation to use Dimension. Set 'matrix_synapse_federation_enabled' to 'true'.

@@ -2,7 +2,9 @@
 matrix_server_name: ~
 matrix_admin_contact: ~
 matrix_registration_shared_password: ~
-
+matrix_coturn_static_auth_secret: ~
+matrix_coturn_user_quota: 8
+matrix_coturn_total_quota: 800
 matrix_enable_registration: "false"
 matrix_allow_public_rooms_without_auth: "false"
 matrix_block_non_admin_invites: "true"

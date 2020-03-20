@@ -10,3 +10,16 @@
     name: nginx
     state: restarted
     enabled: yes
+
+- name: Restart coturn service
+  systemd:
+    name: coturn
+    state: restarted
+    enabled: yes
+
+- name: Restart sydent service
+  systemd:
+    name: matrix-sydent
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,42 @@
+---
+
+#
+# Tasks related to getting rid of the dimension (if it was previously enabled)
+#
+
+- name: Check existence of matrix-dimension service
+  stat:
+    path: "/etc/systemd/system/matrix-dimension.service"
+  register: matrix_dimension_service_stat
+  when: "not matrix_dimension_enabled|bool"
+
+- name: Ensure matrix-dimension is stopped
+  service:
+    name: matrix-dimension
+    state: stopped
+    daemon_reload: yes
+  register: stopping_result
+  when: "not matrix_dimension_enabled|bool and matrix_dimension_service_stat.stat.exists"
+
+- name: Ensure matrix-dimension.service doesn't exist
+  file:
+    path: "/etc/systemd/system/matrix-dimension.service"
+    state: absent
+  when: "not matrix_dimension_enabled|bool and matrix_dimension_service_stat.stat.exists"
+
+- name: Ensure systemd reloaded after matrix-dimension.service removal
+  service:
+    daemon_reload: yes
+  when: "not matrix_dimension_enabled|bool and matrix_dimension_service_stat.stat.exists"
+
+- name: Ensure Dimension environment variables path doesn't exist
+  file:
+    path: "{{ matrix_dimension_base_path }}"
+    state: absent
+  when: "not matrix_dimension_enabled|bool"
+
+- name: Ensure Dimension Docker image doesn't exist
+  docker_image:
+    name: "{{ matrix_dimension_docker_image }}"
+    state: absent
+  when: "not matrix_dimension_enabled|bool"

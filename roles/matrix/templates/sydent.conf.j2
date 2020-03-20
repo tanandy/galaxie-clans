@@ -1,0 +1,50 @@
+[DEFAULT]
+server.name =
+log.path =
+log.level = INFO
+pidfile.path = /var/run/sydent.pid
+terms.path =
+address_lookup_limit = 10000
+enable_v1_associations = true
+db.file = /var/cache/sydent/sydent.db
+clientapi.http.bind_address = ::
+clientapi.http.port = 8090
+internalapi.http.bind_address = ::1
+internalapi.http.port =
+# replication.https.certfile =
+# replication.https.cacert =
+# replication.https.bind_address = ::
+# replication.https.port = 4434
+obey_x_forwarded_for = False
+federation.verifycerts = True
+verify_response_template =
+client_http_base =
+email.template = res/email.template
+email.invite_template = res/invite.template
+email.from = Sydent Validation <noreply@{hostname}>
+email.subject = Your Validation Token
+email.invite.subject = %(sender_display_name)s has invited you to chat
+email.smtphost = {{ matrix_smtp_host }}
+email.smtpport = {{ matrix_smtp_port }}
+email.smtpusername = {{ matrix_smtp_user }}
+email.smtppassword = {{ matrix_smtp_pass }}
+email.hostname = {{ matrix_email_domain }}
+email.tlsmode = 1
+bodytemplate = Your code is {token}
+username =
+password =
+ed25519.signingkey =
+
+[general]
+server.name = {{ matrix_server_name }}
+
+[db]
+
+[http]
+
+[email]
+
+[sms]
+
+[crypto]
+ed25519.signingkey = ed25519 0 3agKEOgeUuCyULBjQamZGAAHsz1eFv+Snmk6kjf2lc8
