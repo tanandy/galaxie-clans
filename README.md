@@ -30,13 +30,13 @@ with goal to back to Galaxie way one day.
 * **DNS**: Based on `bind`. Inspired by the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
 * **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
 * **BACKUP**: Based on [Borg](https://www.borgbackup.org/). Role is be written.
+
 ##### Branch Stub
 * **TFTP**: Based on `tfpd`. Using the role [Bert Van Vreckem tftp role](https://github.com/bertvv/ansible-role-tftp).
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
 
 #### Broadcasting - Galaxie Media
-
 * **WEBSERVER** ``nginx``
 * **MEETING**: ``Riot.im``
 * **MEDIA-STREAMING**: ``peertube``
@@ -50,7 +50,6 @@ Look like it's not that important, but that really matters for family members.
 * **TELEPHONY**: ``asterisk``
 * **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
 * **RPITVOS**: ``Libreelec`` -
-* **MEDIASERVER**: ``Jellyfin`` -
 * **PVR**: ``TVHeadend`` -
 * **FIREWALL** ``OPNSense`` -
 * **VPN** ``OPNSense`` -
