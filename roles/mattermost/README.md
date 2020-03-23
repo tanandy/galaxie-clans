@@ -13,7 +13,7 @@ Nous avons choisi Mattermost pour sa facilité d'installation sur ordinateur et/
 ## Règles de bonne conduite
 Ce service est utilisé par plusieurs familles , ainsi que par des proches de ses familles.
 
-* Respect de la hierachie d'une familialle
+* Respect de la hierachie familialle
 * Les mineurs utilisent la plateforme sous la responssabilitée de leurs parents.
 
 ## Installation
