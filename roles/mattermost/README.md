@@ -36,10 +36,12 @@ Liens direct vers les .apk (au pire du pire)
 * https://f-droid.org/repo/org.jitsi.meet_200300.apk
 
 #### Après installation
-Au lancement de Mattermost entré l'adress suivante: https://palabre.clans.galaxie.family puis cliquer sur connecter.
+Au lancement de Mattermost :
+* Entrez l'adress suivante: https://palabre.clans.galaxie.family
+* Cliquez sur connecter.
 
 ## Créer votre salon
-Une fois invité sur la platforme , que vous avez créer votre compte, et que vous êtes connecté.
+Une fois que vous avez été invité sur la platforme , que vous avez créer votre compte, et que vous êtes connecté:
 
 Vous aurez accès au salon "Place du village", ce salon est public. Vous pouvez créer des salons privés selon vos besoins.
 Gardez à l'esprit que des mineurs et des chefs de familles utilisent ce salon.
