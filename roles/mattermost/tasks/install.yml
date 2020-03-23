@@ -1,0 +1,50 @@
+---
+- name: Prepare directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: 2000
+    group: 2000
+    mode: 0750
+  loop: "{{ mattermost_directories }}"
+
+- name: Pre-pull images
+  docker_image:
+    name: "{{ item.value }}"
+    source: pull
+  loop: "{{ mattermost_docker_images | dict2items }}"
+
+- name: Render docker-compose file
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{ mattermost_docker_compose_file }}"
+  notify:
+    - Restart mattermost service
+
+- name: Render docker-compose environment file
+  template:
+    src: "docker-compose.env.j2"
+    dest: "{{ mattermost_docker_compose_env_file }}"
+  notify:
+    - Restart mattermost service
+
+- name: Render systemd service
+  template:
+    src: "systemd.service.j2"
+    dest: "{{ mattermost_systemd_service_file }}"
+  register: _mattermost_systemd_service_render
+  notify:
+    - Restart mattermost service
+
+- name: Render nginx site
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/mattermost.conf"
+
+- name: Start service
+  systemd:
+    name: mattermost
+    state: started
+    daemon_reload: "{{ _mattermost_systemd_service_render is changed }}"
+
+- meta: flush_handlers

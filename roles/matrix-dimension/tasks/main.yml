@@ -1,9 +1,0 @@
----
-- import_tasks: "dimension-check.yml"
-  when: not _matrix_dimension_uninstall
-
-- include_tasks: "dimension-install.yml"
-  when: not _matrix_dimension_uninstall
-
-- include_tasks: "dimension-uninstall.yml"
-  when: _matrix_dimension_uninstall

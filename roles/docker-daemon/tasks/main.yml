@@ -1,0 +1,21 @@
+---
+- name: Add docker apt signing key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Add docker apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable"
+    state: present
+    filename: docker
+    update_cache: yes
+
+- name: Install docker system
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose
+      - python3-docker

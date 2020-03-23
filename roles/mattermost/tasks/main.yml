@@ -1,0 +1,15 @@
+---
+#
+# Based on https://github.com/mattermost/mattermost-docker
+#
+- import_tasks: "checks.yml"
+  when:
+    - not _mattermost_uninstall
+
+- include_tasks: "install.yml"
+  when:
+    - not _mattermost_uninstall
+
+- include_tasks: "uninstall.yml"
+  when:
+    - _mattermost_uninstall

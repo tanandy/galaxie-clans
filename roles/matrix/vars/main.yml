@@ -1,5 +1,0 @@
----
-matrix_signing_key_file: "/usr/share/keyrings/matrix-org-archive-keyring.gpg"
-matrix_mail_template_directory: "/opt/venvs/matrix-synapse/lib/python3.7/site-packages/synapse/res/templates"
-
-matrix_nginx_config_directory: "/etc/nginx/sites-enabled"

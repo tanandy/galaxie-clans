@@ -40,6 +40,10 @@ services:
             meet.jitsi:
                 aliases:
                     - ${XMPP_DOMAIN}
+        logging:
+            driver: journald
+            options:
+                tag: "jitsi-meet/web"
 
     # XMPP server
     prosody:
@@ -103,6 +107,10 @@ services:
             meet.jitsi:
                 aliases:
                     - ${XMPP_SERVER}
+        logging:
+            driver: journald
+            options:
+                tag: "jitsi-meet/prosody"
 
     # Focus component
     jicofo:
@@ -128,6 +136,10 @@ services:
             - prosody
         networks:
             meet.jitsi:
+        logging:
+            driver: journald
+            options:
+                tag: "jitsi-meet/jicofo"
 
     # Video bridge
     jvb:
@@ -155,6 +167,10 @@ services:
             - prosody
         networks:
             meet.jitsi:
+        logging:
+            driver: journald
+            options:
+                tag: "jitsi-meet/jvb"
 
 # Custom network so all services can communicate using a FQDN
 networks:

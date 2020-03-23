@@ -1,0 +1,6 @@
+---
+- name: Restart mattermost service
+  systemd:
+    name: mattermost
+    state: restarted
+    daemon_reload: "{{ _mattermost_systemd_service_render is changed }}"
