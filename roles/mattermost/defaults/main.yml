@@ -3,3 +3,4 @@ mattermost_public_domain: ~
 mattermost_certificate_file: ~
 mattermost_certificate_key_file: ~
 mattermost_web_port: 8065
+mattermost_sitename: "Mattermost"

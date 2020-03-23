@@ -24,6 +24,13 @@ depot de template site-available
 gestion de available + enabled
 
 
+https://gitlab.com/Tuuux/galaxie-curses/raw/master/docs/source/images/logo_galaxie.png
+
+
+palabre = avec S
+
+
+
 # Pannes latentes
 ## Log merdique de JVB
 

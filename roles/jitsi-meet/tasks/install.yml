@@ -15,6 +15,14 @@
     state: directory
   loop: "{{ jitsi_meet_expected_directories }}"
 
+- name: Render interface configuration file
+  template:
+    src: "interface_config.js.j2"
+    dest: "{{ jitsi_meet_nginx_web_dir }}/interface_config.js"
+  notify:
+    - Restart jitsi-meet service
+
+
 - name: Render docker-compose file
   template:
     src: "docker-compose.yml.j2"

@@ -12,8 +12,10 @@ jitsi_meet_docker_images:
   jvb: "jitsi/jvb"
   jicofo: "jitsi/jicofo"
 
+jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
 jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
 jitsi_meet_nginx_dhparams_key_file: "{{ jitsi_meet_nginx_configuration_dir }}/dhparams.pem"
 jitsi_meet_expected_directories:
   - "{{ jitsi_meet_configuration_directory }}"
+  - "{{ jitsi_meet_nginx_web_dir }}"
   - "{{ jitsi_meet_nginx_configuration_dir }}"
