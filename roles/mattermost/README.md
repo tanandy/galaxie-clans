@@ -25,8 +25,6 @@ https://palabre.clans.galaxie.family
 Allez dans l'**Apple store** ou **Google Play**, recherchez l'application **Mattermost** et installer la.
 Pensez également à installer l'application **Jistsi** qui nous est utilise pour les conférences audio ou vidéo..
 
-Au lancement de Mattermost entré l'adress suivante: https://palabre.clans.galaxie.family 
-
 #### D'un Android via F-Droid
 Nous vous conseillons le Store F-Droid qui permet le télécharegemnt d'application mais surtout le partage d'application via SMS/ Bluetouch / Email.
 * https://f-droid.org/fr/
@@ -37,12 +35,14 @@ Liens direct vers les .apk (au pire du pire)
 * https://f-droid.org/repo/com.mattermost.mattermost_399.apk
 * https://f-droid.org/repo/org.jitsi.meet_200300.apk
 
+#### Après installation
+Au lancement de Mattermost entré l'adress suivante: https://palabre.clans.galaxie.family puis cliquer sur connecter.
 
 ## Créer votre salon
-Une fois invité sur la platforme , que vous avez créer votre compte. 
+Une fois invité sur la platforme , que vous avez créer votre compte, et que vous êtes connecté.
 
 Vous aurez accès au salon "Place du village", ce salon est public. Vous pouvez créer des salons privés selon vos besoins.
-Gardez à l'esprit que des mineurs et des chefs de familles peuvent utiliser ce salon.
+Gardez à l'esprit que des mineurs et des chefs de familles utilisent ce salon.
 
 ## Inviter vos proches
 Une fois connecté sur la plateforme , vous pouvez inviter vos proches.
