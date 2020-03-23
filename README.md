@@ -38,9 +38,8 @@ with goal to back to Galaxie way one day.
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
 
 #### Broadcasting - Galaxie Media
-
-
 * **MEETING**: ``Jitsi + Mattermost``
+* **WEBSERVER** ``nginx``
 * **MEDIA-STREAMING**: ``peertube``
 * **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).
 
@@ -52,7 +51,6 @@ Look like it's not that important, but that really matters for family members.
 * **TELEPHONY**: ``asterisk``
 * **SHARE**: ``samba`` - https://github.com/bertvv/ansible-role-samba
 * **RPITVOS**: ``Libreelec`` -
-* **MEDIASERVER**: ``Jellyfin`` -
 * **PVR**: ``TVHeadend`` -
 * **FIREWALL** ``OPNSense`` -
 * **VPN** ``OPNSense`` -
