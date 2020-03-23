@@ -678,7 +678,6 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 #
 shlib_directory = no
 
-{% if mailserver_is_recipient_server is defined and mailserver_is_recipient_server | bool %}
 virtual_alias_domains = {{ postfix_virtual_alias_domains }}
 virtual_alias_maps = {{ postfix_virtual_alias_maps }}
 virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
@@ -690,8 +689,18 @@ local_transport = virtual
 
 smtpd_sasl_type = dovecot
 smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
-smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
-{% endif %}
+
+smtpd_recipient_restrictions =
+	permit_mynetworks,
+	permit_sasl_authenticated,
+	reject_unauth_destination,
+	reject_unauth_pipelining,
+	reject_non_fqdn_sender,
+	reject_rbl_client bl.spamcop.net,
+	reject_rbl_client zen.spamhaus.org,
+	reject_rbl_client dnsbl.sorbs.net,
+	reject_rbl_client cbl.abuseat.org
+
 
 {% if postfix_relay_domains is defined and postfix_relay_domains|length > 0 %}
 relay_domains = {{ postfix_relay_domains | join(', ') }}

@@ -24,7 +24,7 @@
 
     - name: Generate host vars file
       copy:
-        dest: "{{ playbook_dir }}/../host_vars/{{ inventory_hostname }}/bind-rotate-managed-user-keys.out.yml"
+        dest: "{{ playbook_dir }}/../host_vars/{{ inventory_hostname }}/bind_rotate_managed_user_keys.out.yml"
         content: |
           ---
           {{
