@@ -41,14 +41,31 @@ mail_location = maildir:~
 # users can access all the shared mailboxes, assuming they have permissions
 # on filesystem level to do so.
 namespace inbox {
+  inbox = yes
+  separator = /
   # Namespace type: private, shared or public
   #type = private
 
-  # Hierarchy separator to use. You should use the same separator for all
-  # namespaces or some clients get confused. '/' is usually a good one.
-  # The default however depends on the underlying mail storage format.
-  #separator =
-
+  mailbox "Drafts" {
+    auto = subscribe
+    special_use = \Drafts
+  }
+  mailbox "Sent" {
+    auto = subscribe
+    special_use = \.Sent
+  }
+  mailbox "Trash" {
+    auto = subscribe
+    special_use = \.Trash
+  }
+  mailbox "Junk" {
+    auto = subscribe
+    special_use = \Junk
+  }
+  mailbox "Archive" {
+    auto = subscribe
+    special_use = \Archive
+  }
   # Prefix required to access this namespace. This needs to be different for
   # all namespaces. For example "Public/".
   #prefix =
@@ -59,7 +76,7 @@ namespace inbox {
 
   # There can be only one INBOX, and this setting defines which namespace
   # has it.
-  inbox = yes
+
 
   # If namespace is hidden, it's not advertised to clients via NAMESPACE
   # extension. You'll most likely also want to set list=no. This is mostly

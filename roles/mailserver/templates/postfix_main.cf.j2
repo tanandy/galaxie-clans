@@ -677,19 +677,36 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 # readme_directory: The location of the Postfix README files.
 #
 shlib_directory = no
-
+{% if postfix_relay_domains is defined and postfix_relay_domains|length > 0 %}
+#
+# RELAY
+#
+relay_domains = {{ postfix_relay_domains | join(', ') }}
+{% endif %}
+#
+# LOCAL
+#
+local_recipient_maps = $virtual_mailbox_maps
+local_transport = virtual
+transport_maps = {{ postfix_transport_maps }}
+#
+# VIRTUAL
+#
 virtual_alias_domains = {{ postfix_virtual_alias_domains }}
 virtual_alias_maps = {{ postfix_virtual_alias_maps }}
 virtual_mailbox_domains = {{ postfix_virtual_mailbox_domains | join(', ') }}
 virtual_mailbox_maps = {{ postfix_virtual_mailbox_maps }}
 virtual_mailbox_base = {{ postfix_mailbox_base }}
 virtual_mailbox_limit = {{ postfix_virtual_mailbox_limit }}
-local_recipient_maps = $virtual_mailbox_maps
-local_transport = virtual
-
+virtual_minimum_uid = {{ postfix_virtual_minimum_uid }}
+virtual_transport = virtual
+virtual_uid_maps = {{ postfix_virtual_uid_maps }}
+virtual_gid_maps = {{ postfix_virtual_gid_maps }}
+#
+# SMTPD
+#
 smtpd_sasl_type = dovecot
 smtpd_sasl_local_domain = {{ postfix_smtpd_sasl_local_domain }}
-
 smtpd_recipient_restrictions =
 	permit_mynetworks,
 	permit_sasl_authenticated,
@@ -700,22 +717,8 @@ smtpd_recipient_restrictions =
 	reject_rbl_client zen.spamhaus.org,
 	reject_rbl_client dnsbl.sorbs.net,
 	reject_rbl_client cbl.abuseat.org
-
-
-{% if postfix_relay_domains is defined and postfix_relay_domains|length > 0 %}
-relay_domains = {{ postfix_relay_domains | join(', ') }}
-{% endif %}
-virtual_minimum_uid = {{ postfix_virtual_minimum_uid }}
-virtual_transport = virtual
-virtual_uid_maps = {{ postfix_virtual_uid_maps }}
-virtual_gid_maps = {{ postfix_virtual_gid_maps }}
-transport_maps = {{ postfix_transport_maps }}
-
 smtpd_sasl_auth_enable = yes
-
-
 smtpd_sasl_path = private/auth
-
 smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
 smtpd_sasl_security_options = noanonymous
 smtpd_sasl_tls_security_options = $smtpd_sasl_security_options
@@ -724,25 +727,23 @@ smtpd_tls_auth_only = yes
 smtpd_tls_received_header = yes
 smtpd_tls_cert_file = {{ postfix_smtpd_tls_cert_file }}
 smtpd_tls_key_file = {{ postfix_smtpd_tls_key_file }}
-
 smtpd_tls_loglevel = 1
+smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock
+
+non_smtpd_milters = $smtpd_milters
+#
+# SMTP
+#
 smtp_tls_security_level = may
 smtp_tls_loglevel = 1
 
 milter_default_action = accept
 milter_protocol = 6
-
-smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock
-non_smtpd_milters = $smtpd_milters
-
-# Matt : NOT TOO FAST COWBOY!
-# This means that postfix will up to two concurrent
-# connections per receiving domains. The default value is 20.
+#
+# Speed limits viewed as good citizen behavior by big mail service providers
+#
 default_destination_concurrency_limit = 2
-# Postfix will add a delay between each message to the same receiving domain.
 default_destination_rate_delay = 5s
-# Limit the number of recipients of each message.
-# If a message had 20 recipients on the same domain, postfix will break it out
 default_extra_recipient_limit = 3
 
 # Time a message can stay deferred before being dropped.
