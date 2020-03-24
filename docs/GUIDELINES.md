@@ -1,6 +1,6 @@
 # Galaxie Clans Guidelines
 
-[logo]: images/logo_galaxie.png "Title Text"
+[logo](images/logo_galaxie.png)
 
 ## Over the top
 
