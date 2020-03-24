@@ -1,6 +1,6 @@
 # Galaxie Clans Guidelines
 
-(images/logo_galaxie.png)
+![galaxie](images/logo_galaxie.png)
 
 ## Over the top
 
