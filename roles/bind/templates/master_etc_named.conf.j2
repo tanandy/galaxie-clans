@@ -25,7 +25,7 @@ options {
   check-names  {{ bind_check_names }};
 {% endif %}
 
-  recursion {% if bind_recursion %}yes{% else %}no{% endif %};
+  recursion {% if bind_recursion|bool %}yes{% else %}no{% endif %};
   {% if bind_recursion %}allow-recursion { {{ bind_allow_recursion|join('; ') }}; };
   {% endif %}
 {% if bind_forwarders|length > 0 %}forwarders { {{ bind_forwarders|join('; ') }}; };{% endif %}
