@@ -21,7 +21,7 @@
   notify:
     - Restart mattermost service
 
-- name: Render docker-compose file
+- name: Render config file
   template:
     src: "config.json.j2"
     dest: "{{ mattermost_config_directory }}/config.json"
