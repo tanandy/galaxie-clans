@@ -1,3 +1,7 @@
 ---
-jitsi_meet_uninstall: false
+jitsi_meet_public_domain: ~
 jitsi_meet_support_url: "https://github.com/jitsi/jitsi-meet/issues/new"
+jitsi_meet_cert_chain: ~
+jitsi_meet_cert_key: ~
+
+jitsi_meet_uninstall: false

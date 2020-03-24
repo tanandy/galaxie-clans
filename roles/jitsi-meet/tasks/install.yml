@@ -1,4 +1,8 @@
 ---
+- shell: >-
+    cat /etc/timezone
+  register: _jitsi_meet_system_tz
+
 - name:
   apt:
     name: docker-compose
@@ -29,6 +33,11 @@
     dest: "{{ jitsi_meet_docker_compose_file }}"
   notify:
     - Restart jitsi-meet service
+
+- name: Render nginx configuration
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/jitsi-meet.conf"
 
 - name: Render docker-compose environment file
   template:

@@ -4,3 +4,9 @@ mattermost_certificate_file: ~
 mattermost_certificate_key_file: ~
 mattermost_web_port: 8065
 mattermost_sitename: "Mattermost"
+
+mattermost_retention_message_deletion: "true"
+mattermost_retention_file_deletion: "true"
+mattermost_retention_message_retention_days: "42"
+mattermost_retention_file_retention_days: "42"
+mattermost_retention_deletion_job_start_time: "04:20"

@@ -1,0 +1,21 @@
+server {
+    listen 80;
+	listen [::]:80;
+    server_name {{ jitsi_meet_public_domain }};
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name {{ jitsi_meet_public_domain }};
+
+    ssl on;
+    ssl_certificate {{ jitsi_meet_certificate_file }};
+    ssl_certificate_key {{ jitsi_meet_certificate_key_file }};
+
+    location / {
+        proxy_pass http://localhost:{{ jitsi_meet_proxy_port }};
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+}

@@ -27,6 +27,14 @@
     group: root
   notify: Reload nginx service
 
+- name: Enable required sites
+  file:
+    dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
+    src: "/etc/nginx/sites-available/{{ item }}.conf"
+    state: link
+  notify: Reload nginx service
+  loop: "{{ nginx_sites_enabled }}"
+
 - name: Ensure nginx is started
   systemd:
     name: nginx

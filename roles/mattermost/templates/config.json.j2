@@ -421,11 +421,11 @@
         "Trace": ""
     },
     "DataRetentionSettings": {
-        "EnableMessageDeletion": false,
-        "EnableFileDeletion": false,
-        "MessageRetentionDays": 365,
-        "FileRetentionDays": 365,
-        "DeletionJobStartTime": "02:00"
+        "EnableMessageDeletion": {{ mattermost_retention_message_deletion }},
+        "EnableFileDeletion": {{ mattermost_retention_file_deletion }},
+        "MessageRetentionDays": {{ mattermost_retention_message_retention_days }},
+        "FileRetentionDays": {{ mattermost_retention_file_retention_days }},
+        "DeletionJobStartTime": "{{ mattermost_retention_deletion_job_start_time }}"
     },
     "MessageExportSettings": {
         "EnableExport": false,
