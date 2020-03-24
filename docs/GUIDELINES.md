@@ -33,15 +33,8 @@ methode:
 * nginx cache enable (examples in role for other role integration)
 * SSH compression level + sessions persistentes
 
-
-
-
-palabre = avec S
-
-
-
-# Pannes latentes
-## Log merdique de JVB
+## Pannes latentes
+### Log merdique de JVB
 
 Grosses boucles de ça dans les logs:
 ```
