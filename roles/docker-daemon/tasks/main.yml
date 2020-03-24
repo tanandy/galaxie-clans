@@ -19,3 +19,5 @@
       - containerd.io
       - docker-compose
       - python3-docker
+
+- meta: flush_handlers

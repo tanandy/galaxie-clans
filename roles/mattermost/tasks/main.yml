@@ -13,3 +13,5 @@
 - include_tasks: "uninstall.yml"
   when:
     - _mattermost_uninstall
+
+- meta: flush_handlers

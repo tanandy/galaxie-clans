@@ -1,0 +1,29 @@
+---
+- name: Gather facts about all hosts
+  hosts: "clans:!allies"
+  become: yes
+  gather_facts: yes
+  tags:
+    - gather
+
+- name: Apply core services
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - "common"
+    - "banner"
+    - "ssh"
+    - "ntp"
+    - "bind"
+    - "monitoring"
+
+- name: Apply core services - mailserver
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+  strategy: linear
+
+  roles:
+    - "mailserver"

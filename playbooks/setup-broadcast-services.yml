@@ -1,0 +1,10 @@
+---
+- name: Setup broadcast services
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - "nginx"
+    - "docker-daemon"
+    - "jitsi-meet"

@@ -8,3 +8,5 @@
     name: netdata
     state: started
     enabled: yes
+
+- meta: flush_handlers

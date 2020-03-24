@@ -33,6 +33,7 @@
     src: "/etc/nginx/sites-available/{{ item }}.conf"
     state: link
   notify: Reload nginx service
+  ignore_errors: "{{ nginx_ignore_sites_enabled_error }}"
   loop: "{{ nginx_sites_enabled }}"
 
 - name: Ensure nginx is started
@@ -41,3 +42,5 @@
     enabled: yes
     state: started
     daemon_reload: yes
+
+- meta: flush_handlers

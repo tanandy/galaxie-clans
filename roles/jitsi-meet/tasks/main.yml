@@ -13,3 +13,5 @@
 - include_tasks: "uninstall.yml"
   when:
     - _jitsi_meet_uninstall
+
+- meta: flush_handlers

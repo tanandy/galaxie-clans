@@ -193,6 +193,4 @@
     enabled: true
   tags: bind
 
-
-  # assert that allow-transfer existe dans la liste des NS fournis
-  # SOA unique
+- meta: flush_handlers
