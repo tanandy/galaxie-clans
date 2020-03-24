@@ -41,11 +41,11 @@
     type: TXT
     value: "v=DMARC1;p=reject;pct=20;rua=mailto:hostmaster@{{ item }};ruf=mailto:hostmaster@{{ item }};rf=afrf;aspf=r;adkim=r"
     state: present
-  loop: "{{ opendmarc_domains }}"
+  loop: "{{ opendmarc_keys }}"
 
 - name: Sync dynamic record with zone file
   shell: >-
     rndc sync -clean {{ item }}
-  loop: "{{ opendmarc_domains }}"
+  loop: "{{ opendmarc_keys }}"
 
 - meta: flush_handlers

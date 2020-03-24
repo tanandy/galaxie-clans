@@ -59,7 +59,10 @@ postfix_mailbox_base: "{{ postfix_virtual_mailbox_home }}"
 postfix_virtual_uid_maps: "static:{{ postfix_virtual_mailbox_uid }}"
 postfix_virtual_gid_maps: "static:{{ postfix_virtual_mailbox_gid }}"
 postfix_virtual_minimum_uid: "{{ postfix_virtual_mailbox_uid }}"
-postfix_virtual_mailbox_limit: 512000000
+postfix_virtual_mailbox_limit: "512000000"
+postfix_maximal_queue_lifetime: "5d"
+postfix_minimal_backoff_time: "300s"
+postfix_maximal_backoff_time: "4000s"
 # postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
 # postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
 #

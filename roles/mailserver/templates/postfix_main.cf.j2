@@ -744,3 +744,12 @@ default_destination_rate_delay = 5s
 # Limit the number of recipients of each message.
 # If a message had 20 recipients on the same domain, postfix will break it out
 default_extra_recipient_limit = 3
+
+# Time a message can stay deferred before being dropped.
+maximal_queue_lifetime = {{ postfix_maximal_queue_lifetime }}
+
+# The maximal time between attempts to deliver a deferred message.
+maximal_backoff_time = {{ postfix_maximal_backoff_time }}
+
+# The minimal time between attempts to deliver a deferred message.
+minimal_backoff_time = {{ postfix_minimal_backoff_time }}

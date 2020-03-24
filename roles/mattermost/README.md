@@ -1,25 +1,26 @@
 # Galaxie Clans - L'abre à Palabres
 
 ## Introduction
-**l'Abre a Palabres** est un service que **Galaxie Family** fait tourner sur ses propres serveurs. 
+**l'Abre a Palabres** est un service que **Galaxie Family** fait tourner sur ses propres serveurs.
 L'idée est de rester en contact avec sa famile et ses proches en cas de rupture de la normalitée.
 
 L'adresse est la suivante: https://palabre.clans.galaxie.family
 
-Ce service ne fonctionne que par invitation .
+Ce service ne fonctionne que par invitation.
 
 Nous avons choisi Mattermost pour sa facilité d'installation sur ordinateur et/ou téléphone/tablette.
 
 ## Règles de bonne conduite
-Ce service est utilisé par plusieurs familles , ainsi que par des proches de ses familles.
 
-* Respect de la hierachie familialle
-* Les mineurs utilisent la plateforme sous la responssabilitée de leurs parents.
+Ce service est utilisé par plusieurs familles, ainsi que par les proches de ces familles.
+
+* Respect de la hiérachie familiale
+* Les mineurs utilisent la plateforme sous la responsabilitée de leurs parents.
 
 ## Installation
 #### D'un ordinateur
 Vous n'avez rien d'autre a faire que de lancer votre navigateur internet et d'entrée l'adresse suivante:
-https://palabre.clans.galaxie.family 
+https://palabre.clans.galaxie.family
 
 #### D'un IPHONE ou Android
 Allez dans l'**Apple store** ou **Google Play**, recherchez l'application **Mattermost** et installer la.
@@ -47,10 +48,9 @@ Vous aurez accès au salon "Place du village", ce salon est public. Vous pouvez 
 Gardez à l'esprit que des mineurs et des chefs de familles utilisent ce salon.
 
 ## Inviter vos proches
-Une fois connecté sur la plateforme , vous pouvez inviter vos proches.
-Nous n'avons aucune restrictions autre que la taille du serveur.
 
-Notez que le service n'est accecible que par invitation.
+Une fois connecté sur la plateforme, vous pouvez inviter vos proches. Nous n'avons aucune restrictions autre que la taille du serveur.
+Notez que le service n'est accessible que par invitation.
 
 <div style="text-align:center"><img src ="https://gitlab.com/Tuuux/galaxie-clans/raw/master/roles/mattermost/files/invite_01.png" /></div>
 <BR>
