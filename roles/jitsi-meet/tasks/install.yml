@@ -1,6 +1,7 @@
 ---
 - shell: >-
     cat /etc/timezone
+  changed_when: no
   register: _jitsi_meet_system_tz
 
 - name:

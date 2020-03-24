@@ -5,6 +5,10 @@
   gather_facts: yes
 
   roles:
-    - "nginx"
-    - "docker-daemon"
-    - "jitsi-meet"
+    - role: "nginx"
+      vars:
+        nginx_ignore_sites_enabled_error: yes
+
+    - role: "docker-daemon"
+    - role: "jitsi-meet"
+    - role: "nginx"

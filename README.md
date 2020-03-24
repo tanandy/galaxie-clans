@@ -1,10 +1,5 @@
 # Galaxie - Clans
 
-### Migration plan
-
-* Fork bests existing Ansible, convert it to support Debian stable.
-* Migrate our config files to YAML format
-* Limit the number of Galaxie roles to maintain
 
 ### Criterias
 
@@ -25,7 +20,9 @@ With this migration we'll trash a ton of work, and that's why we start from a bi
 with goal to back to Galaxie way one day.
 
 #### Core services
+
 ##### Critical
+
 * **NTP**: Based on `ntpd`. Home made.
 * **DNS**: Based on `bind`. Inspired by the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
 * **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
@@ -33,6 +30,7 @@ with goal to back to Galaxie way one day.
 * **BACKUP**: Based on [Borg](https://www.borgbackup.org/). Role is be written.
 
 ##### Branch Stub
+
 * **TFTP**: Based on `tfpd`. Using the role [Bert Van Vreckem tftp role](https://github.com/bertvv/ansible-role-tftp).
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).

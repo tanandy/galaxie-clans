@@ -6,6 +6,7 @@
     - system
 
   pre_tasks:
+  # detect and uninstall fail2ban before
     - name: "Update package cache (RAW: ALWAYS CHANGED)"
       raw: apt-get update
       tags:
@@ -26,6 +27,8 @@
       apt:
         update_cache: yes
         upgrade: dist
+
+  # reinstall fail2ban if it was installed before
 
 - name: Prepare clan caretaker access
   hosts: clans
