@@ -1,18 +1,5 @@
 ---
-spamassassin_packages:
-  - spamassassin
-
-clamav_packages:
-  - clamav-server
-  - clamav-data
-  - clamav-update
-  - clamav-filesystem
-  - clamav
-  - clamav-scanner-systemd
-  - clamav-devel
-  - clamav-lib
-  - clamav-server-systemd
-
+mailserver_enable: no
 #
 # System user owning the virtual mailboxes
 #

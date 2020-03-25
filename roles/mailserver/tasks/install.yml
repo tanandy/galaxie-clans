@@ -1,0 +1,14 @@
+---
+- include_tasks: _opendkim.yml
+  when: opendkim_keys is defined
+- meta: flush_handlers
+
+- include_tasks: _opendmarc.yml
+  when: opendmarc_keys is defined
+- meta: flush_handlers
+
+- include_tasks: _postfix.yml
+- meta: flush_handlers
+
+- include_tasks: _dovecot.yml
+- meta: flush_handlers

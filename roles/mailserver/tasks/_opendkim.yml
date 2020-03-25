@@ -29,9 +29,7 @@
       InternalHosts      {{ opendkim_trusted_hosts_file }}
   notify: Restart opendkim service
 
-- include_tasks: "_opendkim_domain.yml"
+- include_tasks: "__opendkim_domain.yml"
   loop: "{{ opendkim_keys }}"
   loop_control:
     loop_var: _opendkim_domain
-
-- meta: flush_handlers

@@ -1,21 +1,30 @@
 ---
+#
+# Uninstall flag
+#
 _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall is defined and jitsi_meet_uninstall | bool }}"
-
+#
+# Directories
+#
 jitsi_meet_configuration_directory: /etc/jitsi-meet
+jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
+jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
+jitsi_meet_expected_directories:
+  - "{{ jitsi_meet_configuration_directory }}"
+  - "{{ jitsi_meet_nginx_web_dir }}"
+  - "{{ jitsi_meet_nginx_configuration_dir }}"
+#
+# Files
+#
+jitsi_meet_nginx_dhparams_key_file: "{{ jitsi_meet_nginx_configuration_dir }}/dhparams.pem"
 jitsi_meet_docker_compose_file: "{{ jitsi_meet_configuration_directory }}/docker-compose.yml"
 jitsi_meet_configuration_file: "{{ jitsi_meet_configuration_directory }}/.env"
 jitsi_meet_systemd_service_file: "/lib/systemd/system/jitsi-meet.service"
-
+#
+# Containers
+#
 jitsi_meet_docker_images:
   web: "jitsi/web"
   prosody: "jitsi/prosody"
   jvb: "jitsi/jvb"
   jicofo: "jitsi/jicofo"
-
-jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
-jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
-jitsi_meet_nginx_dhparams_key_file: "{{ jitsi_meet_nginx_configuration_dir }}/dhparams.pem"
-jitsi_meet_expected_directories:
-  - "{{ jitsi_meet_configuration_directory }}"
-  - "{{ jitsi_meet_nginx_web_dir }}"
-  - "{{ jitsi_meet_nginx_configuration_dir }}"

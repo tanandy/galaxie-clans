@@ -1,24 +1,19 @@
 ---
-_mattermost_uninstall: "{{ mattermost_uninstall is defined and mattermost_uninstall | bool }}"
-
-mattermost_systemd_service_file: "/lib/systemd/system/mattermost.service"
 #
-# Root of it all
+# Uninstall flag
+#
+_mattermost_uninstall: "{{ mattermost_uninstall is defined and mattermost_uninstall | bool }}"
+#
+# Directories
 #
 mattermost_root_directory: "/var/lib/mattermost"
-#
 mattermost_config_directory: "{{ mattermost_root_directory }}/config"
 mattermost_data_directory: "{{ mattermost_root_directory }}/data"
 mattermost_plugins_directory: "{{ mattermost_root_directory }}/plugins"
 mattermost_client_plugins_directory: "{{ mattermost_root_directory }}/client-plugins"
 mattermost_db_directory: "{{ mattermost_root_directory }}/db"
 mattermost_logs_directory: "/var/log/mattermost"
-
 mattermost_compose_directory: "/etc/mattermost"
-mattermost_docker_compose_file: "{{ mattermost_root_directory }}/docker-compose.yml"
-mattermost_docker_compose_env_file: "{{ mattermost_root_directory }}/.env"
-
-
 mattermost_directories:
   - "{{ mattermost_config_directory }}"
   - "{{ mattermost_data_directory }}"
@@ -26,8 +21,15 @@ mattermost_directories:
   - "{{ mattermost_client_plugins_directory }}"
   - "{{ mattermost_db_directory }}"
   - "{{ mattermost_logs_directory }}"
-
-
+#
+# Files
+#
+mattermost_systemd_service_file: "/lib/systemd/system/mattermost.service"
+mattermost_docker_compose_file: "{{ mattermost_root_directory }}/docker-compose.yml"
+mattermost_docker_compose_env_file: "{{ mattermost_root_directory }}/.env"
+#
+# Containers
+#
 mattermost_docker_images:
   app: "mattermost/mattermost-team-edition"
   db: "mattermost/mattermost-prod-db"

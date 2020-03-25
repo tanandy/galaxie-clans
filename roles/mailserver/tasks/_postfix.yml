@@ -1,24 +1,5 @@
 # tasks/postfix.yml -- Install and configure Postfix
 ---
-- name: Sanity checks
-  assert:
-    that:
-      - "{{ postfix_virtual_mailboxes | map(attribute='email') | intersect(postfix_virtual_aliases|map(attribute='alias')) | length == 0 }}"
-    msg: >-
-       NEVER list a virtual MAILBOX domain name as a virtual ALIAS domain!
-
-- name: Sanity checks
-  assert:
-    that:
-      - >-
-        {{
-          postfix_virtual_mailboxes | selectattr('email', 'match', '@.*') | map(attribute='email')
-          | intersect(postfix_virtual_aliases|map(attribute='alias') | map('regex_replace', '^', '@'))
-          | length == 0
-        }}
-    msg: >-
-       NEVER list a virtual MAILBOX domain name as a virtual ALIAS domain!
-
 - name: Create group for mail ownership
   group:
     name: "{{ postfix_virtual_mailbox_gname }}"
@@ -128,5 +109,3 @@
     postmap {{ postfix_transport_maps }}
   when: _render_transports is changed
   notify: Restart postfix service
-
-- meta: flush_handlers

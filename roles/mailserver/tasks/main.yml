@@ -1,22 +1,20 @@
-# roles/mailserver/tasks/main.yml
 ---
-- include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+#
+# Based on https://github.com/mattermost/mattermost-docker
+#
+- import_tasks: "checks.yml"
+  when:
+    - not _mailserver_uninstall
+    - mailserver_enable | bool
 
-- include_tasks: opendkim.yml
-  when: opendkim_keys is defined
+- include_tasks: "install.yml"
+  when:
+    - not _mailserver_uninstall
+    - mailserver_enable | bool
 
-- include_tasks: opendmarc.yml
-  when: opendmarc_keys is defined
-
-- include_tasks: postfix.yml
-
-- include_tasks: dovecot.yml
-
-#- include_tasks: spamassassin.yml
-
-#- include_tasks: clamav.yml
+- include_tasks: "uninstall.yml"
+  when:
+    - _mailserver_uninstall
+    - not (mailserver_enable | bool)
 
 - meta: flush_handlers
