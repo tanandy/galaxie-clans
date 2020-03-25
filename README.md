@@ -13,13 +13,13 @@
 
 ### Core services (GREY)
 
-* **NTP**: Based on `ntpd`
-* **SSH**: Based on `openssh`
-* **DNS**: Based on `bind`
-* **MAIL**: Based on `postfix + dovecot`
-* **LOGS**: Based on `rsyslog`
-* **METRICS**: Based on `netdata`
-* **BACKUP**: Based on [Borg](https://www.borgbackup.org/)
+* **NTP**: Based on [ntpd](http://www.ntp.org/)
+* **SSH**: Based on [openssh](https://www.openssh.com/)
+* **DNS**: Based on [bind](https://www.isc.org/bind/)
+* **MAIL**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
+* **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
+* **METRICS**: Based on [netdata](https://www.netdata.cloud/)
+* **BACKUP**: Based on [borg](https://www.borgbackup.org/)
 
 #### Broadcast services (PURPLE)
 
