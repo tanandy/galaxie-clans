@@ -1,10 +1,12 @@
 # Galaxie - Clans
 
-## Big picture
-
-![galaxie](docs/images/big_picture.png)
+Everything a [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age).
 
 ## Trunk instances
+
+### Services Big Picture
+
+![galaxie](docs/images/big_picture.png)
 
 ### Prerequisites
 
@@ -23,9 +25,9 @@
 
 #### Broadcast services (PURPLE)
 
-* **VIDEOCONF**: ``Jitsi``
-* **CHAT**: ``Mattermost``
-* **R-PROXY** ``nginx``
+* **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
+* **CHAT**: [mattermost](https://mattermost.com/)
+* **R-PROXY** [nginx](https://www.nginx.com/)
 
 ## Branch instances
 
