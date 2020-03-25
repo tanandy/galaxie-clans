@@ -26,6 +26,7 @@
 * **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
 * **METRICS**: Based on [netdata](https://www.netdata.cloud/)
 * **BACKUP**: Based on [borg](https://www.borgbackup.org/)
+* **FIREWALL**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
 
 Core services are installed at the operating system level.
 
