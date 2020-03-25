@@ -3,11 +3,8 @@
 > Everything a [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age)
 > without any compromise with the [Industry](https://en.wikipedia.org/wiki/Industry).
 
-* **Who?**
-Litteraly every group of people willing to communicate over Internet.
-
-* **Why?**
-Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friend.
+* **Who is it for?**: Litteraly every group of people willing to communicate over Internet.
+* **Why do this?**: Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friend.
 
 ## Trunk instances
 
