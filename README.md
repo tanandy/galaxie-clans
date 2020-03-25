@@ -1,6 +1,5 @@
 # Galaxie - Clans
 
-
 ### Criterias
 
 * Each projects selected must have strong and active maintainer community
