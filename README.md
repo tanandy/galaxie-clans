@@ -1,32 +1,16 @@
 # Galaxie - Clans
 
-### Criterias
+## Big picture
 
-* Each projects selected must have strong and active maintainer community
-* Roles should be highly customizable by variables
-* The design must permit easy upgrade
+![galaxie](docs/images/logo_galaxie.png)
 
-### Why this migration?
+### Core services (GREY)
 
-Unfortunately for us, DJB Tools like ``dnscache``, ``tinydns``, ``qmail``, ``damontools`` are dead without true IPV6, DNSSEC support.
-The original author haven't gathered a community of maintainers, nor kept upgrading its softwares for a long time.
-Free software is only as good as its community...
-
-We choose to erase that part of you life and try to be serious. It was a mirage, nothing was true.
-We don't have much time to spend on earth... We have no time to loose on that lost dream anymore.
-
-With this migration we'll trash a ton of work, and that's why we start from a big fork of [Bert Van Vreckem](https://github.com/bertvv) ansible roles,
-with goal to back to Galaxie way one day.
-
-#### Core services
-
-##### Critical
-
-* **NTP**: Based on `ntpd`. Home made.
-* **DNS**: Based on `bind`. Inspired by the role [Bert Van Vreckem bind  role](https://github.com/bertvv/ansible-role-bind).
-* **MAIL**: Based on `postfix + dovecot`. Using the role [Bert Van Vreckem mail server role](https://github.com/bertvv/ansible-role-mailserver).
-* **WEBSERVER** ``nginx``
-* **BACKUP**: Based on [Borg](https://www.borgbackup.org/). Role is be written.
+* **NTP**: Based on `ntpd`
+* **DNS**: Based on `bind`
+* **MAIL**: Based on `postfix + dovecot`
+* **R-PROXY** ``nginx``
+* **BACKUP**: Based on [Borg](https://www.borgbackup.org/)
 
 ##### Branch Stub
 
@@ -34,8 +18,10 @@ with goal to back to Galaxie way one day.
 * **PXE**: Based on `pxelinux`. Using the role [Bert Van Vreckem pxe server role](https://github.com/bertvv/ansible-role-pxeserver).
 * **DHCP**: Based on `dpcpd`. Using the role [Bert Van Vreckem dhcp role](https://github.com/bertvv/ansible-role-dhcp).
 
-#### Broadcasting - Galaxie Media
-* **MEETING**: ``Jitsi + Mattermost``
+#### Broadcast (PURPLE)
+
+* **VIDEOCONF**: ``Jitsi``
+* **CHAT**: ``Mattermost``
 * **WEBSERVER** ``nginx``
 * **MEDIA-STREAMING**: ``peertube``
 * **RDBMS**: Based on `mariadb`. Using the role [Bert Van Vreckem mariadb server role](https://github.com/bertvv/ansible-role-mariadb).

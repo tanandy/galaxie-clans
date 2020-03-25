@@ -8,6 +8,11 @@
 * Ansible: because it's "Simple, agentless IT automation that anyone can use"
 * Every component should be open-source, popular and have a big contributor community
 
+## Then
+
+* Roles should be highly customizable by variables
+* The design must permit easy upgrade
+
 ## Release naming
 
 * Major release are named after the runes names of the elder Futhark.
