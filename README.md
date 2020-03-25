@@ -39,7 +39,6 @@ The following bricks are run as docker-compose files started by a systemd servic
 * **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/).
 * **CHAT**: Based on [mattermost](https://mattermost.com/)
 
-
 ## Branch instances (Work in Progress)
 
 ### Core services (GREY)
@@ -48,6 +47,8 @@ The following bricks are run as docker-compose files started by a systemd servic
 * **TFTP**: Based on `tfpd`
 * **PXE**: Based on `pxelinux`
 * **DHCP**: Based on `dhcpd`
+
+
 * **TELEPHONY**: Based on `asterisk`
 * **SHARE**: Based on `samba`
 * **RPITVOS**: Based on `Libreelec`
