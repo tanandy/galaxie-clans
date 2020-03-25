@@ -1,6 +1,7 @@
 # Galaxie - Clans
 
-Everything a [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age).
+Everything a [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age)
+without any compromise with the [Industry](https://en.wikipedia.org/wiki/Industry).
 
 ## Trunk instances
 
