@@ -16,8 +16,9 @@
     - role: "banner"
     - role: "ssh"
     - role: "ntp"
-    - role: "bind"
-    - role: "monitoring"
+#    - role: "firewall"
+    - role: "dns"
+    - role: "netdata"
 
 - name: Apply core services - mailserver
   hosts: "{{ scope }}"
@@ -27,4 +28,4 @@
   strategy: linear
 
   roles:
-    - "mailserver"
+    - "mail"

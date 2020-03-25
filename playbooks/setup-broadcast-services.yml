@@ -9,7 +9,7 @@
       vars:
         nginx_ignore_sites_enabled_error: yes
 
-    - role: "docker-daemon"
+    - role: "container"
 
     - role: "jitsi-meet"
 
