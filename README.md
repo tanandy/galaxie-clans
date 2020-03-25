@@ -2,7 +2,7 @@
 
 ## Big picture
 
-![galaxie](docs/images/logo_galaxie.png)
+![galaxie](docs/images/big_picture.png)
 
 ### Core services (GREY)
 
