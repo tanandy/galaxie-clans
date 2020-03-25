@@ -1,6 +1,0 @@
----
-- hosts: all
-  vars:
-    app_domain: test.localdomain
-  roles:
-    - ansible-role-peertube
