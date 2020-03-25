@@ -10,3 +10,4 @@
   service:
     name: jitsi-meet
     state: restarted
+    enabled: yes
