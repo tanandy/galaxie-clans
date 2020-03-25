@@ -1,7 +1,13 @@
 ---
+#
+# Content
+#
 banner_text: "Galaxie"
-banner_figlet_font_dir: "/usr/share/figlet"
-banner_figley_bin_path: "/usr/bin/figlet"
+banner_domain: "clans.galaxie.family"
+#
+# Style
+#
 banner_font_name: "galaxie"
 banner_font_filename: "galaxie.flf"
-banner_domain: 'galaxie.ici'
+banner_figlet_font_dir: "/usr/share/figlet"
+banner_figley_bin_path: "/usr/bin/figlet"

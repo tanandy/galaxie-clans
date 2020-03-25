@@ -1,4 +1,6 @@
 ---
+jitsi_meet_enable: no
+
 jitsi_meet_public_domain: ~
 jitsi_meet_support_url: "https://github.com/jitsi/jitsi-meet/issues/new"
 jitsi_meet_cert_chain: ~

@@ -10,5 +10,9 @@
         nginx_ignore_sites_enabled_error: yes
 
     - role: "docker-daemon"
+
     - role: "jitsi-meet"
+
+    - role: "mattermost"
+
     - role: "nginx"

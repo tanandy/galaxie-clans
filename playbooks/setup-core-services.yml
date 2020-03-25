@@ -12,17 +12,18 @@
   gather_facts: yes
 
   roles:
-    - "common"
-    - "banner"
-    - "ssh"
-    - "ntp"
-    - "bind"
-    - "monitoring"
+    - role: "common"
+    - role: "banner"
+    - role: "ssh"
+    - role: "ntp"
+    - role: "bind"
+    - role: "monitoring"
 
 - name: Apply core services - mailserver
   hosts: "{{ scope }}"
   become: yes
   gather_facts: yes
+  # mitogen does not support loading python dns module
   strategy: linear
 
   roles:
