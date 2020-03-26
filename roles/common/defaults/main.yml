@@ -6,3 +6,41 @@ common_secondary_local: 'en_US.UTF-8'
 common_language: 'fr'
 common_tzdata_areas: 'Europe'
 common_tzdata_zones: 'Paris'
+common_system_packages:
+  - aptitude
+  - apt-transport-https
+  - bash
+  - bash-completion
+  - build-essential
+  - cron
+  - direnv
+  - dnsutils
+  - findutils
+  - git
+  - glances
+  - grc
+  - haveged
+  - htop
+  - libffi-dev
+  - libperl-dev
+  - libssl-dev
+  - mc
+  - minicom
+  - openssl
+  - python3
+  - python3-apt
+  - python3-distutils-extra
+  - python3-pip
+  - python3-setuptools
+  - python3-venv
+  - rng-tools5
+  - rsync
+  - screen
+  - ssl-cert
+  - sudo
+  - task-spooler
+  - vim
+  - wget
+common_pip_packages:
+  - dnspython
+  - cryptography
