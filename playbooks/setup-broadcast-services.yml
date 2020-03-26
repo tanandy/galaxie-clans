@@ -7,12 +7,10 @@
   roles:
     - role: "nginx"
       vars:
-        nginx_ignore_sites_enabled_error: yes
+        nginx_skip_enabling_sites: yes
 
     - role: "container"
-
     - role: "jitsi-meet"
-
     - role: "mattermost"
 
     - role: "nginx"
