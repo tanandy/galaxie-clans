@@ -24,3 +24,6 @@
   apt:
     pkg:
       - "manpages-{{ common_language }}"
+  when: >-
+    common_skip_manpages is not defined
+    or not (common_skip_manpages | bool)

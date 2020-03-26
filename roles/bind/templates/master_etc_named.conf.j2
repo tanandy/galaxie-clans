@@ -12,8 +12,12 @@ acl "{{ acl.name }}" {
 
 {% endfor %}
 options {
+  {% if bind_listen_ipv4 is defined and bind_listen_ipv4 | length > 0 %}
   listen-on port 53 { {{ bind_listen_ipv4|join('; ') }}; };
+  {% endif %}
+  {% if bind_listen_ipv6 is defined and bind_listen_ipv6 | length > 0 %}
   listen-on-v6 port 53 { {{ bind_listen_ipv6|join('; ') }}; };
+  {% endif %}
   directory   "{{ bind_dir }}";
   dump-file   "{{ bind_dir }}/data/cache_dump.db";
   statistics-file "{{ bind_dir }}/data/named_stats.txt";
