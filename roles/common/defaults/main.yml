@@ -1,4 +1,5 @@
 ---
+common_enable_manpages: yes
 # See /usr/share/i18n/SUPPORTED
 common_lang: 'fr_FR.UTF-8'
 common_primary_local: 'fr_FR.UTF-8'
