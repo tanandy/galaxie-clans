@@ -9,3 +9,8 @@
 ## peertube
 
 * [Docker compose example](https://yerbamate.dev/nutomic/peertube.social/src/branch/master/templates/docker-compose.yml)
+
+## I2P & Co
+
+* [i2pd container image](https://hub.docker.com/r/meeh/i2pd)
+* [privoxy container image](https://hub.docker.com/r/splazit/privoxy-alpine)
