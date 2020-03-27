@@ -9,6 +9,11 @@
     - not _bind_uninstall
     - bind_enable | bool
 
+- debug:
+    msg: Set variable 'bind_enable' to 'yes' if you want.
+  when:
+    - not (bind_enable | bool)
+
 - include_tasks: "uninstall.yml"
   when:
     - _bind_uninstall

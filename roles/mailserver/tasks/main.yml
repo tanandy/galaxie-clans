@@ -12,6 +12,11 @@
     - not _mailserver_uninstall
     - mailserver_enable | bool
 
+- debug:
+    msg: Set variable 'mailserver_enable' to 'yes' if you want.
+  when:
+    - not (mailserver_enable | bool)
+
 - include_tasks: "uninstall.yml"
   when:
     - _mailserver_uninstall
