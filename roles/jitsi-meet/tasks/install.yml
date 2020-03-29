@@ -27,6 +27,13 @@
   notify:
     - Restart jitsi-meet service
 
+- name: Render coturn configuration file
+  template:
+    src: "coturn.conf.j2"
+    dest: "{{ jitsi_meet_coturn_conf_dir }}/coturn.conf"
+  notify:
+    - Restart jitsi-meet service
+
 - name: Render web configuration file
   template:
     src: "config.js.j2"

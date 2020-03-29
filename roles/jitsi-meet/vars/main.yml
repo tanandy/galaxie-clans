@@ -7,16 +7,20 @@ _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall is defined and jitsi_meet_uninst
 # Directories
 #
 jitsi_meet_configuration_directory: /etc/jitsi-meet
+jitsi_meet_coturn_conf_dir: "{{ jitsi_meet_configuration_directory }}/coturn"
+jitsi_meet_coturn_data_dir: "/var/lib/coturn"
 jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
 jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
 jitsi_meet_expected_directories:
   - "{{ jitsi_meet_configuration_directory }}"
+  - "{{ jitsi_meet_coturn_conf_dir }}"
   - "{{ jitsi_meet_nginx_web_dir }}"
   - "{{ jitsi_meet_nginx_configuration_dir }}"
+  - "{{ jitsi_meet_coturn_data_dir }}"
 #
 # Files
 #
-jitsi_meet_nginx_dhparams_key_file: "{{ jitsi_meet_nginx_configuration_dir }}/dhparams.pem"
+jitsi_meet_coturn_config_file: "{{ jitsi_meet_coturn_conf_dir }}/coturn.conf"
 jitsi_meet_docker_compose_file: "{{ jitsi_meet_configuration_directory }}/docker-compose.yml"
 jitsi_meet_configuration_file: "{{ jitsi_meet_configuration_directory }}/.env"
 jitsi_meet_systemd_service_file: "/lib/systemd/system/jitsi-meet.service"

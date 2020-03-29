@@ -5,6 +5,11 @@
 ## jisti-meet
 
 * [Jitsi Videobridge Performance Evaluation](https://jitsi.org/jitsi-videobridge-performance-evaluation/)
+* [](https://www.speedguide.net/port.php?port=3478)
+* [](https://meetrix.io/blog/webrtc/jitsi/jitsi-meet-and-firewalls.html)
+* [](https://meetrix.io/blog/webrtc/jitsi/setting-up-a-turn-server-for-jitsi-meet.html)
+* [](https://github.com/jitsi/jitsi-meet/issues/797)
+* [](https://meetrix.io/blog/webrtc/jitsi/meet/installing.html)
 
 ## peertube
 

@@ -11,3 +11,6 @@ jitsi_meet_lang_detection: yes
 jitsi_meet_show_watermark: no
 jitsi_meet_roomnames_on_welcome_page: no
 jitsi_meet_display_welcome_page_content: no
+
+jitsi_meet_coturn_port: "3478"
+jitsi_meet_coturn_range: "49160-49200"
