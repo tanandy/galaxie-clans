@@ -1,4 +1,9 @@
 ---
+#
+# Uninstall flag
+#
+_nginx_uninstall: "{{ nginx_uninstall | default(false) | bool }}"
+
 nginx_modular_config_directories:
   - "{{ nginx_modular_conf_directory_modules_available }}"
   - "{{ nginx_modular_conf_directory_modules_enabled }}"

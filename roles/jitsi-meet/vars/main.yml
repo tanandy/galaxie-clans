@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_jitsi_meet_uninstall: "{{ jitsi_meet_uninstall is defined and jitsi_meet_uninstall | bool }}"
+_jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
 #
 # Directories
 #

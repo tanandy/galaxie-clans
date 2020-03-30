@@ -1,47 +1,20 @@
 ---
-- name: Source specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
+#
+# Based on https://github.com/jitsi/docker-jitsi-meet
+#
+#- import_tasks: "checks.yml"
+#  when:
+#    - not _nginx_uninstall
+#    - nginx_enable | bool
 
-- name: Install nginx
-  package:
-    name: nginx
-
-- name: Create modular configuration directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: 0755
-    owner: root
-    group: root
-  loop: "{{ nginx_modular_config_directories }}"
-
-- name: Configure nginx
-  template:
-    src: "nginx.conf.j2"
-    dest: "{{ nginx_config_file }}"
-    mode: 0644
-    owner: root
-    group: root
-  notify: Reload nginx service
-
-- name: Enable required sites
-  file:
-    dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
-    src: "/etc/nginx/sites-available/{{ item }}.conf"
-    state: link
-  loop: "{{ nginx_sites_enabled }}"
-  notify: Reload nginx service
+- include_tasks: "install.yml"
   when:
-    - not (nginx_skip_enabling_sites | bool)
+    - not _nginx_uninstall
+    - nginx_enable | bool
 
-- name: Ensure nginx is started
-  systemd:
-    name: nginx
-    enabled: yes
-    state: started
-    daemon_reload: yes
+- include_tasks: "uninstall.yml"
+  when:
+    - _nginx_uninstall
+    - not (nginx_enable | bool)
 
 - meta: flush_handlers

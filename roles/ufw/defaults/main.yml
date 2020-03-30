@@ -1,0 +1,16 @@
+---
+ufw_enable: no
+
+ufw_policy: "allow"
+
+ufw_nginx_ports:
+  - port: "80"
+    proto: "tcp"
+  - port: "443"
+    proto: "tcp"
+
+ufw_bind_ports:
+  - port: "53"
+    proto: "tcp"
+  - port: "53"
+    proto: "udp"

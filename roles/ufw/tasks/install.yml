@@ -1,0 +1,30 @@
+---
+- name: Install system packages
+  apt:
+    name: ufw
+
+- name: Allow everything and enable UFW
+  ufw:
+    state: enabled
+    policy: "{{ ufw_policy }}"
+
+- name: Set logging
+  ufw:
+    logging: "full"
+
+- name: Allow ssh server
+  ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+
+- name: Allow nginx services profiles
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop: "{{ ufw_nginx_ports }}"
+  when: nginx_enable | bool
+
+  # allow all avec tag à grep dans les logs "NO RULE MATCHED"
+  # derniere en drop ALL (uniquement une fois validé le reste)

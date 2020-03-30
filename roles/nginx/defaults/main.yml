@@ -1,4 +1,6 @@
 ---
+nginx_enable: no
+
 raw_nginx_stream_conf_directory: "/etc/nginx/streams.conf.d"
 nginx_sites_enabled: []
 nginx_skip_enabling_sites: no

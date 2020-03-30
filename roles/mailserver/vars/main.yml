@@ -1,5 +1,5 @@
 ---
-_mailserver_uninstall: "{{ mailserver_uninstall is defined and mailserver_uninstall | bool }}"
+_mailserver_uninstall: "{{ mailserver_uninstall | default(false) | bool }}"
 
 postfix_has_virtual_aliases: "{{ postfix_virtual_aliases | length > 0 }}"
 postfix_has_virtual_aliases_domains: "{{ postfix_virtual_aliases_domains | length > 0 }}"

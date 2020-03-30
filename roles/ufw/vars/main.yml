@@ -1,0 +1,5 @@
+---
+#
+# Uninstall flag
+#
+_ufw_uninstall: "{{ ufw_uninstall | default(false) | bool }}"

@@ -4,26 +4,36 @@
   become: yes
   gather_facts: yes
   tags:
-    - gather
+    - always
 
-- name: Apply core services
+- name: Apply minimal service configuration
   hosts: "{{ scope }}"
   become: yes
-  gather_facts: yes
+  gather_facts: no
+  tags:
+    - minimal
 
   roles:
     - role: "common"
     - role: "banner"
     - role: "ssh"
     - role: "ntp"
-#    - role: "firewall"
+    - role: "ufw"
+
+- name: Apply core services (with mitogen)
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: no
+  tags:
+    - core
+  roles:
     - role: "bind"
     - role: "metrics"
 
-- name: Apply core services - mailserver
+- name: Apply core services (without mitogen)
   hosts: "{{ scope }}"
   become: yes
-  gather_facts: yes
+  gather_facts: no
   # mitogen does not support loading python dns module
   strategy: linear
 

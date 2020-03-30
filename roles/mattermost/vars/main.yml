@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_mattermost_uninstall: "{{ mattermost_uninstall is defined and mattermost_uninstall | bool }}"
+_mattermost_uninstall: "{{ mattermost_uninstall | default(false) | bool }}"
 #
 # Directories
 #

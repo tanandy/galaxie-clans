@@ -2,6 +2,7 @@
 jitsi_meet_enable: no
 
 jitsi_meet_public_domain: ~
+jitsi_meet_stun_public_domain: ~
 jitsi_meet_support_url: "https://github.com/jitsi/jitsi-meet/issues/new"
 jitsi_meet_cert_chain: ~
 jitsi_meet_cert_key: ~
@@ -13,4 +14,9 @@ jitsi_meet_roomnames_on_welcome_page: no
 jitsi_meet_display_welcome_page_content: no
 
 jitsi_meet_coturn_port: "3478"
-jitsi_meet_coturn_range: "49160-49200"
+jitsi_meet_coturn_alt_port: "3479"
+jitsi_meet_coturn_tls_port: "5349"
+jitsi_meet_coturn_alt_tls_port: "5350"
+jitsi_meet_coturn_min_port: "49160"
+jitsi_meet_coturn_max_port: "49200"
+jitsi_meet_coturn_range: "{{ jitsi_meet_coturn_min_port }}-{{ jitsi_meet_coturn_max_port }}"
