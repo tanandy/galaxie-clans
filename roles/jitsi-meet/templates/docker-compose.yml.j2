@@ -169,29 +169,6 @@ services:
             driver: journald
             options:
                 tag: "jitsi-meet/jvb"
-    coturn:
-        image: "instrumentisto/coturn"
-        environment:
-            - COTURN_CONF_FILE
-            - COTURN_PORT
-            - COTURN_RANGE
-            - COTURN_DATA_DIR
-        volumes:
-            - '${COTURN_CONF_FILE}:/etc/coturn/turnserver.conf'
-            - '${COTURN_DATA_DIR}:/var/lib/coturn'
-        ports:
-            - '{{ jitsi_meet_coturn_port }}:{{ jitsi_meet_coturn_port }}'
-            - '${COTURN_RANGE}:49160-49200/udp'
-            - '{{ jitsi_meet_coturn_alt_port }}:{{ jitsi_meet_coturn_alt_port }}'
-            - '{{ jitsi_meet_coturn_tls_port }}:{{ jitsi_meet_coturn_tls_port }}'
-            - '{{ jitsi_meet_coturn_alt_tls_port }}:{{ jitsi_meet_coturn_alt_tls_port }}'
-
-        networks:
-            meet.jitsi:
-        logging:
-            driver: journald
-            options:
-                tag: "jitsi-meet/coturn"
 # Custom network so all services can communicate using a FQDN
 networks:
     meet.jitsi:

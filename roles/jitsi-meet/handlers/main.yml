@@ -11,3 +11,9 @@
     name: jitsi-meet
     state: restarted
     enabled: yes
+
+- name: Restart coturn service
+  service:
+    name: coturn
+    state: restarted
+    enabled: yes

@@ -7,16 +7,12 @@ _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
 # Directories
 #
 jitsi_meet_configuration_directory: /etc/jitsi-meet
-jitsi_meet_coturn_conf_dir: "{{ jitsi_meet_configuration_directory }}/coturn"
-jitsi_meet_coturn_data_dir: "/var/lib/coturn"
 jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
 jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
 jitsi_meet_expected_directories:
   - "{{ jitsi_meet_configuration_directory }}"
-  - "{{ jitsi_meet_coturn_conf_dir }}"
   - "{{ jitsi_meet_nginx_web_dir }}"
   - "{{ jitsi_meet_nginx_configuration_dir }}"
-  - "{{ jitsi_meet_coturn_data_dir }}"
 #
 # Files
 #

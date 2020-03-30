@@ -20,3 +20,8 @@ jitsi_meet_coturn_alt_tls_port: "5350"
 jitsi_meet_coturn_min_port: "49160"
 jitsi_meet_coturn_max_port: "49200"
 jitsi_meet_coturn_range: "{{ jitsi_meet_coturn_min_port }}-{{ jitsi_meet_coturn_max_port }}"
+
+jitsi_meet_stun_servers:
+  - "stun:stun.l.google.com:19302"
+  - "stun:stun1.l.google.com:19302"
+  - "stun:stun2.l.google.com:19302"

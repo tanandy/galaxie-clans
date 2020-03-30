@@ -6,7 +6,9 @@
 
 - name:
   apt:
-    name: docker-compose
+    name:
+      - docker-compose
+      - coturn
 
 - name: Pre-pull images
   docker_image:
@@ -27,19 +29,19 @@
   notify:
     - Restart jitsi-meet service
 
-- name: Render coturn configuration file
-  template:
-    src: "coturn.conf.j2"
-    dest: "{{ jitsi_meet_coturn_conf_dir }}/turnserver.conf"
-  notify:
-    - Restart jitsi-meet service
-
 - name: Render web configuration file
   template:
     src: "config.js.j2"
     dest: "{{ jitsi_meet_nginx_web_dir }}/config.js"
   notify:
     - Restart jitsi-meet service
+
+- name: Render turnserver configuration file
+  template:
+    src: "turnserver.conf.j2"
+    dest: "/etc/turnserver.conf"
+  notify:
+    - Restart coturn service
 
 - name: Render docker-compose file
   template:

@@ -1,9 +1,10 @@
 # Coturn TURN SERVER configuration file
 #
-# Boolean values note: where a boolean value is supposed to be used,
-# you can use '0', 'off', 'no', 'false', or 'f' as 'false,
-# and you can use '1', 'on', 'yes', 'true', or 't' as 'true'
-# If the value is missing, then it means 'true' by default.
+# Boolean values note: where boolean value is supposed to be used,
+# you can use '0', 'off', 'no', 'false', 'f' as 'false,
+# and you can use '1', 'on', 'yes', 'true', 't' as 'true'
+# If the value is missed, then it means 'true'.
+#
 
 # Listener interface device (optional, Linux only).
 # NOT RECOMMENDED.
@@ -14,19 +15,19 @@
 # Note: actually, TLS & DTLS sessions can connect to the
 # "plain" TCP & UDP port(s), too - if allowed by configuration.
 #
-listening-port={{ jitsi_meet_coturn_port }}
+#listening-port=3478
 
 # TURN listener port for TLS (Default: 5349).
 # Note: actually, "plain" TCP & UDP sessions can connect to the TLS & DTLS
 # port(s), too - if allowed by configuration. The TURN server
 # "automatically" recognizes the type of traffic. Actually, two listening
 # endpoints (the "plain" one and the "tls" one) are equivalent in terms of
-# functionality; but Coturn keeps both endpoints to satisfy the RFC 5766 specs.
-# For secure TCP connections, Coturn currently supports SSL version 3 and
+# functionality; but we keep both endpoints to satisfy the RFC 5766 specs.
+# For secure TCP connections, we currently support SSL version 3 and
 # TLS version 1.0, 1.1 and 1.2.
-# For secure UDP connections, Coturn supports DTLS version 1.
+# For secure UDP connections, we support DTLS version 1.
 #
-tls-listening-port={{ jitsi_meet_coturn_tls_port }}
+#tls-listening-port=5349
 
 # Alternative listening port for UDP and TCP listeners;
 # default (or zero) value means "listening port plus one".
@@ -37,20 +38,19 @@ tls-listening-port={{ jitsi_meet_coturn_tls_port }}
 # RFC 5780 is supported only by UDP protocol, other protocols
 # are listening to that endpoint only for "symmetry".
 #
-alt-listening-port={{ jitsi_meet_coturn_alt_port }}
+#alt-listening-port=0
 
 # Alternative listening port for TLS and DTLS protocols.
 # Default (or zero) value means "TLS listening port plus one".
 #
-alt-tls-listening-port={{ jitsi_meet_coturn_alt_tls_port }}
+#alt-tls-listening-port=0
 
 # Listener IP address of relay server. Multiple listeners can be specified.
 # If no IP(s) specified in the config file or in the command line options,
 # then all IPv4 and IPv6 system IPs will be used for listening.
 #
-#listening-ip=172.17.19.101
-#listening-ip=10.207.21.238
-#listening-ip=2607:f0d0:1002:51::4
+listening-ip={{ ansible_default_ipv4.address }}
+listening-ip={{ ansible_default_ipv6.address }}
 
 # Auxiliary STUN/TURN server listening endpoint.
 # Aux servers have almost full TURN and STUN functionality.
@@ -132,8 +132,8 @@ alt-tls-listening-port={{ jitsi_meet_coturn_alt_tls_port }}
 #
 # If this parameter is not set, then the default OS-dependent
 # thread pattern algorithm will be employed. Usually the default
-# algorithm is optimal, so you have to change this option
-# if you want to make some fine tweaks.
+# algorithm is the most optimal, so you have to change this option
+# only if you want to make some fine tweaks.
 #
 # In the older systems (Linux kernel before 3.9),
 # the number of UDP threads is always one thread per network listening
@@ -154,7 +154,7 @@ alt-tls-listening-port={{ jitsi_meet_coturn_alt_tls_port }}
 
 # Uncomment to run TURN server in 'extra' verbose mode.
 # This mode is very annoying and produces lots of output.
-# Not recommended under normal circumstances.
+# Not recommended under any normal circumstances.
 #
 #Verbose
 
@@ -168,14 +168,14 @@ alt-tls-listening-port={{ jitsi_meet_coturn_alt_tls_port }}
 #
 #lt-cred-mech
 
-# This option is the opposite of lt-cred-mech.
+# This option is opposite to lt-cred-mech.
 # (TURN Server with no-auth option allows anonymous access).
 # If neither option is defined, and no users are defined,
 # then no-auth is default. If at least one user is defined,
-# in this file, in command line or in usersdb file, then
+# in this file or in command line or in usersdb file, then
 # lt-cred-mech is default.
 #
-no-auth
+#no-auth
 
 # TURN REST API flag.
 # (Time Limited Long Term Credential)
@@ -192,33 +192,34 @@ no-auth
 # turn password -> base64(hmac(secret key, usercombo))
 #
 # This allows TURN credentials to be accounted for a specific user id.
-# If you don't have a suitable id, then the timestamp alone can be used.
-# This option is enabled by turning on secret-based authentication.
-# The actual value of the secret is defined either by the option static-auth-secret,
+# If you don't have a suitable id, the timestamp alone can be used.
+# This option is just turning on secret-based authentication.
+# The actual value of the secret is defined either by option static-auth-secret,
 # or can be found in the turn_secret table in the database (see below).
 #
 # Read more about it:
 #  - https://tools.ietf.org/html/draft-uberti-behave-turn-rest-00
 #  - https://www.ietf.org/proceedings/87/slides/slides-87-behave-10.pdf
 #
-# Be aware that use-auth-secret overrides some parts of lt-cred-mech.
-# The use-auth-secret feature depends internally on lt-cred-mech, so if you set
-# this option then it automatically enables lt-cred-mech internally
-# as if you had enabled both.
+# Be aware that use-auth-secret overrides some part of lt-cred-mech.
+# Notice that this feature depends internally on lt-cred-mech, so if you set
+# use-auth-secret then it enables internally automatically lt-cred-mech option
+# like if you enable both.
 #
-# Note that you can use only one auth mechanism at the same time! This is because,
-# both mechanisms conduct username and password validation in different ways.
+# You can use only one of the to auth mechanisms in the same time because,
+# both mechanism use the username and password validation in different way.
 #
-# Use either lt-cred-mech or use-auth-secret in the conf
+# This way be aware that you can't use both auth mechnaism in the same time!
+# Use in config either the lt-cred-mech or the use-auth-secret
 # to avoid any confusion.
 #
 #use-auth-secret
 
 # 'Static' authentication secret value (a string) for TURN REST API only.
 # If not set, then the turn server
-# will try to use the 'dynamic' value in the turn_secret table
-# in the user database (if present). The database-stored  value can be changed on-the-fly
-# by a separate program, so this is why that mode is considered 'dynamic'.
+# will try to use the 'dynamic' value in turn_secret table
+# in user database (if present). The database-stored  value can be changed on-the-fly
+# by a separate program, so this is why that other mode is 'dynamic'.
 #
 #static-auth-secret=north
 
@@ -232,10 +233,10 @@ no-auth
 #
 #oauth
 
-# 'Static' user accounts for the long term credentials mechanism, only.
+# 'Static' user accounts for long term credentials mechanism, only.
 # This option cannot be used with TURN REST API.
 # 'Static' user accounts are NOT dynamically checked by the turnserver process,
-# so they can NOT be changed while the turnserver is running.
+# so that they can NOT be changed while the turnserver is running.
 #
 #user=username1:key1
 #user=username2:key2
@@ -261,24 +262,83 @@ no-auth
 
 # SQLite database file name.
 #
-# The default file name is /var/db/turndb or /usr/local/var/db/turndb or
+# Default file name is /var/db/turndb or /usr/local/var/db/turndb or
 # /var/lib/turn/turndb.
 #
-userdb={{ jitsi_meet_coturn_data_dir }}/turndb
+#userdb=/var/db/turndb
+
+# PostgreSQL database connection string in the case that we are using PostgreSQL
+# as the user database.
+# This database can be used for long-term credential mechanism
+# and it can store the secret value for secret-based timed authentication in TURN RESP API.
+# See http://www.postgresql.org/docs/8.4/static/libpq-connect.html for 8.x PostgreSQL
+# versions connection string format, see
+# http://www.postgresql.org/docs/9.2/static/libpq-connect.html#LIBPQ-CONNSTRING
+# for 9.x and newer connection string formats.
+#
+#psql-userdb="host=<host> dbname=<database-name> user=<database-user> password=<database-user-password> connect_timeout=30"
+
+# MySQL database connection string in the case that we are using MySQL
+# as the user database.
+# This database can be used for long-term credential mechanism
+# and it can store the secret value for secret-based timed authentication in TURN RESP API.
+#
+# Optional connection string parameters for the secure communications (SSL):
+# ca, capath, cert, key, cipher
+# (see http://dev.mysql.com/doc/refman/5.1/en/ssl-options.html for the
+# command options description).
+#
+# Use string format as below (space separated parameters, all optional):
+#
+#mysql-userdb="host=<host> dbname=<database-name> user=<database-user> password=<database-user-password> port=<port> connect_timeout=<seconds> read_timeout=<seconds>"
+
+# If you want to use in the MySQL connection string the password in encrypted format,
+# then set in this option the MySQL password encryption secret key file.
+#
+# Warning: If this option is set, then mysql password must be set in "mysql-userdb" in encrypted format!
+# If you want to use cleartext password then do not set this option!
+#
+# This is the file path which contain secret key of aes encryption while using password encryption.
+#
+#secret-key-file=/path/
+
+# MongoDB database connection string in the case that we are using MongoDB
+# as the user database.
+# This database can be used for long-term credential mechanism
+# and it can store the secret value for secret-based timed authentication in TURN RESP API.
+# Use string format is described at http://hergert.me/docs/mongo-c-driver/mongoc_uri.html
+#
+#mongo-userdb="mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]"
+
+# Redis database connection string in the case that we are using Redis
+# as the user database.
+# This database can be used for long-term credential mechanism
+# and it can store the secret value for secret-based timed authentication in TURN RESP API.
+# Use string format as below (space separated parameters, all optional):
+#
+#redis-userdb="ip=<ip-address> dbname=<database-number> password=<database-user-password> port=<port> connect_timeout=<seconds>"
+
+# Redis status and statistics database connection string, if used (default - empty, no Redis stats DB used).
+# This database keeps allocations status information, and it can be also used for publishing
+# and delivering traffic and allocation event notifications.
+# The connection string has the same parameters as redis-userdb connection string.
+# Use string format as below (space separated parameters, all optional):
+#
+#redis-statsdb="ip=<ip-address> dbname=<database-number> password=<database-user-password> port=<port> connect_timeout=<seconds>"
 
 # The default realm to be used for the users when no explicit
-# origin/realm relationship is found in the database, or if the TURN
+# origin/realm relationship was found in the database, or if the TURN
 # server is not using any database (just the commands-line settings
 # and the userdb file). Must be used with long-term credentials
 # mechanism or with TURN REST API.
 #
-# Note: If the default realm is not specified, then realm falls back to the host domain name.
-#       If the domain name string is empty, or set to '(None)', then it is initialized as an empty string.
+# Note: If default realm is not specified at all, then realm falls back to the host domain name.
+#       If domain name is empty string, or '(None)', then it is initialized to am empty string.
 #
-realm={{ jitsi_meet_public_domain }}
+realm={{ jitsi_meet_stun_public_domain }}
 
-# This flag sets the origin consistency
-# check. Across the session, all requests must have the same
+# The flag that sets the origin consistency
+# check: across the session, all requests must have the same
 # main ORIGIN attribute value (if the ORIGIN was
 # initially used by the session).
 #
@@ -298,7 +358,7 @@ realm={{ jitsi_meet_public_domain }}
 
 # Max bytes-per-second bandwidth a TURN session is allowed to handle
 # (input and output network streams are treated separately). Anything above
-# that limit will be dropped or temporarily suppressed (within
+# that limit will be dropped or temporary suppressed (within
 # the available buffer limits).
 # This option can also be set through the database, for a particular realm.
 #
@@ -342,9 +402,9 @@ realm={{ jitsi_meet_public_domain }}
 #no-tcp-relay
 
 # Uncomment if extra security is desired,
-# with nonce value having a limited lifetime.
+# with nonce value having limited lifetime.
 # By default, the nonce value is unique for a session,
-# and has an unlimited lifetime.
+# and has unlimited lifetime.
 # Set this option to limit the nonce lifetime.
 # It defaults to 600 secs (10 min) if no value is provided. After that delay,
 # the client will get 438 error and will have to re-authenticate itself.
@@ -374,7 +434,6 @@ realm={{ jitsi_meet_public_domain }}
 # Certificate file.
 # Use an absolute path or path relative to the
 # configuration file.
-# Use PEM file format.
 #
 #cert=/usr/local/etc/turn_server_cert.pem
 
@@ -397,7 +456,7 @@ realm={{ jitsi_meet_public_domain }}
 
 # CA file in OpenSSL format.
 # Forces TURN server to verify the client SSL certificates.
-# By default this is not set: there is no default value and the client
+# By default it is not set: there is no default value and the client
 # certificate is not checked.
 #
 # Example:
@@ -425,16 +484,16 @@ realm={{ jitsi_meet_public_domain }}
 #dh-file=<DH-PEM-file-name>
 
 # Flag to prevent stdout log messages.
-# By default, all log messages go to both stdout and to
-# the configured log file. With this option everything will
-# go to the configured log only (unless the log file itself is stdout).
+# By default, all log messages are going to both stdout and to
+# the configured log file. With this option everything will be
+# going to the configured log only (unless the log file itself is stdout).
 #
 #no-stdout-log
 
 # Option to set the log file name.
 # By default, the turnserver tries to open a log file in
-# /var/log, /var/tmp, /tmp and the current directory
-# (Whichever file open operation succeeds first will be used).
+# /var/log, /var/tmp, /tmp and current directories directories
+# (which open operation succeeds first that file will be used).
 # With this option you can set the definite log file name.
 # The special names are "stdout" and "-" - they will force everything
 # to the stdout. Also, the "syslog" name will force everything to
@@ -442,11 +501,11 @@ realm={{ jitsi_meet_public_domain }}
 # In the runtime, the logfile can be reset with the SIGHUP signal
 # to the turnserver process.
 #
-log-file=stdout
+#log-file=/var/tmp/turn.log
 
 # Option to redirect all log output into system log (syslog).
 #
-#syslog
+syslog
 
 # This flag means that no log file rollover will be used, and the log file
 # name will be constructed as-is, without PID and date appendage.
@@ -455,14 +514,14 @@ log-file=stdout
 #simple-log
 
 # Option to set the "redirection" mode. The value of this option
-# will be the address of the alternate server for UDP & TCP service in the form of
+# will be the address of the alternate server for UDP & TCP service in form of
 # <ip>[:<port>]. The server will send this value in the attribute
 # ALTERNATE-SERVER, with error 300, on ALLOCATE request, to the client.
 # Client will receive only values with the same address family
 # as the client network endpoint address family.
-# See RFC 5389 and RFC 5766 for the description of ALTERNATE-SERVER functionality.
+# See RFC 5389 and RFC 5766 for ALTERNATE-SERVER functionality description.
 # The client must use the obtained value for subsequent TURN communications.
-# If more than one --alternate-server option is provided, then the functionality
+# If more than one --alternate-server options are provided, then the functionality
 # can be more accurately described as "load-balancing" than a mere "redirection".
 # If the port number is omitted, then the default port
 # number 3478 for the UDP/TCP protocols will be used.
@@ -472,7 +531,7 @@ log-file=stdout
 # [2001:db8:85a3:8d3:1319:8a2e:370:7348]:3478 .
 # Multiple alternate servers can be set. They will be used in the
 # round-robin manner. All servers in the pool are considered of equal weight and
-# the load will be distributed equally. For example, if you have 4 alternate servers,
+# the load will be distributed equally. For example, if we have 4 alternate servers,
 # then each server will receive 25% of ALLOCATE requests. A alternate TURN server
 # address can be used more than one time with the alternate-server option, so this
 # can emulate "weighting" of the servers.
@@ -498,15 +557,6 @@ log-file=stdout
 # By default, this option is NOT set.
 #
 #stun-only
-
-# Option to hide software version. Enhance security when used in production.
-# Revealing the specific software version of the agent through the
-# SOFTWARE attribute might allow them to become more vulnerable to
-# attacks against software that is known to contain security holes.
-# Implementers SHOULD make usage of the SOFTWARE attribute a
-# configurable option (https://tools.ietf.org/html/rfc5389#section-16.1.2)
-#
-#prod
 
 # Option to suppress STUN functionality, only TURN requests will be processed.
 # Run as TURN server only, all STUN requests will be ignored.
@@ -578,12 +628,12 @@ log-file=stdout
 
 
 # User name to run the process. After the initialization, the turnserver process
-# will attempt to change the current user ID to that user.
+# will make an attempt to change the current user ID to that user.
 #
 #proc-user=<user-name>
 
 # Group name to run the process. After the initialization, the turnserver process
-# will attempt to change the current group ID to that group.
+# will make an attempt to change the current group ID to that group.
 #
 #proc-group=<group-name>
 
@@ -603,8 +653,8 @@ log-file=stdout
 #cli-port=5766
 
 # CLI access password. Default is empty (no password).
-# For the security reasons, it is recommended that you use the encrypted
-# form of the password (see the -P command in the turnadmin utility).
+# For the security reasons, it is recommended to use the encrypted
+# for of the password (see the -P command in the turnadmin utility).
 #
 # Secure form for password 'qwerty':
 #
@@ -634,7 +684,7 @@ log-file=stdout
 #web-admin-listen-on-workers
 
 # Server relay. NON-STANDARD AND DANGEROUS OPTION.
-# Only for those applications when you want to run
+# Only for those applications when we want to run
 # server applications on the relay endpoints.
 # This option eliminates the IP permissions check on
 # the packets incoming to the relay endpoints.
