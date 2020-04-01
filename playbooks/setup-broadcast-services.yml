@@ -3,6 +3,8 @@
   hosts: "{{ scope }}"
   become: yes
   gather_facts: yes
+  tags:
+    - broadcast
 
   roles:
     - role: "nginx"

@@ -30,4 +30,4 @@
   roles:
     - role: "bind"
     - role: "metrics"
-    - roel: "mailserver"
+    - role: "mailserver"
