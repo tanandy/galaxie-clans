@@ -30,3 +30,12 @@ mailserver_dovecot_service: dovecot
 postfix_config_dir: /etc/postfix
 
 dovecot_config_dir: /etc/dovecot/conf.d
+
+mailserver_clamav_packages:
+  - clamav
+  - clamav-daemon
+  - clamav-base
+  - clamav-freshclam
+  - clamav-milter
+mailserver_clamav_service_extend_file: >-
+  /etc/systemd/system/clamav-daemon.service.d/extend.conf

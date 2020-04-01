@@ -1,16 +1,11 @@
 ---
 - name: Clamav - install system packages
   apt:
-    pkg:
-      - clamav
-      - clamav-daemon
-      - clamav-base
-      - clamav-freshclam
-      - clamav-milter
+    pkg: "{{ mailserver_clamav_packages }}"
 
 - name: Clamav - force service to wait after socket to validate start
   copy:
-    dest: "/etc/systemd/system/clamav-daemon.service.d/extend.conf"
+    dest: "{{ mailserver_clamav_service_extend_file }}"
     content: |-
       [Service]
       ExecStartPre=-/bin/mkdir /run/clamav

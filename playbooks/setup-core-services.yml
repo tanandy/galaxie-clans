@@ -1,17 +1,17 @@
 ---
-- name: Gather facts about all hosts
+- name: Gathering facts
   hosts: "clans:!allies"
   become: yes
   gather_facts: yes
   tags:
     - always
 
-- name: Apply minimal service configuration
+- name: Apply critical services
   hosts: "{{ scope }}"
   become: yes
   gather_facts: no
   tags:
-    - minimal
+    - critical
 
   roles:
     - role: "common"
@@ -20,22 +20,14 @@
     - role: "ntp"
 #    - role: "ufw"
 
-- name: Apply core services (with mitogen)
+- name: Apply core services
   hosts: "{{ scope }}"
   become: yes
   gather_facts: no
   tags:
     - core
+
   roles:
     - role: "bind"
     - role: "metrics"
-
-- name: Apply core services (without mitogen)
-  hosts: "{{ scope }}"
-  become: yes
-  gather_facts: no
-  # mitogen does not support loading python dns module
-  strategy: linear
-
-  roles:
-    - "mailserver"
+    - roel: "mailserver"
