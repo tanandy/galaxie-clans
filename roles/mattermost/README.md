@@ -31,7 +31,7 @@ Nous vous conseillons le Store F-Droid qui permet le télécharegemnt d'applicat
 * https://f-droid.org/fr/
 * https://f-droid.org/fr/packages/com.mattermost.mattermost/
 
-Liens direct vers les .apk (au pire du pire)
+Liens direct vers les fichier d'installation .apk (au pire du pire)
 * https://f-droid.org/FDroid.apk
 * https://f-droid.org/repo/com.mattermost.mattermost_399.apk
 * https://f-droid.org/repo/org.jitsi.meet_200300.apk
@@ -42,9 +42,11 @@ Au lancement de Mattermost :
 * Cliquez sur connecter.
 
 ## Créer votre salon
-Une fois que vous avez été invité sur la platforme , que vous avez créer votre compte, et que vous êtes connecté:
+Une fois que vous avez été invité , que vous avez créer votre compte, et que vous êtes connecté:
 
-Vous aurez accès au salon "Place du village", ce salon est public. Vous pouvez créer des salons privés selon vos besoins.
+Vous aurez accès au salon "Place du village", qui est un salon public.
+
+Vous pouvez créer des salons privés ou public selon vos besoins.
 Gardez à l'esprit que des mineurs et des chefs de familles utilisent ce salon.
 
 ## Inviter vos proches
