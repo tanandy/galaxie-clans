@@ -62,3 +62,5 @@ opendkim_key_table_file: "{{ opendkim_conf_directory }}/key_table"
 opendkim_signing_table_file: "{{ opendkim_conf_directory }}/signing_table"
 opendkim_trusted_hosts_file: "{{ opendkim_conf_directory }}/trusted_hosts"
 opendkim_key_size: 1024
+
+mailserver_spam_report_contact: ~

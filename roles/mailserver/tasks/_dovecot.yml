@@ -1,52 +1,52 @@
 # tasks/dovecot.yml -- Install and configure Dovecot
 ---
-- name: Install Dovecot
+- name: Dovecot - install system packages
   package:
     name: "{{ item }}"
   with_items: "{{ mailserver_dovecot_packages }}"
 
-- name: Add dovecot user to ssl-cert group
+- name: Dovecot - add dovecot user to ssl-cert group
   user:
     name: dovecot
     append: yes
     groups:
       - ssl-cert
 
-- name: Ensure Dovecot is started
-  service:
-    name: "{{ mailserver_dovecot_service }}"
-    state: started
-    enabled: true
-
-- name: Applying thunderbird fix
+- name: Dovecot - apply thunderbird fix
   lineinfile:
     path: "{{ dovecot_config_dir }}/20-imap.conf"
     regexp: '^#imap_client_workarounds'
     line: 'imap_client_workarounds = tb-extra-mailbox-sep'
   notify: Restart dovecot service
 
-- name: Setting dovecot authentication mechanisms
+- name: Dovecot - configure authentication mechanisms
   template:
     src: dovecot-auth.conf.j2
     dest: "{{ dovecot_config_dir }}/10-auth.conf"
   notify: Restart dovecot service
 
-- name: Setting dovecot mail mechanisms
+- name: Dovecot - configure mail mechanisms
   template:
     src: dovecot-mail.conf.j2
     dest: "{{ dovecot_config_dir }}/10-mail.conf"
   notify: Restart dovecot service
 
-- name: Setting dovecot master mechanisms
+- name: Dovecot - configure master mechanisms
   template:
     src: dovecot-master.conf.j2
     dest: "{{ dovecot_config_dir }}/10-master.conf"
   notify: Restart dovecot service
 
-- name: Setting dovecot ssl mechanisms
+- name: Dovecot - configure ssl
   template:
     src: dovecot-ssl.conf.j2
     dest: "{{ dovecot_config_dir }}/10-ssl.conf"
   notify: Restart dovecot service
+
+- name: Dovecot - enable service
+  service:
+    name: "{{ mailserver_dovecot_service }}"
+    state: started
+    enabled: true
 
 - meta: flush_handlers

@@ -19,3 +19,8 @@
 
 * [i2pd container image](https://hub.docker.com/r/meeh/i2pd)
 * [privoxy container image](https://hub.docker.com/r/splazit/privoxy-alpine)
+
+## Mailserver
+
+* https://www.malekal.com/installer-configurer-spamassassin-debian/
+* https://wiki.debian.org/DebianSpamAssassin

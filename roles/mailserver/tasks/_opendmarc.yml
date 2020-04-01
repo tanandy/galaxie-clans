@@ -42,10 +42,12 @@
     value: "v=DMARC1;p=reject;pct=20;rua=mailto:hostmaster@{{ item }};ruf=mailto:hostmaster@{{ item }};rf=afrf;aspf=r;adkim=r"
     state: present
   loop: "{{ opendmarc_keys }}"
+  register: _dmarc_record_creation
 
 - name: Sync dynamic record with zone file
   shell: >-
     rndc sync -clean {{ item }}
   loop: "{{ opendmarc_keys }}"
+  when: _dmarc_record_creation is changed
 
 - meta: flush_handlers

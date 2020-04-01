@@ -24,3 +24,9 @@
     name: "opendmarc"
     enabled: yes
     state: restarted
+
+- name: Restart spamassassin service
+  service:
+    name: "spamassassin"
+    enabled: yes
+    state: restarted
