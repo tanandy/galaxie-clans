@@ -1,27 +1,27 @@
 ---
-- name: Sanity checks
+- name: "Opendkim - {{ _opendkim_domain }} - Sanity checks"
   assert:
     that:
       - _opendkim_domain is defined
 
-- name: Cooking variables
+- name: "Opendkim - {{ _opendkim_domain }} - Cooking variables"
   set_fact:
     _opendkim_domain_directory: "{{ opendkim_key_directory }}/{{ _opendkim_domain }}"
 
-- name: Delete dkim keys to force rotation
+- name: "Opendkim - {{ _opendkim_domain }} - delete dkim key to force rotation"
   shell: >-
     rm -f {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.private
     {{ opendkim_key_directory }}/{{ _opendkim_domain }}/mail.txt
   when: opendkim_rotate_key is defined and opendkim_rotate_key | bool
 
-- name: Generate dkim keys
+- name: "Opendkim - {{ _opendkim_domain }} - generate key"
   shell: >-
     opendkim-genkey -b {{ opendkim_key_size }} -D {{ _opendkim_domain_directory }} -d {{ _opendkim_domain }} -s mail
     && chown opendkim: {{ opendkim_key_directory }} -R
   args:
     creates: "{{ _opendkim_domain_directory }}/mail.private"
 
-- name: Render key table
+- name: "Opendkim - {{ _opendkim_domain }} - render key table"
   lineinfile:
     dest: "{{ opendkim_key_table_file }}"
     line: >-
@@ -31,7 +31,7 @@
     create: yes
   notify: Restart opendkim service
 
-- name: Render signing table
+- name: "Opendkim - {{ _opendkim_domain }} - render signing table"
   lineinfile:
     dest: "{{ opendkim_signing_table_file }}"
     line: >-
@@ -41,7 +41,7 @@
     create: yes
   notify: Restart opendkim service
 
-- name: Render trusted hosts table
+- name: "Opendkim - {{ _opendkim_domain }} - render trusted hosts table"
   lineinfile:
     dest: "{{ opendkim_trusted_hosts_file }}"
     line: >-
@@ -51,12 +51,12 @@
     create: yes
   notify: Restart opendkim service
 
-- name: Find out what the remote machine's mounts are
+- name: "Opendkim - {{ _opendkim_domain }} - find out what the remote machine's mounts are"
   slurp:
     src: "{{ _opendkim_domain_directory }}/mail.txt"
   register: _opendkim_domain_key
 
-- name: Opendkim key extraction
+- name: "Opendkim - {{ _opendkim_domain }} - extract key"
   set_fact:
     _opendkim_domain_full_record: >-
       {{
@@ -66,7 +66,7 @@
         | regex_replace('[\n\t\(\)\" ]', '')
       }}
 
-- name: "Create record mail._domainkey.{{ _opendkim_domain }}"
+- name: "Opendkim - {{ _opendkim_domain }} - Create record 'mail._domainkey'"
   nsupdate:
     server: "127.0.0.1"
     zone: "{{ _opendkim_domain }}"
@@ -77,7 +77,7 @@
     state: present
   register: _domainkey_record_creation
 
-- name: Sync dynamic record with zone file
+- name: "Opendkim - {{ _opendkim_domain }} - sync record with zone file"
   shell: >-
     rndc sync -clean {{ _opendkim_domain }}
   when:

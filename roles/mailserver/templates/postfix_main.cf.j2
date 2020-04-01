@@ -728,7 +728,7 @@ smtpd_tls_received_header = yes
 smtpd_tls_cert_file = {{ postfix_smtpd_tls_cert_file }}
 smtpd_tls_key_file = {{ postfix_smtpd_tls_key_file }}
 smtpd_tls_loglevel = 1
-smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock
+smtpd_milters = local:/var/run/opendkim/opendkim.sock, local:/var/run/opendmarc/opendmarc.sock, local:/var/run/clamav/clamav-milter.ctl
 
 non_smtpd_milters = $smtpd_milters
 #

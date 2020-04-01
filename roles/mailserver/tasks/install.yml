@@ -10,6 +10,9 @@
 - include_tasks: _spamassassin.yml
 - meta: flush_handlers
 
+- include_tasks: _clamav.yml
+- meta: flush_handlers
+
 - include_tasks: _postfix.yml
 - meta: flush_handlers
 

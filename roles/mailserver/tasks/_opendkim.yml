@@ -1,9 +1,16 @@
 ---
-- name: Install opendkim
+- name: Opendkim - install system packages
   package:
     name: "{{ mailserver_opendkim_packages }}"
 
-- name: Create dkim key directories
+- name: Opendkim - create config directory
+  file:
+    path: "{{ opendkim_conf_directory }}"
+    state: directory
+    owner: opendkim
+    group: opendkim
+
+- name: Opendkim - create key directories
   file:
     path: "{{ opendkim_key_directory }}/{{ item }}"
     state: directory
@@ -11,15 +18,7 @@
     group: opendkim
   loop: "{{ opendkim_keys }}"
 
-
-- name: Create dkim key directories
-  file:
-    path: "{{ opendkim_conf_directory }}"
-    state: directory
-    owner: opendkim
-    group: opendkim
-
-- name: Adjust opendkim configuration
+- name: Opendkim - adjust config
   blockinfile:
     path: "{{ opendkim_conf_file }}"
     block: |-

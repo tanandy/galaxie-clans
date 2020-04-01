@@ -1,0 +1,37 @@
+---
+- name: Clamav - install system packages
+  apt:
+    pkg:
+      - clamav
+      - clamav-daemon
+      - clamav-base
+      - clamav-freshclam
+      - clamav-milter
+
+- name: Clamav - force service to wait after socket to validate start
+  copy:
+    dest: "/etc/systemd/system/clamav-daemon.service.d/extend.conf"
+    content: |-
+      [Service]
+      ExecStartPre=-/bin/mkdir /run/clamav
+      ExecStartPre=/bin/chown clamav /run/clamav
+      ExecStartPost=/bin/bash -c 'while [ ! -e "/var/run/clamav/clamd.ctl" ]; do sleep 0.5; done'
+  notify: Restart clamav-daemon service
+
+- name: Clamav - Enable clamav-daemon service
+  systemd:
+    name: "clamav-daemon"
+    state: started
+    enabled: yes
+
+- name: Clamav - Enable clamav-milter service
+  systemd:
+    name: "clamav-milter"
+    state: started
+    enabled: yes
+
+- name: Clamav - Enable clamav-freshclam service
+  systemd:
+    name: "clamav-freshclam"
+    state: started
+    enabled: yes

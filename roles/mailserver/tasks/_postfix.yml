@@ -19,6 +19,13 @@
     name: "{{ mailserver_postfix_packages }}"
     state: present
 
+- name: Add postfix to clamav groups
+  user:
+    name: postfix
+    groups:
+      - clamav
+    append: yes
+
 - name: Add postfix to opendmarc groups
   user:
     name: postfix
