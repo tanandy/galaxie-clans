@@ -1,0 +1,5 @@
+---
+- copy:
+    dest: /etc/ansible/facts.d/bind_zones.fact
+    content: |-
+      {{ _bind_zones | to_nice_json }}

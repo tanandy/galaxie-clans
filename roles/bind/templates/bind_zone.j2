@@ -1,50 +1,4 @@
-{#
- #  First create a dict holding the entire zone information and create a hash
- #  from it, that it can be compared with subsequent task executions. In this
- #  way the serial will only be updated if there are some content changes.
- #}
-{% set _zone_data = {} %}
-{% set _ = _zone_data.update({'ttl': bind_zone_ttl}) %}
-{% set _ = _zone_data.update({'domain': item.name}) %}
-{% set _ = _zone_data.update({'mname': item.name_servers|default([])}) %}
-{% set _ = _zone_data.update({'aname': item.other_name_servers|default([])}) %}
-{% set _ = _zone_data.update({'mail': item.mail_servers|default([])}) %}
-{% if item.hostmaster_email is defined %}
-{% set _ = _zone_data.update({'rname': (( item.hostmaster_email )) + ('' if (item.hostmaster_email is search('\.')) else ('.' + _zone_data['domain']))}) %}
-{% else %}
-{% set _ = _zone_data.update({'rname': 'hostmaster.' + _zone_data['domain']}) %}
-{% endif %}
-{% set _ = _zone_data.update({'refresh': bind_zone_time_to_refresh}) %}
-{% set _ = _zone_data.update({'retry': bind_zone_time_to_retry}) %}
-{% set _ = _zone_data.update({'expire': bind_zone_time_to_expire}) %}
-{% set _ = _zone_data.update({'minimum': bind_zone_minimum_ttl}) %}
-{% set _ = _zone_data.update({'hosts': item.hosts|default([])}) %}
-{% set _ = _zone_data.update({'delegate': item.delegate|default([])}) %}
-{% set _ = _zone_data.update({'services': item.services|default([])}) %}
-{% set _ = _zone_data.update({'text': item.text|default([])}) %}
-{% set _ = _zone_data.update({'naptr': item.naptr|default([])}) %}
-{#
- #  Compare the zone file hash with the current zone data hash and set serial
- #  accordingly
- #}
-{% set _zone = {'hash': _zone_data | string | hash('md5')} %}
-{% for _result in forward_hashes if _result.name == item.name %}
-{%   set _hash_serial = _result.hash.split(' ')[2:] %}
-{%   if _hash_serial %}
-{%     if _hash_serial[0] == _zone['hash'] %}
-{%       set _ = _zone.update({'serial': _hash_serial[1]}) %}
-{%     else %}
-{%       set _ = _zone.update({'serial': (_hash_serial[1] | int) + 1 }) %}
-{%     endif %}
-{%   else %}
-{%       set _ = _zone.update({'serial': (item.init_serial | default(timestamp.stdout)) }) %}
-{%   endif %}
-{% endfor %}
-{#
- #  Eventually output the zone data
- #}
-; Hash: {{ _zone['hash'] }} {{ _zone['serial'] }}
-; Zone file for {{ _zone_data['domain'] }}
+{% set _zone_data = (_bind_forward_zones | selectattr('name', 'equalto', item.name) | list)[0].data  %}
 {{ ansible_managed | comment(decoration='; ') }}
 
 $ORIGIN {{ _zone_data['domain'] }}.
@@ -55,7 +9,7 @@ $TTL {{ _zone_data['ttl'] }}
 {% else %}
 @ IN SOA {{ ansible_hostname }}.{{ _zone_data['domain'] }}. {{ _zone_data['rname'] }}. (
 {% endif %}
-  {{ _zone['serial'] }}
+  {{ _bind_zones[item.name].forward_serial }}
   {{ _zone_data['refresh'] }}
   {{ _zone_data['retry'] }}
   {{ _zone_data['expire'] }}
