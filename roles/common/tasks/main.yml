@@ -1,4 +1,15 @@
 ---
+- name: Create ansible local facts directory
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    owner: root
+    group: root
+    state: directory
+  loop:
+    - /etc/ansible
+    - /etc/ansible/facts.d
+
 - include: hostname.yml
 - include: locales.yml
 - include: packages.yml

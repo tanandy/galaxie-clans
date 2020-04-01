@@ -1,0 +1,144 @@
+---
+- name: Extract forward zones data
+  set_fact:
+    _bind_forward_zones: >-
+      {{
+        _bind_forward_zones | default ([])
+        + [{
+            'name': item.name,
+            'data': {
+              'ttl': bind_zone_ttl,
+              'domain': item.name,
+              'mname': item.name_servers | default([]),
+              'aname': item.other_name_servers | default([]),
+              'mail': item.mail_servers | default([]),
+              'rname': item.hostmaster_email | default('hostmaster.' + item.name),
+              'refresh': bind_zone_time_to_refresh,
+              'retry': bind_zone_time_to_retry,
+              'expire': bind_zone_time_to_expire,
+              'minimum': bind_zone_minimum_ttl,
+              'hosts': item.hosts | default([]),
+              'delegate': item.delegate | default([]),
+              'services': item.services | default([]),
+              'text': item.text | default([]),
+              'naptr': item.naptr | default([])
+            }
+          }]
+      }}
+  loop: "{{ bind_zone_domains }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Extract reverse zones data
+  set_fact:
+    _bind_reverse_zones: >-
+      {{
+        _bind_reverse_zones | default ([])
+        + [{
+            'name': item.0.name,
+            'data': {
+              'ttl': bind_zone_ttl,
+              'domain': item.0.name,
+              'mname': item.0.name_servers|default([]),
+              'aname': item.0.other_name_servers|default([]),
+              'rname': item.0.hostmaster_email | default('hostmaster.' + item.0.name),
+              'refresh': bind_zone_time_to_refresh,
+              'retry': bind_zone_time_to_retry,
+              'expire': bind_zone_time_to_expire,
+              'minimum': bind_zone_minimum_ttl,
+              'hosts': item.0.hosts|default([]) | selectattr('ip', 'defined') | selectattr('ip', 'string') | selectattr('ip', 'search', '^'+item.1) | list,
+              'revip': ('.'.join(item.1.replace(item.1+'.','').split('.')[::-1]))
+            }
+          }]
+      }}
+  loop: "{{ lookup('subelements', bind_zone_domains, 'networks', {'skip_missing': True}) }}"
+  loop_control:
+    label: "{{ item.1 }}"
+
+- name: Extract reverse ipv6 zones data
+  set_fact:
+    _bind_reverse_ipv6_zones: >-
+      {{
+        _bind_reverse_ipv6_zones | default ([])
+        + [{
+            'name': item.0.name,
+            'data': {
+              'ttl': bind_zone_ttl,
+              'domain': item.0.name,
+              'mname': item.0.name_servers|default([]),
+              'aname': item.0.other_name_servers|default([]),
+              'rname': item.0.hostmaster_email | default('hostmaster.' + item.0.name),
+              'refresh': bind_zone_time_to_refresh,
+              'retry': bind_zone_time_to_retry,
+              'expire': bind_zone_time_to_expire,
+              'minimum': bind_zone_minimum_ttl,
+              'hosts': item.0.hosts|default([]) | selectattr('ipv6','defined') | selectattr('ipv6','string') | selectattr('ipv6', 'search', '^'+item.1|regex_replace('/.*$','')) | list,
+              'revip': (item.1 | ipaddr('revdns'))[-(9+(item.1|regex_replace('^.*/','')|int)//2):]
+            }
+          }]
+      }}
+  loop: "{{ lookup('subelements', bind_zone_domains, 'ipv6_networks', {'skip_missing': True}) }}"
+  loop_control:
+    label: "{{ item.1 }}"
+
+- name: Local fact cooking
+  set_fact:
+    _bind_zones: >-
+      {{
+        _bind_zones | default({})
+        | combine ({
+            (item.name): {
+              'forward_serial': ansible_local.bind_zones[item.name].forward_serial | default (item.init_serial | default(ansible_date_time.epoch)),
+              'forward_hash':
+                ( _bind_forward_zones | default([]) | selectattr('name', 'equalto', item.name) | list )[0].data
+                | default({}) | string | hash('md5'),
+              'reverse_serial': ansible_local.bind_zones[item.name].reverse_serial | default (item.init_serial | default(ansible_date_time.epoch)),
+              'reverse_hash':
+                ( _bind_reverse_zones | default([]) | selectattr('name', 'equalto', item.name) | list )[0].data
+                | default({}) | string | hash('md5'),
+              'reverse_ipv6_serial': ansible_local.bind_zones[item.name].reverse_ipv6_serial | default (item.init_serial | default(ansible_date_time.epoch)),
+              'reverse_ipv6_hash': ( _bind_reverse_ipv6_zones | default([]) | selectattr('name', 'equalto', item.name) | list )[0].data
+                | default({}) | string | hash('md5')
+            }
+          })
+      }}
+  loop: "{{ bind_master_zone_domains }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Update detector cooking
+  set_fact:
+    bind_zones_updates: >-
+      {{
+        bind_zones_updates | default({})
+        | combine ({
+            (item.name): {
+              'forward_update': (_bind_zones[item.name].forward_hash != (ansible_local.bind_zones[item.name].forward_hash | default(""))),
+              'reverse_update': (_bind_zones[item.name].reverse_hash != (ansible_local.bind_zones[item.name].reverse_hash | default(""))),
+              'reverse_ipv6_update': (_bind_zones[item.name].reverse_ipv6_hash != (ansible_local.bind_zones[item.name].reverse_ipv6_hash | default(""))),
+            }
+          })
+      }}
+  loop: "{{ bind_master_zone_domains }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Local fact cooking
+  set_fact:
+    _bind_zones: >-
+      {{
+        _bind_zones
+        | combine ({
+            (item.name): {
+              'forward_serial': bind_zones_updates[item.name].forward_update | ternary (_bind_zones[item.name].forward_serial|int + 1, _bind_zones[item.name].forward_serial),
+              'forward_hash': _bind_zones[item.name].forward_hash,
+              'reverse_serial': bind_zones_updates[item.name].reverse_update | ternary (_bind_zones[item.name].reverse_serial|int + 1, _bind_zones[item.name].reverse_serial),
+              'reverse_hash': _bind_zones[item.name].reverse_hash,
+              'reverse_ipv6_serial': bind_zones_updates[item.name].reverse_ipv6_update | ternary (_bind_zones[item.name].reverse_ipv6_serial|int + 1, _bind_zones[item.name].reverse_ipv6_serial),
+              'reverse_ipv6_hash': _bind_zones[item.name].reverse_ipv6_hash
+            }
+          })
+      }}
+  loop: "{{ bind_master_zone_domains }}"
+  loop_control:
+    label: "{{ item.name }}"

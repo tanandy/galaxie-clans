@@ -30,3 +30,9 @@ bind_auth_file: "{{ bind_conf_dir }}/{{ auth_file }}"
 
 bind_owner: root
 bind_group: bind
+
+bind_directories:
+  - "{{ bind_dir }}/dynamic"
+  - "{{ bind_dir }}/slaves"
+  - "{{ bind_dir }}/data"
+  - "{{ bind_zone_dir }}"
