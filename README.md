@@ -37,8 +37,9 @@ other services by domain name.
 
 The following bricks are run as docker-compose files started by a systemd service. Volumes are binded on the host so data can be persisted accross services restart.
 
-* **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/).
+* **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
 * **CHAT**: Based on [mattermost](https://mattermost.com/)
+* **PRIVATE BROWSING**: Based on Tor and I2P and Privoxy + anonymization light, mattermost should GET previews via tor browsing.
 
 ## Branch instances (Work in Progress)
 
