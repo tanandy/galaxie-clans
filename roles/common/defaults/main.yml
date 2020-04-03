@@ -45,3 +45,6 @@ common_system_packages:
 common_pip_packages:
   - dnspython
   - cryptography
+
+common_sysctl_vm_swappiness: "10"
+common_sysctl_vm_vfs_cache_pressure: "100"

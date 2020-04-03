@@ -16,4 +16,17 @@
 - include: bashrc.yml
 - include: vim.yml
 
+- name: Adjust swapiness and cache_pressure
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  loop:
+    - name: "vm.swappiness"
+      value: "{{ common_sysctl_vm_swappiness }}"
+    - name: "vm.vfs_cache_pressure"
+      value: "{{ common_sysctl_vm_vfs_cache_pressure }}"
+
 - meta: flush_handlers
