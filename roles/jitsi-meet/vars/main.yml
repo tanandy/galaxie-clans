@@ -8,11 +8,13 @@ _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
 #
 jitsi_meet_configuration_directory: /etc/jitsi-meet
 jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
+jitsi_meet_jvb_dir: "{{ jitsi_meet_configuration_directory }}/jvb"
 jitsi_meet_nginx_configuration_dir: "{{ jitsi_meet_configuration_directory }}/web/nginx"
 jitsi_meet_expected_directories:
   - "{{ jitsi_meet_configuration_directory }}"
   - "{{ jitsi_meet_nginx_web_dir }}"
   - "{{ jitsi_meet_nginx_configuration_dir }}"
+  - "{{ jitsi_meet_jvb_dir }}"
 #
 # Files
 #
@@ -24,7 +26,7 @@ jitsi_meet_systemd_service_file: "/lib/systemd/system/jitsi-meet.service"
 # Containers
 #
 jitsi_meet_docker_images:
-  web: "jitsi/web"
-  prosody: "jitsi/prosody"
-  jvb: "jitsi/jvb"
-  jicofo: "jitsi/jicofo"
+  web: "jitsi/web:{{ jitsi_meet_container_version }}"
+  prosody: "jitsi/prosody:{{ jitsi_meet_container_version }}"
+  jvb: "jitsi/jvb:{{ jitsi_meet_container_version }}"
+  jicofo: "jitsi/jicofo:{{ jitsi_meet_container_version }}"

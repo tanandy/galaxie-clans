@@ -1,0 +1,30 @@
+---
+- hosts: uranus
+  become: yes
+  gather_facts: no
+  tasks:
+    - shell: >-
+        ls /var/qmail/alias/.qmail-*
+      register: qmail_aliases_files
+
+    - shell: >-
+        cat {{ item }} | grep -v -e "^#"
+      loop: "{{ qmail_aliases_files.stdout_lines }}"
+      register: qmail_aliases
+
+
+    - set_fact:
+        dedup_aliases: >-
+          {{
+            dedup_aliases | default([]) +
+            [{
+              'alias': item.item.split('-')[1] + '@galaxie.eu.org',
+              'email': item.stdout_lines | map('regex_replace', '$', '@galaxie.eu.org') | list
+            }]
+          }}
+      loop: "{{ qmail_aliases.results }}"
+
+
+    - debug:
+        msg: |-
+          {{ dedup_aliases | to_nice_yaml }}

@@ -24,3 +24,14 @@
 
 * https://www.malekal.com/installer-configurer-spamassassin-debian/
 * https://wiki.debian.org/DebianSpamAssassin
+
+cpu wait vs user wait
+
+diminuer le
+
+rmem_default
+A kernel parameter that controls the default size of receive buffers used by sockets. To configure this, run the following command:
+
+sysctl -w net.core.rmem_default=N
+
+Replace N with the desired buffer size, in bytes. To determine the value for this kernel parameter, view /proc/sys/net/core/rmem_default. Bear in mind that the value of rmem_default should be no greater than rmem_max (/proc/sys/net/core/rmem_max); if need be, increase the value of rmem_max.
