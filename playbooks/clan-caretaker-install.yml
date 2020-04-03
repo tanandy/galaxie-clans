@@ -78,16 +78,3 @@
         create: yes
         line: >-
           {{ lookup('file', public_key_file_to_inject) }}
-
-- name: Base server configuration
-  hosts: clans
-  become: yes
-  gather_facts: yes
-  tags:
-    - base
-
-  roles:
-    - common
-    - banner
-    - ssh
-    - ntp

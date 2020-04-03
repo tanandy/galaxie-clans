@@ -23,10 +23,6 @@
     sysctl_set: yes
     state: present
     reload: yes
-  loop:
-    - name: "vm.swappiness"
-      value: "{{ common_sysctl_vm_swappiness }}"
-    - name: "vm.vfs_cache_pressure"
-      value: "{{ common_sysctl_vm_vfs_cache_pressure }}"
+  loop: "{{ common_sysctl_tuning }}"
 
 - meta: flush_handlers
