@@ -7,7 +7,6 @@ An Ansible role for installing a mail server on Enterprise Linux 7 (RHEL, CentOS
 - Integrate both services
 - Configure user mailboxes
 - Install and configure the SpamAssassin service
-- Install and configure the ClamAV Service
 - Integrate ldap in postfix
 
 ## Requirements

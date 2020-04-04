@@ -1,6 +1,5 @@
 # roles/mailserver/handlers/main.yml
 ---
-
 - name: Restart postfix service
   service:
     name: "{{ mailserver_postfix_service }}"
@@ -30,18 +29,3 @@
     name: "spamassassin"
     enabled: yes
     state: restarted
-
-- name: Restart clamav-daemon service
-  systemd:
-    name: "clamav-daemon"
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
-  notify: Restart clamav-milter service
-
-- name: Restart clamav-milter service
-  systemd:
-    name: "clamav-milter"
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
