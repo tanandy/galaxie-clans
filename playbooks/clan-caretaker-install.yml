@@ -1,12 +1,14 @@
 ---
 - name: Init host for management
-  hosts: clans
+  hosts: "{{ scope }}"
   gather_facts: no
   tags:
     - system
 
-  pre_tasks:
-  # detect and uninstall fail2ban before
+  tasks:
+  #
+  # WARNING: Detect and uninstall fail2ban before
+  #
     - name: "Update package cache (RAW: ALWAYS CHANGED)"
       raw: apt-get update
       tags:
@@ -18,41 +20,42 @@
       tags:
         - raw
 
-    - name: Safe-upgrade system
+    - name: "Safe-upgrade system"
       apt:
         update_cache: yes
         upgrade: safe
 
-    - name: Upgrade dist
+    - name: "Full-upgrade system"
       apt:
         update_cache: yes
-        upgrade: dist
-
-  # reinstall fail2ban if it was installed before
-
+        upgrade: full
+  #
+  # WARNING: Reinstall fail2ban if it was installed before
+  #
 - name: Prepare clan caretaker access
-  hosts: clans
+  hosts: "{{ scope }}"
   become: no
   gather_facts: no
   tags:
     - caretaker
 
   tasks:
-    - name: Sanity check
+    - name: "Sanity check"
       assert:
         that:
-          - public_key_file_to_inject is defined
+          - caretaker_authorized_key_files is defined
+          - caretaker_authorized_key_files | length > 0
           - clan_caretaker_name is defined
           - clan_caretaker_uid is defined
           - clan_caretaker_gid is defined
           - clan_caretaker_home is defined
 
-    - name: Create caretaker system group
+    - name: "Create caretaker system group"
       group:
         name: "{{ clan_caretaker_name }}"
         gid: "{{ clan_caretaker_gid }}"
 
-    - name: Create caretaker system user
+    - name: "Create caretaker system user"
       user:
         name: "{{ clan_caretaker_name }}"
         group: "{{ clan_caretaker_name }}"
@@ -60,21 +63,21 @@
         uid: "{{ clan_caretaker_uid }}"
         shell: /bin/bash
 
-    - name: Add sudo capabilities to caretaker
+    - name: "Add sudo capabilities to caretaker"
       copy:
         dest: "/etc/sudoers.d/{{ clan_caretaker_name }}"
         content: |-
           {{ clan_caretaker_name }} ALL=(ALL) NOPASSWD: ALL
         validate: /usr/sbin/visudo -csf %s
 
-    - name: Create dot-ssh directory
+    - name: "Create dot-ssh directory"
       file:
         path: "{{ clan_caretaker_home }}/.ssh"
         state: directory
 
-    - name: Authorize key for caretaker user connections
-      lineinfile:
-        dest: "{{ clan_caretaker_home }}/.ssh/authorized_keys"
-        create: yes
-        line: >-
-          {{ lookup('file', public_key_file_to_inject) }}
+    - name: "Authorize key for caretaker user connections"
+      authorized_key:
+        user: "{{ clan_caretaker_name }}"
+        state: present
+        key: "{{ lookup('file', item) }}"
+      loop: "{{ caretaker_authorized_key_files }}"

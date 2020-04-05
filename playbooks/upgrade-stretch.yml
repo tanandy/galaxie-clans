@@ -1,0 +1,33 @@
+---
+- hosts: "{{ scope }}"
+  gather_facts: no
+
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+  tasks:
+    - name: Stretch Update
+      raw: >-
+        apt-get update -y
+
+    - name: Stretch upgrade
+      raw: >-
+        apt-get upgrade -o Dpkg::Options::="--force-confold" -y
+        && apt-get full-upgrade -o Dpkg::Options::="--force-confold" -y
+        && apt-get autoremove --purge -y
+
+    - name: Switch apt sources to buster
+      raw: >-
+        sed -i 's/stretch/buster/g' /etc/apt/sources.list
+        && sed -i 's/stretch/buster/g' /etc/apt/sources.list.d/*
+        && apt-get update
+
+    - name: Buster upgrade
+      raw: >-
+        apt-get upgrade -o Dpkg::Options::="--force-confold" -y
+        && apt-get full-upgrade -o Dpkg::Options::="--force-confold" -y
+        && apt-get autoremove --purge -y
+
+    - debug:
+        msg: >-
+          ==> Upgraded debian stretch to buster. Ready to reboot <==
