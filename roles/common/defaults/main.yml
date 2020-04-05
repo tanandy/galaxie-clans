@@ -49,10 +49,10 @@ common_pip_packages:
   - dnspython
   - cryptography
 
-common_sysctl_vm_swappiness: "20"
+common_sysctl_vm_swappiness: "10"
 common_sysctl_vm_vfs_cache_pressure: "50"
 common_sysctl_vm_overcommit_memory: "0"
-common_sysctl_vm_overcommit_ratio: "{{ 100 * ((ansible_memtotal_mb - ansible_swaptotal_mb) / ansible_memtotal_mb) }}"
+common_sysctl_vm_overcommit_ratio: "95"
 common_sysctl_net_core_wmem_max: "1048576"
 
 common_sysctl_tuning:
