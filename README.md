@@ -22,7 +22,7 @@
 * **NTP**: Based on [ntpd](http://www.ntp.org/)
 * **SSH**: Based on [openssh](https://www.openssh.com/)
 
-### Core services (GREY)
+### Core services (BLUE)
 
 Core services are installed at the operating system level.
 
