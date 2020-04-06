@@ -70,11 +70,10 @@ Once upon a time, this project was hosted on a ancient platform called GitHub. T
 
 We build an Ansible toolkit for managing a set of Debian servers, a set of powerful roles made hand-in-hand by a senior system admin and a senior developer.
 
-Originaly written for managing a Home Network with external services. The project has shifted to managing digital survival of clans entities.
+Originaly written for managing a Home Network with external services. The project has shifted to managing digital survival of clanic entities.
 
 Galaxie is a true mix of the two world, by luck author Tuux and Mo have made the necessary to have no compromise.
 
-* Pure System Admin compliance
-* Pure Syntax Devs compliance
+Bear in mind folks: Tech purity is cancer of mind.
 
 It will be an honor if you could use our work in any way. Be it as-is or as code samples.
