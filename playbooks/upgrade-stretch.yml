@@ -2,6 +2,8 @@
 - hosts: "{{ scope }}"
   gather_facts: no
 
+# TODO: Evolve into an upgrade from `oldstable` to `stable`
+
   environment:
     DEBIAN_FRONTEND: noninteractive
 

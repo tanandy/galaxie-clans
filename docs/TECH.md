@@ -35,3 +35,8 @@ A kernel parameter that controls the default size of receive buffers used by soc
 sysctl -w net.core.rmem_default=N
 
 Replace N with the desired buffer size, in bytes. To determine the value for this kernel parameter, view /proc/sys/net/core/rmem_default. Bear in mind that the value of rmem_default should be no greater than rmem_max (/proc/sys/net/core/rmem_max); if need be, increase the value of rmem_max.
+
+## Mailu
+
+* https://mailu.io/1.7/general.html
+* https://github.com/Mailu/Mailu/blob/master/setup/flavors/compose/docker-compose.yml
