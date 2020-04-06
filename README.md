@@ -14,13 +14,18 @@
 
 ### Host prerequisites
 
-* [Debian Stable](https://www.debian.org/): with ipv4 and ipv6 interface
+* [Debian Stable](https://www.debian.org/): with ipv4 (and ideally with ipv6 interface too)
 * SSH access: as root or full sudo
 
-### Core services (GREY)
+### Critical (BLACK)
 
 * **NTP**: Based on [ntpd](http://www.ntp.org/)
 * **SSH**: Based on [openssh](https://www.openssh.com/)
+
+### Core services (GREY)
+
+Core services are installed at the operating system level.
+
 * **DNS**: Based on [bind](https://www.isc.org/bind/)
 * **MAIL**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
 * **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
@@ -28,18 +33,21 @@
 * **BACKUP**: Based on [borg](https://www.borgbackup.org/)
 * **FIREWALL**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
 
-Core services are installed at the operating system level.
+### High-level Hub services (PURPLE)
 
-#### Broadcast services (PURPLE)
+High-level Hub services are installed at the operating system level. These are the mandatory os-level services to build upon for higher-level services.
 
+* **CONTAINER**: Based on [containerd]https://containerd.io/). It is installed at the operating system level. Every higher-level services are to be run by docker-compose-centric system services.
 * **R-PROXY**: Based on [nginx](https://www.nginx.com/). It is installed at the operating system level. The reverse proxy feature is used to expose
 other services by domain name.
+
+#### Broadcast services (RED)
 
 The following bricks are run as docker-compose files started by a systemd service. Volumes are binded on the host so data can be persisted accross services restart.
 
 * **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
 * **CHAT**: Based on [mattermost](https://mattermost.com/)
-* **PRIVATE BROWSING**: Based on Tor and I2P and Privoxy + anonymization light, mattermost should GET previews via tor browsing.
+* **PRIVATE BROWSING**: Based on Tor and I2P and Privoxy + anonymization light, mattermost should GET previews via tor browsing. (WIP)
 
 ## Branch instances (Work in Progress)
 
