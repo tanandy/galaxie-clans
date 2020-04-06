@@ -57,8 +57,6 @@ The following bricks are run as docker-compose files started by a systemd servic
 * **TFTP**: Based on `tfpd`
 * **PXE**: Based on `pxelinux`
 * **DHCP**: Based on `dhcpd`
-
-
 * **TELEPHONY**: Based on `asterisk`
 * **SHARE**: Based on `samba`
 * **RPITVOS**: Based on `Libreelec`
