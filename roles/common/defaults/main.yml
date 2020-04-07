@@ -54,6 +54,7 @@ common_sysctl_vm_vfs_cache_pressure: "50"
 common_sysctl_vm_overcommit_memory: "0"
 common_sysctl_vm_overcommit_ratio: "95"
 common_sysctl_net_core_wmem_max: "1048576"
+common_sysctl_net_core_rmem_max: "4194304"
 
 common_sysctl_tuning:
   - name: "vm.swappiness"
@@ -71,5 +72,7 @@ common_sysctl_tuning:
   - name: "net.core.wmem_max"
     value: "{{ common_sysctl_net_core_wmem_max }}"
 
+  - name: "net.core.rmem_max"
+    value: "{{ common_sysctl_net_core_rmem_max }}"
 
 # powertop --csv=powertop_report.txt --time=20s

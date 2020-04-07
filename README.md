@@ -37,7 +37,7 @@ Core services are installed at the operating system level.
 
 High-level Hub services are installed at the operating system level. These are the mandatory os-level services to build upon for higher-level services.
 
-* **CONTAINER**: Based on [containerd]https://containerd.io/). It is installed at the operating system level. Every higher-level services are to be run by docker-compose-centric system services.
+* **CONTAINER**: Based on [containerd](https://containerd.io/). It is installed at the operating system level. Every higher-level services are to be run by docker-compose-centric system services.
 * **R-PROXY**: Based on [nginx](https://www.nginx.com/). It is installed at the operating system level. The reverse proxy feature is used to expose
 other services by domain name.
 

@@ -1,10 +1,16 @@
 ---
 - name: Install netdata package
   package:
-    name: "{{ monitoring_system_packages }}"
+    name: "{{ metrics_system_packages }}"
 
 - name: Activate netdata service
-  service:
+  template:
+    src: "netdata.conf.j2"
+    dest: "/etc/netdata/netdata.conf"
+  notify: Restart netdata service
+
+- name: Activate netdata service
+  systemd:
     name: netdata
     state: started
     enabled: yes

@@ -1,0 +1,24 @@
+# NetData Configuration
+
+[global]
+    run as user = netdata
+    web files owner = root
+    web files group = root
+# Netdata is not designed to be exposed to potentially hostile
+# networks. See https://github.com/netdata/netdata/issues/164
+    bind socket to IP = 127.0.0.1
+    process scheduling policy = idle
+    process scheduling priority = 0
+    process nice level = 19
+    update every = {{ metrics_update_every }}
+    debug log = none
+    error log = none
+    access log = none
+    page cache size = {{ metrics_page_cache_size }}
+    dbengine disk space = {{ metrics_dbengine_disk_space }}
+
+[web]
+    web server threads = {{ metrics_web_server_threads }}
+    web server max sockets = 512
+    enable web responses gzip compression = {{ metrics_enable_web_responses_gzip_compression }}
+#   gzip compression level = 1

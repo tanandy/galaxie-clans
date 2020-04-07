@@ -45,6 +45,10 @@ Replace N with the desired buffer size, in bytes. To determine the value for thi
 
 * https://github.com/afaqurk/linux-dash
 
-## Monit
+## Netdata
 
-https://mmonit.com/monit/
+https://docs.netdata.cloud/docs/performance/
+
+## TODO
+
+* host and distribute rootfs alpine & debian.
