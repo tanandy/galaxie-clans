@@ -15,7 +15,7 @@
 
 ### Big Picture
 
-![galaxie](docs/images/big_picture.png)
+![galaxie](docs/images/big_picture_v2.png)
 
 ### Core (BLACK)
 
@@ -23,8 +23,6 @@ Core services are installed at the operating system level.
 
 * **NTP**: Based on [ntpd](http://www.ntp.org/)
 * **SSH**: Based on [openssh](https://www.openssh.com/)
-* **DNS**: Based on [bind](https://www.isc.org/bind/)
-* **MAIL**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
 * **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
 * **METRICS**: Based on [netdata](https://www.netdata.cloud/)
 * **BACKUP**: Based on [borg](https://www.borgbackup.org/)
@@ -42,6 +40,8 @@ other services by domain name.
 
 The following bricks are run as docker-compose files started by a systemd service. Volumes are binded on the host so data can be persisted accross services restart.
 
+* **DNS**: Based on [bind](https://www.isc.org/bind/)
+* **MAIL**: Based on [mailu](https://mailu.io/)
 * **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
 * **CHAT**: Based on [mattermost](https://mattermost.com/)
 
