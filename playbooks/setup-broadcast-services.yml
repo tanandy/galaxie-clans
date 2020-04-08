@@ -7,7 +7,7 @@
     - broadcast
 
   roles:
-    - role: "nginx"
+    - role: "rproxy"
       vars:
         nginx_skip_enabling_sites: yes
 
@@ -15,6 +15,6 @@
     - role: "jitsi-meet"
     - role: "mattermost"
 
-    - role: "nginx"
+    - role: "rproxy"
       vars:
         nginx_skip_enabling_sites: no

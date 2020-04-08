@@ -12,10 +12,10 @@
   gather_facts: no
   tags:
     - critical
+    - black
 
   roles:
-    - role: "common"
-    - role: "banner"
+    - role: "system_base"
     - role: "ssh"
     - role: "ntp"
 #    - role: "ufw"
@@ -26,6 +26,7 @@
   gather_facts: no
   tags:
     - core
+    - grey
 
   roles:
     - role: "bind"

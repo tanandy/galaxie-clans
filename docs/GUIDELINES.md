@@ -49,3 +49,11 @@ Grosses boucles de ça dans les logs:
 ```
 mars 23 00:10:52 vana docker-compose[19315]: jvb_1      | JVB 2020-03-23 00:10:51.807 WARNING: [423112] org.jitsi.impl.neomedia.transform.RtxTransformer.log() Cannot find SSRC for RTX,
 ```
+
+
+## Color Palette
+
+* Black `#001516`
+* Grey `#ccccccff`
+* Cyan `#8ef4f7`
+* Cyan strong `#6bd1d4`
