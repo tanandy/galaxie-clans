@@ -22,11 +22,11 @@
 Core services are installed at the operating system level.
 
 * **[NTP](roles/ntp/README.md)**: Based on [ntpd](http://www.ntp.org/)
-* **SSH**: Based on [openssh](https://www.openssh.com/)
-* **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
-* **METRICS**: Based on [netdata](https://www.netdata.cloud/)
-* **BACKUP**: Based on [borg](https://www.borgbackup.org/)
-* **FIREWALL**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
+* **[SSH](roles/ssh/README.md)**: Based on [openssh](https://www.openssh.com/)
+* **[LOGS](roles/logs/README.md)**: Based on [rsyslog](https://www.rsyslog.com/)
+* **[METRICS](roles/metrics/README.md)**: Based on [netdata](https://www.netdata.cloud/)
+* **[BACKUP](roles/backup/README.md)**: Based on [borg](https://www.borgbackup.org/)
+* **[FIREWALL](roles/firewall/README.md)**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
 
 ### High-Level Hub (GREY)
 
