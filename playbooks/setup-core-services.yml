@@ -13,22 +13,11 @@
   tags:
     - critical
     - black
-
   roles:
     - role: "system_base"
     - role: "ssh"
     - role: "ntp"
-    - role: "firewall"
-
-- name: Apply core services
-  hosts: "{{ scope }}"
-  become: yes
-  gather_facts: no
-  tags:
-    - core
-    - cyan
-
-  roles:
-    - role: "bind"
     - role: "metrics"
+    - role: "firewall"
+    - role: "bind"
     - role: "mailserver"

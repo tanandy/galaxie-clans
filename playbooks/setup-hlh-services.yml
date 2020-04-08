@@ -6,22 +6,15 @@
   tags:
     - always
 
-- name: Setup broadcast services
+- name: Apply critical services
   hosts: "{{ scope }}"
   become: yes
-  gather_facts: yes
+  gather_facts: no
   tags:
-    - broadcast
-    - cyan
+    - hlh
+    - grey
   roles:
     - role: "rproxy"
       vars:
         nginx_skip_enabling_sites: yes
-
     - role: "container"
-    - role: "jitsi-meet"
-    - role: "mattermost"
-
-    - role: "rproxy"
-      vars:
-        nginx_skip_enabling_sites: no

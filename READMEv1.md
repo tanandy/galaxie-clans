@@ -15,7 +15,7 @@
 
 ### Big Picture
 
-![galaxie](docs/images/big_picture_v2.png)
+![galaxie](docs/images/big_picture_v1.png)
 
 ### Core (BLACK)
 
