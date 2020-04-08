@@ -42,6 +42,19 @@
     state: directory
   loop: "{{ system_base_ansible_dirs }}"
 
+- name: Create ssl-cert group
+  group:
+    name: ssl-cert
+    system: yes
+
+- name: Create ssl certificates directory
+  file:
+    path: "/etc/ssl/private"
+    owner: "root"
+    group: "ssl-cert"
+    mode: "0710"
+    state: directory
+
 - import_tasks: locales.yml
 
 - name: Render bashrc templates
