@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_rproxy_uninstall: "{{ nginx_uninstall | default(false) | bool }}"
+_rproxy_uninstall: "{{ rproxy_uninstall | default(false) | bool }}"
 
 rproxy_modular_config_directories:
   - "{{ nginx_modular_conf_directory_modules_available }}"
