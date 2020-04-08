@@ -1,0 +1,79 @@
+---
+- name: Sanity checks
+  include_tasks: checks.yml
+
+- name: Set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Add hostname ipv4 to /etc/hosts
+  lineinfile:
+    dest: "/etc/hosts"
+    regexp: >-
+      ^{{ ansible_default_ipv4.address }}.+$
+    line: >-
+      {{ ansible_default_ipv4.address }} {{ ansible_hostname }}
+
+- name: Set timezone
+  timezone:
+    name: "{{ system_base_tzdata_areas }}/{{ system_base_tzdata_zones }}"
+
+- name: Install base packages
+  apt:
+    name: "{{ system_base_system_packages }}"
+    state: present
+
+- name: Remove unwanted packages
+  apt:
+    name: "{{ system_base_unwanted_system_packages }}"
+    state: absent
+    purge: yes
+
+- name: Install base python packages
+  pip:
+    name: "{{ system_base_pip_packages }}"
+
+- name: Create ansible directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ system_base_ansible_dirs_owner }}"
+    group: "{{ system_base_ansible_dirs_group }}"
+    mode: "{{ system_base_ansible_dirs_mode }}"
+    state: directory
+  loop: "{{ system_base_ansible_dirs }}"
+
+- import_tasks: locales.yml
+
+- name: Render bashrc templates
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - src: "bash.bashrc"
+      dest: "/etc/bash.bashrc"
+    - src: "etc_skel_bashrc"
+      dest: "/etc/skel/.bashrc"
+
+- name: Configure vim
+  lineinfile:
+    dest: /etc/vim/vimrc
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop: "{{ system_base_vimrc_lines }}"
+
+- name: Tune sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  loop: "{{ system_base_sysctl_tuning }}"
+
+- import_tasks: banner.yml
+
+- meta: flush_handlers

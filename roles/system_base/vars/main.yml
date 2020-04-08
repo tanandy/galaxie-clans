@@ -1,0 +1,7 @@
+---
+system_base_ansible_dirs_owner: root
+system_base_ansible_dirs_group: root
+system_base_ansible_dirs_mode: "0700"
+system_base_ansible_dirs:
+  - /etc/ansible
+  - /etc/ansible/facts.d

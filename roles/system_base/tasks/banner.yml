@@ -1,0 +1,34 @@
+---
+- name: Install figlet font
+  copy:
+    src: "{{ system_base_banner_font_filename }}"
+    dest: "{{ system_base_banner_figlet_font_dir }}/{{ system_base_banner_font_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Render figlet banner
+  command: >-
+    /usr/bin/figlet -c -w 80 -f {{ system_base_banner_font_name }} '{{ system_base_banner_text }}'
+  register: system_base_banner_figlet_result
+  changed_when: false
+
+- name: Configure message of the day
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Force static banner
+  copy:
+    src: empty.file
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - /etc/issue
+    - /etc/issue.net
+    - /etc/banner.dynamic

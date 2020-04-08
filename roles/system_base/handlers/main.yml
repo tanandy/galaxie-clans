@@ -1,0 +1,5 @@
+---
+
+- name: Update timezone
+  shell: >-
+    dpkg-reconfigure --frontend noninteractive tzdata

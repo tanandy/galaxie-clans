@@ -1,0 +1,122 @@
+---
+system_base_enable_manpages: yes
+# See /usr/share/i18n/SUPPORTED
+system_base_lang: 'fr_FR.UTF-8'
+system_base_primary_local: 'fr_FR.UTF-8'
+system_base_secondary_local: 'en_US.UTF-8'
+system_base_language: 'fr'
+system_base_tzdata_areas: 'Europe'
+system_base_tzdata_zones: 'Paris'
+system_base_system_packages:
+  - aptitude
+  - apt-transport-https
+  - bash
+  - bash-completion
+  - build-essential
+  - cpufrequtils
+  - cron
+  - direnv
+  - dnsutils
+  - dphys-swapfile
+  - figlet
+  - findutils
+  - git
+  - glances
+  - grc
+  - haveged
+  - htop
+  - libffi-dev
+  - libperl-dev
+  - libssl-dev
+  - mc
+  - minicom
+  - openssl
+  - powertop
+  - python3
+  - python3-apt
+  - python3-distutils-extra
+  - python3-pip
+  - python3-setuptools
+  - python3-venv
+  - rng-tools5
+  - rsync
+  - screen
+  - ssl-cert
+  - sudo
+  - task-spooler
+  - vim
+  - vim-common
+  - wget
+system_base_unwanted_system_packages:
+  - vim-tiny
+  - nano
+system_base_pip_packages:
+  - dnspython
+  - cryptography
+
+system_base_sysctl_vm_swappiness: "10"
+system_base_sysctl_vm_vfs_cache_pressure: "50"
+system_base_sysctl_vm_overcommit_memory: "0"
+system_base_sysctl_vm_overcommit_ratio: "95"
+system_base_sysctl_net_core_wmem_max: "1048576"
+system_base_sysctl_net_core_rmem_max: "4194304"
+
+system_base_sysctl_tuning:
+  - name: "vm.swappiness"
+    value: "{{ system_base_sysctl_vm_swappiness }}"
+
+  - name: "vm.vfs_cache_pressure"
+    value: "{{ system_base_sysctl_vm_vfs_cache_pressure }}"
+
+  - name: "vm.overcommit_memory"
+    value: "{{ system_base_sysctl_vm_overcommit_memory }}"
+
+  - name: "vm.overcommit_ratio"
+    value: "{{ system_base_sysctl_vm_overcommit_ratio | int | round | int }}"
+
+  - name: "net.core.wmem_max"
+    value: "{{ system_base_sysctl_net_core_wmem_max }}"
+
+  - name: "net.core.rmem_max"
+    value: "{{ system_base_sysctl_net_core_rmem_max }}"
+
+system_base_vimrc_lines:
+  - regexp: >-
+      .*syntax
+    line: "syntax on"
+  - regexp: >-
+      .*set background=[a-zA-Z0-9_]+
+    line: "set background=dark"
+  - regexp: >-
+      .*set tabstop=[0-9]+
+    line: set tabstop=4
+  - regexp: >-
+      .*set shiftwidth=[0-9]+
+    line: set shiftwidth=4
+  - regexp: >-
+      .*set expandtab
+    line: set expandtab
+  - regexp: >-
+      .*set noautoindent
+    line: set noautoindent
+  - regexp: >-
+      .*set mouse=[a-zA-Z0-9_]+
+    line: set mouse=
+  - regexp: >-
+      .*set ttymouse=[a-zA-Z0-9_]+
+    line: set ttymouse=
+
+# powertop --csv=powertop_report.txt --time=20s
+
+#
+# Content
+#
+system_base_banner_text: "Galaxie Clans"
+system_base_banner_domain: "clans.galaxie.family"
+#
+# Style
+#
+system_base_banner_font_name: "galaxie"
+system_base_banner_font_filename: "galaxie.flf"
+system_base_banner_figlet_font_dir: "/usr/share/figlet"
+system_base_banner_figley_bin_path: "/usr/bin/figlet"
