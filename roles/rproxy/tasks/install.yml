@@ -16,7 +16,7 @@
     mode: 0755
     owner: root
     group: root
-  loop: "{{ nginx_modular_config_directories }}"
+  loop: "{{ rproxy_modular_config_directories }}"
 
 - name: Configure nginx
   template:
