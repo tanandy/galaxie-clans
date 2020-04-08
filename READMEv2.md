@@ -21,7 +21,7 @@
 
 Core services are installed at the operating system level.
 
-* **NTP**: Based on [ntpd](http://www.ntp.org/)
+* **[NTP](roles/ntp/README.md)**: Based on [ntpd](http://www.ntp.org/)
 * **SSH**: Based on [openssh](https://www.openssh.com/)
 * **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
 * **METRICS**: Based on [netdata](https://www.netdata.cloud/)
@@ -39,7 +39,7 @@ other services by domain name.
 #### Broadcast (CYAN)
 
 The following bricks are run as docker-compose files started by a systemd service. Volumes are binded on the host so data can be persisted accross services restart.
-[NTP](roles/ntp/README.md)
+
 * **DNS**: Based on [bind](https://www.isc.org/bind/)
 * **MAIL**: Based on [mailu](https://mailu.io/)
 * **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
