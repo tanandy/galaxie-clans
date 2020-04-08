@@ -10,7 +10,7 @@
 #   Add *****SPAM***** to the Subject header of spam e-mails
 #
 rewrite_header Subject *****SPAM*****
-{% if mailserver_spam_report_contact is defined and mailserver_spam_report_contact | length > 0 %}
+{% if mailserver_spam_report_contact | bool %}
 report_contact {{ mailserver_spam_report_contact }}
 {% endif %}
 #   Save spam messages as a message/rfc822 MIME attachment instead of
