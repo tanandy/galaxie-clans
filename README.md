@@ -6,16 +6,16 @@
 * **Who is it for?**: Litteraly every group of people willing to communicate over Internet.
 * **Why do this?**: Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friends.
 
-## Trunk instances
-
-### Services Big Picture
-
-![galaxie](docs/images/big_picture.png)
-
 ### Host prerequisites
 
 * [Debian Stable](https://www.debian.org/): with ipv4 (and ideally with ipv6 interface too)
 * SSH access: as root or full sudo
+
+## Trunk Services
+
+### Big Picture
+
+![galaxie](docs/images/big_picture.png)
 
 ### Core (BLACK)
 
