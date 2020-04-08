@@ -50,7 +50,9 @@
 # then all IPv4 and IPv6 system IPs will be used for listening.
 #
 listening-ip={{ ansible_default_ipv4.address }}
+{% if ansible_default_ipv6 is defined and ansible_default_ipv6.address is defined %}
 listening-ip={{ ansible_default_ipv6.address }}
+{% endif %}
 
 # Auxiliary STUN/TURN server listening endpoint.
 # Aux servers have almost full TURN and STUN functionality.
