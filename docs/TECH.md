@@ -52,3 +52,22 @@ https://docs.netdata.cloud/docs/performance/
 ## TODO
 
 * host and distribute rootfs alpine & debian.
+
+# Work In Progress
+
+* **PRIVATE BROWSING**: Based on Tor and I2P and Privoxy + anonymization light, mattermost should GET previews via tor browsing. (WIP)
+
+## Branch instances (Work in Progress)
+
+### Core services (GREY)
+
+* **Trunk Core Services**
+* **TFTP**: Based on `tfpd`
+* **PXE**: Based on `pxelinux`
+* **DHCP**: Based on `dhcpd`
+* **TELEPHONY**: Based on `asterisk`
+* **SHARE**: Based on `samba`
+* **RPITVOS**: Based on `Libreelec`
+* **PVR**: Based on `TVHeadend`
+* **FIREWALL** Based on `OPNSense`
+* **VPN** Based on `OPNSense`
