@@ -9,12 +9,12 @@
 
 - include_tasks: "install.yml"
   when:
-    - not _nginx_uninstall
-    - nginx_enable | bool
+    - not _rproxy_uninstall
+    - rproxy_enable | bool
 
 - include_tasks: "uninstall.yml"
   when:
-    - _nginx_uninstall
-    - not (nginx_enable | bool)
+    - _rproxy_uninstall
+    - not (rproxy_enable | bool)
 
 - meta: flush_handlers

@@ -4,7 +4,7 @@
 > without any compromise with the [Industry](https://en.wikipedia.org/wiki/Industry).
 
 * **Who is it for?**: Litteraly every group of people willing to communicate over Internet.
-* **Why do this?**: Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friends.
+* **Why do this?**: Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friends. 
 
 ### Host prerequisites
 
