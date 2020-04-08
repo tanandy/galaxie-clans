@@ -18,7 +18,7 @@
     - role: "system_base"
     - role: "ssh"
     - role: "ntp"
-#    - role: "ufw"
+    - role: "firewall"
 
 - name: Apply core services
   hosts: "{{ scope }}"
@@ -26,7 +26,7 @@
   gather_facts: no
   tags:
     - core
-    - grey
+    - cyan
 
   roles:
     - role: "bind"
