@@ -59,7 +59,7 @@ system_base_sysctl_vm_vfs_cache_pressure: "50"
 system_base_sysctl_vm_overcommit_memory: "0"
 system_base_sysctl_vm_overcommit_ratio: "95"
 system_base_sysctl_net_core_wmem_max: "1048576"
-system_base_sysctl_net_core_rmem_max: "4194304"
+system_base_sysctl_net_core_rmem_max: "10485760"
 
 system_base_sysctl_tuning:
   - name: "vm.swappiness"

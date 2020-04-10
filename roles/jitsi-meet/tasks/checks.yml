@@ -3,5 +3,17 @@
   debug:
     msg: Is nginx installed ?
     verbosity: 1
+
+- name: Get public ip
+  uri:
+    url: https://api.ipify.org
+    return_content: yes
+  register: _ipify
+
+- name: Cook variable
+  set_fact:
+    jitsi_meet_public_address: "{{ _ipify.content }}"
+    jitsi_meet_is_behind_nat: "{{ _ipify.content not in ansible_all_ipv4_addresses }}"
+
 #- name: Check docker is installed
 #- name: Check certificate exists

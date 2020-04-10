@@ -56,6 +56,13 @@
   notify:
     - Restart jitsi-meet service
 
+- name: Render jvb sip-communicator configuration file
+  template:
+    src: "sip-communicator.properties.j2"
+    dest: "{{ jitsi_meet_jvb_dir }}/sip-communicator.properties"
+  notify:
+    - Restart jitsi-meet service
+
 - name: Render turnserver configuration file
   template:
     src: "turnserver.conf.j2"
