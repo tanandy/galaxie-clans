@@ -1,5 +1,5 @@
 ---
-mailer_enable: no
+mail_enable: no
 
 mail_docker_ipv4_subnet: "192.168.203.0/24"
 mail_docker_ipv6_subnet: "fd48:459e:277e:beef::/64"
