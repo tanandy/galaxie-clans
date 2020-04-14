@@ -7,7 +7,7 @@ _mail_secret_key_file: "{{ playbook_dir + '/../keys/mail-' + mail_domain + '.key
 
 mail_secret_key: "{{ lookup('password', _mail_secret_key_file + ' chars=ascii_letters,digits length=16') }}"
 mail_configuration_directory: /etc/mail/mailu
-
+mail_docker_compose_file: "{{ mail_configuration_directory }}/docker-compose.yml"
 mail_mailu_container_version: "1.7"
 mail_mailu_docker_images:
   nginx: "mailu/nginx:{{ mail_mailu_container_version }}"

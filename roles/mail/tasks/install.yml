@@ -14,7 +14,7 @@
 - name: Render docker-compose file
   template:
     src: "docker-compose.yml.j2"
-    dest: "{{ jitsi_meet_docker_compose_file }}"
+    dest: "{{ mail_docker_compose_file }}"
   notify:
     - Restart mail service
 
