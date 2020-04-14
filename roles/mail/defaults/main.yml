@@ -10,7 +10,7 @@ mail_website_url: "https://{{ mail_domain }}"
 mail_web_webmail: "/plume"
 
 mail_hostnames:
-    - "{{ mail_domain }}"
+  - "{{ mail_domain }}"
 
 mail_postmaster: "admin"
 
