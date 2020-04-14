@@ -1,0 +1,17 @@
+---
+- import_tasks: "checks.yml"
+  when:
+    - not _mailer_uninstall
+    - mailer_enable | bool
+
+- include_tasks: "install.yml"
+  when:
+    - not _mailer_uninstall
+    - mailer_enable | bool
+
+- include_tasks: "uninstall.yml"
+  when:
+    - _mailer_uninstall
+    - not (mailer_enable | bool)
+
+- meta: flush_handlers
