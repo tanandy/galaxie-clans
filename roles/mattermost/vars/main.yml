@@ -19,8 +19,9 @@ mattermost_directories:
   - "{{ mattermost_data_directory }}"
   - "{{ mattermost_plugins_directory }}"
   - "{{ mattermost_client_plugins_directory }}"
-  - "{{ mattermost_db_directory }}"
   - "{{ mattermost_logs_directory }}"
+
+
 #
 # Files
 #

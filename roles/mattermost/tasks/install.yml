@@ -8,6 +8,14 @@
     mode: 0750
   loop: "{{ mattermost_directories }}"
 
+- name: Prepare directories
+  file:
+    path: "{{ mattermost_db_directory }}"
+    state: directory
+    owner: 70
+    group: 70
+    mode: 0750
+
 - name: Get jitsi plugin
   get_url:
     url: https://github.com/seansackowitz/mattermost-plugin-jitsi/releases/download/v1.3.0/jitsi-1.3.0.tar.gz

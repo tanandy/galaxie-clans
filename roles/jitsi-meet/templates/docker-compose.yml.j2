@@ -201,8 +201,12 @@ services:
             - TZ
         depends_on:
             - jicofo
+        logging:
+            driver: journald
+            options:
+                tag: "jitsi-meet/jibri"
         networks:
             meet.jitsi:
-# Custom network so all services can communicate using a FQDN
+
 networks:
     meet.jitsi:
