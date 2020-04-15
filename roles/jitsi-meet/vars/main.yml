@@ -15,9 +15,8 @@ jitsi_meet_jicofo_component_secret: "{{ lookup('password', _jitsi_meet_jicofo_co
 _jitsi_meet_jicofo_auth_password_file: "{{ playbook_dir + '/../keys/jicofo_auth_password-' + jitsi_meet_public_domain | realpath }}"
 jitsi_meet_jicofo_auth_password: "{{ lookup('password', _jitsi_meet_jicofo_auth_password_file + ' chars=ascii_letters,digits length=16') }}"
 
-
-
-
+_jitsi_meet_jibri_recorder_password_file: "{{ playbook_dir + '/../keys/jibri_recorder_password-' + jitsi_meet_public_domain | realpath }}"
+jitsi_meet_jibri_recorder_password: "{{ lookup('password', _jitsi_meet_jibri_recorder_password_file + ' chars=ascii_letters,digits length=16') }}"
 
 jitsi_meet_configuration_directory: /etc/jitsi-meet
 jitsi_meet_nginx_web_dir: "{{ jitsi_meet_configuration_directory }}/web"
