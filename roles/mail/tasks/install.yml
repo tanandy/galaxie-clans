@@ -37,4 +37,5 @@
   systemd:
     name: mail
     state: started
+    enabled: yes
     daemon_reload: "{{ _mail_systemd_service_render is changed }}"
