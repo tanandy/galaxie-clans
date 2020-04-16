@@ -6,34 +6,34 @@ _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
 #
 # Passwords generation
 #
-_jitsi_meet_password_dir: "{{ playbook_dir + '/../keys/' | realpath }}/"
+_jitsi_meet_password_prefix: "{{ playbook_dir + '/../keys' | realpath }}/{{ jitsi_meet_public_domain }}-"
 _jitsi_meet_jvb_auth_password_file: >-
-  {{ _jitsi_meet_password_dir }}/jvb_auth_password-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jvb_auth_password
 jitsi_meet_jvb_auth_password: >-
   {{ lookup('password', _jitsi_meet_jvb_auth_password_file + ' chars=ascii_letters,digits length=16') }}
 
 _jitsi_meet_jicofo_component_secret_file: >-
-  {{ _jitsi_meet_password_dir }}/jicofo_component_secret-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jicofo_component_secret
 jitsi_meet_jicofo_component_secret: >-
   {{ lookup('password', _jitsi_meet_jicofo_component_secret_file + ' chars=ascii_letters,digits length=16') }}
 
 _jitsi_meet_jicofo_auth_password_file: >-
-  {{ _jitsi_meet_password_dir }}/jicofo_auth_password-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jicofo_auth_password
 jitsi_meet_jicofo_auth_password: >-
   {{ lookup('password', _jitsi_meet_jicofo_auth_password_file + ' chars=ascii_letters,digits length=16') }}
 
 _jitsi_meet_jibri_recorder_password_file: >-
-  {{ _jitsi_meet_password_dir }}/jibri_recorder_password-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jibri_recorder_password
 jitsi_meet_jibri_recorder_password: >-
   {{ lookup('password', _jitsi_meet_jibri_recorder_password_file + ' chars=ascii_letters,digits length=16') }}
 
 _jitsi_meet_jigasi_xmpp_password_file: >-
-  {{ _jitsi_meet_password_dir }}/jigasi_xmpp_password-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jigasi_xmpp_password
 jitsi_meet_jigasi_xmpp_password: >-
   {{ lookup('password', _jitsi_meet_jigasi_xmpp_password_file + ' chars=ascii_letters,digits length=16') }}
 
 _jitsi_meet_jibri_xmpp_password_file: >-
-  {{ _jitsi_meet_password_dir }}/jibri_xmpp_password-{{ jitsi_meet_public_domain }}
+  {{ _jitsi_meet_password_prefix }}jibri_xmpp_password
 jitsi_meet_jibri_xmpp_password: >-
   {{ lookup('password', _jitsi_meet_jibri_xmpp_password_file + ' chars=ascii_letters,digits length=16') }}
 #
