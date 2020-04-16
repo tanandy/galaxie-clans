@@ -170,7 +170,7 @@ services:
             driver: journald
             options:
                 tag: "jitsi-meet/jvb"
-
+{% if jitsi_meet_enable_recorder %}
     jibri:
         image: "{{ jitsi_meet_docker_images.jibri }}"
         restart: ${RESTART_POLICY}
@@ -207,6 +207,7 @@ services:
                 tag: "jitsi-meet/jibri"
         networks:
             meet.jitsi:
+{% endif %}
 
 networks:
     meet.jitsi:

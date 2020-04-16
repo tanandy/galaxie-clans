@@ -30,3 +30,5 @@ jitsi_meet_stun_servers:
   - "stun:stun2.l.google.com:19302"
 
 jitsi_meet_container_version: "4384-1"
+
+jitsi_meet_enable_recorder: no
