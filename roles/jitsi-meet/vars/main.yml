@@ -6,7 +6,7 @@ _jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
 #
 # Passwords generation
 #
-_jitsi_meet_password_prefix: "{{ playbook_dir + '/../keys' | realpath }}/{{ jitsi_meet_public_domain }}-"
+_jitsi_meet_password_prefix: "{{ (playbook_dir + '/../keys') | realpath }}/{{ jitsi_meet_public_domain }}-"
 _jitsi_meet_jvb_auth_password_file: >-
   {{ _jitsi_meet_password_prefix }}jvb_auth_password
 jitsi_meet_jvb_auth_password: >-
