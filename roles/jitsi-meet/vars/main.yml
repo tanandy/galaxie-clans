@@ -36,6 +36,12 @@ _jitsi_meet_jibri_xmpp_password_file: >-
   {{ _jitsi_meet_password_prefix }}jibri_xmpp_password
 jitsi_meet_jibri_xmpp_password: >-
   {{ lookup('password', _jitsi_meet_jibri_xmpp_password_file + ' chars=ascii_letters,digits length=16') }}
+
+_jitsi_meet_muc_nickname_file: >-
+  {{ _jitsi_meet_password_prefix }}muc_nickname
+jitsi_meet_muc_nickname: >-
+  {{ lookup('password', _jitsi_meet_muc_nickname_file + ' chars=ascii_letters,digits length=16') | lower }}
+
 #
 # Directories
 #
