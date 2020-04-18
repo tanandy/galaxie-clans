@@ -14,28 +14,31 @@ services:
     restart: always
     env_file: {{ mail_docker_compose_env_file }}
     logging:
-      driver: json-file
+      driver: journald
+      options:
+        tag: "mailu/front"
     ports:
-      - "127.0.0.1:80:80"
-      - "::1:80:80"
-      - "127.0.0.1:443:443"
-      - "::1:443:443"
-      - "127.0.0.1:25:25"
-      - "::1:25:25"
-      - "127.0.0.1:465:465"
-      - "::1:465:465"
-      - "127.0.0.1:587:587"
-      - "::1:587:587"
-      - "127.0.0.1:110:110"
-      - "::1:110:110"
-      - "127.0.0.1:995:995"
-      - "::1:995:995"
-      - "127.0.0.1:143:143"
-      - "::1:143:143"
-      - "127.0.0.1:993:993"
-      - "::1:993:993"
+      - "127.0.0.1:9080:80"
+      - "::1:9080:80"
+      - "127.0.0.1:9443:443"
+      - "::1:9443:443"
+      - "127.0.0.1:9025:25"
+      - "::1:9025:25"
+      - "127.0.0.1:9465:465"
+      - "::1:9465:465"
+      - "127.0.0.1:9587:587"
+      - "::1:9587:587"
+      - "127.0.0.1:9110:110"
+      - "::1:9110:110"
+      - "127.0.0.1:9995:995"
+      - "::1:9995:995"
+      - "127.0.0.1:9143:143"
+      - "::1:9143:143"
+      - "127.0.0.1:9993:993"
+      - "::1:9993:993"
     volumes:
-      - "/home/vmail/certs:/certs"
+      - "/etc/ssl/private/{{ mail_domain }}.fullchain.crt:/certs/{{ mail_domain }}.fullchain.crt"
+      - "/etc/ssl/private/{{ mail_domain }}.key:/certs/{{ mail_domain }}.key"
       - "/home/vmail/overrides/nginx:/overrides"
 
 
@@ -50,6 +53,10 @@ services:
       - "/home/vmail/dkim:/dkim"
     depends_on:
       - redis
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/admin"
 
   imap:
     image: {{ mail_mailu_docker_images.dovecot }}
@@ -60,6 +67,10 @@ services:
       - "/home/vmail/overrides:/overrides"
     depends_on:
       - front
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/imap"
 
   smtp:
     image: {{ mail_mailu_docker_images.postfix }}
@@ -69,6 +80,10 @@ services:
       - "/home/vmail/overrides:/overrides"
     depends_on:
       - front
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/smtp"
 
   antispam:
     image: {{ mail_mailu_docker_images.rspamd }}
@@ -80,6 +95,10 @@ services:
       - "/home/vmail/overrides/rspamd:/etc/rspamd/override.d"
     depends_on:
       - front
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/antispam"
 
   # Optional services
 
@@ -89,11 +108,19 @@ services:
     env_file: {{ mail_docker_compose_env_file }}
     volumes:
       - "/home/vmail/dav:/data"
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/webdav"
 
   fetchmail:
     image: {{ mail_mailu_docker_images.fetchmail }}
     restart: always
     env_file: {{ mail_docker_compose_env_file }}
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/fetchmail"
 
   # Webmail
   webmail:
@@ -104,6 +131,10 @@ services:
       - "/home/vmail/webmail:/data"
     depends_on:
       - imap
+    logging:
+      driver: journald
+      options:
+        tag: "mailu/webmail"
 
 networks:
   default:
