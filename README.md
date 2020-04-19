@@ -1,6 +1,6 @@
 # Galaxie - Clans
 
-> Every gamer need a clan.
+> Every gamer needs a clan.
 > Find here everything a gamer [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age).
 
 * **Who is it for?**: Litteraly every group of friend willing to communicate over Internet.
