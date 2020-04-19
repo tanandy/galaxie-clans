@@ -35,7 +35,7 @@
   loop: "{{ rproxy_nginx_sites_enabled }}"
   notify: Reload nginx service
   when:
-    - not (nginx_skip_enabling_sites | bool)
+    - not (rproxy_nginx_skip_enabling_sites | bool)
 
 - name: Ensure nginx is started
   systemd:

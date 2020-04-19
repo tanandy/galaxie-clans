@@ -16,7 +16,7 @@
   roles:
     - role: "rproxy"
       vars:
-        nginx_skip_enabling_sites: yes
+        rproxy_nginx_skip_enabling_sites: yes
 
     - role: "container"
     - role: "jitsi-meet"
@@ -24,4 +24,4 @@
 
     - role: "rproxy"
       vars:
-        nginx_skip_enabling_sites: no
+        rproxy_nginx_skip_enabling_sites: no
