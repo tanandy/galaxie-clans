@@ -1,10 +1,13 @@
 # Galaxie - Clans
 
-> Everything a [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age)
-> without any compromise with the [Industry](https://en.wikipedia.org/wiki/Industry).
+> Every gamer needs a clan.
+> Find here everything a gamer [clan](https://en.wikipedia.org/wiki/Clan) needs to live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age).
 
-* **Who is it for?**: Litteraly every group of people willing to communicate over Internet.
-* **Why do this?**: Because in an Open-Source world, we should not have to rely on the [Industry](https://en.wikipedia.org/wiki/Industry) to keep up with our family and friends.
+* **Who is it for?**: Litteraly every group of friend willing to communicate over Internet.
+* **Why do this?**:
+  * Because we can.
+  * Because Open-Source is cool.
+  * For the fun.
 
 ### Host prerequisites
 
