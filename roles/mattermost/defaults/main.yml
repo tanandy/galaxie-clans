@@ -11,8 +11,8 @@ mattermost_email_feedback: "feedback@mattermost.com"
 mattermost_email_reply_to: "feedback@mattermost.com"
 mattermost_retention_message_deletion: "true"
 mattermost_retention_file_deletion: "true"
-mattermost_retention_message_retention_days: "42"
-mattermost_retention_file_retention_days: "42"
+mattermost_retention_message_retention_days: "9"
+mattermost_retention_file_retention_days: "9"
 mattermost_retention_deletion_job_start_time: "04:20"
 mattermost_smtp_host: ~
 mattermost_smtp_port: ~
