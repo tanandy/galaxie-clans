@@ -19,24 +19,35 @@
     apt_autoremove_cmd: >-
       apt-get autoremove --purge -y
     switch_apt_sources_cmd: >-
-      sed -i 's/stretch/buster/g' /etc/apt/sources.list /etc/apt/sources.list.d/*
+      sed -i 's/{{ oldstable }}/{{ stable }}/g' /etc/apt/sources.list /etc/apt/sources.list.d/*
+    apt_upgrade_choregraphy:
+      - "{{ apt_update_cmd }}"
+      - "{{ apt_upgrade_cmd }}"
+      - "{{ apt_full_upgrade_cmd }}"
+      - "{{ apt_autoremove_cmd }}"
 
   tasks:
-    - name: "Upgrading from {{ oldstable }} to {{ stable }}"
+    # set apt set-selection NOM_KERNEL_VERSION hold if kernel should not upgrade
+    # check with apt-cache policy linux-image-amd64
+    
+    # remove a list of packages before upgrade
+
+    - name: "Upgrading {{ oldstable }}"
       raw: >-
         {{ item }}
-      loop:
-        - "{{ apt_update_cmd }}"
-        - "{{ apt_upgrade_cmd }}"
-        - "{{ apt_full_upgrade_cmd }}"
-        - "{{ apt_autoremove_cmd }}"
+      loop: "{{ apt_upgrade_choregraphy }}"
 
-        - "{{ switch_apt_sources_cmd }}"
+    - name: "Pivoting from {{ oldstable }} to {{ stable }}"
+      raw: "{{ switch_apt_sources_cmd }}"
+      when: oldstable != stable
 
-        - "{{ apt_update_cmd }}"
-        - "{{ apt_upgrade_cmd }}"
-        - "{{ apt_full_upgrade_cmd }}"
-        - "{{ apt_autoremove_cmd }}"
+    - name: "Upgrading {{ stable }}"
+      raw: >-
+        {{ item }}
+      loop: "{{ apt_upgrade_choregraphy }}"
+      when: oldstable != stable
+
+    # reinstall a list of packages after upgrade
 
     - debug:
         msg: >-
