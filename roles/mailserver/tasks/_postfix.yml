@@ -70,7 +70,6 @@
       {{ alias.alias }} {{ alias.email }}
       {% endfor %}
   register: _render_virtual_alias
-  when: postfix_has_virtual_aliases
 
 - name: Postfix - update virtual aliases db
   shell: >-
@@ -86,7 +85,6 @@
       {{ alias.email }} {{ alias.recipient }}
       {% endfor %}
   register: _render_virtual_mailboxes
-  when: postfix_has_virtual_mailboxes
 
 - name: Postfix - update virtual mailboxes db
   shell: >-
@@ -102,7 +100,6 @@
       {{ transport.domain }} {{ transport.transport }}
       {% endfor %}
   register: _render_transports
-  when: postfix_has_transports
 
 - name: Postfix - update transports db
   shell: >-

@@ -25,6 +25,11 @@
   notify:
     - Restart mail service
 
+- name: Render nginx site
+  template:
+    src: "nginx.http.conf.j2"
+    dest: "/etc/nginx/sites-available/mail.conf"
+
 - name: Render mail systemd service
   template:
     src: "systemd.service.j2"

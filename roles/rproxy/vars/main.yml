@@ -4,11 +4,29 @@
 #
 _rproxy_uninstall: "{{ rproxy_uninstall | default(false) | bool }}"
 
+rproxy_nginx_user: "www-data"
+rproxy_nginx_config_file: "/etc/nginx/nginx.conf"
+rproxy_nginx_modular_conf_directory_http: "/etc/nginx/conf.d"
+
+rproxy_nginx_modular_conf_directory_modules_available: "/etc/nginx/modules-available"
+rproxy_nginx_modular_conf_directory_modules_enabled: "/etc/nginx/modules-enabled"
+
+rproxy_nginx_modular_conf_directory_sites_available: "/etc/nginx/sites-available"
+rproxy_nginx_modular_conf_directory_sites_enabled: "/etc/nginx/sites-enabled"
+
+rproxy_nginx_modular_conf_directory_streams_available: "/etc/nginx/streams-available"
+rproxy_nginx_modular_conf_directory_streams_enabled: "/etc/nginx/streams-enabled"
+
+rproxy_nginx_modular_conf_directory_mails_available: "/etc/nginx/mails-available"
+rproxy_nginx_modular_conf_directory_mails_enabled: "/etc/nginx/mails-enabled"
+
 rproxy_modular_config_directories:
-  - "{{ nginx_modular_conf_directory_modules_available }}"
-  - "{{ nginx_modular_conf_directory_modules_enabled }}"
-  - "{{ nginx_modular_conf_directory_http }}"
-  - "{{ nginx_modular_conf_directory_sites_available }}"
-  - "{{ nginx_modular_conf_directory_sites_enabled }}"
-  - "{{ nginx_modular_conf_directory_streams_available }}"
-  - "{{ nginx_modular_conf_directory_streams_enabled }}"
+  - "{{ rproxy_nginx_modular_conf_directory_modules_available }}"
+  - "{{ rproxy_nginx_modular_conf_directory_modules_enabled }}"
+  - "{{ rproxy_nginx_modular_conf_directory_http }}"
+  - "{{ rproxy_nginx_modular_conf_directory_sites_available }}"
+  - "{{ rproxy_nginx_modular_conf_directory_sites_enabled }}"
+  - "{{ rproxy_nginx_modular_conf_directory_streams_available }}"
+  - "{{ rproxy_nginx_modular_conf_directory_streams_enabled }}"
+  - "{{ rproxy_nginx_modular_conf_directory_mails_available }}"
+  - "{{ rproxy_nginx_modular_conf_directory_mails_enabled }}"

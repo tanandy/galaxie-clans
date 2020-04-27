@@ -50,9 +50,21 @@ system_base_system_packages:
 system_base_unwanted_system_packages:
   - vim-tiny
   - nano
+  - exim4
+  - exim4-base
+  - exim4-config
+  - exim4-daemon-heavy
+  - exim4-daemon-light
+  - exim4-dev
+  - exim4-doc-html
+  - exim4-doc-info
+  - eximon4
+  - sa-exim
 system_base_pip_packages:
   - dnspython
   - cryptography
+  - passlib
+  - bcrypt
 
 system_base_sysctl_vm_swappiness: "10"
 system_base_sysctl_vm_vfs_cache_pressure: "50"

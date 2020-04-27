@@ -1,0 +1,13 @@
+---
+- name: Restart calendar service
+  systemd:
+    name: radicale
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: Reload nginx service
+  systemd:
+    name: nginx
+    state: reloaded
+    enabled: yes

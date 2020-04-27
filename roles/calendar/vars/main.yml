@@ -1,0 +1,15 @@
+---
+#
+# Uninstall flag
+#
+_calendar_uninstall: "{{ calendar_uninstall | default(false) | bool }}"
+
+calendar_system_packages:
+  - radicale
+
+calendar_home_dir: "/var/lib/radicale"
+calendar_log_dir: "/var/log/radicale"
+
+calendar_expected_directories:
+  - "{{ calendar_home_dir }}"
+  - "{{ calendar_log_dir }}"

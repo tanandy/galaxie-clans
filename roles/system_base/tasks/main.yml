@@ -87,6 +87,20 @@
     reload: yes
   loop: "{{ system_base_sysctl_tuning }}"
 
+- name: Create low-priority alternative for python2
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python2
+    priority: 10
+
+- name: Create high-priority alternative for python3
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python3
+    priority: 50
+
 - import_tasks: banner.yml
 
 - meta: flush_handlers

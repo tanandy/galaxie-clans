@@ -2,5 +2,6 @@
 rproxy_enable: no
 
 rproxy_nginx_stream_conf_dir: "/etc/nginx/streams.conf.d"
-rproxy_nginx_sites_enabled: []
-rproxy_nginx_skip_enabling_sites: no
+rproxy_nginx_managed_sites: []
+
+rproxy_nginx_enable_sites: no

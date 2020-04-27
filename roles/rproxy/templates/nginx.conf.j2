@@ -3,11 +3,11 @@
 #
 {{ ansible_managed | comment }}
 #
-user {{ nginx_user }};
+user {{ rproxy_nginx_user }};
 worker_processes auto;
 pid /run/nginx.pid;
 
-include {{ nginx_modular_conf_directory_modules_enabled }}/*.conf;
+include {{ rproxy_nginx_modular_conf_directory_modules_enabled }}/*.conf;
 
 events {
         worker_connections 768;
@@ -61,10 +61,14 @@ http {
         ##
         # Virtual Host Configs
         ##
-        include {{ nginx_modular_conf_directory_http }}/*.conf;
-        include {{ nginx_modular_conf_directory_sites_enabled }}/*;
+        include {{ rproxy_nginx_modular_conf_directory_http }}/*.conf;
+        include {{ rproxy_nginx_modular_conf_directory_sites_enabled }}/*;
 }
 
 stream {
-    include {{ nginx_modular_conf_directory_streams_enabled }}/*.conf;
+    include {{ rproxy_nginx_modular_conf_directory_streams_enabled }}/*.conf;
+}
+
+mail {
+    include {{ rproxy_nginx_modular_conf_directory_mails_enabled }}/*.conf;
 }

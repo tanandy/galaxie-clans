@@ -1,0 +1,36 @@
+---
+- name: Install system packages
+  apt:
+    name: "{{ calendar_system_packages }}"
+
+- name: Create expected directories
+  file:
+    path: "{{ item }}"
+    owner: radicale
+    group: radicale
+    state: directory
+  loop: "{{ calendar_expected_directories }}"
+- name: Render logging configuration
+  template:
+    src: radicale.logging.j2
+    dest: /etc/radicale/logging
+  notify: Restart calendar service
+
+- name: Render main configuration
+  template:
+    src: radicale.config.j2
+    dest: /etc/radicale/config
+  notify: Restart calendar service
+
+- name: Render rproxy service configuration
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/calendar.conf
+  notify: Reload nginx service
+
+- name: Enable calendar service
+  systemd:
+    name: radicale
+    state: started
+    enabled: yes
+    daemon_reload: yes

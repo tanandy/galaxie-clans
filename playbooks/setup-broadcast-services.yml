@@ -16,12 +16,13 @@
   roles:
     - role: "rproxy"
       vars:
-        rproxy_nginx_skip_enabling_sites: yes
+        rproxy_nginx_enable_sites: no
 
+    - role: "calendar"
     - role: "container"
     - role: "jitsi-meet"
     - role: "mattermost"
 
     - role: "rproxy"
       vars:
-        rproxy_nginx_skip_enabling_sites: no
+        rproxy_nginx_enable_sites: yes

@@ -1,10 +1,4 @@
 ---
-- name: Source specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-
 - name: Install nginx
   package:
     name: nginx
@@ -21,21 +15,30 @@
 - name: Configure nginx
   template:
     src: "nginx.conf.j2"
-    dest: "{{ nginx_config_file }}"
+    dest: "{{ rproxy_nginx_config_file }}"
     mode: 0644
     owner: root
     group: root
   notify: Reload nginx service
 
-- name: Enable required sites
+- name: Disable managed sites
+  file:
+    dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
+    state: absent
+  loop: "{{ rproxy_nginx_managed_sites }}"
+  notify: Reload nginx service
+  when:
+    - not (rproxy_nginx_enable_sites | bool)
+
+- name: Enable managed sites
   file:
     dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
     src: "/etc/nginx/sites-available/{{ item }}.conf"
     state: link
-  loop: "{{ rproxy_nginx_sites_enabled }}"
+  loop: "{{ rproxy_nginx_managed_sites }}"
   notify: Reload nginx service
   when:
-    - not (rproxy_nginx_skip_enabling_sites | bool)
+    - rproxy_nginx_enable_sites | bool
 
 - name: Ensure nginx is started
   systemd:

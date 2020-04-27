@@ -72,3 +72,5 @@ jitsi_meet_docker_images:
   jvb: "jitsi/jvb:{{ jitsi_meet_container_version }}"
   jicofo: "jitsi/jicofo:{{ jitsi_meet_container_version }}"
   jibri: "jitsi/jibri:{{ jitsi_meet_container_version }}"
+
+jitsi_meet_proxy_port: "8001"

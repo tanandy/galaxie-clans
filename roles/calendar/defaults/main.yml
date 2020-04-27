@@ -1,0 +1,9 @@
+---
+calendar_enable: no
+
+calendar_public_domain: ~
+calendar_certificate_file: ~
+calendar_certificate_key_file: ~
+
+calendar_system_packages:
+  - radicale

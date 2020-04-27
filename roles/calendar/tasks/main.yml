@@ -1,0 +1,20 @@
+---
+#
+# Based on https://radicale.org/2.1.html
+#
+- import_tasks: "checks.yml"
+  when:
+    - not _calendar_uninstall
+    - calendar_enable | bool
+
+- include_tasks: "install.yml"
+  when:
+    - not _calendar_uninstall
+    - calendar_enable | bool
+
+- include_tasks: "uninstall.yml"
+  when:
+    - _calendar_uninstall
+    - not (calendar_enable | bool)
+
+- meta: flush_handlers
