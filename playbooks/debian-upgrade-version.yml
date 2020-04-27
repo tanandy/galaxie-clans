@@ -1,0 +1,43 @@
+---
+- hosts: "{{ scope }}"
+  gather_facts: no
+
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+  vars:
+    oldstable: stretch
+    stable: buster
+    apt_update_cmd: >-
+      apt-get update -y
+    apt_upgrade_options: >-
+      -o Dpkg::Options::="--force-confold" -y
+    apt_upgrade_cmd: >-
+      apt-get upgrade {{ apt_upgrade_options }}
+    apt_full_upgrade_cmd: >-
+      apt-get full-upgrade {{ apt_upgrade_options }}
+    apt_autoremove_cmd: >-
+      apt-get autoremove --purge -y
+    switch_apt_sources_cmd: >-
+      sed -i 's/stretch/buster/g' /etc/apt/sources.list /etc/apt/sources.list.d/*
+
+  tasks:
+    - name: "Upgrading from {{ oldstable }} to {{ stable }}"
+      raw: >-
+        {{ item }}
+      loop:
+        - "{{ apt_update_cmd }}"
+        - "{{ apt_upgrade_cmd }}"
+        - "{{ apt_full_upgrade_cmd }}"
+        - "{{ apt_autoremove_cmd }}"
+
+        - "{{ switch_apt_sources_cmd }}"
+
+        - "{{ apt_update_cmd }}"
+        - "{{ apt_upgrade_cmd }}"
+        - "{{ apt_full_upgrade_cmd }}"
+        - "{{ apt_autoremove_cmd }}"
+
+    - debug:
+        msg: >-
+          ==> Upgraded from {{ oldstable }} to {{ stable }}. Ready to reboot <==
