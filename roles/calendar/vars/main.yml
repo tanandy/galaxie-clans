@@ -7,9 +7,22 @@ _calendar_uninstall: "{{ calendar_uninstall | default(false) | bool }}"
 calendar_system_packages:
   - radicale
 
+calendar_user:
+  name: "radicale"
+  group: "radicale"
+  uid: 59000
+  gid: 59000
+  home: "{{ calendar_home_dir }}"
+  groups:
+    - "docker"
+
+calendar_config_dir: "/etc/radicale"
 calendar_home_dir: "/var/lib/radicale"
 calendar_log_dir: "/var/log/radicale"
 
 calendar_expected_directories:
+  - "{{ calendar_config_dir }}"
   - "{{ calendar_home_dir }}"
   - "{{ calendar_log_dir }}"
+
+calendar_systemd_service_file: "/lib/systemd/system/calendar.service"

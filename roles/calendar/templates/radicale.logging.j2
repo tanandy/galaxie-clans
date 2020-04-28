@@ -21,7 +21,7 @@ keys = root
 
 [handlers]
 # Logging handlers, defining logging output methods
-keys = console
+keys = file
 
 [formatters]
 # Logging formatters
@@ -33,15 +33,15 @@ keys = simple
 [logger_root]
 # Root logger
 level = WARNING
-handlers = console
+handlers = file
 
 
 # Handlers
 
-[handler_console]
-# Console handler
-class = StreamHandler
-args = (sys.stderr,)
+[handler_file]
+class = FileHandler
+# Specify the output file here.
+args = ('/var/log/radicale/radicale.log',)
 formatter = simple
 
 

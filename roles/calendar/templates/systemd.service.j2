@@ -1,11 +1,11 @@
 [Unit]
-Description=Mail services
+Description=Radicale
 Requires=docker.service
 After=docker.service
 
 [Service]
 Restart=always
-WorkingDirectory={{ mail_configuration_directory }}
+WorkingDirectory={{ calendar_config_dir }}
 
 # Compose up
 ExecStart=/usr/bin/docker-compose up

@@ -1,6 +1,0 @@
----
-- name: Restart mail service
-  service:
-    name: mail
-    state: restarted
-    enabled: yes

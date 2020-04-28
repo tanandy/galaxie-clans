@@ -1,7 +1,7 @@
 ---
 - name: Restart calendar service
   systemd:
-    name: radicale
+    name: calendar
     state: restarted
     enabled: yes
     daemon_reload: yes

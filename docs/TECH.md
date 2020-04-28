@@ -71,3 +71,6 @@ https://docs.netdata.cloud/docs/performance/
 * **PVR**: Based on `TVHeadend`
 * **FIREWALL** Based on `OPNSense`
 * **VPN** Based on `OPNSense`
+
+icecast
+shoutcast

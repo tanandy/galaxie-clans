@@ -1,0 +1,20 @@
+# Can be enhanced with additional compose file
+# See also https://docs.docker.com/compose/production/#modify-your-compose-file-for-production
+
+version: "3.6"
+
+services:
+  radicale:
+    image: "tomsquest/docker-radicale"
+    container_name: "radicale"
+#    user: "{{ calendar_user.name }}"
+    environment:
+      - PUID={{ calendar_user.uid }}
+      - PGID={{ calendar_user.gid }}
+    ports:
+      - "127.0.0.1:5232:5232"
+    restart: "unless-stopped"
+    volumes:
+      - "{{ calendar_home_dir }}:/data"
+      - "{{ calendar_config_dir }}:/config:ro"
+      - "{{ calendar_log_dir }}:/var/log/radicale"
