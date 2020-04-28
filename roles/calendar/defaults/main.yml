@@ -5,5 +5,7 @@ calendar_public_domain: ~
 calendar_certificate_file: ~
 calendar_certificate_key_file: ~
 
+calendar_radicale_container_version: "latest"
+
 calendar_system_packages:
   - radicale

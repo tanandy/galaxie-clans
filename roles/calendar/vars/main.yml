@@ -25,4 +25,26 @@ calendar_expected_directories:
   - "{{ calendar_home_dir }}"
   - "{{ calendar_log_dir }}"
 
+calendar_expected_templates:
+  - src: "docker-compose.yml.j2"
+    dest: "{{ calendar_config_dir }}/docker-compose.yml"
+
+  - src: "radicale.config.j2"
+    dest: "{{ calendar_config_dir }}/config"
+
+  - src: "radicale.rights.j2"
+    dest: "{{ calendar_config_dir }}/rights"
+
+  - src: "radicale.rights.j2"
+    dest: "{{ calendar_config_dir }}/rights"
+
+  - src: radicale.logging.j2
+    dest: "{{ calendar_config_dir }}/logging"
+
+  - src: "systemd.service.j2"
+    dest: "{{ calendar_systemd_service_file }}"
+
+
 calendar_systemd_service_file: "/lib/systemd/system/calendar.service"
+calendar_containers:
+  radicale: "tomsquest/docker-radicale:{{ calendar_radicale_container_version }}"

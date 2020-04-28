@@ -21,23 +21,26 @@
     state: directory
   loop: "{{ calendar_expected_directories }}"
 
-- name: Render logging configuration
+- name: Render configuration files
   template:
-    src: radicale.logging.j2
-    dest: /etc/radicale/logging
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ calendar_user.name }}"
+    group: "{{ calendar_user.group }}"
+    mode: 0640
+  loop: "{{ calendar_expected_templates }}"
   notify: Restart calendar service
 
-- name: Render main configuration
-  template:
-    src: radicale.config.j2
-    dest: /etc/radicale/config
-  notify: Restart calendar service
-
-- name: Render rights configuration
-  template:
-    src: radicale.rights.j2
-    dest: /etc/radicale/rights
-  notify: Restart calendar service
+- name: Create user file
+  blockinfile:
+    path: "/etc/radicale/users"
+    insertbefore: "BOF"
+    owner: "{{ calendar_user.name }}"
+    group: "{{ calendar_user.group }}"
+    mode: 0640
+    create: yes
+    block: |-
+      # This file is to be managed by galaxie-clans tooling. Any manual addition can be erased at any time.
 
 - name: Render rproxy service configuration
   template:
@@ -45,23 +48,8 @@
     dest: /etc/nginx/sites-available/calendar.conf
   notify: Reload nginx service
 
-- name: Render docker-compose file
-  template:
-    src: "docker-compose.yml.j2"
-    dest: "{{ calendar_config_dir }}/docker-compose.yml"
-  notify:
-    - Restart calendar service
-
-- name: Render calendar systemd service
-  template:
-    src: "systemd.service.j2"
-    dest: "{{ calendar_systemd_service_file }}"
-  register: _calendar_systemd_service_render
-  notify:
-    - Restart calendar service
-
 - name: Start calendar service
   systemd:
     name: calendar
     state: started
-    daemon_reload: "{{ _calendar_systemd_service_render is changed }}"
+    daemon_reload: yes
