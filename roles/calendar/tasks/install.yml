@@ -44,9 +44,15 @@
 
 - name: Render rproxy service configuration
   template:
-    src: nginx.conf.j2
-    dest: /etc/nginx/sites-available/calendar.conf
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/calendar.conf"
   notify: Reload nginx service
+
+- name: Pre-pull container images
+  docker_image:
+    name: "{{ item.value }}"
+    source: pull
+  loop: "{{ calendar_containers | dict2items }}"
 
 - name: Start calendar service
   systemd:
