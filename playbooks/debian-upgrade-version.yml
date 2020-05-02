@@ -1,4 +1,14 @@
 ---
+#
+# Version upgrader for Debian. Does not rely on Python on target server.
+#
+# Usage:
+#   ansible-playbook debian-upgrade-version.yml -e scope=$INVENTORY_TARGET
+# Optional parameters:
+#   oldstable: name of current version of the server
+#   stable: name of the target version of the server
+#
+#
 - hosts: "{{ scope }}"
   gather_facts: no
 
@@ -27,10 +37,9 @@
       - "{{ apt_autoremove_cmd }}"
 
   tasks:
-    # set apt set-selection NOM_KERNEL_VERSION hold if kernel should not upgrade
-    # check with apt-cache policy linux-image-amd64
-    
-    # remove a list of packages before upgrade
+    # TODO: set apt set-selection NOM_KERNEL_VERSION hold if kernel should not upgrade
+    # TODO: check with apt-cache policy linux-image-amd64
+    # TODO: remove a list of packages before upgrade
 
     - name: "Upgrading {{ oldstable }}"
       raw: >-
@@ -47,7 +56,7 @@
       loop: "{{ apt_upgrade_choregraphy }}"
       when: oldstable != stable
 
-    # reinstall a list of packages after upgrade
+    # TODO: reinstall a list of packages after upgrade
 
     - debug:
         msg: >-

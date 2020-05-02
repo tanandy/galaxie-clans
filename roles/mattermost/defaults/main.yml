@@ -28,3 +28,5 @@ mattermost_enable_smtp_auth: >-
     | string | lower
   }}
 mattermost_jitsi_meet_url: "https://meet.jit.si"
+mattermost_container_version_app: "release-5.23"
+mattermost_container_version_db: "5.22.1"

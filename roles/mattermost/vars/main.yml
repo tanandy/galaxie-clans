@@ -20,8 +20,15 @@ mattermost_directories:
   - "{{ mattermost_plugins_directory }}"
   - "{{ mattermost_client_plugins_directory }}"
   - "{{ mattermost_logs_directory }}"
+  - "{{ mattermost_db_directory }}"
 
 
+mattermost_user:
+  name: "mattermost"
+  group: "mattermost"
+  uid: 59001
+  gid: 59001
+  home: "{{ mattermost_root_directory }}"
 #
 # Files
 #
@@ -32,5 +39,5 @@ mattermost_docker_compose_env_file: "{{ mattermost_root_directory }}/.env"
 # Containers
 #
 mattermost_docker_images:
-  app: "mattermost/mattermost-team-edition"
-  db: "mattermost/mattermost-prod-db"
+  app: "mattermost/mattermost-team-edition:{{ mattermost_container_version_app }}"
+  db: "mattermost/mattermost-prod-db:{{ mattermost_container_version_db }}"

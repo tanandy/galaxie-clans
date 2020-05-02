@@ -1,0 +1,7 @@
+---
+system_users_reserved:
+  - name: "radicale"
+    uid: "59000"
+
+  - name: "mattermost"
+    uid: "59001"
