@@ -6,22 +6,19 @@
   tags:
     - always
 
-- name: Setup broadcast services
+- name: Deploy containerd and container-level services
   hosts: "{{ scope }}"
   become: yes
-  gather_facts: yes
-  tags:
-    - broadcast
-    - cyan
+  gather_facts: no
   roles:
+    - role: "container"
     - role: "rproxy"
       vars:
         rproxy_nginx_enable_sites: no
 
+    - role: "videoconf"
+    - role: "chat"
     - role: "calendar"
-    - role: "container"
-    - role: "jitsi-meet"
-    - role: "mattermost"
 
     - role: "rproxy"
       vars:
