@@ -15,10 +15,9 @@
     - black
   roles:
     - role: "system_base"
-    # - role: "system_users"
-    - role: "ssh"
-    - role: "ntp"
-    - role: "metrics"
+    - role: "system_users"
+    - role: "backup"
+    - role: "monitor"
     - role: "firewall"
-    - role: "bind"
+    - role: "dns"
     - role: "mailserver"

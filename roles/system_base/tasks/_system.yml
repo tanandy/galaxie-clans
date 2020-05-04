@@ -1,0 +1,70 @@
+---
+- name: Set hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Add hostname ipv4 to /etc/hosts
+  lineinfile:
+    dest: "/etc/hosts"
+    regexp: >-
+      ^{{ ansible_default_ipv4.address }}.+$
+    line: >-
+      {{ ansible_default_ipv4.address }} {{ ansible_hostname }}
+
+- name: Set timezone
+  timezone:
+    name: "{{ system_base_tzdata_areas }}/{{ system_base_tzdata_zones }}"
+
+- name: Check if {{ system_base_primary_local }} locale present
+  tags: locales
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "{{ system_base_primary_local }}"
+    - "{{ system_base_secondary_local }}"
+  register: locale_gen_status
+
+- name: Update and Set locale
+  tags: locales
+  command: >-
+    /usr/sbin/update-locale LANG={{ system_base_primary_local }} LANGUAGE={{ system_base_language }}
+  when:
+    - locale_gen_status.changed
+
+- name: Install manpages in desired language
+  apt:
+    pkg:
+      - "manpages-{{ system_base_language }}"
+  when: (system_base_enable_manpages | bool)
+
+- name: Create ansible directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ system_base_ansible_dirs_owner }}"
+    group: "{{ system_base_ansible_dirs_group }}"
+    mode: "{{ system_base_ansible_dirs_mode }}"
+    state: directory
+  loop: "{{ system_base_ansible_dirs }}"
+
+- name: Create ssl-cert group
+  group:
+    name: ssl-cert
+    system: yes
+
+- name: Create ssl certificates directory
+  file:
+    path: "/etc/ssl/private"
+    owner: "root"
+    group: "ssl-cert"
+    mode: "0710"
+    state: directory
+
+- name: Tune sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  loop: "{{ system_base_sysctl_tuning }}"

@@ -2,105 +2,22 @@
 - name: Sanity checks
   include_tasks: checks.yml
 
-- name: Set hostname
-  hostname:
-    name: "{{ inventory_hostname }}"
+- name: Configure hostname, locale, timezone and sysctl
+  import_tasks: _system.yml
 
-- name: Add hostname ipv4 to /etc/hosts
-  lineinfile:
-    dest: "/etc/hosts"
-    regexp: >-
-      ^{{ ansible_default_ipv4.address }}.+$
-    line: >-
-      {{ ansible_default_ipv4.address }} {{ ansible_hostname }}
+- name: Configure mandatory and unwanted packages
+  import_tasks: _packages.yml
 
-- name: Set timezone
-  timezone:
-    name: "{{ system_base_tzdata_areas }}/{{ system_base_tzdata_zones }}"
+- name: Configure ntp
+  import_tasks: _ntp.yml
 
-- name: Install base packages
-  apt:
-    name: "{{ system_base_system_packages }}"
-    state: present
+- name: Configure preferences
+  import_tasks: _preferences.yml
 
-- name: Remove unwanted packages
-  apt:
-    name: "{{ system_base_unwanted_system_packages }}"
-    state: absent
-    purge: yes
+- name: Configure ssh client and server
+  import_tasks: _ssh.yml
 
-- name: Install base python packages
-  pip:
-    name: "{{ system_base_pip_packages }}"
-
-- name: Create ansible directories
-  file:
-    path: "{{ item }}"
-    owner: "{{ system_base_ansible_dirs_owner }}"
-    group: "{{ system_base_ansible_dirs_group }}"
-    mode: "{{ system_base_ansible_dirs_mode }}"
-    state: directory
-  loop: "{{ system_base_ansible_dirs }}"
-
-- name: Create ssl-cert group
-  group:
-    name: ssl-cert
-    system: yes
-
-- name: Create ssl certificates directory
-  file:
-    path: "/etc/ssl/private"
-    owner: "root"
-    group: "ssl-cert"
-    mode: "0710"
-    state: directory
-
-- import_tasks: locales.yml
-
-- name: Render bashrc templates
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
-  loop:
-    - src: "bash.bashrc"
-      dest: "/etc/bash.bashrc"
-    - src: "etc_skel_bashrc"
-      dest: "/etc/skel/.bashrc"
-
-- name: Configure vim
-  lineinfile:
-    dest: /etc/vim/vimrc
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    state: present
-  loop: "{{ system_base_vimrc_lines }}"
-
-- name: Tune sysctl
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    state: present
-    sysctl_set: yes
-    reload: yes
-  loop: "{{ system_base_sysctl_tuning }}"
-
-- name: Create low-priority alternative for python2
-  alternatives:
-    name: python
-    link: /usr/bin/python
-    path: /usr/bin/python2
-    priority: 10
-
-- name: Create high-priority alternative for python3
-  alternatives:
-    name: python
-    link: /usr/bin/python
-    path: /usr/bin/python3
-    priority: 50
-
-- import_tasks: banner.yml
+- name: Configure connection banner
+  import_tasks: _banner.yml
 
 - meta: flush_handlers

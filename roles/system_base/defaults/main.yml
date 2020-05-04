@@ -132,3 +132,26 @@ system_base_banner_font_name: "galaxie"
 system_base_banner_font_filename: "galaxie.flf"
 system_base_banner_figlet_font_dir: "/usr/share/figlet"
 system_base_banner_figley_bin_path: "/usr/bin/figlet"
+
+ntp_timezone: Europe/Paris
+
+ntp_server_upper_stratum:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 2.pool.ntp.org
+  - 3.pool.ntp.org
+
+# NTP server area configuration (leave empty for 'Worldwide').
+# See: http://support.ntp.org/bin/view/Servers/NTPPoolServers
+ntp_area: ''
+ntp_servers:
+  - "0{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
+  - "1{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
+  - "2{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
+  - "3{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
+
+ntp_restrict:
+  - 127.0.0.1
+  - ::1
+
+ntp_driftfile: /var/lib/ntp/ntp.drift

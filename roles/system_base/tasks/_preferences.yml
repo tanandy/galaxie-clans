@@ -1,0 +1,60 @@
+---
+- name: Render bashrc templates
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - src: "bash.bashrc"
+      dest: "/etc/bash.bashrc"
+    - src: "etc_skel_bashrc"
+      dest: "/etc/skel/.bashrc"
+
+- name: Configure vim
+  lineinfile:
+    dest: /etc/vim/vimrc
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop: "{{ system_base_vimrc_lines }}"
+
+- name: Gather info about default python
+  stat:
+    path: /usr/bin/python
+  register: _system_base_usr_bin_python
+
+- name: Gather info about default python
+  stat:
+    path: /etc/alternatives/python
+  register: _system_base_alternatives_python
+
+- name: Cook variables
+  set_fact:
+    _system_base_force_python3: >-
+      {{
+        not _system_base_usr_bin_python.stat.islnk
+        or
+        not _system_base_usr_bin_python.stat.lnk_target == '/etc/alternatives/python'
+        or
+        not _system_base_alternatives_python.stat.islnk
+        or
+        not _system_base_alternatives_python.stat.lnk_target | regex_search('/usr/bin/python3.*')
+      }}
+
+- name: Create low-priority alternative for python2
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python2
+    priority: 10
+  when: _system_base_force_python3
+
+- name: Create high-priority alternative for python3
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python3
+    priority: 50
+  when: _system_base_force_python3

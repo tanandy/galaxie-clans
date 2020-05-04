@@ -1,17 +1,22 @@
 ---
+- debug:
+    msg: >-
+      Not implemented yet.
+    verbosity: 2
+
 #- import_tasks: "checks.yml"
 #  when:
 #    - not _ufw_uninstall
 #    - ufw_enable | bool
 
-- include_tasks: "install.yml"
-  when:
-    - not _ufw_uninstall
-    - ufw_enable | bool
+#- include_tasks: "install.yml"
+#  when:
+#    - not _ufw_uninstall
+#    - ufw_enable | bool
 
-- include_tasks: "uninstall.yml"
-  when:
-    - _ufw_uninstall
-    - not (ufw_enable | bool)
+#- include_tasks: "uninstall.yml"
+#  when:
+#    - _ufw_uninstall
+#    - not (ufw_enable | bool)
 
-- meta: flush_handlers
+#- meta: flush_handlers

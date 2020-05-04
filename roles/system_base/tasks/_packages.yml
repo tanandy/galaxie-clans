@@ -1,0 +1,15 @@
+---
+- name: Install base packages
+  apt:
+    name: "{{ system_base_system_packages }}"
+    state: present
+
+- name: Remove unwanted packages
+  apt:
+    name: "{{ system_base_unwanted_system_packages }}"
+    state: absent
+    purge: yes
+
+- name: Install base python packages
+  pip:
+    name: "{{ system_base_pip_packages }}"
