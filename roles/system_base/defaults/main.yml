@@ -124,7 +124,7 @@ system_base_vimrc_lines:
 # Content
 #
 system_base_banner_text: "Galaxie Clans"
-system_base_banner_domain: "clans.galaxie.family"
+system_base_banner_domain: "{{ ansible_hostname | default('clans.galaxie.family') }}"
 #
 # Style
 #
