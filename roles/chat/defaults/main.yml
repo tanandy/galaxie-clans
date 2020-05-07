@@ -14,19 +14,12 @@ mattermost_retention_file_deletion: "true"
 mattermost_retention_message_retention_days: "9"
 mattermost_retention_file_retention_days: "9"
 mattermost_retention_deletion_job_start_time: "04:20"
+mattermost_enable_smtp_auth: "false"
 mattermost_smtp_host: ~
 mattermost_smtp_port: ~
 mattermost_smtp_user: ~
 mattermost_smtp_pass: ~
 mattermost_smtp_connection_security: ~
-mattermost_enable_smtp_auth: >-
-  {{
-    (mattermost_smtp_host | bool
-    and mattermost_smtp_port | bool
-    and mattermost_smtp_user | bool
-    and mattermost_smtp_pass | bool)
-    | string | lower
-  }}
 mattermost_jitsi_meet_url: "https://meet.jit.si"
 mattermost_container_version_app: "release-5.23"
 mattermost_container_version_db: "5.22.1"
