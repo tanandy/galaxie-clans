@@ -1,0 +1,13 @@
+---
+- name: Disable netdata service
+  systemd:
+    name: netdata
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+
+- name: Uninstall system packages
+  apt:
+    name: "{{ monitor_system_packages }}"
+    state: absent
+    purge: yes

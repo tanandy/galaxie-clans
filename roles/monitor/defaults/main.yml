@@ -1,14 +1,13 @@
 ---
-metrics_system_packages:
+monitor_system_packages:
   - netdata-core
   - netdata-plugins-bash
   - netdata-plugins-python
   - netdata-web
 
-metrics_web_server_threads: "{{ [ ansible_processor_cores, 6] | min | int }}"
-metrics_enable_web_responses_gzip_compression: "no"
-metrics_update_every: 3
+monitor_netdata_web_server_threads: "{{ [ ansible_processor_cores, 6] | min | int }}"
+monitor_netdata_web_server_max_sockets: 256
+monitor_netdata_update_every: 3
 # In Mb, RAM allocated for caching and indexing
-metrics_page_cache_size: 32
-
-metrics_dbengine_disk_space: 256
+monitor_netdata_page_cache_size: 32
+monitor_netdata_dbengine_disk_space: 256

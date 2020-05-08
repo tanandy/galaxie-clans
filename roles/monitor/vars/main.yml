@@ -1,0 +1,2 @@
+---
+_monitor_uninstall: "{{ monitor_uninstall | default(false) | bool }}"
