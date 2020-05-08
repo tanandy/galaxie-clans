@@ -24,7 +24,7 @@
 
 Core services are installed at the operating system level.
 
-* **NTP**: Based on [ntpd](http://www.ntp.org/)
+* **SYSTEM_BASE**: Based on [ntpd](http://www.ntp.org/)
 * **SSH**: Based on [openssh](https://www.openssh.com/)
 * **DNS**: Based on [bind](https://www.isc.org/bind/)
 * **MAIL**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
@@ -43,10 +43,11 @@ other services by domain name.
 
 #### Broadcast (CYAN)
 
-The following bricks are run as docker-compose files started by a systemd service. Volumes are binded on the host so data can be persisted accross services restart.
+The following bricks are run as docker-compose files started by a systemd service. Data persistence is ensured by host-bound volumes.
 
-* **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
+* **CALENDAR**: Based on [radicale](https://radicale.org/)
 * **CHAT**: Based on [mattermost](https://mattermost.com/)
+* **VIDEOCONF**: Based on [jitsi-meet](https://jitsi.org/jitsi-meet/)
 
 ## Once upon a time...
 
