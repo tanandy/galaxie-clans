@@ -4,10 +4,14 @@
 
 ## How is the documentation organized ?
 
-* [Tutorials](_TUTO__.md) take you by the hand through a series of steps to setup a clan server. __Start here__ if you’re new to Galaxie-Clans.
-* [How-To Guides](_HOWTO__.md) are cooking recipes. They guide you through the steps involved in addressing __key problems and specific use-cases__. They are more advanced than tutorials and assume some knowledge of how Galaxie-Clans works.
-* [Reference Guides](_REF__.md) contain technical reference on aspects of Galaxie-Clans' machinery. They describe __how it works and how to use it__ but assume that you have a basic understanding of key concepts.
-* [Topic Guides](_TOPIC__.md) discuss key topics and concepts at a fairly high level and provide useful __background information and explanation__.
+* [Tutorials](_TUTO__.md) 
+  * __Start here__ if you’re new to Galaxie-Clans. Tutorials take you by the hand through a series of steps to achieve results with Galaxie-Clans.
+* [How-To Guides](_HOWTO__.md)
+  * Address __key problems and specific use-cases__. They are more advanced than tutorials and assume some knowledge of how Galaxie-Clans works.
+* [Reference Guides](_REF__.md) 
+  * Describe __how it works and how to use it__ but assume that you have a basic understanding of key concepts. They contain technical reference on aspects of Galaxie-Clans' machinery.
+* [Topic Guides](_TOPIC__.md) 
+  * Provide useful __background information and explanation__ and discuss key topics and concepts at a fairly high level.
 
 ## Why is it so ?
 
