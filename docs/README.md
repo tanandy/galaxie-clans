@@ -1,5 +1,7 @@
 # Galaxie-Clans Documentation
 
+![galaxie](images/logo_galaxie.png)
+
 ## How is the documentation organized ?
 
 * [Tutorials](TUTORIAL.md) take you by the hand through a series of steps to setup a clan server. __Start here__ if you’re new to Galaxie-Clans.
@@ -64,3 +66,4 @@ __What matters:__
 * multiple examples, alternative approaches
 * making connections
 * no instructions or technical description
+

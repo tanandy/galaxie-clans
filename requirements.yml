@@ -6,15 +6,15 @@
 #  src: "git+https://github.com/bertvv/ansible-role-bind.git"
 #  version: "master"
 
-- name: "bertvv.dhcp"
-  src: "git+https://github.com/bertvv/ansible-role-dhcp.git"
-  version: "master"
+#- name: "bertvv.dhcp"
+#  src: "git+https://github.com/bertvv/ansible-role-dhcp.git"
+#  version: "master"
 
-- name: "bertvv.tftp"
-  src: "git+https://github.com/bertvv/ansible-role-tftp.git"
-  version: "master"
+#- name: "bertvv.tftp"
+#  src: "git+https://github.com/bertvv/ansible-role-tftp.git"
+#  version: "master"
 
-- name: "bertvv.pxeserver"
-  src: "git+https://github.com/bertvv/ansible-role-pxeserver.git"
-  version: "master"
+#- name: "bertvv.pxeserver"
+#  src: "git+https://github.com/bertvv/ansible-role-pxeserver.git"
+#  version: "master"
 
