@@ -24,14 +24,13 @@
 
 Core services are installed at the operating system level.
 
-* **SYSTEM_BASE**: Based on [ntpd](http://www.ntp.org/)
-* **SSH**: Based on [openssh](https://www.openssh.com/)
+* **SYSTEM_BASE**: Mandatory system configuration, impacts [ntpd](http://www.ntp.org/), [openssh](https://www.openssh.com/) and sysctl tweaking.
+* **SYSTEM_USERS**: Role to manage system users deployment.
 * **DNS**: Based on [bind](https://www.isc.org/bind/)
-* **MAIL**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
-* **LOGS**: Based on [rsyslog](https://www.rsyslog.com/)
-* **METRICS**: Based on [netdata](https://www.netdata.cloud/)
-* **BACKUP**: Based on [borg](https://www.borgbackup.org/)
 * **FIREWALL**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
+* **MONITOR**: Based on [netdata](https://www.netdata.cloud/)
+* **BACKUP**: Based on [borg](https://www.borgbackup.org/)
+* **MAILSERVER**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
 
 ### High-Level Hub (GREY)
 
@@ -57,8 +56,8 @@ We build an Ansible toolkit for managing a set of Debian servers, a set of power
 
 Originaly written for managing a Home Network with external services. The project has shifted to managing digital survival of clanic entities.
 
-Galaxie is a true mix of the two world, by luck author Tuuux and Mo have made the necessary to have no compromise.
+Galaxie-Clans is a true mix of the two world, by luck author Tuuux and Mo have made the necessary to have no compromise.
 
 Bear in mind folks: Tech purity is cancer of mind.
 
-It will be an honor if you could use our work in any way. Be it as-is or as code samples.
+It would be an honor if you could use our work in any way. Be it as-is or as code samples.
