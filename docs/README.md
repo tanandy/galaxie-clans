@@ -9,7 +9,7 @@
 * [How-To Guides](_HOWTO__.md)
   * Address __key problems and specific use-cases__. They are more advanced than tutorials and assume some knowledge of how Galaxie-Clans works.
 * [Reference Guides](_REF__.md) 
-  * Describe __how it works and how to use it__ but assume that you have a basic understanding of key concepts. They contain technical reference on aspects of Galaxie-Clans' machinery.
+  * Describe __how things work and how to use them__ but assume that you have a basic understanding of key concepts. Also contain technical reference on internals.
 * [Topic Guides](_TOPIC__.md) 
   * Provide useful __background information and explanation__ and discuss key topics and concepts at a fairly high level.
 
