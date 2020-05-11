@@ -13,7 +13,7 @@ This structure is borrowed from Daniele Procida's presentation at PyCon Australi
 
 Thanks to him.
 
-[https://documentation.divio.com/]
+[Learn more...](https://documentation.divio.com/)
 
 ## Contributing documentation
 ### Tutorials: Learning oriented
