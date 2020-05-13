@@ -16,7 +16,6 @@ Major release are named after the runes names of the elder Futhark.
 
 * 1.X.X FEHU
 
-
 ### Color Palette
 
 * Black `#001516`

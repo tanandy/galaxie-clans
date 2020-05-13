@@ -31,4 +31,4 @@ restrict {{ item }}
 # l'heure en cas de coupures du net. Ne pas placer ce fichier dans un répertoire
 # temporaire : cela évite aussi ?|  ntpd d'avoir ?|  refaire les calculs permettant
 # de déterminer la dérive de l'horloge après chaque redémarrage.
-driftfile {{ ntp_driftfile }}
+driftfile {{ system_base_ntp_driftfile }}

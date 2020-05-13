@@ -2,14 +2,13 @@
 - name: Sanity checks
   assert:
     that:
-      - ssl_private_key_directory is defined
       - _domain_to_certify is defined
       - _domain_to_certify.cn is defined
       - _domain_to_certify.zone is defined
 
 - name: "{{ _domain_to_certify.cn }} - Cooking variables"
   set_fact:
-    ssl_private_key_path_basename: "{{ ssl_private_key_directory }}/{{ _domain_to_certify.cn }}"
+    ssl_private_key_path_basename: "{{ ssl_certs_dir }}/{{ _domain_to_certify.cn }}"
 
 - name: "{{ _domain_to_certify.cn }} - Cooking variables"
   set_fact:

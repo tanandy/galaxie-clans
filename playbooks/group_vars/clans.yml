@@ -3,7 +3,7 @@
 # General
 #
 ansible_python_interpreter: /usr/bin/python3
-ssl_private_key_directory: "/etc/ssl/private"
+ssl_certs_dir: "/etc/ssl/private"
 #
 # PLAYBOOK clan-install.yml
 #

@@ -10,3 +10,5 @@ system_base_banner_font_name: "galaxie"
 system_base_banner_font_filename: "galaxie.flf"
 system_base_banner_figlet_font_dir: "/usr/share/figlet"
 system_base_banner_figlet_bin_path: "/usr/bin/figlet"
+
+system_base_ntp_driftfile: /var/lib/ntp/ntp.drift

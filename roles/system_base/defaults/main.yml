@@ -1,5 +1,5 @@
 ---
-system_base_enable_manpages: yes
+system_base_install_localized_manpages: yes
 system_base_primary_local: 'fr_FR.UTF-8'
 system_base_secondary_local: 'en_US.UTF-8'
 system_base_language: 'fr'
@@ -128,17 +128,6 @@ ntp_server_upper_stratum:
   - 2.pool.ntp.org
   - 3.pool.ntp.org
 
-# NTP server area configuration (leave empty for 'Worldwide').
-# See: http://support.ntp.org/bin/view/Servers/NTPPoolServers
-ntp_area: ''
-ntp_servers:
-  - "0{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-  - "1{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-  - "2{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-  - "3{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
-
 ntp_restrict:
   - 127.0.0.1
   - ::1
-
-ntp_driftfile: /var/lib/ntp/ntp.drift

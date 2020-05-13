@@ -8,12 +8,11 @@
     - name: Sanity checks
       assert:
         that:
-          - ssl_private_key_directory is defined
           - amce_domains is defined
 
     - name: Create acme key directory
       file:
-        path: "{{ ssl_private_key_directory }}"
+        path: "{{ ssl_certs_dir }}"
         state: directory
         mode: 0710
         owner: root

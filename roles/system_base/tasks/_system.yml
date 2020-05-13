@@ -24,7 +24,7 @@
     - "{{ system_base_secondary_local }}"
   register: locale_gen_status
 
-- name: Update and Set locale
+- name: Update locale
   command: >-
     /usr/sbin/update-locale LANG={{ system_base_primary_local }} LANGUAGE={{ system_base_language }}
   when:
@@ -34,7 +34,7 @@
   apt:
     pkg:
       - "manpages-{{ system_base_language }}"
-  when: (system_base_enable_manpages | bool)
+  when: system_base_install_localized_manpages | bool
 
 - name: Create ansible directories
   file:
@@ -47,12 +47,12 @@
 
 - name: Create ssl-cert group
   group:
-    name: ssl-cert
+    name: "ssl-cert"
     system: yes
 
 - name: Create ssl certificates directory
   file:
-    path: "/etc/ssl/private"
+    path: "{{ ssl_certs_dir }}"
     owner: "root"
     group: "ssl-cert"
     mode: "0710"
