@@ -13,10 +13,9 @@
 
 - name: Set timezone
   timezone:
-    name: "{{ system_base_tzdata_areas }}/{{ system_base_tzdata_zones }}"
+    name: "{{ system_base_timezone }}"
 
-- name: Check if {{ system_base_primary_local }} locale present
-  tags: locales
+- name: Generate locales
   locale_gen:
     name: "{{ item }}"
     state: present
@@ -26,7 +25,6 @@
   register: locale_gen_status
 
 - name: Update and Set locale
-  tags: locales
   command: >-
     /usr/sbin/update-locale LANG={{ system_base_primary_local }} LANGUAGE={{ system_base_language }}
   when:

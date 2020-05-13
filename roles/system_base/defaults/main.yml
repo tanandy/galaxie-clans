@@ -1,12 +1,9 @@
 ---
 system_base_enable_manpages: yes
-# See /usr/share/i18n/SUPPORTED
-system_base_lang: 'fr_FR.UTF-8'
 system_base_primary_local: 'fr_FR.UTF-8'
 system_base_secondary_local: 'en_US.UTF-8'
 system_base_language: 'fr'
-system_base_tzdata_areas: 'Europe'
-system_base_tzdata_zones: 'Paris'
+system_base_timezone: 'Europe/Paris'
 system_base_system_packages:
   - aptitude
   - apt-transport-https
@@ -125,16 +122,6 @@ system_base_vimrc_lines:
 #
 system_base_banner_text: "Galaxie Clans"
 system_base_banner_domain: "{{ ansible_hostname | default('clans.galaxie.family') }}"
-#
-# Style
-#
-system_base_banner_font_name: "galaxie"
-system_base_banner_font_filename: "galaxie.flf"
-system_base_banner_figlet_font_dir: "/usr/share/figlet"
-system_base_banner_figley_bin_path: "/usr/bin/figlet"
-
-ntp_timezone: Europe/Paris
-
 ntp_server_upper_stratum:
   - 0.pool.ntp.org
   - 1.pool.ntp.org

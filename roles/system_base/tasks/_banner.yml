@@ -9,7 +9,9 @@
 
 - name: Render figlet banner
   command: >-
-    /usr/bin/figlet -c -w 80 -f {{ system_base_banner_font_name }} '{{ system_base_banner_text }}'
+    {{ system_base_banner_figlet_bin_path }} 
+    -c -w 80 
+    -f {{ system_base_banner_font_name }} '{{ system_base_banner_text }}'
   register: system_base_banner_figlet_result
   changed_when: false
 
