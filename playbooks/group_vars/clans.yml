@@ -5,9 +5,9 @@
 ansible_python_interpreter: /usr/bin/python3
 ssl_certs_dir: "/etc/ssl/private"
 #
-# PLAYBOOK clan-install.yml
+# PLAYBOOK clan-caretaker-install.yml
 #
-clan_install_system_packages:
+clan_system_packages:
   - apt-transport-https
   - aptitude
   - build-essential
@@ -36,12 +36,3 @@ clan_alliance_export_content: |-
     | default({})
     | to_nice_yaml
   }}
-#
-# ROLE: bind
-#
-bind_user_keys_algorithm: HMAC-SHA512
-bind_user_keys_size: 512
-bind_user_keys_directory: /etc/bind/keys
-#
-# ROLE: common
-#
