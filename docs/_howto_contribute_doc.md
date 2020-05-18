@@ -6,7 +6,7 @@
 
 #### Create a dedicated file
 
-* For a tutorial, create a file in the `docs/` directory
+* Create a file in the `docs/` directory
 * Its name must match the format `_tuto_*.md`
 
 #### Write
@@ -34,7 +34,7 @@ __What matters:__
 ### How-to Guides: Problem-oriented
 #### Create a dedicated file
 
-* For a tutorial, create a file in the `docs/` directory
+* Create a file in the `docs/` directory
 * Its name must match the format `_howto_*.md`
 
 #### Write
@@ -60,6 +60,13 @@ __What matters:__
 
 ### Reference Guides: Information-oriented
 
+#### Create a dedicated file
+
+* Create a file in the `docs/` directory
+* Its name must match the format `_ref_*.md`
+
+#### Write
+
 Technical descriptions of the machinery and how to operate it.
 
 __What matters:__
@@ -69,7 +76,22 @@ __What matters:__
 * structure, tone, format must all be as consistent as those of an encyclopaedia or dictionary
 * do nothing but describe
 
+#### Integrate it into the Tutorial root documentation
+
+* Edit `docs/_REF__.md`
+* Add a link to the list of tutorials pointing to your new file.
+```
+* [DaThing module parameters](_ref_dathing.md)
+```
+
 ### Topic Guides: Understanding-oriented
+
+#### Create a dedicated file
+
+* Create a file in the `docs/` directory
+* Its name must match the format `_topic_*.md`
+
+#### Write
 
 Explanations that clarify and illuminate a particular topic.
 
@@ -80,3 +102,10 @@ __What matters:__
 * making connections
 * no instructions or technical description
 
+#### Integrate it into the Tutorial root documentation
+
+* Edit `docs/_TOPIC__.md`
+* Add a link to the list of tutorials pointing to your new file.
+```
+* [Big Picture](_topic_big_picture.md)
+```
