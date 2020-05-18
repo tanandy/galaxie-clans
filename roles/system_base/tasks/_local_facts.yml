@@ -1,0 +1,19 @@
+---
+- name: Get password hash system policy
+  shell: >-
+    cat /etc/pam.d/common-password | grep pam_unix | grep -e "^password" | rev | cut -d " " -f1 | rev
+  register: _system_base_password_hash_policy_shell
+  changed_when: no
+
+- name: Store local fact password hash system policy
+  copy:
+    dest: /etc/ansible/facts.d/system_base_pam.fact
+    content: >-
+      {{
+        {'password_hash_policy': _system_base_password_hash_policy_shell.stdout }
+        | to_json
+      }}
+
+- name: Reload local facts
+  setup: 
+    filter: ansible_local

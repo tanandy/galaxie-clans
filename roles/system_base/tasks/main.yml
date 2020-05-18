@@ -1,6 +1,9 @@
 ---
 - name: Sanity checks
-  include_tasks: checks.yml
+  import_tasks: checks.yml
+
+- name: Configure ansible local facts
+  import_tasks: _local_facts.yml
 
 - name: Configure hostname, locale, timezone and sysctl
   import_tasks: _system.yml

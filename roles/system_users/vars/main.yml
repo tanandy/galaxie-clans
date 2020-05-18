@@ -1,7 +1,22 @@
 ---
-system_users_reserved:
-  - name: "radicale"
-    uid: "59000"
+_system_users_uninstall: "{{ system_users_uninstall | default(false) | bool }}"
 
-  - name: "mattermost"
+system_users_default_shell: "/bin/bash"
+system_users_default_home: "/home/{{ current_user.uname }}"
+system_users_local_passwords_dir: "{{ local_secrets_dir }}/system_users"
+
+system_users_password: "{{ }}"
+system_users_reserved:
+  - uname: "radicale"
+    uid: "59000"
+  - uname: "mattermost"
     uid: "59001"
+
+system_users_password_hashes:
+  sha512:
+    salt: "{{ lookup('password', system_users_local_passwords_dir + '/salt.sha512 length=16 chars=ascii_letters,digits') }}"
+  bcrypt:
+    salt: "{{ lookup('password', system_users_local_passwords_dir + '/salt.bcrypt length=22 chars=ascii_letters,digits') }}"
+
+system_users_prefered_hash: >-
+  {{ system_users_local_passwords_dir }}/{{ current_user.uname }}.password.{{ ansible_local.system_base_pam.password_hash_policy }}

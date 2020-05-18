@@ -1,5 +1,17 @@
----
-- debug:
-    msg: >-
-      Not implemented yet.
-    verbosity: 2
+- import_tasks: "checks.yml"
+  when:
+    - not _system_users_uninstall
+    - system_users is defined
+    - system_users | length > 0
+
+- include_tasks: "install.yml"
+  when:
+    - not _system_users_uninstall
+    - system_users is defined
+    - system_users | length > 0
+
+- include_tasks: "uninstall.yml"
+  when:
+    - system_users is not defined or system_users | length <= 0
+
+- meta: flush_handlers

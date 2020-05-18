@@ -1,0 +1,14 @@
+---
+system_users: []
+# - uname:
+#   uid:
+#   groups: []
+#   home: home/{{ uname }}
+#   shell: /bin/bash
+#   authorized_keys
+
+# password generation 
+
+system_users_groups: []
+# - gname:
+#   gid:

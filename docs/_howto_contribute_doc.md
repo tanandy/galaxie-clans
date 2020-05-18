@@ -4,7 +4,14 @@
 
 ### Tutorials: Learning oriented
 
-Lessons that take the read by the hand through a series of steps to complete a project.
+#### Create a dedicated file
+
+* For a tutorial, create a file in the `docs/` directory
+* Its name must match the format `_tuto_*.md`
+
+#### Write
+
+Keep it clear and simple. Tutorials must be lessons that take the read by the hand through a series of steps to complete a project.
 
 __What matters:__
 * learning by doing
@@ -16,7 +23,21 @@ __What matters:__
 * minimum necessary explaination
 * no distractions
 
+#### Integrate it into the Tutorial root documentation
+
+* Edit `docs/_TUTO__.md`
+* Add a link to the list of tutorials pointing to your new file.
+```
+* [Your new tutorial](_tuto_yournewtutorial.md)
+```
+
 ### How-to Guides: Problem-oriented
+#### Create a dedicated file
+
+* For a tutorial, create a file in the `docs/` directory
+* Its name must match the format `_howto_*.md`
+
+#### Write
 
 Guides that take the reader through a series of steps required to solve a common problem.
 
@@ -28,6 +49,14 @@ __What matters:__
 * a little flexibily
 * practical usability
 * good naming
+
+#### Integrate it into the Tutorial root documentation
+
+* Edit `docs/_HOWTO__.md`
+* Add a link to the list of tutorials pointing to your new file.
+```
+* [How to use a knife ?](_howto_knifeusage.md)
+```
 
 ### Reference Guides: Information-oriented
 

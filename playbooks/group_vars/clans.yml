@@ -3,6 +3,7 @@
 # General
 #
 ansible_python_interpreter: /usr/bin/python3
+local_secrets_dir: "{{ (playbook_dir + '/../secrets') | realpath }}"
 ssl_certs_dir: "/etc/ssl/private"
 #
 # PLAYBOOK clan-caretaker-install.yml

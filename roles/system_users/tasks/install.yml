@@ -1,0 +1,56 @@
+---
+- name: Create system groups
+  group:
+    name: "{{ current_group.gname }}"
+    gid: "{{ current_group.gid }}"
+  loop: "{{ system_users_groups }}"
+  loop_control:
+    loop_var: current_group
+
+- name: Create system parent groups for each user
+  group:
+    name: "{{ current_user.uname }}"
+    gid: "{{ current_user.uid }}"
+  loop: "{{ system_users }}"
+  loop_control:
+    loop_var: current_user
+
+- name: Store system users password hashes
+  delegate_to: localhost
+  become: no
+  copy:
+    dest: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password.{{ item[1] }}"
+    content: >-
+      {{ 
+        lookup(
+          'password', 
+          system_users_local_passwords_dir + '/' + item[0].uname + '.password'
+        )
+        | password_hash(item[1], system_users_password_hashes[item[1]].salt) 
+      }}
+  loop: "{{ system_users | product(system_users_password_hashes.keys()) | list }}"
+  
+- name: Create system users
+  user:
+    name: "{{ current_user.uname }}"
+    uid: "{{ current_user.uid }}"
+    groups: "{{ current_user.groups | default(omit) }}"
+    shell: "{{ current_user.shell | default(system_users_default_shell) }}"
+    home: "{{ current_user.home | default(system_users_default_home) }}"
+    password: "{{ lookup('file', system_users_prefered_hash) }}"
+  loop: "{{ system_users }}"
+  loop_control:
+    loop_var: current_user
+
+
+- name: Configure authorized_keys for users
+  authorized_key:
+    user: ""
+    key: ""
+  loop: "{{ system_users }}"
+  loop_control:
+    loop_var: current_user
+  when: 
+    - false
+    - current_user.authorized_keys is defined
+    - current_user.authorized_keys | length > 0
