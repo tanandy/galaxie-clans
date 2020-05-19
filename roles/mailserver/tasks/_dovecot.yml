@@ -49,4 +49,17 @@
     state: started
     enabled: true
 
+- name: "Set mailserver password"
+  lineinfile:
+    regex: >-
+      ^{{ item.email }}.*
+    line: >-
+      {{ item.email }}:{CRYPT}{{ ansible_local.system_users_password_hash[item.system_user].bcrypt }}:::
+    dest: /etc/dovecot/users
+    create: yes
+  loop: "{{ postfix_virtual_mailboxes }}"
+  when:
+    - item.system_user is defined
+    - item.system_user in ansible_local.system_users_password_hash.keys()
+
 - meta: flush_handlers

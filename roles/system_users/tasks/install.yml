@@ -39,3 +39,27 @@
   loop: "{{ system_users }}"
   loop_control:
     loop_var: current_user
+
+- name: Establish hashed passwords state
+  set_fact:
+    system_users_password_hash: >-
+      {{
+        system_users_password_hash | default({})
+        | combine({
+          (item[0].uname):
+            system_users_password_hash[(item[0].uname)] | default({}) | combine({
+              (item[1]): lookup('file', system_users_local_passwords_dir + '/' + item[0].uname + '.password.' + item[1])
+            })
+        })
+      }}
+  loop: "{{ system_users | product(system_users_supported_hash) | list }}"
+
+- name: Persist hashed passwords state
+  copy:
+    dest: "/etc/ansible/facts.d/system_users_password_hash.fact"
+    content: |-
+      {{ system_users_password_hash | to_nice_json }}
+  
+- name: Reload local facts
+  setup: 
+    filter: ansible_local

@@ -55,7 +55,7 @@
     path: "{{ ssl_certs_dir }}"
     owner: "root"
     group: "ssl-cert"
-    mode: "0710"
+    mode: "0750"
     state: directory
 
 - name: Tune sysctl

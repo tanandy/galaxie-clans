@@ -35,6 +35,7 @@ system_base_system_packages:
   - python3-pip
   - python3-setuptools
   - python3-venv
+  - python3-wheel
   - rng-tools5
   - rsync
   - screen
@@ -62,6 +63,7 @@ system_base_pip_packages:
   - cryptography
   - passlib
   - bcrypt
+  - ansible
 
 system_base_sysctl_vm_swappiness: "10"
 system_base_sysctl_vm_vfs_cache_pressure: "50"
