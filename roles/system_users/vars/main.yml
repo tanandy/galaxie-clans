@@ -12,11 +12,9 @@ system_users_reserved:
   - uname: "mattermost"
     uid: "59001"
 
-system_users_password_hashes:
-  sha512:
-    salt: "{{ lookup('password', system_users_local_passwords_dir + '/salt.sha512 length=16 chars=ascii_letters,digits') }}"
-  bcrypt:
-    salt: "{{ lookup('password', system_users_local_passwords_dir + '/salt.bcrypt length=22 chars=ascii_letters,digits') }}"
+system_users_supported_hash:
+  - sha512
+  - bcrypt
 
 system_users_prefered_hash: >-
   {{ system_users_local_passwords_dir }}/{{ current_user.uname }}.password.{{ ansible_local.system_base_pam.password_hash_policy }}

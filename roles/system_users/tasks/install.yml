@@ -15,7 +15,18 @@
   loop_control:
     loop_var: current_user
 
-- name: Store system users password hashes
+- include_tasks: "_init_{{ item }}_salt.yml"
+  loop: "{{ system_users_supported_hash }}"
+
+- name: Erase old password
+  delegate_to: localhost
+  become: no
+  file:
+    path: "{{ system_users_local_passwords_dir }}/{{ item.uname }}.password"
+    state: absent
+  loop: "{{ system_users | selectattr('rotate', 'defined') | selectattr('rotate') | list }}"
+
+- name: Generate and store password and hashes
   delegate_to: localhost
   become: no
   copy:
@@ -26,9 +37,9 @@
           'password', 
           system_users_local_passwords_dir + '/' + item[0].uname + '.password'
         )
-        | password_hash(item[1], system_users_password_hashes[item[1]].salt) 
+        | password_hash(item[1], system_users_hash_salt[item[1]]) 
       }}
-  loop: "{{ system_users | product(system_users_password_hashes.keys()) | list }}"
+  loop: "{{ system_users | product(system_users_supported_hash) | list }}"
   
 - name: Create system users
   user:
@@ -42,15 +53,12 @@
   loop_control:
     loop_var: current_user
 
-
-- name: Configure authorized_keys for users
+- name: Authorize user key
   authorized_key:
-    user: ""
-    key: ""
+    user: "{{ current_user.uname }}"
+    key: "{{ current_user.authorized_key | default('') }}"
+    exclusive: yes
+    manage_dir: yes
   loop: "{{ system_users }}"
   loop_control:
     loop_var: current_user
-  when: 
-    - false
-    - current_user.authorized_keys is defined
-    - current_user.authorized_keys | length > 0

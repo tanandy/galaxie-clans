@@ -1,0 +1,33 @@
+---
+- name: Init bcrypt salt
+  set_fact:
+    system_users_hash_salt: >-
+      {{
+        system_users_hash_salt | default({})
+        | combine({
+          'bcrypt': lookup('password', system_users_local_passwords_dir + '/salt.bcrypt length=21 chars=ascii_letters,digits')
+          })
+      }}
+
+- name: Check bcrypt salt for ending char
+  set_fact:
+    _bcrypt_salt_need_ending_char: "{{ system_users_hash_salt.bcrypt | length == 21 }}"
+
+- name: Add ending char
+  set_fact:
+    system_users_hash_salt: >-
+      {{
+        system_users_hash_salt
+        | combine({
+          'bcrypt': system_users_hash_salt.bcrypt + ['.','0','e','u'][4 | random]
+          })
+      }}
+  when: _bcrypt_salt_need_ending_char
+
+- name: Persist ending char for next run
+  delegate_to: localhost
+  become: no
+  copy:
+    dest: "{{ system_users_local_passwords_dir }}/salt.bcrypt"
+    content: >
+      {{ system_users_hash_salt.bcrypt }}

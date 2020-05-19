@@ -1,0 +1,10 @@
+---
+- name: Init sha512 salt
+  set_fact:
+    system_users_hash_salt: >-
+      {{
+        system_users_hash_salt | default({})
+        | combine({
+          "sha512": "{{ lookup('password', system_users_local_passwords_dir + '/salt.sha512 length=16 chars=ascii_letters,digits') }}"
+          })
+      }}

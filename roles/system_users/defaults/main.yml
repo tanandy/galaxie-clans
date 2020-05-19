@@ -4,8 +4,8 @@ system_users: []
 #   uid:
 #   groups: []
 #   home: home/{{ uname }}
-#   shell: /bin/bash
-#   authorized_keys
+#   shell: "/bin/bash"
+#   authorized_keys: "value"
 
 # password generation 
 
