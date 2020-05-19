@@ -1,46 +1,23 @@
 ---
-- name: Create system groups
-  group:
-    name: "{{ current_group.gname }}"
-    gid: "{{ current_group.gid }}"
-  loop: "{{ system_users_groups }}"
-  loop_control:
-    loop_var: current_group
+- import_tasks: _groups.yml
 
-- name: Create system parent groups for each user
-  group:
-    name: "{{ current_user.uname }}"
-    gid: "{{ current_user.uid }}"
-  loop: "{{ system_users }}"
-  loop_control:
-    loop_var: current_user
+- import_tasks: _rotation.yml
 
 - include_tasks: "_init_{{ item }}_salt.yml"
   loop: "{{ system_users_supported_hash }}"
-
-- name: Erase old password
-  delegate_to: localhost
-  become: no
-  file:
-    path: "{{ system_users_local_passwords_dir }}/{{ item.uname }}.password"
-    state: absent
-  loop: "{{ system_users | selectattr('rotate', 'defined') | selectattr('rotate') | list }}"
 
 - name: Generate and store password and hashes
   delegate_to: localhost
   become: no
   copy:
-    dest: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password.{{ item[1] }}"
+    dest: "{{ system_users_hashed_password_file }}"
     content: >-
       {{ 
-        lookup(
-          'password', 
-          system_users_local_passwords_dir + '/' + item[0].uname + '.password'
-        )
+        lookup('password', system_users_clear_password_file)
         | password_hash(item[1], system_users_hash_salt[item[1]]) 
       }}
-  loop: "{{ system_users | product(system_users_supported_hash) | list }}"
-  
+  loop: "{{ system_users_expecting_rotation | product(system_users_supported_hash) | list }}"
+
 - name: Create system users
   user:
     name: "{{ current_user.uname }}"

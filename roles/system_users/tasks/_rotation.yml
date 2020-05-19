@@ -1,0 +1,54 @@
+---
+- name: Scan for existing hash
+  delegate_to: localhost
+  become: no
+  stat:
+    path: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password.{{ item[1] }}"
+  loop: "{{ system_users | product(system_users_supported_hash) | list }}"
+  register: _system_users_existing_hash
+
+- debug:
+    var: _system_users_existing_hash
+- set_fact:
+    _system_users_supported_hash_present: >-
+      {{
+        _system_users_supported_hash_present | default({})
+        | combine(
+          { 
+            (item[0].uname):
+                (_system_users_supported_hash_present[item[0].uname] | default(True)) 
+                and 
+                ( _system_users_existing_hash.results 
+                  | selectattr( 'invocation.module_args.path', 'equalto', system_users_hashed_password_file) 
+                  | list)[0].stat.exists 
+          }
+        )
+      }}
+  loop: "{{ system_users | product(system_users_supported_hash) | list }}"
+      
+- debug:
+    var: _system_users_supported_hash_present
+
+- set_fact:
+    system_users_expecting_rotation: >-
+      {{ 
+        system_users | selectattr('rotate', 'defined') | selectattr('rotate') | list 
+        + system_users | selectattr('uname', 'in', _system_users_supported_hash_present|dict2items|selectattr('value', 'false')|map(attribute='key')|list) | list
+      }}
+
+
+- name: Erase existing password for rotation
+  delegate_to: localhost
+  become: no
+  file:
+    path: "{{ system_users_local_passwords_dir }}/{{ item.uname }}.password"
+    state: absent
+  loop: "{{ system_users_expecting_rotation }}"
+
+- name: Erase existing hash for rotation
+  delegate_to: localhost
+  become: no
+  file:
+    path: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password.{{ item[1] }}"
+    state: absent
+  loop: "{{ system_users_expecting_rotation | product(system_users_supported_hash) | list }}"

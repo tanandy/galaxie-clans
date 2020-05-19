@@ -1,6 +1,6 @@
 [Galaxie-Clans Documentation](README.md) / [How-to Guides](_HOWTO__.md)
 
-# How to contribute documentation ?
+# How to contribute documentation?
 ---
 ### Tutorials: Learning oriented
 

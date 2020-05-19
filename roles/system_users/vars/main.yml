@@ -18,3 +18,7 @@ system_users_supported_hash:
 
 system_users_prefered_hash: >-
   {{ system_users_local_passwords_dir }}/{{ current_user.uname }}.password.{{ ansible_local.system_base_pam.password_hash_policy }}
+
+
+system_users_clear_password_file: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password"
+system_users_hashed_password_file: "{{ system_users_local_passwords_dir }}/{{ item[0].uname }}.password.{{ item[1] }}"

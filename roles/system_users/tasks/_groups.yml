@@ -1,0 +1,16 @@
+---
+- name: Create system groups
+  group:
+    name: "{{ current_group.gname }}"
+    gid: "{{ current_group.gid }}"
+  loop: "{{ system_users_groups }}"
+  loop_control:
+    loop_var: current_group
+
+- name: Create system parent groups for each user
+  group:
+    name: "{{ current_user.uname }}"
+    gid: "{{ current_user.uid }}"
+  loop: "{{ system_users }}"
+  loop_control:
+    loop_var: current_user
