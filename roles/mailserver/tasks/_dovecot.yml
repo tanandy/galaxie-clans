@@ -60,6 +60,6 @@
   loop: "{{ postfix_virtual_mailboxes }}"
   when:
     - item.system_user is defined
-    - item.system_user in ansible_local.system_users_password_hash.keys()
+    - item.system_user in ansible_local.system_users_password_hash.keys() | default([])
 
 - meta: flush_handlers

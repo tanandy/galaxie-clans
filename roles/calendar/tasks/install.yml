@@ -42,6 +42,18 @@
     block: |-
       # This file is to be managed by galaxie-clans tooling. Any manual addition can be erased at any time.
 
+- name: "Set calendar passwords"
+  htpasswd:
+    path: /etc/radicale/users
+    name: "{{ item.email }}"
+    password: "{{ ansible_local.system_users_password_hash[item.system_user].bcrypt }}"
+    crypt_scheme: plaintext
+    create: yes
+  loop: "{{ postfix_virtual_mailboxes }}"
+  when:
+    - item.system_user is defined
+    - item.system_user in ansible_local.system_users_password_hash.keys() | default([])
+
 - name: Render rproxy service configuration
   template:
     src: "nginx.conf.j2"
