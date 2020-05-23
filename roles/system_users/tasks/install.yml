@@ -30,6 +30,8 @@
   loop_control:
     loop_var: current_user
 
+# - chown recursif sur la home SI le create est changed
+
 - name: Authorize user key
   authorized_key:
     user: "{{ current_user.uname }}"

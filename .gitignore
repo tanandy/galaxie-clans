@@ -22,3 +22,5 @@ __pycache__
 draft.yml
 ssh.cfg
 roles/tmp-*
+rsync_tmbackup.sh
+backups
