@@ -4,111 +4,54 @@
   strategy: linear
 
   vars:
-    backup_dir: "{{ (playbook_dir + '/../backups/' + inventory_hostname) | realpath }}"
-    date_marker: "{{ ansible_date_time.iso8601 }}"
-    backup_iso8601_validation_regex: >-
-      (([1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])Z
+    time_machine_current_backup_dir: "{{ time_machine_backup_dir }}/{{ time_machine_date_marker }}"
 
   tasks:
     - name: Find existing backups
-      find:
-        paths: "{{ backup_dir }}"
-        patterns: "{{ backup_iso8601_validation_regex }}"
-        use_regex: yes
-        file_type: directory
-        recurse: yes
-        depth: 1
-      register: _find_existing_backups
-      delegate_to: localhost
-      become: no
+      import_tasks: "{{ playbook_dir }}/inc/_time_machine_find_backups.yml"
 
-    - name: Cook variables
+    - name: Group found backup profiles
       set_fact:
-        existing_backups: >-
-          {{ 
-            _find_existing_backups.files | default([])
-            | map(attribute='path') | map('regex_replace','.*/', '')
-            | sort | reverse | list
-          }}
-        current_backup_dir: "{{ backup_dir }}/{{ date_marker }}"
-        backup_profiles: "{{ vars.ansible_local.keys() | select('match', '^backup_profile_.*$') | list }}"
-
-    - name: Cook variables
-      set_fact:
-        to_backup: >-
+        time_machine_profiles_to_backup: >-
           {{
-            to_backup|default({})
+            time_machine_profiles_to_backup 
+            | default({})
             | combine({
               (item|regex_replace('^backup_profile_', '')): vars.ansible_local[item]
             })
           }}
-      loop: "{{ backup_profiles }}"
+      loop: "{{ time_machine_backup_profiles }}"
 
-    - name: Create backup dir
+    - name: Create backup data slots
       file:
-        path: "{{ current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}"
+        path: "{{ time_machine_current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}"
         state: directory
-      loop: "{{ to_backup | dict2items | subelements('value.locations') }}"
+      loop: "{{ time_machine_profiles_to_backup | dict2items | subelements('value.locations') }}"
       delegate_to: localhost
       become: no
 
-    - name: Save profile
+    - debug:
+        msg: >- 
+          {{ (existing_backups | length == 0) | ternary('ZERO', 'NON-ZERO') }}
+
+    - name: Backup
+      synchronize:
+        mode: pull
+        src: "{{ item[1].path }}"
+        dest: "{{ time_machine_current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}"
+        use_ssh_args: yes
+        compress: yes
+        archive: yes
+        rsync_opts: "{{ time_machine_rsync_opts_pull }}"
+      loop: "{{ time_machine_profiles_to_backup | dict2items | subelements('value.locations') }}"
+
+    - name: Save restore profile
       copy:
-        dest: "{{ current_backup_dir }}/profile.yml"
+        dest: "{{ time_machine_current_backup_dir }}/restore_profile.yml"
         content: |-
           ---
           {{
-            { 'backup_profile': to_backup }
-            | to_nice_yaml
+            { 'restore_profile': time_machine_profiles_to_backup } | to_nice_yaml
           }}
       delegate_to: localhost
       become: no
-
-    - name: Operate first backup
-      synchronize:
-        mode: pull
-        src: "{{ item[1].path }}"
-        dest: "{{ current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}"
-        use_ssh_args: yes
-        compress: yes
-        archive: yes
-        rsync_opts:
-          - "--devices"
-          - "--numeric-ids"
-          - "--hard-links"
-          - "--one-file-system" 
-          - "--itemize-changes"
-          - "--stats"
-          - "--fake-super"
-          - "--xattrs"
-          - "--acls"
-          - "--human-readable"
-      loop: "{{ to_backup | dict2items | subelements('value.locations') }}"
-      when: existing_backups | length == 0
-
-    - name: Operate incremental backup
-      synchronize:
-        mode: pull
-        src: "{{ item[1].path }}"
-        dest: "{{ current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}"
-        use_ssh_args: yes
-        compress: yes
-        archive: yes
-        rsync_opts:
-          - "--devices"
-          - "--numeric-ids"
-          - "--hard-links"
-          - "--one-file-system" 
-          - "--itemize-changes"
-          - "--stats"
-          - "--human-readable"
-          - "--fake-super"
-          - "--xattrs"
-          - "--acls"
-          - "--link-dest={{ backup_dir }}/{{ existing_backups | first }}/{{ item[0].key }}/{{ item[1].name }}"
-      loop: "{{ to_backup | dict2items | subelements('value.locations') }}"
-      when: existing_backups | length > 0
-
-    - debug: 
-        msg: >-
-          BACKED UP: {{ current_backup_dir }}

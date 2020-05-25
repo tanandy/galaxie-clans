@@ -4,60 +4,30 @@
   strategy: linear
 
   vars:
-    backup_dir: "{{ (playbook_dir + '/../backups/' + inventory_hostname) | realpath }}"
-    date_marker: "{{ ansible_date_time.iso8601 }}"
-    backup_iso8601_validation_regex: >-
-      (([1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])Z
+    time_machine_current_backup_dir: "{{ time_machine_backup_dir }}/{{ restore }}"
 
   tasks:
-    - name: Find existing backups
-      find:
-        paths: "{{ backup_dir }}"
-        patterns: "{{ backup_iso8601_validation_regex }}"
-        use_regex: yes
-        file_type: directory
-        recurse: yes
-        depth: 1
-      register: _find_existing_backups
-      delegate_to: localhost
-      become: no
+    - name: Sanity check
+      assert:
+        that:
+          - restore is defined
+          - restore | length > 0
+        msg: >-
+          Defined 'restore' var to target a backup directory to restore.
 
-    - name: Cook variables
-      set_fact:
-        existing_backups: >-
-          {{ 
-            _find_existing_backups.files | default([])
-            | map(attribute='path') | map('regex_replace','.*/', '')
-            | sort | reverse | list
-          }}
-        current_backup_dir: "{{ backup_dir }}/{{ target_backup }}"
+    - name: Find existing backups
+      import_tasks: "{{ playbook_dir }}/inc/_time_machine_find_backups.yml"
 
     - name: Load profile
-      include_vars: "{{ current_backup_dir }}/profile.yml"
+      include_vars: "{{ time_machine_current_backup_dir }}/restore_profile.yml"
 
-    - debug:
-        msg: |-
-          src: "{{ current_backup_dir | realpath }}/{{ item[0].key }}"
-          dest: "{{ item[1] }}"
-      loop: "{{ backup_profile | dict2items | subelements('value.locations') }}"
-    - name: Push backups data back in place
+    - name: "Restore {{ scope }} -- {{ backup }}"
       synchronize:
         mode: push
-        src: "{{ current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}/"
+        src: "{{ time_machine_current_backup_dir }}/{{ item[0].key }}/{{ item[1].name }}/"
         dest: "{{ item[1].path }}"
         use_ssh_args: yes
         compress: yes
         archive: yes
-        rsync_opts:
-          - "--devices"
-          - "--numeric-ids"
-          - "--hard-links"
-          - "--one-file-system" 
-          - "--itemize-changes"
-          - "--stats"
-          - "--human-readable"
-          - "--fake-super" 
-          - "--xattrs"
-          - "--acls"
-      loop: "{{ backup_profile | dict2items | subelements('value.locations') }}"
-
+        rsync_opts: "{{ time_machine_rsync_opts_push }}"
+      loop: "{{ restore_profile | dict2items | subelements('value.locations') }}"

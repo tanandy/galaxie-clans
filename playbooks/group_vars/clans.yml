@@ -37,3 +37,39 @@ clan_alliance_export_content: |-
     | default({})
     | to_nice_yaml
   }}
+
+#
+# Playbook: time_machine.yml
+#
+time_machine_backup_dir: "{{ (playbook_dir + '/../backups/' + inventory_hostname) | realpath }}"
+time_machine_backup_profiles: >-
+  {{ 
+    vars.ansible_local.keys() 
+    | select('match', '^backup_profile_.*$') 
+    | list 
+  }}
+time_machine_date_marker: "{{ ansible_date_time.iso8601 }}"
+time_machine_date_marker_regex: >-
+  (([1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])Z
+time_machine_rsync_opts_common:
+  - "--devices"
+  - "--numeric-ids"
+  - "--hard-links"
+  - "--one-file-system" 
+  - "--itemize-changes"
+  - "--stats"
+  - "--human-readable"
+  - "--fake-super" 
+  - "--xattrs"
+  - "--acls"
+time_machine_rsync_opts_push: "{{ time_machine_rsync_opts_common }}"
+time_machine_link_dest_dir_prefix: >-
+  {%- if (existing_backups | length == 0) -%}
+  {{ time_machine_current_backup_dir }}
+  {%- else -%}
+  {{ time_machine_backup_dir }}/{{ existing_backups[0] }}
+  {%- endif -%}
+time_machine_rsync_opts_link_dest: >-
+  --link-dest={{ time_machine_link_dest_dir_prefix }}/{{ item[0].key }}/{{ item[1].name }}
+time_machine_rsync_opts_pull: >-
+  {{ time_machine_rsync_opts_common + [time_machine_rsync_opts_link_dest] }}
