@@ -65,30 +65,30 @@ root:~# reboot
 
 ### Install `caretaker` user access
 
-* Create `kimserver`'s host variables files
+* __Create `kimserver`'s host variables files__
 
 ```
 mkdir host_vars/kimserver
 touch host_vars/kimserver/main.yml
 ```
 
-* Configure `caretaker`'s first authorized key
+* __Configure `caretaker`'s first authorized key__
 
 Edit `host_vars/kimserver/main.yml` and add:
 ```
 ---
 caretaker_authorized_key_files:
-  - "{{ (playbook_dir + '/../keys/kimserver.key.pub') | realpath}}"
+  - "{{ (playbook_dir + '/../keys/kimserver.key.pub') | realpath }}"
 ```
 
-* Install `caretaker` user
+* __Install `caretaker` user__
 
 Run:
 ```
 ansible-playbook playbooks/clan_caretaker_install.yml -e scope=kimserver -e ansible_ssh_user=root -k
 ```
 
-* Validate access
+* __Validate access__
 
 Run:
 ```
