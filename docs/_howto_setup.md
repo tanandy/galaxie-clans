@@ -9,7 +9,7 @@
 * Have `python > 3.7.3` installed.
 * Have `direnv` [installed](https://direnv.net/docs/installation.html) and [hooked](https://direnv.net/docs/hook.html) to your shell.
 
-## Steps:
+## Steps
 
 ### Clone the project
 
