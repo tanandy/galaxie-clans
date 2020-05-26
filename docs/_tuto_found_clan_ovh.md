@@ -102,6 +102,7 @@ kimserver | SUCCESS => {
 }
 ```
 
-> Congratulations! You now have a normalized `caretaker` access to ease ansible management of you server!
+> Congratulations! You now have a normalized `caretaker` access to ease management of your server by ansible!
 > Your clan is founded! From now on you can search for other tutorials or how-to and go further in the rabbit hole.
-> Welcome in the galaxie-clans.
+>
+> Welcome in the `galaxie-clans`'s brotherhood.
