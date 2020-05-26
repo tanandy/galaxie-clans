@@ -8,15 +8,14 @@ all services enabled.
 ## Starting line
 
 * Have a ready `galaxie-clans` workspace (see [How to setup a galaxie-clans workspace](_howto_setup.md))
-* Have a Kimsufi Server
-* Install it with the template `Debian 9 (Stretch) (64bits)`
-* Validate you can login as root with the newly generated password
+* Have a Kimsufi server, installed with the template `Debian 9 (Stretch) (64bits)`
+* Validate you are able to log as `root`
 
 ## Assumptions
 
-* We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the steps.
+* We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
 * We will use 2 labels that you will have to replace with actual values: `KIM_IPV4` and `KIM_IPV6`.
-* All commands are to be run from the root of your local clone of `galaxie-clans` project.
+* All commands are to be run from the root of your `galaxie-clans` workspace.
 
 ## Steps
 
@@ -40,9 +39,9 @@ Host kimserver
     IdentitiesOnly yes
 ```
 
-* __Add `kimserver` to Ansible inventory__
+* __Update ansible inventory__
 
-You should have `kimserver` as a member of the `clans` group.
+You should have `kimserver` as a member of the `clans` group. Add this section to `hosts`:
 ```
 [clans]
 kimserver
@@ -59,9 +58,50 @@ ansible-playbook playbooks/debian-upgrade-version.yml -e scope=kimserver -e ansi
 
 * Connect to `kimserver` as root and reboot it:
 ```
-$ ssh -F ssh.cfg kimserver -l root
+ssh -F ssh.cfg kimserver -l root
 [...]
-root@ns3000003:~# reboot
+root:~# reboot
 ```
 
-### 
+### Install `caretaker` user access
+
+* Create `kimserver`'s host variables files
+
+```
+mkdir host_vars/kimserver
+touch host_vars/kimserver/main.yml
+```
+
+* Configure `caretaker`'s first authorized key
+
+Edit `host_vars/kimserver/main.yml` and add:
+```
+---
+caretaker_authorized_key_files:
+  - "{{ (playbook_dir + '/../keys/kimserver.key.pub') | realpath}}"
+```
+
+* Install `caretaker` user
+
+Run:
+```
+ansible-playbook playbooks/clan_caretaker_install.yml -e scope=kimserver -e ansible_ssh_user=root -k
+```
+
+* Validate access
+
+Run:
+```
+ansible -m ping kimserver
+```
+It should give you a glorious:
+```
+kimserver | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+> Congratulations! You now have a normalized `caretaker` access to ease ansible management of you server!
+> Your clan is founded! From now on you can search for other tutorials or how-to and go further in the rabbit hole.
+> Welcome in the galaxie-clans.
