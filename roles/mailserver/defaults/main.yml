@@ -39,9 +39,13 @@ postfix_virtual_mailboxes: []
 postfix_virtual_mailbox_domains: []
   # - example.com
   # - localhost
-postfix_virtual_aliases_domains: []
+postfix_virtual_aliases_domains: "{{ postfix_virtual_mailbox_domains }}"
   # - example.com
   # - localhost
+mailserver_services_subdomain: mail
+postfix_smtpd_tls_cert_file: "{{ ssl_certs_dir }}/{{ mailserver_services_subdomain }}.{{ system_base_domain }}.fullchain.crt"
+postfix_smtpd_tls_key_file: "{{ ssl_certs_dir }}/{{ mailserver_services_subdomain }}.{{ system_base_domain }}.key"
+postfix_smtpd_sasl_local_domain: "localhost"
 postfix_mailbox_base: "{{ postfix_virtual_mailbox_home }}"
 postfix_virtual_uid_maps: "static:{{ postfix_virtual_mailbox_uid }}"
 postfix_virtual_gid_maps: "static:{{ postfix_virtual_mailbox_gid }}"
@@ -62,5 +66,7 @@ opendkim_key_table_file: "{{ opendkim_conf_directory }}/key_table"
 opendkim_signing_table_file: "{{ opendkim_conf_directory }}/signing_table"
 opendkim_trusted_hosts_file: "{{ opendkim_conf_directory }}/trusted_hosts"
 opendkim_key_size: 1024
+opendkim_keys: "{{ postfix_virtual_mailbox_domains }}"
+opendmarc_keys: "{{ postfix_virtual_mailbox_domains }}"
 
 mailserver_spam_report_contact: ~

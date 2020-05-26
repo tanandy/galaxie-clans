@@ -123,7 +123,7 @@ system_base_vimrc_lines:
 # Content
 #
 system_base_banner_text: "Galaxie Clans"
-system_base_banner_domain: "{{ ansible_hostname | default('clans.galaxie.family') }}"
+system_base_domain: "{{ ansible_hostname | default('clans.galaxie.family') }}"
 ntp_server_upper_stratum:
   - 0.pool.ntp.org
   - 1.pool.ntp.org

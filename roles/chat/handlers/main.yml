@@ -4,3 +4,7 @@
     name: mattermost
     state: restarted
     daemon_reload: "{{ _mattermost_systemd_service_render is changed }}"
+
+- name: Reload local facts
+  setup:
+    filter: ansible_local

@@ -21,6 +21,12 @@
     - name: Load profile
       include_vars: "{{ time_machine_current_backup_dir }}/restore_profile.yml"
 
+    - name: Stop services
+      service:
+        name: "{{ item[1] }}"
+        state: stopped
+      loop: "{{ restore_profile | dict2items | subelements('value.services') }}"
+
     - name: "Restore {{ scope }} -- {{ backup }}"
       synchronize:
         mode: push
@@ -31,3 +37,9 @@
         archive: yes
         rsync_opts: "{{ time_machine_rsync_opts_push }}"
       loop: "{{ restore_profile | dict2items | subelements('value.locations') }}"
+
+    - name: Start services
+      service:
+        name: "{{ item[1] }}"
+        state: started
+      loop: "{{ restore_profile | dict2items | subelements('value.services') }}"

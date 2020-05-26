@@ -1,12 +1,7 @@
 {% if system_base_banner_figlet_result.stdout %}
 {{ system_base_banner_figlet_result.stdout }}
 {% endif %}
-{% if system_base_banner_domain %}
-Hostname  : {{ ansible_hostname }}.{{ system_base_banner_domain }}
-{% endif %}
-{% if not system_base_banner_domain %}
-Hostname  : {{ ansible_hostname }}
-{% endif %}
+Hostname  : {{ ansible_hostname }}.{{ system_base_domain }}
 {% if ansible_default_ipv4 %}
 eth0 IPv4 : {{ ansible_default_ipv4.address }}
 {% endif %}

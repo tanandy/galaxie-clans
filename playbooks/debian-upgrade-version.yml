@@ -40,6 +40,9 @@
     # TODO: set apt set-selection NOM_KERNEL_VERSION hold if kernel should not upgrade
     # TODO: check with apt-cache policy linux-image-amd64
     # TODO: remove a list of packages before upgrade
+    - name: "Holding grub"
+      raw: >-
+        apt-mark hold grub-*
 
     - name: "Upgrading {{ oldstable }}"
       raw: >-

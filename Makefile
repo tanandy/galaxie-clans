@@ -25,8 +25,8 @@ requirements:
 	direnv allow .
 	direnv reload
 	pip install -U -r requirements.txt --no-cache
-	ansible-galaxy install -fr requirements.yml
 	direnv reload
+#	ansible-galaxy install -fr requirements.yml
 
 first-date: sys-requirements hook-bash requirements
 

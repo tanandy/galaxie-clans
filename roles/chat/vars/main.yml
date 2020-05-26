@@ -41,3 +41,19 @@ mattermost_docker_compose_env_file: "{{ mattermost_root_directory }}/.env"
 mattermost_docker_images:
   app: "mattermost/mattermost-team-edition:{{ mattermost_container_version_app }}"
   db: "mattermost/mattermost-prod-db:{{ mattermost_container_version_db }}"
+
+chat_backup_profile_file: "/etc/ansible/facts.d/backup_profile_chat.fact"
+chat_backup_profile:
+  services:
+    - mattermost
+  locations:
+    - name: "mattermost_db"
+      path: "{{ mattermost_db_directory }}/"
+    - name: "mattermost_config"
+      path: "{{ mattermost_config_directory }}/"
+    - name: "mattermost_data"
+      path: "{{ mattermost_data_directory }}/"
+    - name: "mattermost_plugins"
+      path: "{{ mattermost_plugins_directory }}/"
+    - name: "mattermost_client_plugins"
+      path: "{{ mattermost_client_plugins_directory }}/"

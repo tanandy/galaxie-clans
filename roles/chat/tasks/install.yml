@@ -84,6 +84,12 @@
     source: pull
   loop: "{{ mattermost_docker_images | dict2items }}"
 
+- name: Render backup profile
+  template:
+    src: "backup_profile.j2"
+    dest: "{{ chat_backup_profile_file }}"
+  notify: Reload local facts
+    
 - name: Start service
   systemd:
     name: mattermost

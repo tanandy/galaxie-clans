@@ -24,7 +24,7 @@ clan_system_packages:
   - python3-setuptools
   - python-apt-dev
   - sudo
-clan_caretaker_name: zoe
+clan_caretaker_name: caretaker
 clan_caretaker_uid: 4200
 clan_caretaker_gid: 4200
 clan_caretaker_home: "/home/{{ clan_caretaker_name }}"

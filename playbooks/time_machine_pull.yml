@@ -30,9 +30,11 @@
       delegate_to: localhost
       become: no
 
-    - debug:
-        msg: >- 
-          {{ (existing_backups | length == 0) | ternary('ZERO', 'NON-ZERO') }}
+    - name: Stop services
+      service:
+        name: "{{ item[1] }}"
+        state: stopped
+      loop: "{{ time_machine_profiles_to_backup | dict2items | subelements('value.services') }}"
 
     - name: Backup
       synchronize:
@@ -55,3 +57,9 @@
           }}
       delegate_to: localhost
       become: no
+
+    - name: Start services
+      service:
+        name: "{{ item[1] }}"
+        state: started
+      loop: "{{ time_machine_profiles_to_backup | dict2items | subelements('value.services') }}"
