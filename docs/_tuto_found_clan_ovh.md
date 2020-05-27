@@ -3,18 +3,24 @@
 # Tutorial: Found a galaxie-clan on a Kimsufi server
 
 This tutorial will guide you through installing a fresh clan instance on a Kimsufi server, from zero to
-all services enabled.
+all services enabled. 
+
+> This is no marketing bullshit intending to push you into renting a Kimsufi server.
+>
+> This is only based on our available infrastructure at the time of writing.
 
 ## Starting line
 
-* Have a ready `galaxie-clans` workspace (see [How to setup a galaxie-clans workspace](_howto_setup.md))
-* Have a Kimsufi server, installed with the template `Debian 9 (Stretch) (64bits)`
-* Validate you are able to log as `root`
+* Have a ready `galaxie-clans` workspace (see [How to setup a galaxie-clans workspace](_howto_setup.md)).
+* Have a [Kimsufi](https://www.kimsufi.com/) server, installed with the template `Debian 9 (Stretch) (64bits)`.
+* Validate you are able to log as `root`.
+* Configure a DNS to delegate a SOA to your server.
 
 ## Assumptions
 
 * We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
 * We will use 2 labels that you will have to replace with actual values: `KIM_IPV4` and `KIM_IPV6`.
+* The domain that `kimserver` is SOA for will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
 ## Steps
@@ -47,16 +53,16 @@ You should have `kimserver` as a member of the `clans` group. Add this section t
 kimserver
 ```
 
-> Congratulations! You now have your server at hand to perform `galaxie-clans` installation.
+> Congratulations! You now have your server at hand to perform `galaxie-clans` installation!
 
 ### Upgrade to Debian Buster
 
-* From your `galaxie-clans` workspace, run:
+* __Perform in-place upgrade__
 ```
 ansible-playbook playbooks/debian-upgrade-version.yml -e scope=kimserver -e ansible_ssh_user=root
 ```
 
-* Connect to `kimserver` as root and reboot it:
+* __Reboot the server__
 ```
 ssh -F ssh.cfg kimserver -l root
 [...]
@@ -66,14 +72,12 @@ root:~# reboot
 ### Install `caretaker` user access
 
 * __Create `kimserver`'s host variables files__
-
 ```
 mkdir host_vars/kimserver
 touch host_vars/kimserver/main.yml
 ```
 
 * __Configure `caretaker`'s first authorized key__
-
 Edit `host_vars/kimserver/main.yml` and add:
 ```
 ---

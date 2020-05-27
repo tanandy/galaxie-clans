@@ -43,6 +43,7 @@
     - name: "Holding grub"
       raw: >-
         apt-mark hold grub-*
+      when: grub_upgrade is not defined or grub_upgrade is False
 
     - name: "Upgrading {{ oldstable }}"
       raw: >-
