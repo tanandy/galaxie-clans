@@ -59,6 +59,8 @@ Originaly written for managing a Home Network with external services. The projec
 
 Galaxie-Clans is a true mix of the two world, by luck author Tuuux and Mo have made the necessary to have no compromise.
 
-Bear in mind folks: Tech purity is cancer of mind.
+Bear in mind folks: Tech purity is cancer for the mind.
 
 It would be an honor if you could use our work in any way. Be it as-is or as code samples.
+
+Have fun, hack in peace.
