@@ -1,6 +1,6 @@
 [Galaxie-Clans Documentation](README.md) / [Tutorials](_TUTO__.md)
 
-# Tutorial: Found a galaxie-clan on a Kimsufi server
+# Tutorial: Found a Galaxie Clan on a Kimsufi server
 
 This tutorial will guide you through installing a fresh clan instance on a Kimsufi server, from zero to
 all services enabled. 
@@ -23,15 +23,15 @@ all services enabled.
 * The domain that `kimserver` is SOA for will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
-## Steps
+## Step 1: Integrate your server into `galaxie-clans` standards
 
 ### Add `kimserver` to managed servers
 
 * __Generate a key for later connections__
 
-From your `galaxie-clans` workspace, run:
+Run:
 ```
-$ ssh-keygen -t ed25519 -f ./keys/kimserver.key -C "caretaker@kimserver" -N ""
+ssh-keygen -t ed25519 -f ./keys/kimserver.key -C "caretaker@kimserver" -N ""
 ```
 
 * __Configure SSH client__
@@ -47,7 +47,9 @@ Host kimserver
 
 * __Update ansible inventory__
 
-You should have `kimserver` as a member of the `clans` group. Add this section to `hosts`:
+You should have `kimserver` as a member of the `clans` group. 
+
+Add this to the `hosts` file:
 ```
 [clans]
 kimserver
@@ -59,7 +61,7 @@ kimserver
 
 * __Perform in-place upgrade__
 ```
-ansible-playbook playbooks/debian-upgrade-version.yml -e scope=kimserver -e ansible_ssh_user=root
+ansible-playbook playbooks/debian-upgrade-version.yml -e scope=kimserver -e ansible_ssh_user=root -k
 ```
 
 * __Reboot the server__
@@ -74,13 +76,12 @@ root:~# reboot
 * __Create `kimserver`'s host variables files__
 ```
 mkdir host_vars/kimserver
-touch host_vars/kimserver/main.yml
+echo '---' > host_vars/kimserver/main.yml
 ```
 
 * __Configure `caretaker`'s first authorized key__
-Edit `host_vars/kimserver/main.yml` and add:
+Edit `host_vars/kimserver/main.yml` file. Add:
 ```
----
 caretaker_authorized_key_files:
   - "{{ (playbook_dir + '/../keys/kimserver.key.pub') | realpath }}"
 ```
@@ -98,7 +99,8 @@ Run:
 ```
 ansible -m ping kimserver
 ```
-It should give you a glorious:
+
+It should give you a __glorious__:
 ```
 kimserver | SUCCESS => {
     "changed": false,
@@ -106,10 +108,22 @@ kimserver | SUCCESS => {
 }
 ```
 
+>
 > Congratulations! You now have a normalized `caretaker` access to ease management of your server by ansible!
 >
+
+## Step 2: Configure services
+
+### Configure delegated NS domain
+
+### Configure services
+
+## Step 3: Deploy services
+
+## Step 4: Enjoy
+
 > Your clan is founded!
 >
-> Welcome in the `galaxie-clans`'s brotherhood.
+> Welcome in the `galaxie-clans`'s community.
 >
 > From now on you can search [documentation](README.md) for other materials and go further in the rabbit hole.
