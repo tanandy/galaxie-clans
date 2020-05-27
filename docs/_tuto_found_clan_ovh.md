@@ -19,8 +19,8 @@ all services enabled.
 ## Assumptions
 
 * We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
-* We will use 2 labels that you will have to replace with actual values: `KIM_IPV4` and `KIM_IPV6`.
-* The domain that `kimserver` is SOA for will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
+* We will use 2 labels that you will have to replace with actual values: `CLAN_IPV4`.
+* The domain that `kimserver` is SOA for, will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
 ## Step 1: Integrate your server into `galaxie-clans` standards
@@ -61,30 +61,10 @@ kimserver
 
 * __Perform in-place upgrade__
 ```
-ansible-playbook playbooks/debian-upgrade-version.yml -e scope=kimserver -e ansible_ssh_user=root -k
-```
-
-* __Reboot the server__
-```
-ssh -F ssh.cfg kimserver -l root
-[...]
-root:~# reboot
+ansible-playbook playbooks/debian_upgrade_version.yml -e scope=kimserver -e ansible_ssh_user=root -k
 ```
 
 ### Install `caretaker` user access
-
-* __Create `kimserver`'s host variables files__
-```
-mkdir host_vars/kimserver
-echo '---' > host_vars/kimserver/main.yml
-```
-
-* __Configure `caretaker`'s first authorized key__
-Edit `host_vars/kimserver/main.yml` file. Add:
-```
-caretaker_authorized_key_files:
-  - "{{ (playbook_dir + '/../keys/kimserver.key.pub') | realpath }}"
-```
 
 * __Install `caretaker` user__
 
@@ -114,12 +94,33 @@ kimserver | SUCCESS => {
 
 ## Step 2: Configure services
 
-### Configure delegated NS domain
+* __Create host variables file__
+```
+mkdir host_vars/kimserver
+echo '---' > host_vars/kimserver/main.yml
+```
 
-### Configure services
+* __Configure host variables__
+
+Edit `host_vars/kimserver/main.yml` file. Add:
+```
+system_base_domain: "tuto.galaxie.clans"
+dns_enable: yes
+mailserver_enable: yes
+rproxy_enable: yes
+chat_enable: yes
+videoconf_enable: yes
+calendar_enable: yes
+```
 
 ## Step 3: Deploy services
 
+Run:
+```
+ansible-playbook playbooks/setup_core_services.yml -e scope=kimserver
+ansible-playbook playbooks/acme_rotate_certificates.yml -e scope=kimserver
+ansible-playbook playbooks/setup_broadcast_services.yml -e scope=kimserver
+```
 ## Step 4: Enjoy
 
 > Your clan is founded!

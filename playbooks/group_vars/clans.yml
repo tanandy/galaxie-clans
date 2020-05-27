@@ -1,12 +1,16 @@
 ---
-#
-# General
+#########################################
+# GENERAL
 #
 ansible_python_interpreter: /usr/bin/python3
 local_secrets_dir: "{{ (playbook_dir + '/../secrets') | realpath }}"
+local_keys_dir: "{{ (playbook_dir + '/../keys') | realpath }}"
+local_backups_dir: "{{ (playbook_dir + '/../backups') | realpath }}"
 ssl_certs_dir: "/etc/ssl/private"
-#
-# PLAYBOOK clan-caretaker-install.yml
+caretaker_authorized_key_files:
+  - "{{ (playbook_dir + '/../keys/' + inventory_hostname + '.key.pub') | realpath }}"
+#########################################
+# PLAYBOOK clan_caretaker_install.yml
 #
 clan_system_packages:
   - apt-transport-https
@@ -30,18 +34,17 @@ clan_caretaker_gid: 4200
 clan_caretaker_home: "/home/{{ clan_caretaker_name }}"
 clan_allies_group: "{{ clan_name }}_allies"
 clan_allies_os_group: "allies"
-clan_allies_keystore_path: "{{ playbook_dir }}/../keys/{{ clan_name }}/allies"
+clan_allies_keystore_path: "{{ local_keys_dir }}/{{ clan_name }}/allies"
 clan_alliance_export_content: |-
   {{
     clan_allies_export[with_clan]
     | default({})
     | to_nice_yaml
   }}
-
+#########################################
+# PLAYBOOK: time_machine_pull.yml + time_machine_push.yml
 #
-# Playbook: time_machine.yml
-#
-time_machine_backup_dir: "{{ (playbook_dir + '/../backups/' + inventory_hostname) | realpath }}"
+time_machine_backup_dir: "{{ local_backups_dir }}/{{ inventory_hostname }}"
 time_machine_backup_profiles: >-
   {{ 
     vars.ansible_local.keys() 
@@ -73,3 +76,142 @@ time_machine_rsync_opts_link_dest: >-
   --link-dest={{ time_machine_link_dest_dir_prefix }}/{{ item[0].key }}/{{ item[1].name }}
 time_machine_rsync_opts_pull: >-
   {{ time_machine_rsync_opts_common + [time_machine_rsync_opts_link_dest] }}
+#########################################
+# ROLE: system_users
+#
+system_users:
+  - uname: autobot
+    uid: 47000
+    shell: /bin/false
+
+#########################################
+# ROLE: dns
+#
+bind_allow_query: ['any']
+bind_listen_ipv4:
+  - "{{ ansible_default_ipv4.address }}"
+  - "127.0.0.1"
+bind_listen_ipv6:
+  - "{{ ansible_default_ipv6.address }}"
+  - "::1"
+bind_recursion: true
+bind_allow_recursion:
+  - "127.0.0.1"
+bind_forwarders:
+  - "127.0.0.1"
+bind_zone_domains:
+  - name: "{{ system_base_domain }}"
+    type: master
+    hostmaster_email: "hostmaster.{{ system_base_domain }}"
+    allow_update:
+      - "localhost"
+    name_servers:
+      - ns1
+    mail_servers:
+      - name: mail
+        preference: 10
+    text:
+      - name: "{{ system_base_domain }}."
+        text: "v=spf1 mx -all"
+    hosts:
+      - name: ""
+        ip: "{{ ansible_default_ipv4.address }}"
+        ipv6: "{{ ansible_default_ipv6.address }}"
+        
+      - name: "{{ inventory_hostname }}"
+        ip: "{{ ansible_default_ipv4.address }}"
+        ipv6: "{{ ansible_default_ipv6.address }}"
+        aliases:
+          - cal
+          - chat
+          - meet
+          - stun
+          
+      - name: ns1
+        ip: "{{ ansible_default_ipv4.address }}"
+        ipv6: "{{ ansible_default_ipv6.address }}"
+
+      - name: mail
+        ip: "{{ ansible_default_ipv4.address }}"
+        ipv6: "{{ ansible_default_ipv6.address }}"
+
+#########################################
+# ROLE: mailserver
+#
+postfix_virtual_mailbox_domains:
+  - "{{ system_base_domain }}"
+postfix_virtual_mailboxes:
+  - email: "hostmaster@{{ system_base_domain }}"
+    recipient: "hostmaster@{{ system_base_domain }}/"
+    system_user: autobot
+mailserver_spam_report_contact: "hostmaster@{{ system_base_domain }}"
+
+#########################################
+# ROLE: videoconf
+#
+jitsi_meet_public_domain: "meet.{{ system_base_domain }}"
+jitsi_meet_stun_public_domain: "stun.{{ system_base_domain }}"
+jitsi_meet_support_url: "https://{{ jitsi_meet_public_domain }}"
+jitsi_meet_certificate_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.fullchain.crt"
+jitsi_meet_certificate_key_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.key"
+jitsi_meet_stun_servers:
+  - "stun:{{ jitsi_meet_stun_public_domain }}:3478"
+  - "stun:stun.galaxie.eu.org:3478"
+  - "stun:stun.clans.galaxie.family:3478"
+
+#########################################
+# ROLE: rproxy
+#
+rproxy_nginx_managed_sites:
+  - "jitsi-meet"
+  - "calendar"
+  - "mattermost"
+
+#########################################
+# PLAYBOOK: acme_rotate_certificates.yml
+#
+acme_account_email: "hostmaster@{{ system_base_domain }}"
+acme_domains:
+  - cn: "{{ system_base_domain }}"
+    zone: "{{ system_base_domain }}"
+    alt:
+      - "DNS:mail.{{ system_base_domain }}"
+      - "DNS:{{ calendar_public_domain }}"
+      - "DNS:{{ mattermost_public_domain }}"
+      - "DNS:meet.{{ system_base_domain }}"
+      - "DNS:stun.{{ system_base_domain }}"
+      - "DNS:{{ inventory_hostname }}.{{ system_base_domain }}"
+
+#########################################
+# ROLE: calendar
+#
+calendar_public_domain: "cal.{{ system_base_domain }}"
+calendar_certificate_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.fullchain.crt"
+calendar_certificate_key_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.key"
+
+#########################################
+# ROLE: chat
+#
+
+mattermost_public_domain: "chat.{{ system_base_domain }}"
+
+mattermost_certificate_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.fullchain.crt"
+mattermost_certificate_key_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.key"
+
+mattermost_sitename: "Chat"
+mattermost_jitsi_meet_url: "https://{{ jitsi_meet_public_domain }}"
+
+mattermost_email_feedback: "hostmaster@{{ system_base_domain }}"
+mattermost_support_email: "{{ mattermost_email_feedback }}"
+mattermost_email_reply_to: "{{ mattermost_email_feedback }}"
+
+mattermost_smtp_host: "mail.{{ system_base_domain }}"
+mattermost_smtp_port: "465"
+mattermost_smtp_user: "{{ (system_users | selectattr('uid', 'equalto', 47000) | list)[0].uname}}"
+mattermost_smtp_pass: >-
+  {{ 
+    lookup('password', 
+      local_secrets_dir + '/system_users/' + inventory_hostname + '/' + mattermost_smtp_user + '.password'
+    )
+  }}
+mattermost_smtp_connection_security: "TLS"

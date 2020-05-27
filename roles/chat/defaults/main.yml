@@ -1,5 +1,5 @@
 ---
-mattermost_enable: no
+chat_enable: no
 
 mattermost_public_domain: ~
 mattermost_certificate_file: ~

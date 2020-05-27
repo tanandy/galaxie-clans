@@ -13,6 +13,7 @@
 
 * [Debian Stable](https://www.debian.org/): with ipv4 (and ideally with ipv6 interface too)
 * SSH access: as root or full sudo
+* NS domain delegation
 
 ## Trunk Services
 
@@ -29,7 +30,7 @@ Core services are installed at the operating system level.
 * **DNS**: Based on [bind](https://www.isc.org/bind/)
 * **FIREWALL**: Based on [ufw](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29)
 * **MONITOR**: Based on [netdata](https://www.netdata.cloud/)
-* **BACKUP**: Based on [borg](https://www.borgbackup.org/)
+* **BACKUP**: Based on [rsync](https://rsync.samba.org/)
 * **MAILSERVER**: Based on [postfix](http://www.postfix.org/) & [dovecot](https://www.dovecot.org/)
 
 ### High-Level Hub (GREY)

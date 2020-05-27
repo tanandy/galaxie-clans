@@ -1,5 +1,5 @@
 ---
-jitsi_meet_enable: no
+videoconf_enable: no
 
 jitsi_meet_public_domain: ~
 jitsi_meet_stun_public_domain: ~

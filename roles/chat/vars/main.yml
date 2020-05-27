@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_mattermost_uninstall: "{{ mattermost_uninstall | default(false) | bool }}"
+_chat_uninstall: "{{ chat_uninstall | default(false) | bool }}"
 #
 # Directories
 #

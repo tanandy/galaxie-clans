@@ -12,12 +12,10 @@
 - hosts: "{{ scope }}"
   gather_facts: no
 
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-
   vars:
     oldstable: stretch
     stable: buster
+    noninteractive: "DEBIAN_FRONTEND=noninteractive"
     apt_update_cmd: >-
       apt-get update -y
     apt_upgrade_options: >-
@@ -47,7 +45,7 @@
 
     - name: "Upgrading {{ oldstable }}"
       raw: >-
-        {{ item }}
+        {{ noninteractive }} {{ item }}
       loop: "{{ apt_upgrade_choregraphy }}"
 
     - name: "Pivoting from {{ oldstable }} to {{ stable }}"
@@ -56,12 +54,11 @@
 
     - name: "Upgrading {{ stable }}"
       raw: >-
-        {{ item }}
+        {{ noninteractive }} {{ item }}
       loop: "{{ apt_upgrade_choregraphy }}"
       when: oldstable != stable
 
     # TODO: reinstall a list of packages after upgrade
 
-    - debug:
-        msg: >-
-          ==> Upgraded from {{ oldstable }} to {{ stable }}. Ready to reboot <==
+    - name: Reboot
+      reboot:

@@ -4,17 +4,17 @@
 #
 - import_tasks: "checks.yml"
   when:
-    - not _mattermost_uninstall
-    - mattermost_enable | bool
+    - not _chat_uninstall
+    - chat_enable | bool
 
 - include_tasks: "install.yml"
   when:
-    - not _mattermost_uninstall
-    - mattermost_enable | bool
+    - not _chat_uninstall
+    - chat_enable | bool
 
 - include_tasks: "uninstall.yml"
   when:
-    - _mattermost_uninstall
-    - not (mattermost_enable | bool)
+    - _chat_uninstall
+    - not (chat_enable | bool)
 
 - meta: flush_handlers

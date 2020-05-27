@@ -1,6 +1,6 @@
 # roles/bind/defaults/main.yml
 ---
-bind_enable: no
+dns_enable: no
 
 bind_log: "data/named.run"
 

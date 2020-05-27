@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_jitsi_meet_uninstall: "{{ jitsi_meet_uninstall | default(false) | bool }}"
+_videoconf_uninstall: "{{ videoconf_uninstall | default(false) | bool }}"
 #
 # Passwords generation
 #

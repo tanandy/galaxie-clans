@@ -1,0 +1,19 @@
+---
+#- name: Gathering facts
+#  hosts: "clans:!allies"
+#  become: yes
+#  gather_facts: yes
+#  tags:
+#    - always
+
+- name: Deploy system-level services
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+  roles:
+    - role: "system_base"
+    - role: "system_users"
+    - role: "dns"
+    - role: "mailserver"
+    - role: "firewall"
+    - role: "monitor"

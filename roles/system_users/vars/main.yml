@@ -3,7 +3,7 @@ _system_users_uninstall: "{{ system_users_uninstall | default(false) | bool }}"
 
 system_users_default_shell: "/bin/bash"
 system_users_default_home: "/home/{{ current_user.uname }}"
-system_users_local_passwords_dir: "{{ local_secrets_dir }}/system_users"
+system_users_local_passwords_dir: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}"
 
 system_users_password: "{{ }}"
 system_users_reserved:

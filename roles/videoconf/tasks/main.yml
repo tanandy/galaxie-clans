@@ -4,17 +4,17 @@
 #
 - import_tasks: "checks.yml"
   when:
-    - not _jitsi_meet_uninstall
-    - jitsi_meet_enable | bool
+    - not _videoconf_uninstall
+    - videoconf_enable | bool
 
 - include_tasks: "install.yml"
   when:
-    - not _jitsi_meet_uninstall
-    - jitsi_meet_enable | bool
+    - not _videoconf_uninstall
+    - videoconf_enable | bool
 
 - include_tasks: "uninstall.yml"
   when:
-    - _jitsi_meet_uninstall
-    - not (jitsi_meet_enable | bool)
+    - _videoconf_uninstall
+    - not (videoconf_enable | bool)
 
 - meta: flush_handlers

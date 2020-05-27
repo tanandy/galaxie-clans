@@ -8,7 +8,7 @@
     - name: Sanity checks
       assert:
         that:
-          - amce_domains is defined
+          - acme_domains is defined
 
     - name: Create acme key directory
       file:
@@ -19,6 +19,6 @@
         group: ssl-cert
 
     - include_tasks: "{{ playbook_dir }}/inc/_acme-rotate-certificate.yml"
-      loop: "{{ amce_domains }}"
+      loop: "{{ acme_domains }}"
       loop_control:
         loop_var: _domain_to_certify

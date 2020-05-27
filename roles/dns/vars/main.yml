@@ -2,7 +2,7 @@
 #
 # Uninstall flag
 #
-_bind_uninstall: "{{ bind_uninstall is defined and bind_uninstall | bool }}"
+_dns_uninstall: "{{ dns_uninstall is defined and dns_uninstall | bool }}"
 
 bind_master_zone_domains: "{{ bind_zone_domains | selectattr('type', 'equalto', 'master') | list }}"
 
