@@ -145,7 +145,8 @@ postfix_virtual_mailboxes:
     recipient: "hostmaster@{{ system_base_domain }}/"
     system_user: autobot
 mailserver_spam_report_contact: "hostmaster@{{ system_base_domain }}"
-
+postfix_smtpd_tls_cert_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.fullchain.crt"
+postfix_smtpd_tls_key_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.key"
 #########################################
 # ROLE: videoconf
 #
