@@ -3,8 +3,8 @@ site_name: Galaxie Clans
 nav:
   - Home: README.md
   - Tutorials: _TUTO__.md
-  - Topics: _TOPIC__.md
-  - How-To: _HOWTO__.md
-  - References: _REF__.md
+  - 'Topics Guides': _TOPIC__.md
+  - 'How-To Guides': _HOWTO__.md
+  - 'References Guides': _REF__.md
 
 theme: readthedocs

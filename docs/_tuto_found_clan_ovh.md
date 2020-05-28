@@ -19,7 +19,7 @@ all services enabled.
 ## Assumptions
 
 * We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
-* We will use 2 labels that you will have to replace with actual values: `CLAN_IPV4`.
+* We will use the label `$KIM_IPV4` instead of a real IP address. replace with actual values when following instructions.
 * The domain that `kimserver` is SOA for, will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
@@ -39,7 +39,7 @@ ssh-keygen -t ed25519 -f ./keys/kimserver.key -C "caretaker@kimserver" -N ""
 Add a block to your `ssh.cfg`:
 ```
 Host kimserver
-    Hostname KIM_IPV4
+    Hostname $KIM_IPV4
     User caretaker
     IdentityFile ./keys/kimserver.key
     IdentitiesOnly yes
