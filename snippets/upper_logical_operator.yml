@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  become: no
+
+  vars:
+    input_1: [False, True]
+    input_2: [False, True]
+
+  tasks:
+    - debug:
+        msg: |
+          ===== {{ item.0 }} XNOR {{  item.1 }} IS {{ item.0 == item.1 }} =====
+      loop: "{{ input_1 | product(input_2) | list }}"
+
+    - debug:
+        msg: |
+          ===== {{ item.0 }} XOR {{  item.1 }} IS {{ item.0 != item.1 }} =====
+      loop: "{{ input_1 | product(input_2) | list }}"
+
+    - debug:
+        msg: |
+          ===== {{ item.0 }} NOR {{  item.1 }} IS {{ (not item.0) and (not item.1) }} =====
+      loop: "{{ input_1 | product(input_2) | list }}"
+
+    - debug:
+        msg: |
+          ===== {{ item.0 }} NAND {{  item.1 }} IS {{ not (item.0 and item.1) }} =====
+      loop: "{{ input_1 | product(input_2) | list }}"

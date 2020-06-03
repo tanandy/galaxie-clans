@@ -24,3 +24,4 @@ ssh.cfg
 roles/tmp-*
 rsync_tmbackup.sh
 backups
+uranus-migration.md

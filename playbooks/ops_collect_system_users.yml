@@ -1,0 +1,76 @@
+---
+- hosts: "{{ scope }}"
+  become: yes
+
+  tasks:
+    - name: Find regular users homes
+      find:
+        paths: /home
+        recurse: no
+        file_type: directory
+        excludes: "lost+found"
+      register: home_directories
+
+    - name: Cook variables
+      set_fact:
+        system_users: "{{ system_users | default({}) | combine ({ (item): { 'uname': item } }) }}"
+      loop: "{{ home_directories.files | map(attribute='pw_name') | list }}"
+
+    - debug:
+        var: system_users
+
+    - name: Gather uid
+      shell: >-
+        id -u {{ item.key }}
+      loop: "{{ system_users | dict2items }}"
+      register: gather_uid
+
+    - name: Cook variables
+      set_fact:
+        system_users: >- 
+          {{ 
+            system_users | combine(
+              { 
+                (item.item.key): system_users[item.item.key] | combine({ 'uid': item.stdout }) 
+              }
+            ) 
+          }}
+      loop: "{{ gather_uid.results }}"
+
+    - debug:
+        var: system_users
+
+    - name: Gather groups
+      shell: >-
+        id -G {{ item.key }}
+      loop: "{{ system_users | dict2items }}"
+      register: gather_groups
+
+    - name: Cook variables
+      set_fact:
+        system_users: >- 
+          {{ 
+            system_users | combine(
+              { (item.item.key): system_users[item.item.key] | combine({ 'group_ids': item.stdout.split(' ') }) }
+            ) 
+          }}
+      loop: "{{ gather_groups.results }}"
+
+    - name: Cook gather_groups_ids
+      set_fact:
+        gather_groups_ids: "{{ gather_groups_ids | default([]) + item.value.group_ids }}"
+      loop: "{{ system_users | dict2items }}"
+
+    - name: Gather groups
+      shell: >-
+        getent group {{ item }} | cut -d ":" -f1
+      loop: "{{ gather_groups_ids | unique }}"
+      register: gather_groups
+
+    - name: Cook gathered_groups
+      set_fact:
+        gathered_groups: "{{ gathered_groups | default({}) | combine({(item.item): item.stdout}) }}"
+      loop: "{{ gather_groups.results }}"
+
+    - debug:
+        var: gathered_groups
