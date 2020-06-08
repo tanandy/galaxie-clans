@@ -9,6 +9,11 @@ local_backups_dir: "{{ (playbook_dir + '/../backups') | realpath }}"
 ssl_certs_dir: "/etc/ssl/private"
 caretaker_authorized_key_files:
   - "{{ (playbook_dir + '/../keys/' + inventory_hostname + '.key.pub') | realpath }}"
+
+ssl_certs_file_extensions:
+  - "crt"
+  - "fullchain.crt"
+  - "key"
 #########################################
 # PLAYBOOK clan_caretaker_install.yml
 #

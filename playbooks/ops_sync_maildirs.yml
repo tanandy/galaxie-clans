@@ -1,0 +1,38 @@
+---
+- hosts: "{{ scope }}"
+  become: yes
+
+  tasks:
+    - name: Find regular users homes
+      find:
+        paths: "/home"
+        recurse: yes
+        depth: 2
+        file_type: directory
+        patterns: "Maildir"
+      register: mail_dirs
+
+    - set_fact:
+        sync_orders: >-
+          {{
+            sync_orders | default([])
+            + [{
+              'src': item.path + '/',
+              'dst': '/home/vmail/' + item.pw_name + '@' + system_base_domain
+            }]
+          }}
+      loop: "{{ mail_dirs.files }}"
+
+    - name: Synchronize two directories on one remote host.
+      synchronize:
+        src: "{{ item.src }}"
+        dest: "{{ item.dst }}"
+      loop: "{{ sync_orders }}"
+      delegate_to: "{{ inventory_hostname }}"
+
+    - name: Fix ownership
+      shell: >-
+        chown vmail:vmail /home/vmail -R
+        
+    - debug:
+        var: sync_orders

@@ -1,0 +1,58 @@
+---
+- hosts: "{{ cert_src }}"
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Get certificates files content
+      slurp:
+        src: "{{ ssl_certs_dir }}/{{ item.0 }}.{{ item.1 }}"
+      loop: "{{ [cert_name] | product(ssl_certs_file_extensions) | list }}"
+      register: slurped_certs
+
+
+- hosts: "{{ cert_dst }}"
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Cooking variables - certificate components
+      set_fact:
+        certificate_components: >-
+          {{
+            certificate_components | default({})
+            | combine({
+              (item): (
+                  hostvars[cert_src].slurped_certs.results | selectattr('item', 'equalto', [cert_name, item]) | list
+                )[0]
+            })
+          }}
+      loop: "{{ ssl_certs_file_extensions }}"
+    
+    - name: Check destination certificates files
+      stat:
+        path: "{{ ssl_certs_dir }}/{{ item.0 }}.{{ item.1 }}"
+      loop: "{{ [cert_name] | product(ssl_certs_file_extensions) | list }}"
+      register: destination_cert_files
+
+    - debug:
+        msg: "{{ destination_cert_files.results }}"
+
+    - name: Fail if destination files already exist
+      fail:
+        msg: "File {{ ssl_certs_dir }}/{{ item.0 }}.{{ item.1 }} already exist"
+      when:
+        - (destination_cert_files.results | selectattr('item', 'equalto', [cert_name, item.1]) | list)[0].stat.exists
+      loop: "{{ [cert_name] | product(ssl_certs_file_extensions) | list }}"
+
+    - name: Render certificate components
+      copy:
+        dest: "{{ ssl_certs_dir }}/{{ cert_name }}.{{ item }}"
+        content: >-
+          {{ 
+            certificate_components[item].content | b64decode
+          }}
+        owner: root
+        group: ssl-cert
+        mode: 0640
+      loop: "{{ ssl_certs_file_extensions }}"

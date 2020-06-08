@@ -1,0 +1,26 @@
+---
+- hosts: "{{ scope }}"
+  become: yes
+
+  tasks:
+    - file:
+        path: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}"
+        state: directory
+      delegate_to: localhost
+      become: no
+
+    - copy:
+        dest: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}/{{ item.uname }}.password.sha512"
+        content: >-
+          {{ item.shadow }}
+      loop: "{{ system_users }}"
+      delegate_to: localhost
+      become: no
+
+    - copy:
+        dest: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}/{{ item.uname }}.password.bcrypt"
+        content: >-
+          {{ item.shadow }}
+      loop: "{{ system_users }}"
+      delegate_to: localhost
+      become: no

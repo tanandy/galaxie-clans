@@ -5,7 +5,7 @@
   tasks:
     - name: Find regular users homes
       find:
-        paths: /home
+        paths: "/home"
         recurse: no
         file_type: directory
         excludes: "lost+found"
@@ -46,6 +46,12 @@
       loop: "{{ system_users | dict2items }}"
       register: gather_groups
 
+    - name: Gather shadows
+      shell: >-
+        cat /etc/shadow | grep {{ item.key }} | cut -d ":" -f2 
+      loop: "{{ system_users | dict2items }}"
+      register: gather_shadows
+
     - name: Cook variables
       set_fact:
         system_users: >- 
@@ -55,6 +61,16 @@
             ) 
           }}
       loop: "{{ gather_groups.results }}"
+
+    - name: Cook variables
+      set_fact:
+        system_users: >- 
+          {{ 
+            system_users | combine(
+              { (item.item.key): system_users[item.item.key] | combine({ 'shadow': item.stdout }) }
+            ) 
+          }}
+      loop: "{{ gather_shadows.results }}"
 
     - name: Cook gather_groups_ids
       set_fact:
@@ -72,5 +88,14 @@
         gathered_groups: "{{ gathered_groups | default({}) | combine({(item.item): item.stdout}) }}"
       loop: "{{ gather_groups.results }}"
 
+    
+
     - debug:
-        var: gathered_groups
+        msg: |
+          system_users:
+          {{ system_users | dict2items | map(attribute='value') | list | to_nice_yaml(indent=2) }}
+
+    - debug:
+        msg: |
+          gathered_groups:
+          {{ gathered_groups | to_nice_yaml(indent=2) }}
