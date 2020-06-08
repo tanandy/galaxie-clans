@@ -30,12 +30,6 @@
   when:
     - locale_gen_status.changed
 
-- name: Install manpages in desired language
-  apt:
-    pkg:
-      - "manpages-{{ system_base_language }}"
-  when: system_base_install_localized_manpages | bool
-
 - name: Create ansible directories
   file:
     path: "{{ item }}"

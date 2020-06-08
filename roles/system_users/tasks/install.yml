@@ -35,12 +35,13 @@
 - name: Authorize user key
   authorized_key:
     user: "{{ current_user.uname }}"
-    key: "{{ current_user.authorized_key | default('') }}"
-    exclusive: yes
+    key: "{{ current_user.authorized_key }}"
+    exclusive: no
     manage_dir: yes
   loop: "{{ system_users }}"
   loop_control:
     loop_var: current_user
+  when: current_user.authorized_key is defined
 
 - name: Establish hashed passwords state
   set_fact:
