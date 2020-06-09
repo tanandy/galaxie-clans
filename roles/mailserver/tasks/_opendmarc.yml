@@ -32,7 +32,7 @@
     - config_key: "SPFSelfValidate"
       config_value: "true"
   notify: Restart opendmarc service
-
+    
 - name: "Create DNS record"
   nsupdate:
     server: "127.0.0.1"
@@ -43,6 +43,20 @@
     state: present
   loop: "{{ opendmarc_keys }}"
   register: _dmarc_record_creation
+  when:
+    - render_opendmarc_record is not defined or not render_opendmarc_record
+
+- name: Render opendmarc record formatted for mailserver role integration
+  debug:
+    msg: |-
+      {% for key in opendmarc_keys %}
+      # insert in zone {{ key }}
+      - name: "_dmarc"
+        text: "v=DMARC1;p=reject;pct=20;rua=mailto:hostmaster@{{ key }};ruf=mailto:hostmaster@{{ key }};rf=afrf;aspf=r;adkim=r"
+      {% endfor %}
+  when:
+    - render_opendmarc_record is defined
+    - render_opendmarc_record | bool
 
 - name: Sync dynamic record with zone file
   shell: >-

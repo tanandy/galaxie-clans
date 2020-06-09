@@ -76,9 +76,23 @@
       - "{{ _opendkim_domain_full_record }}"
     state: present
   register: _domainkey_record_creation
+  when:
+    - render_opendkim_record is not defined or not render_opendkim_record
+
+- name: Render opendkim record formatted for mailserver role integration
+  debug:
+    msg: |-
+      # insert in zone {{ _opendkim_domain }}
+      - name: "mail._domainkey"
+        text: "{{ _opendkim_domain_full_record }}"
+  when:
+    - render_opendkim_record is defined
+    - render_opendkim_record | bool
+
 
 - name: "Opendkim - {{ _opendkim_domain }} - sync record with zone file"
   shell: >-
     rndc sync -clean {{ _opendkim_domain }}
   when:
+    - _domainkey_record_creation is defined
     - _domainkey_record_creation is changed

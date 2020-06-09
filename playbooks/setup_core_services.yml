@@ -1,10 +1,10 @@
 ---
-#- name: Gathering facts
-#  hosts: "clans:!allies"
-#  become: yes
-#  gather_facts: yes
-#  tags:
-#    - always
+- name: Gathering facts
+  hosts: "clans:!allies"
+  become: yes
+  gather_facts: yes
+  tags:
+    - always
 
 - name: Deploy system-level services
   hosts: "{{ scope }}"
