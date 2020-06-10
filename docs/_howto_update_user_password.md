@@ -39,7 +39,7 @@ ansible-playbook playbooks/ops_store_user_hash.yml \
 > Beware of the single quotes around `$UHASH`.
 >
 
-* __Spread password hash to clan hosts__
+* __Spread password hash value__
 
 Run:
 ```
@@ -50,3 +50,5 @@ If the clan host has some of broadcast services enabled, also run:
 ```
 ansible-playbook playbooks/setup_broadcast_services.yml -e scope=$INVENTORY_HOSTNAME 
 ```
+
+#### DONE
