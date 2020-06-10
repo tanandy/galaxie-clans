@@ -18,4 +18,4 @@ Inform the reader about some writing conventions or context informations.
 * __substep 2__
 * __substep 3__
 
-#### Done
+## EOC

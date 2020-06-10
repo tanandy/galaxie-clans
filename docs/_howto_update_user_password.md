@@ -49,4 +49,4 @@ If the clan host has some of broadcast services enabled, also run:
 ansible-playbook playbooks/setup_broadcast_services.yml -e scope=$INVENTORY_HOSTNAME 
 ```
 
-## Done
+## EOC
