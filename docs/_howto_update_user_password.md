@@ -17,18 +17,16 @@ You must have:
 
 * __Get password hash__
 
-The user must, on his side use this command to hash the password he likes:
+The user must, on his side, use this command to hash the password he likes:
 ```
 mkpasswd -m SHA-512
 ```
-
 ...and give it to the clan caretaker. 
 
->
 > Until the end, this user-supplied hash value will be referenced as `$UHASH`.
->
 
 * __Store password hash__
+
 Run:
 ```
 ansible-playbook playbooks/ops_store_user_hash.yml \
