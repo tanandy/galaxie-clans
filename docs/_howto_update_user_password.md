@@ -4,9 +4,7 @@
 ---
 ## Ready?
 
-You must have:
-* a `galaxie-clans` managed host
-* `system_users` role managing the user you want to update password for
+The target host must be one of `galaxie-clans`.
 
 ## Set.
 
@@ -51,4 +49,4 @@ If the clan host has some of broadcast services enabled, also run:
 ansible-playbook playbooks/setup_broadcast_services.yml -e scope=$INVENTORY_HOSTNAME 
 ```
 
-#### DONE
+#### Done
