@@ -2,7 +2,7 @@
 
 # How to ...
 
-## Ready
+## Ready?
 
 Put here the prerequisites for the how-to.
 

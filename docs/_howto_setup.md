@@ -25,3 +25,5 @@ make requirements
 ```
 
 > Congratulations! You now have a `galaxie-clans` workspace at hand!
+
+## EOC
