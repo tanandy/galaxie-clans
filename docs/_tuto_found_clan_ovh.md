@@ -21,6 +21,7 @@ all services enabled.
 * We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
 * We will use the label `$KIM_IPV4` instead of a real IP address. replace with actual values when following instructions.
 * The domain that `kimserver` is SOA for, will be named `tuto.galaxie.clans`. Replace any occurence in the following steps with the domain you chose.
+* The name of the clan we are founding is `kimclan`
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
 ## Step 1: Integrate your server into `galaxie-clans` standards
@@ -47,11 +48,16 @@ Host kimserver
 
 * __Update ansible inventory__
 
-You should have `kimserver` as a member of the `clans` group. 
+You should have:
+* a group named `kimclan` with `kimserver` as a member
+* the `kimclan` group as a child of the `clans` group
 
 Add this to the `hosts` file:
 ```
-[clans]
+[clans:children]
+kimclan
+
+[kimclan]
 kimserver
 ```
 

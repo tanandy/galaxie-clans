@@ -265,6 +265,7 @@ unknown_local_recipient_reject_code = 550
 #mynetworks = $config_directory/mynetworks
 #mynetworks = hash:/etc/postfix/network_table
 
+
 # The relay_domains parameter restricts what destinations this system will
 # relay mail to.  See the smtpd_recipient_restrictions description in
 # postconf(5) for detailed information.
@@ -679,9 +680,15 @@ sample_directory = /usr/share/doc/postfix-2.10.1/samples
 shlib_directory = no
 {% if postfix_relay_domains is defined and postfix_relay_domains|length > 0 %}
 #
-# RELAY
+# RELAY DOMAINS
 #
 relay_domains = {{ postfix_relay_domains | join(', ') }}
+{% endif %}
+{% if postfix_trust_cidr is defined and postfix_trust_cidr|length > 0 %}
+#
+# RELAY NETWORKS
+#
+mynetworks = {{ postfix_trust_cidr | join(', ') }}
 {% endif %}
 #
 # LOCAL

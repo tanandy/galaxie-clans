@@ -39,6 +39,9 @@ postfix_virtual_mailboxes: []
 postfix_virtual_mailbox_domains: []
   # - example.com
   # - localhost
+postfix_trust_cidr: []
+  # - 192.168.0.0/16
+  # - 10.42.42.0/24
 postfix_virtual_aliases_domains: "{{ postfix_virtual_mailbox_domains }}"
   # - example.com
   # - localhost
