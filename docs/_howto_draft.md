@@ -1,14 +1,14 @@
 [Galaxie-Clans Documentation](README.md) / [How-to Guides](_HOWTO__.md)
 
 # How to ...
----
+
 ## Ready
 
-prerequisites
+Put here the prerequisites for the how-to.
 
 ## Set.
 
-assumptions
+Inform the reader about some writing conventions or context informations.
 
 ## Go!
 

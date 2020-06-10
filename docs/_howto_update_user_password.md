@@ -1,7 +1,7 @@
 [Galaxie-Clans Documentation](README.md) / [How-to Guides](_HOWTO__.md)
 
 # How to update a user's password ?
----
+
 ## Ready?
 
 The target host must be one of `galaxie-clans`.
@@ -13,7 +13,7 @@ The target host must be one of `galaxie-clans`.
 
 ## Go!
 
-* __Get password hash__
+### Get password hash
 
 The user must, on his side, use this command to hash the password he likes:
 ```
@@ -23,7 +23,7 @@ mkpasswd -m SHA-512
 
 > Until the end, this user-supplied hash value will be referenced as `$UHASH`.
 
-* __Store password hash__
+### Store password hash
 
 Run:
 ```
@@ -37,7 +37,7 @@ ansible-playbook playbooks/ops_store_user_hash.yml \
 > Beware of the single quotes around `$UHASH`.
 >
 
-* __Spread password hash value__
+### Spread password hash value
 
 Run:
 ```
