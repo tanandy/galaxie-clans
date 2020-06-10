@@ -22,25 +22,29 @@ The user must, on his side use this command to hash the password he likes:
 mkpasswd -m SHA-512
 ```
 
-...and give it to the clan caretaker.
+...and give it to the clan caretaker. 
+
+>
+> Until the end, this user-supplied hash value will be referenced as `$UHASH`.
+>
 
 * __Store password hash__
 Run:
 ```
-ansible-playbook playbooks/ops_store_user_password.yml \
+ansible-playbook playbooks/ops_store_user_hash.yml \
     -e scope=$INVENTORY_HOSTNAME \
-    -e uname=$USERNAME \
-    -e hash=$HASH
-    -e hash_type=['bcrypt]
+    -e uname=$UNAME \
+    -e uhash=$UHASH
 ```
 
 * __Spread password hash to clan hosts__
+
 Run:
 ```
 ansible-playbook playbooks/setup_core_services.yml -e scope=$INVENTORY_HOSTNAME
 ```
 
-Optionaly, if the clan services include some of the broadcast services, also run:
+If the clan host has some of broadcast services enabled, also run:
 ```
 ansible-playbook playbooks/setup_broadcast_services.yml -e scope=$INVENTORY_HOSTNAME 
 ```

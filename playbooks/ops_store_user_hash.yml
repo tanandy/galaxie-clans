@@ -1,0 +1,25 @@
+---
+- hosts: "{{ scope }}"
+  gather_facts: no
+  become: no
+
+  tasks:
+    - name: Sanity checks
+      assert:
+        that:
+          - uname is defined
+          - uname in system_user's uname for scope
+          - uhash is defined
+
+    - name: Create secret directory
+      file:
+        state: directory
+      delegate_to: localhost
+
+    - name: Store hash
+      copy:
+        dest:
+        mode: 0600
+        content: |-
+          {{ uhash }}
+      delegate_to: localhost
