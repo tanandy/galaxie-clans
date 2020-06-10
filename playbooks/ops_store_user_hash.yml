@@ -8,18 +8,23 @@
       assert:
         that:
           - uname is defined
-          - uname in system_user's uname for scope
+          - uname in (system_users | map(attribute='uname') | list)
           - uhash is defined
 
     - name: Create secret directory
       file:
+        path: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}"
         state: directory
+        mode: 0700
       delegate_to: localhost
 
     - name: Store hash
       copy:
-        dest:
+        dest: "{{ local_secrets_dir }}/system_users/{{ inventory_hostname }}/{{ uname }}.password.{{ item }}"
         mode: 0600
-        content: |-
+        content: |
           {{ uhash }}
       delegate_to: localhost
+      loop:
+        - sha512
+        - bcrypt

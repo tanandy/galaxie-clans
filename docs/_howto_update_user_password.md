@@ -34,8 +34,12 @@ Run:
 ansible-playbook playbooks/ops_store_user_hash.yml \
     -e scope=$INVENTORY_HOSTNAME \
     -e uname=$UNAME \
-    -e uhash=$UHASH
+    -e uhash='$UHASH'
 ```
+
+>
+> Beware of the single quotes around `$UHASH`.
+>
 
 * __Spread password hash to clan hosts__
 
