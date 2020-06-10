@@ -9,14 +9,14 @@ all services enabled.
 >
 > This is only based on our available infrastructure at the time of writing.
 
-## Starting line
+## Ready?
 
 * Have a ready `galaxie-clans` workspace (see [How to setup a galaxie-clans workspace](_howto_setup.md)).
 * Have a [Kimsufi](https://www.kimsufi.com/) server, installed with the template `Debian 9 (Stretch) (64bits)`.
 * Validate you are able to log as `root`.
 * Configure a DNS to delegate a SOA to your server.
 
-## Assumptions
+## Set.
 
 * We will call our host `kimserver`. If you want to rename it, be aware to replace any occurence in the following steps.
 * We will use the label `$KIM_IPV4` instead of a real IP address. replace with actual values when following instructions.
@@ -24,7 +24,7 @@ all services enabled.
 * The name of the clan we are founding is `kimclan`
 * All commands are to be run from the root of your `galaxie-clans` workspace.
 
-## Step 1: Integrate your server into `galaxie-clans` standards
+## Go!
 
 ### Add `kimserver` to managed servers
 
@@ -72,16 +72,12 @@ ansible-playbook playbooks/debian_upgrade_version.yml -e scope=kimserver -e ansi
 
 ### Install `caretaker` user access
 
-* __Install `caretaker` user__
-
-Run:
 ```
 ansible-playbook playbooks/clan_caretaker_install.yml -e scope=kimserver -e ansible_ssh_user=root -k
 ```
 
-* __Validate access__
+### Validate access
 
-Run:
 ```
 ansible -m ping kimserver
 ```
@@ -98,7 +94,7 @@ kimserver | SUCCESS => {
 > Congratulations! You now have a normalized `caretaker` access to ease management of your server by ansible!
 >
 
-## Step 2: Configure services
+### Configure services
 
 * __Create host variables file__
 ```
@@ -119,18 +115,20 @@ videoconf_enable: yes
 calendar_enable: yes
 ```
 
-## Step 3: Deploy services
+### Deploy services
 
-Run:
 ```
 ansible-playbook playbooks/setup_core_services.yml -e scope=kimserver
 ansible-playbook playbooks/acme_rotate_certificates.yml -e scope=kimserver
 ansible-playbook playbooks/setup_broadcast_services.yml -e scope=kimserver
 ```
-## Step 4: Enjoy
+
+### Enjoy
 
 > Your clan is founded!
 >
 > Welcome in the `galaxie-clans`'s community.
 >
 > From now on you can search [documentation](README.md) for other materials and go further in the rabbit hole.
+
+## EOC
