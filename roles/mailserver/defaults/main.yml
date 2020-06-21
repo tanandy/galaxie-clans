@@ -24,6 +24,7 @@ postfix_transport_maps: "hash:{{ postfix_transport_maps_file }}"
 postfix_virtual_alias_domains: "hash:{{ postfix_virtual_alias_domains_file }}"
 postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_file }}"
 postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_file }}"
+
 #
 # K/V content
 #
@@ -39,7 +40,8 @@ postfix_virtual_mailboxes: []
 postfix_virtual_mailbox_domains: []
   # - example.com
   # - localhost
-postfix_trust_cidr: []
+postfix_trust_cidr:
+  - "127.0.0.1/32"
   # - 192.168.0.0/16
   # - 10.42.42.0/24
 postfix_virtual_aliases_domains: "{{ postfix_virtual_mailbox_domains }}"

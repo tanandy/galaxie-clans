@@ -74,6 +74,9 @@ mail_owner = postfix
 #
 #myhostname = host.domain.tld
 #myhostname = virtual.domain.tld
+{% if postfix_myhostname is defined %}
+myhostname = {{ postfix_myhostname }}
+{% endif %}
 
 # The mydomain parameter specifies the local internet domain name.
 # The default is to use $myhostname minus the first component.
@@ -97,6 +100,9 @@ mail_owner = postfix
 #
 #myorigin = $myhostname
 #myorigin = $mydomain
+{% if postfix_myorigin is defined %}
+myorigin = {{ postfix_myorigin }}
+{% endif %}
 
 # RECEIVING MAIL
 

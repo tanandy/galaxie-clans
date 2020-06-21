@@ -12,11 +12,13 @@
     - name: Cooking variables
       set_fact:
         ssl_private_key_path_basename: "{{ ssl_certs_dir }}/{{ acme_revoke }}"
+      tags: always
 
     - name: Cooking variables
       set_fact:
         acme_private_key_filename: "{{ ssl_private_key_path_basename }}.acme.key"
         crt_filename: "{{ ssl_private_key_path_basename }}.crt"
+      tags: always
 
     - name: Revoke certificate with account key
       acme_certificate_revoke:
@@ -35,3 +37,5 @@
         - "{{ ssl_private_key_path_basename }}.fullchain.crt"
         - "{{ ssl_private_key_path_basename }}.key"
         - "{{ ssl_private_key_path_basename }}.acme.key"
+      tags:
+        - clean

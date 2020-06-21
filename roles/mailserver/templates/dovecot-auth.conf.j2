@@ -128,6 +128,10 @@ passdb {
   args = scheme=CRYPT username_format=%u /etc/dovecot/users
 }
 
+passdb {
+  driver = pam
+}
+
 userdb {
   driver = passwd-file
   args = username_format=%u /etc/dovecot/users
@@ -137,6 +141,10 @@ userdb {
 
   # Override fields from passwd-file
   #override_fields = home=/home/virtual/%u
+}
+
+userdb {
+  driver = passwd
 }
 
 service auth {

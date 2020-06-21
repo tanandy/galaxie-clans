@@ -25,6 +25,7 @@ system_base_system_packages:
   - libffi-dev
   - libperl-dev
   - libssl-dev
+  - mailutils
   - mc
   - minicom
   - openssl
