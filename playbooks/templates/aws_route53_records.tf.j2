@@ -1,0 +1,15 @@
+{% for item in aws_route53_records %}
+{% for record in item.value %}
+resource "aws_route53_record" "{{ item.key | regex_replace('[\.|-]', '_') | regex_replace('^_', '') | regex_replace('_$', '') }}" {
+  zone_id = "${aws_route53_zone.primary.zone_id}"
+  name    = "{{ item.key | regex_replace('\.$', '') }}"
+  type    = "{{ record.type }}"
+  ttl     = "{{ record.ttl }}"
+  records = [
+    {% for record_value in record.value %}
+    "{{ record_value | regex_replace('^"', '') | regex_replace('"$', '') }}",
+    {% endfor %}
+  ]
+}
+{% endfor %}
+{% endfor %}

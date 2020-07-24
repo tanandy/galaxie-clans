@@ -1,0 +1,21 @@
+---
+- name: Find existing backup directories
+  find:
+    paths: "{{ time_machine_backup_dir }}/{{ inventory_hostname }}"
+    patterns: "{{ time_machine_date_marker_regex }}"
+    use_regex: yes
+    file_type: directory
+    recurse: yes
+    depth: 1
+  register: _find_existing_backups
+  delegate_to: localhost
+  become: no
+
+- name: Extract directories names
+  set_fact:
+    existing_backups: >-
+      {{ 
+        _find_existing_backups.files | default([])
+        | map(attribute='path') | map('regex_replace','.*/', '')
+        | sort | reverse | list
+      }}

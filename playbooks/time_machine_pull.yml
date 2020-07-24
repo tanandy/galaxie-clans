@@ -2,11 +2,15 @@
 - hosts: "{{ scope }}"
   become: yes
   strategy: linear
+  gather_facts: no
 
   vars:
     time_machine_current_backup_dir: "{{ time_machine_backup_dir }}/{{ time_machine_date_marker }}"
 
   tasks:
+    - setup:
+        filter:
+        
     - name: Find existing backups
       import_tasks: "{{ playbook_dir }}/inc/_time_machine_find_backups.yml"
 

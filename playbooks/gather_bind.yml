@@ -1,0 +1,26 @@
+---
+- name: Bind reader
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: no
+  tags: always
+
+  tasks:
+    #- pip:
+    #    name: dnszone
+
+    - gather_zone:
+        name: sid.galaxie.family.
+        path: /var/cache/bind/sid.galaxie.family
+      register: my_zone
+
+    - debug:
+        var: my_zone
+
+    - set_fact:
+        aws_route53_records: "{{ my_zone.zone.data | dict2items }}"
+    - template:
+        src: aws_route53_records.tf.j2
+        dest: "{{ playbook_dir }}/aws_route53_records.tf"
+      delegate_to: localhost
+      become: no
