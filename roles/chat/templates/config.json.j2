@@ -200,7 +200,7 @@
         "FeedbackEmail": "{{ mattermost_email_feedback }}",
         "ReplyToAddress": "{{ mattermost_email_reply_to }}",
         "FeedbackOrganization": "",
-        "EnableSMTPAuth": {{ mattermost_enable_smtp_auth }},
+        "EnableSMTPAuth": {{ mattermost_enable_smtp_auth | lower }},
         "SMTPUsername": "{{ mattermost_smtp_user }}",
         "SMTPPassword": "{{ mattermost_smtp_pass }}",
         "SMTPServer": "{{ mattermost_smtp_host }}",

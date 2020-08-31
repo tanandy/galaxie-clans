@@ -213,11 +213,13 @@ mattermost_email_reply_to: "{{ mattermost_email_feedback }}"
 
 mattermost_smtp_host: "mail.{{ system_base_domain }}"
 mattermost_smtp_port: "465"
-mattermost_smtp_user: "{{ (system_users | selectattr('uid', 'equalto', 47000) | list)[0].uname}}"
+mattermost_smtp_mail_system_user: "{{ (system_users | selectattr('uid', 'equalto', 47000) | list)[0].uname }}"
+mattermost_smtp_user: >-
+  {{ mattermost_smtp_mail_system_user }}@{{ system_base_domain }}
 mattermost_smtp_pass: >-
   {{ 
     lookup('password', 
-      local_secrets_dir + '/system_users/' + inventory_hostname + '/' + mattermost_smtp_user + '.password'
+      local_secrets_dir + '/system_users/' + inventory_hostname + '/' + mattermost_smtp_mail_system_user + '.password'
     )
   }}
 mattermost_smtp_connection_security: "TLS"
