@@ -15,11 +15,13 @@ mattermost_db_directory: "{{ mattermost_root_directory }}/db"
 mattermost_logs_directory: "/var/log/mattermost"
 mattermost_compose_directory: "/etc/mattermost"
 mattermost_directories:
+  - "{{ mattermost_root_directory }}"
   - "{{ mattermost_config_directory }}"
   - "{{ mattermost_data_directory }}"
   - "{{ mattermost_plugins_directory }}"
   - "{{ mattermost_client_plugins_directory }}"
   - "{{ mattermost_logs_directory }}"
+mattermost_db_directories:
   - "{{ mattermost_db_directory }}"
 
 
@@ -29,6 +31,14 @@ mattermost_user:
   uid: 59001
   gid: 59001
   home: "{{ mattermost_root_directory }}"
+
+mattermost_db_user:
+  name: "mattermost-postgres"
+  group: "mattermost-postgres"
+  uid: 70
+  gid: 70
+  home: "{{ mattermost_db_directory }}"
+
 #
 # Files
 #

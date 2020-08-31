@@ -21,5 +21,7 @@ mattermost_smtp_user: ~
 mattermost_smtp_pass: ~
 mattermost_smtp_connection_security: ~
 mattermost_jitsi_meet_url: "https://meet.jit.si"
-mattermost_container_version_app: "release-5.23"
-mattermost_container_version_db: "5.22.1"
+# https://hub.docker.com/r/mattermost/mattermost-team-edition/tags
+mattermost_container_version_app: "release-5.26"
+# https://hub.docker.com/r/mattermost/mattermost-prod-db/tags
+mattermost_container_version_db: "5.26.1"
