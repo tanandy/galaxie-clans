@@ -1,0 +1,89 @@
+---
+- hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: Sanity checks
+      assert:
+        that:
+          - dedibox_ipv6_address is defined
+          - dedibox_ipv6_prefixlen is defined
+          - dedibox_ipv6_duid is defined
+
+    - name: Configure dhclient
+      copy:
+        dest: /etc/dhcp/dhclient6.conf
+        content: |-
+          interface "{{ ansible_default_ipv4.interface }}" {
+            send dhcp6.client-id {{ dedibox_ipv6_duid }};
+          }
+
+    - name: Create dhclient6 service
+      copy:
+        dest: /lib/systemd/system/dhclient6.service
+        content: |-
+          [Unit]
+          Description=dhclient for sending DUID IPv6
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Restart=always
+          RestartSec=10
+          Type=forking
+          ExecStart=/sbin/dhclient -cf /etc/dhcp/dhclient6.conf -6 -P -v {{ ansible_default_ipv4.interface }}
+          ExecStop=/sbin/dhclient -x -pf /var/run/dhclient6.pid
+
+          [Install]
+          WantedBy=network.target
+      notify:
+        - Reload systemd
+        - Restart dhclient6 service
+
+    - meta: flush_handlers
+
+    - name: Enable DUID publication
+      systemd:
+        name: dhclient6
+        state: started
+        enabled: yes
+
+    - name: Configure network interface for static ipv6
+      copy:
+        dest: /etc/network/interfaces
+        content: |-
+          # This file describes the network interfaces available on your system
+          # and how to activate them. For more information, see interfaces(5).
+
+          source /etc/network/interfaces.d/*
+
+          # The loopback network interface
+          auto lo
+          iface lo inet loopback
+
+          # The primary network interface
+          auto {{ ansible_default_ipv4.interface }}
+          iface {{ ansible_default_ipv4.interface }} inet dhcp
+          iface {{ ansible_default_ipv4.interface }} inet6 static
+              address {{ dedibox_ipv6_address }}
+              netmask {{ dedibox_ipv6_prefixlen }}
+      notify:
+        - Restart networking
+
+  handlers:
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Restart networking
+      systemd:
+        name: networking
+        state: restarted
+        enabled: yes
+
+    - name: Restart dhclient6 service
+      systemd:
+        name: dhclient6
+        state: restarted
+        enabled: yes
