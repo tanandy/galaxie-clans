@@ -47,11 +47,11 @@
 - name: Create ssl certificates directory
   file:
     path: "{{ ssl_certs_dir }}"
+    state: directory
     owner: "root"
     group: "ssl-cert"
-    mode: "0750"
-    state: directory
-
+    mode: 0750
+    
 - name: Tune sysctl
   sysctl:
     name: "{{ item.name }}"

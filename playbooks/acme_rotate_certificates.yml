@@ -14,9 +14,9 @@
       file:
         path: "{{ ssl_certs_dir }}"
         state: directory
-        mode: 0710
-        owner: root
-        group: ssl-cert
+        owner: "root"
+        group: "ssl-cert"
+        mode: 0750
 
     - include_tasks: "{{ playbook_dir }}/inc/_acme-rotate-certificate.yml"
       loop: "{{ acme_domains }}"
