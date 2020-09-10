@@ -1,12 +1,24 @@
-# NetData Configuration
+# netdata configuration
+#
+# You can download the latest version of this file, using:
+#
+#  wget -O /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
+# or
+#  curl -o /etc/netdata/netdata.conf http://localhost:19999/netdata.conf
+#
+# You can uncomment and change any of the options below.
+# The value shown in the commented settings, is the default value.
+#
 
 [global]
     run as user = netdata
-    web files owner = root
-    web files group = root
-# Netdata is not designed to be exposed to potentially hostile
-# networks. See https://github.com/netdata/netdata/issues/164
-    bind socket to IP = 127.0.0.1
+
+    # the default database size - 1 hour
+    history = 3600
+
+    # some defaults to run netdata with least priority
+    process scheduling policy = idle
+    OOM score = 1000
     process scheduling policy = idle
     process scheduling priority = 0
     process nice level = 19
@@ -18,6 +30,11 @@
     dbengine disk space = {{ monitor_netdata_dbengine_disk_space }}
 
 [web]
+    web files owner = root
+    web files group = netdata
+
+    # by default do not expose the netdata port
+    bind to = localhost
     enable web responses gzip compression = no
     respect do not track policy = yes
     web server threads = {{ monitor_netdata_web_server_threads }}

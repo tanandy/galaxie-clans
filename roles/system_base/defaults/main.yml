@@ -12,6 +12,8 @@ system_base_system_packages:
   - build-essential
   - cpufrequtils
   - cron
+  - curl
+  - debian-archive-keyring
   - direnv
   - dnsutils
   - dphys-swapfile
@@ -19,6 +21,7 @@ system_base_system_packages:
   - findutils
   - git
   - glances
+  - gnupg
   - grc
   - haveged
   - htop

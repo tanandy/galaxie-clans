@@ -2,7 +2,4 @@
 _monitor_uninstall: "{{ monitor_uninstall | default(false) | bool }}"
 
 monitor_system_packages:
-  - netdata-core
-  - netdata-plugins-bash
-  - netdata-plugins-python
-  - netdata-web
+  - netdata
