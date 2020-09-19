@@ -36,6 +36,7 @@
     name: netdata
     groups:
       - docker
+      - adm
     append: yes
 
 - name: Activate netdata service

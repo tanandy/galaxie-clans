@@ -1,0 +1,14 @@
+---
+- hosts: "{{ scope }}"
+  become: true
+  gather_facts: yes
+  strategy: linear
+
+  tasks:
+    - systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - nginx
+        - postfix
+        - dovecot
