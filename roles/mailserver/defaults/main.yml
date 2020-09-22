@@ -1,5 +1,14 @@
 ---
 mailserver_enable: no
+
+mailserver_backup_profile_file: "/etc/ansible/facts.d/backup_profile_mailserver.fact"
+mailserver_backup_profile:
+  services:
+    - dovecot
+    - postfix
+  locations:
+    - name: "users_data"
+      path: "{{ postfix_virtual_mailbox_home }}/"
 #
 # System user owning the virtual mailboxes
 #
@@ -59,8 +68,6 @@ postfix_virtual_mailbox_limit: "512000000"
 postfix_maximal_queue_lifetime: "5d"
 postfix_minimal_backoff_time: "300s"
 postfix_maximal_backoff_time: "4000s"
-# postfix_smtpd_tls_cert_file: "/etc/ssl/private/your.domain.crt"
-# postfix_smtpd_tls_key_file: "/etc/ssl/private/your.domain.key"
 #
 # OpenDKIM
 #

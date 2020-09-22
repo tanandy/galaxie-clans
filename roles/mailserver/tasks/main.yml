@@ -22,4 +22,10 @@
     - _mailserver_uninstall
     - not (mailserver_enable | bool)
 
+- name: Render backup profile
+  template:
+    src: "backup_profile.j2"
+    dest: "{{ mailserver_backup_profile_file }}"
+  notify: Reload local facts
+
 - meta: flush_handlers

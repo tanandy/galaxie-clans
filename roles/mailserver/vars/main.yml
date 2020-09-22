@@ -7,26 +7,29 @@ postfix_has_virtual_mailboxes: "{{ postfix_virtual_mailboxes | length > 0 }}"
 postfix_has_virtual_mailbox_domains: "{{ postfix_virtual_mailbox_domains | length > 0 }}"
 postfix_has_transports: "{{ postfix_transports | length > 0 }}"
 
+mailserver_postfix_service: postfix
+mailserver_dovecot_service: dovecot
 
 mailserver_postfix_packages:
   - postfix
-
-mailserver_opendkim_packages:
-  - opendkim
-  - opendkim-tools
-
-mailserver_opendmarc_packages:
-  - opendmarc
-
-mailserver_postfix_service: postfix
-
 mailserver_dovecot_packages:
   - dovecot-core
   - dovecot-imapd
   - pwgen
-
-mailserver_dovecot_service: dovecot
+mailserver_opendkim_packages:
+  - opendkim
+  - opendkim-tools
+mailserver_opendmarc_packages:
+  - opendmarc
 
 postfix_config_dir: /etc/postfix
-
 dovecot_config_dir: /etc/dovecot/conf.d
+
+mailserver_backup_profile_file: "/etc/ansible/facts.d/backup_profile_mailserver.fact"
+mailserver_backup_profile:
+  services:
+    - dovecot
+    - postfix
+  locations:
+    - name: "users_data"
+      path: "{{ postfix_virtual_mailbox_home }}/"
