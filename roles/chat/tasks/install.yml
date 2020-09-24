@@ -24,6 +24,7 @@
     name: "{{ mattermost_db_user.name }}"
     uid: "{{ mattermost_db_user.uid }}"
     home: "{{ mattermost_db_user.home }}"
+    create_home: "{{ mattermost_user.create_home | default(omit) }}"
     group: "{{ mattermost_db_user.group }}"
     groups: "{{ mattermost_db_user.groups | default(omit) }}"
     shell: "{{ mattermost_db_user.shell | default('/bin/false') }}"
