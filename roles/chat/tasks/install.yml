@@ -9,6 +9,7 @@
     name: "{{ mattermost_user.name }}"
     uid: "{{ mattermost_user.uid }}"
     home: "{{ mattermost_user.home }}"
+    create_home: "{{ mattermost_user.create_home | default(omit) }}"
     group: "{{ mattermost_user.group }}"
     groups: "{{ mattermost_user.groups | default(omit) }}"
     shell: "{{ mattermost_user.shell | default('/bin/false') }}"

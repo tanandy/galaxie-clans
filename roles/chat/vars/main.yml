@@ -38,6 +38,7 @@ mattermost_db_user:
   uid: 70
   gid: 70
   home: "{{ mattermost_db_directory }}"
+  create_home: false
 
 #
 # Files
