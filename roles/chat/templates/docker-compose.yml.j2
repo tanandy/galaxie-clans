@@ -30,6 +30,7 @@ services:
       - {{ mattermost_data_directory }}:/mattermost/data:rw
       - {{ mattermost_plugins_directory }}:/mattermost/plugins:rw
       - {{ mattermost_client_plugins_directory }}:/mattermost/client/plugins:rw
+      - {{ mattermost_logs_directory }}:/mattermost/logs:rw
       - /etc/localtime:/etc/localtime:ro
     user: "{{ mattermost_user.uid }}:{{ mattermost_user.gid }}"
     environment:
