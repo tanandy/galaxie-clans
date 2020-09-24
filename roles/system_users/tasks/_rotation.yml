@@ -33,9 +33,11 @@
     system_users_expecting_rotation: >-
       {{ 
         system_users | selectattr('rotate', 'defined') | selectattr('rotate') | list 
-        + system_users | selectattr('uname', 'in', _system_users_supported_hash_present|dict2items|selectattr('value', 'equalto', 'false')|map(attribute='key')|list) | list
+        + system_users | selectattr('uname', 'in', _system_users_supported_hash_present|dict2items|selectattr('value', 'false')|map(attribute='key')|list) | list
       }}
 
+- debug:
+    var: system_users_expecting_rotation
 
 - name: Erase existing password for rotation
   delegate_to: localhost
