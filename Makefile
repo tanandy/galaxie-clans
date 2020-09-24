@@ -23,13 +23,12 @@ hook-bash:
 
 dependencies:
 	pip install -U -r requirements.txt --no-cache
-	
+
 requirements:
 	direnv allow .
 	direnv reload
 	pip install -U -r requirements.txt --no-cache
 	direnv reload
-#	ansible-galaxy install -fr requirements.yml
 
 first-date: sys-requirements hook-bash requirements
 
