@@ -1,14 +1,5 @@
 ---
 mailserver_enable: no
-
-mailserver_backup_profile_file: "/etc/ansible/facts.d/backup_profile_mailserver.fact"
-mailserver_backup_profile:
-  services:
-    - dovecot
-    - postfix
-  locations:
-    - name: "users_data"
-      path: "{{ postfix_virtual_mailbox_home }}/"
 #
 # System user owning the virtual mailboxes
 #
