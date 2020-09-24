@@ -21,6 +21,9 @@ sys-requirements:
 hook-bash:
 	direnv hook bash >> ~/.bashrc
 
+dependencies:
+	pip install -U -r requirements.txt --no-cache
+	
 requirements:
 	direnv allow .
 	direnv reload

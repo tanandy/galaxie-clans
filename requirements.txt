@@ -1,8 +1,7 @@
 pip
 ansible
+jinja2
 ipaddr
 mitogen
-green
-molecule
 ansible-lint
 passlib
