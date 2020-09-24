@@ -16,4 +16,5 @@
     - role: "dns"
     - role: "mailserver"
     - role: "firewall"
+    - role: "container"
     - role: "monitor"

@@ -11,7 +11,6 @@
   become: yes
   gather_facts: no
   roles:
-    - role: "container"
     - role: "rproxy"
       vars:
         rproxy_nginx_enable_sites: no
