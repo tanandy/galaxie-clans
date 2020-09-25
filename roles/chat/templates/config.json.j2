@@ -82,7 +82,7 @@
         "ExperimentalEnableHardenedMode": false,
         "DisableLegacyMFA": true,
         "ExperimentalStrictCSRFEnforcement": false,
-        "EnableEmailInvitations": false,
+        "EnableEmailInvitations": {{ mattermost_enable_smtp_auth | lower }},
         "DisableBotsWhenOwnerIsDeactivated": true,
         "EnableBotAccountCreation": false,
         "EnableSVGs": false,
