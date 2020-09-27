@@ -6,7 +6,7 @@
   tags:
     - always
 
-- name: Deploy system-level services
+- name: Setup core services
   hosts: "{{ scope }}"
   become: yes
   gather_facts: yes

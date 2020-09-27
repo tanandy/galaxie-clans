@@ -223,3 +223,8 @@ mattermost_smtp_pass: >-
     )
   }}
 mattermost_smtp_connection_security: "TLS"
+
+postfix_virtual_alias_maps_file: /etc/postfix/virtual_alias_maps
+postfix_virtual_mailbox_maps_file: /etc/postfix/virtual_mailbox_maps
+postfix_virtual_alias_maps: "hash:{{ postfix_virtual_alias_maps_file }}"
+postfix_virtual_mailbox_maps: "hash:{{ postfix_virtual_mailbox_maps_file }}"

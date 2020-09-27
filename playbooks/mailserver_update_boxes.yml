@@ -1,0 +1,16 @@
+---
+- name: Update postfix mailboxes
+  hosts: "{{ scope }}"
+  become: yes
+  gather_facts: yes
+  
+  tasks:
+    
+    - import_tasks: "{{ (playbook_dir + '/../') | realpath }}/roles/mailserver/tasks/_postfix_mails.yml"
+
+  handlers:
+    - name: Restart postfix service
+      systemd:
+        name: postfix
+        state: restarted
+        enabled: yes

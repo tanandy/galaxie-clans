@@ -1,0 +1,30 @@
+---
+- name: Postfix - render virtual aliases
+  copy:
+    dest: "{{ postfix_virtual_alias_maps_file }}"
+    content: |-
+      {% for alias in postfix_virtual_aliases %}
+      {{ alias.alias }} {{ alias.email }}
+      {% endfor %}
+  register: _render_virtual_alias
+
+- name: Postfix - update virtual aliases db
+  shell: >-
+    postmap {{ postfix_virtual_alias_maps }}
+  when: _render_virtual_alias is changed
+  notify: Restart postfix service
+
+- name: Postfix - render virtual mailboxes
+  copy:
+    dest: "{{ postfix_virtual_mailbox_maps_file }}"
+    content: |-
+      {% for alias in postfix_virtual_mailboxes %}
+      {{ alias.email }} {{ alias.recipient }}
+      {% endfor %}
+  register: _render_virtual_mailboxes
+
+- name: Postfix - update virtual mailboxes db
+  shell: >-
+    postmap {{ postfix_virtual_mailbox_maps }}
+  when: _render_virtual_mailboxes is changed
+  notify: Restart postfix service
