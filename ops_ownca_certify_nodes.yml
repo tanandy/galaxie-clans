@@ -1,0 +1,96 @@
+- name: Generate certificates locally
+  hosts: all
+  become: no
+  gather_facts: no
+
+  tasks:
+    - name: Wait 600 seconds for target connection to become reachable/usable
+      wait_for_connection:
+
+    - name: Gathering Facts
+      setup:
+
+    - name: Create secrets dir
+      file:
+        path: "{{ node_secrets_dir }}"
+        state: directory
+        mode: 0700
+      delegate_to: localhost
+      
+    - name: Generate KEY
+      openssl_privatekey:
+        path: "{{ node_private_key_path }}"
+        size: 2048
+      delegate_to: localhost
+
+    - name: Generate CSR
+      openssl_csr:
+        path: "{{ node_csr_path }}"
+        privatekey_path: "{{ node_private_key_path }}"
+        common_name: "my-alb-2436a5239cf3a5bf.elb.eu-west-1.amazonaws.com"
+        subject_alt_name:
+          - "IP:127.0.0.1"
+          - "IP:{{ ansible_default_ipv4.address }}"
+      delegate_to: localhost
+
+    - name: Generate ownca-signed CRT
+      openssl_certificate:
+        provider: ownca
+        path: "{{ node_crt_path }}"
+        csr_path: "{{ node_csr_path }}"
+        ownca_path: "{{ ownca_crt_path }}"
+        ownca_privatekey_path: "{{ ownca_private_key_path }}"
+      delegate_to: localhost
+
+- name: Generate certificates locally
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Create custom ssl cert directory
+      file:
+        path: "/etc/ssl/private"
+        state: directory
+        owner: root
+        group: ssl-cert
+        mode: 0750
+
+    - name: Install node certificates
+      copy:
+        src: "{{ node_private_key_path }}"
+        dest: "/etc/ssl/private/vault.key"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+
+    - name: Install node certificates
+      copy:
+        src: "{{ node_crt_path }}"
+        dest: "/etc/ssl/private/vault.crt"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+
+    - name: Install ownca certificate
+      copy:
+        src: "{{ ownca_crt_path }}"
+        dest: "/etc/ssl/private/ownca.crt"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+
+    - name: Link ownca into trusted
+      file:
+        src: "/etc/ssl/private/ownca.crt"
+        dest: /usr/local/share/ca-certificates/ownca.crt
+        state: link
+        owner: root
+        group: ssl-cert
+        mode: 0640
+      register: ownca_linking
+
+    - shell: >-
+        update-ca-certificates
+      when: ownca_linking is changed
+  

@@ -5,3 +5,4 @@ ipaddr
 mitogen
 ansible-lint
 passlib
+molecule

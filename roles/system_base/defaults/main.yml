@@ -1,5 +1,4 @@
 ---
-system_base_install_localized_manpages: yes
 system_base_primary_local: 'fr_FR.UTF-8'
 system_base_secondary_local: 'en_US.UTF-8'
 system_base_language: 'fr'

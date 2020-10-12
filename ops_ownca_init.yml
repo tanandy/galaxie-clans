@@ -1,0 +1,33 @@
+- name: Init local selfsigned CA
+  hosts: localhost
+  become: no
+  gather_facts: no
+
+  tasks:
+    - name: Wait 600 seconds for target connection to become reachable/usable
+      wait_for_connection:
+      
+    - name: Create secrets dir
+      file:
+        path: "{{ ownca_secrets_dir }}"
+        state: directory
+        mode: 0700
+        
+    - name: OWNCA - Generate PEM
+      openssl_privatekey:
+        path: "{{ ownca_private_key_path }}"
+        size: 2048
+
+    - name: OWNCA - Generate CSR
+      openssl_csr:
+        path: "{{ ownca_csr_path }}"
+        privatekey_path: "{{ ownca_private_key_path }}"
+        basic_constraints:
+          - "CA:TRUE"
+
+    - name: OWNCA - Generate CRT
+      openssl_certificate:
+        provider: selfsigned
+        path: "{{ ownca_crt_path }}"
+        csr_path: "{{ ownca_csr_path }}"
+        privatekey_path: "{{ ownca_private_key_path }}"
