@@ -1,18 +1,4 @@
 ---
-- name: Ensure ntpdate is absent
-  apt:
-    pkg:
-      - ntpdate
-    state: absent
-    purge: yes
-
-- name: Ensure id ntpd is present
-  apt:
-    pkg:
-      - ntp
-      - tzdata
-    state: present
-
 - name: ntp time source
   template:
     src: ntp-server.conf.j2
@@ -29,7 +15,7 @@
   notify: Restart ntp service
 
 - name: Ensure NTP is running and enabled as configured.
-  service:
+  systemd:
     name: ntp
     state: started
     enabled: true

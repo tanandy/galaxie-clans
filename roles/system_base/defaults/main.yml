@@ -1,4 +1,6 @@
 ---
+dockerized: false
+
 system_base_primary_local: 'fr_FR.UTF-8'
 system_base_secondary_local: 'en_US.UTF-8'
 system_base_language: 'fr'
@@ -27,11 +29,14 @@ system_base_system_packages:
   - libffi-dev
   - libperl-dev
   - libssl-dev
+  - locales
   - mailutils
   - mc
   - minicom
+  - ntp
   - openssl
   - powertop
+  - procps
   - python3
   - python3-apt
   - python3-distutils-extra
@@ -45,12 +50,11 @@ system_base_system_packages:
   - ssl-cert
   - sudo
   - task-spooler
+  - tzdata
   - vim
   - vim-common
   - wget
 system_base_unwanted_system_packages:
-  - vim-tiny
-  - nano
   - exim4
   - exim4-base
   - exim4-config
@@ -60,7 +64,10 @@ system_base_unwanted_system_packages:
   - exim4-doc-html
   - exim4-doc-info
   - eximon4
+  - nano
+  - ntpdate
   - sa-exim
+  - vim-tiny
 system_base_pip_packages:
   - dnspython
   - cryptography
@@ -127,12 +134,13 @@ system_base_vimrc_lines:
 #
 system_base_banner_text: "Galaxie Clans"
 system_base_domain: "{{ ansible_hostname | default('clans.galaxie.family') }}"
-ntp_server_upper_stratum:
+system_base_ssl_certs_dir: /etc/ssl/private
+system_base_ntp_server_upper_stratum:
   - 0.pool.ntp.org
   - 1.pool.ntp.org
   - 2.pool.ntp.org
   - 3.pool.ntp.org
 
-ntp_restrict:
+system_base_ntp_restrict:
   - 127.0.0.1
   - ::1

@@ -1,6 +1,6 @@
 ## Les serveurs externes qui seront utilisés pour se synchroniser (strate 1 et 1)
 
-{% for ntp_server in ntp_server_upper_stratum %}
+{% for ntp_server in system_base_ntp_server_upper_stratum %}
 server {{ ntp_server }} iburst
 {% endfor %}
 
@@ -19,7 +19,7 @@ restrict -4 default kod nomodify notrap nopeer noquery limited
 restrict -6 default kod nomodify notrap nopeer noquery limited
 
 # ... et en local (on peut tout faire)
-{% for item in ntp_restrict %}
+{% for item in system_base_ntp_restrict %}
 restrict {{ item }}
 {% endfor %}
 

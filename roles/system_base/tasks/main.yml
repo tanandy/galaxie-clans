@@ -2,14 +2,14 @@
 - name: Sanity checks
   import_tasks: checks.yml
 
+- name: Configure mandatory and unwanted packages
+  import_tasks: _packages.yml
+
 - name: Configure hostname, locale, timezone and sysctl
   import_tasks: _system.yml
 
 - name: Configure ansible local facts
   import_tasks: _local_facts.yml
-
-- name: Configure mandatory and unwanted packages
-  import_tasks: _packages.yml
 
 - name: Configure ntp
   import_tasks: _ntp.yml

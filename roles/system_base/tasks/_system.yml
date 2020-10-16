@@ -3,13 +3,13 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Add hostname ipv4 to /etc/hosts
-  lineinfile:
-    dest: "/etc/hosts"
-    regexp: >-
-      ^{{ ansible_default_ipv4.address }}.+$
-    line: >-
-      {{ ansible_default_ipv4.address }} {{ ansible_hostname }}
+#- name: Add hostname ipv4 to /etc/hosts
+#  lineinfile:
+#    dest: "/etc/hosts"
+#    regexp: >-
+#      ^{{ ansible_default_ipv4.address }}.+$
+#    line: >-
+#      {{ ansible_default_ipv4.address }} {{ ansible_hostname }}
 
 - name: Set timezone
   timezone:
@@ -46,7 +46,7 @@
 
 - name: Create ssl certificates directory
   file:
-    path: "{{ ssl_certs_dir }}"
+    path: "{{ system_base_ssl_certs_dir }}"
     state: directory
     owner: "root"
     group: "ssl-cert"
@@ -60,3 +60,4 @@
     sysctl_set: yes
     reload: yes
   loop: "{{ system_base_sysctl_tuning }}"
+  when: not dockerized
