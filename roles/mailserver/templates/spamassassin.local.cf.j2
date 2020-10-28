@@ -10,6 +10,11 @@
 #   Add *****SPAM***** to the Subject header of spam e-mails
 #
 rewrite_header Subject *****SPAM*****
+{% if mailserver_spam_whitelist_from_received is defined %}
+{% for allow_item in mailserver_spam_whitelist_from_received %}
+whitelist_from_rcvd {{ allow_item.from }} {{ allow_item.received_domain }}
+{% endfor %}
+{% endif %}
 {% if mailserver_spam_report_contact | bool %}
 report_contact {{ mailserver_spam_report_contact }}
 {% endif %}
