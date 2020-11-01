@@ -26,3 +26,5 @@ rsync_tmbackup.sh
 backups
 uranus-migration.md
 *.bak
+.env.gandi
+.env.scw
