@@ -21,6 +21,12 @@
     group: root
   notify: Reload nginx service
 
+- name: Disable default site
+  file:
+    dest: "/etc/nginx/sites-enabled/default.conf"
+    state: absent
+  notify: Reload nginx service
+
 - name: Disable managed sites
   file:
     dest: "/etc/nginx/sites-enabled/{{ item }}.conf"
