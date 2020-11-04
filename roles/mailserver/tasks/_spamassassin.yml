@@ -1,9 +1,7 @@
 ---
 - name: Spamassassin - install system packages
   apt:
-    pkg:
-      - spamassassin
-      - spamc
+    name: "{{ mailserver_spamassassin_packages }}"
 
 - name: Spamassassin - configure daemon
   template:

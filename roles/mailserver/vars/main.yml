@@ -10,6 +10,9 @@ postfix_has_transports: "{{ postfix_transports | length > 0 }}"
 mailserver_postfix_service: postfix
 mailserver_dovecot_service: dovecot
 
+mailserver_spamassassin_packages:
+  - spamassassin
+  - spamc
 mailserver_postfix_packages:
   - postfix
 mailserver_dovecot_packages:

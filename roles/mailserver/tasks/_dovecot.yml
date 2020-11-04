@@ -1,9 +1,8 @@
 # tasks/dovecot.yml -- Install and configure Dovecot
 ---
 - name: Dovecot - install system packages
-  package:
-    name: "{{ item }}"
-  with_items: "{{ mailserver_dovecot_packages }}"
+  apt:
+    name: "{{ mailserver_dovecot_packages }}"
 
 - name: Dovecot - add dovecot user to ssl-cert group
   user:

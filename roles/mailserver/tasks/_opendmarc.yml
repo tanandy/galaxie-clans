@@ -1,6 +1,6 @@
 ---
-- name: Install opendmarc
-  package:
+- name: Opendmarc - install system packages
+  apt:
     name: "{{ mailserver_opendmarc_packages }}"
 
 - name: Enable service
