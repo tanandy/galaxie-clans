@@ -1,37 +1,16 @@
 ---
-- name: Fine tune openssh server configuration
-  lineinfile:
+- name: Configure openssh client
+  template:
+    src: "ssh_config.j2"
+    dest: "/etc/ssh/ssh_config"
+  notify: Restart ssh service
+
+- name: Configure openssh server
+  template:
+    src: "sshd_config.j2"
     dest: /etc/ssh/sshd_config
-    regexp: "^{{ item.key }} "
-    line: "{{ item.key }} {{ item.value }}"
-    insertafter: "{{ item.key }} "
-    state: present
     backup: yes
     validate: "/usr/sbin/sshd -T -f %s"
-  loop:
-    - { key: "ListenAddress",   value: "0.0.0.0" }
-    - { key: "Protocol",        value: "2" }
-    - { key: "DebianBanner",    value: "no" }
-    - { key: "PrintLastLog",    value: "yes" }
-    - { key: "SyslogFacility",  value: "AUTH" }
-    - { key: "LogLevel",        value: "INFO" }
-    - { key: "LoginGraceTime",  value: "60" }
-    - { key: "StrictModes",     value: "yes" }
-    - { key: "TCPKeepAlive",    value: "yes" }
-    - { key: "Compression ",     value: "yes" }
-    - { key: "IgnoreRhosts",    value: "yes" }
-    - { key: "PermitRootLogin",     value: "no" }
-    - { key: "RSAAuthentication",   value: "no" }
-    - { key: "ClientAliveInterval", value: "300" }
-    - { key: "ClientAliveCountMax", value: "2" }
-    - { key: "PubkeyAuthentication",  value: "yes" }
-    - { key: "AuthorizedKeysFile",    value: "%h/.ssh/authorized_keys" }
-    - { key: "RhostsRSAAuthentication", value: "no" }
-    - { key: "HostbasedAuthentication", value: "no" }
-    - { key: "PermitEmptyPasswords",    value: "no" }
-    - { key: "PasswordAuthentication",  value: "no" }
-    - { key: "GSSAPIAuthentication",    value: "no" }
-    - { key: "ChallengeResponseAuthentication", value: "no" }
   notify:
     - Restart ssh service
 
@@ -43,25 +22,3 @@
     regexp: "^session    optional     pam_mail.so standard noenv"
     line: "#session    optional     pam_mail.so standard noenv \\# [1]"
 
-# Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
-- name: Fine tune ssh config
-  lineinfile:
-    dest: "/etc/ssh/ssh_config"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    insertafter: "{{ item.insertafter|default(omit) }}"
-  loop:
-    - regexp: "^ *ServerAliveCountMax.*|^# *ServerAliveCountMax.*"
-      line: "    ServerAliveCountMax 2"
-      # Ref Doc: https://patrickmn.com/aside/how-to-keep-alive-ssh-sessions/
-    - regexp: "^ *ServerAliveInterval.*|^# *ServerAliveInterval.*"
-      line: "    ServerAliveInterval 300"
-    - regexp: "^ *CompressionLevel.*|^# *CompressionLevel.*"
-      line: "    CompressionLevel 9"
-    - regexp: "^ *Protocol.*|^# *Protocol.*"
-      line: "    Protocol 2"
-      # Fix for CVE-2016-0777
-    - regexp: "^ *UseRoaming.*"
-      line: "    UseRoaming no"
-      insertafter: "^Host *"
-  notify: Restart ssh service

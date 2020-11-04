@@ -101,6 +101,15 @@ system_base_sysctl_tuning:
   - name: "net.core.rmem_max"
     value: "{{ system_base_sysctl_net_core_rmem_max }}"
 
+system_base_vimrc:
+  background: "dark"
+  tabstop: 4
+  shiftwidth: 4
+  expandtab: true
+  noautoindent: true
+  mouse: ""
+  ttymouse: ""
+
 system_base_vimrc_lines:
   - regexp: >-
       .*syntax
