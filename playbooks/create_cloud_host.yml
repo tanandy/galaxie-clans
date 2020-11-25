@@ -17,8 +17,11 @@
     ready_host_name: "{{ tf_workspace }}"
     raw_host_name: "raw_{{ tf_workspace }}"
     clan_name: "{{ tf_stack }}_{{ tf_workspace }}_clan"
-    ready_host_vars_file: "{{ project_dir }}/host_vars/{{ tf_workspace }}.yml"
-    raw_host_vars_file: "{{ project_dir }}/host_vars/raw_{{ tf_workspace }}.yml"
+    ready_host_vars_dir: "{{ project_dir }}/host_vars/{{ tf_workspace }}"
+    ready_host_vars_file: "{{ ready_host_vars_dir }}/tf_vars.yml"
+
+    raw_host_vars_dir: "{{ project_dir }}/host_vars/raw_{{ tf_workspace }}"
+    raw_host_vars_file: "{{ raw_host_vars_dir }}/tf_vars.yml"
 
   tasks:
     - name: Sanity checks
@@ -48,44 +51,26 @@
         public_ipv6: "{{ tf_apply.outputs.ipv6.value }}"
         raw_ssh_user: "{{ tf_apply.outputs.raw_ssh_user.value }}"
 
-    - name: Add ssh config
-      blockinfile:
-        path: "{{ project_dir }}/ssh.cfg"
-        state: "present"
-        create: yes
-        block: |
-          Host {{ raw_host_name }}
-            Hostname {{ public_ipv4 }}
-            User {{ raw_ssh_user }}
-            StrictHostKeyChecking no
-            IdentityFile {{ ssh_private_key_file }}
-            IdentitiesOnly yes
+    - name: Create host vars directory
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ raw_host_vars_dir }}"
+        - "{{ ready_host_vars_dir }}"
 
-          Host {{ ready_host_name }}
-            Hostname {{ public_ipv4 }}
-            User caretaker
-            StrictHostKeyChecking no
-            IdentityFile ./keys/${terraform.workspace}.key
-            IdentitiesOnly yes
-        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
-
-    - name: Render ready host vars file
+    - name: Render host vars file
       copy:
-        dest: "{{ ready_host_vars_file }}"
+        dest: "{{ item }}"
         content: |
           ---
           caretaker_authorized_key_files:
             - "{{ ssh_public_key_file }}"
           public_ipv4: "{{ tf_apply.outputs.ipv4.value }}"
           public_ipv6: "{{ tf_apply.outputs.ipv6.value }}"
-
-    - name: Render raw host vars file
-      copy:
-        dest: "{{ raw_host_vars_file }}"
-        content: |
-          ---
-          caretaker_authorized_key_files:
-            - "{{ ssh_public_key_file }}"
+      loop:
+        - "{{ raw_host_vars_file }}"
+        - "{{ ready_host_vars_file }}"
 
     - name: Add raw and ready host definitions to inventory group
       blockinfile:
@@ -95,8 +80,12 @@
         marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
         block: |
           [{{ clan_name }}]
-          {{ ready_host_name }}
-          {{ raw_host_name }}
+          {{ raw_host_name }} ansible_ssh_host={{ public_ipv4 }} ansible_ssh_user={{ raw_ssh_user }}
+          {{ ready_host_name }}  ansible_ssh_host={{ public_ipv4 }} ansible_ssh_user=caretaker 
+
+          [{{ clan_name }}:vars]
+          ansible_host_key_checking=False
+          ansible_ssh_private_key_file={{ ssh_private_key_file }}
 
     - name: Link created host group to 'clans' group in inventory
       lineinfile:

@@ -27,45 +27,19 @@
           - tf_workspace is defined
           - tf_workspace != 'default'
         msg: "'tf_workspace' must be defined and not 'default'"
-
-    - name: "Apply workspace {{ tf_workspace }} on {{ tf_stack }}"
-      terraform:
-        project_path: "{{ tf_stack_dir }}"
-        state: present
-        force_init: true
-        workspace: "{{ tf_workspace }}"
-        variables:
-          ssh_public_key_file: "{{ ssh_public_key_file }}"
-      register: tf_apply
-
-    - name: Add ssh config
-      blockinfile:
-        path: "{{ project_dir }}/ssh.cfg"
-        state: "absent"
-        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
-
-    - name: Remove ready host vars file
-      file:
-        path: "{{ ready_host_vars_file }}"
-        state: absent
-
-    - name: Remove raw host vars file
-      file:
-        path: "{{ raw_host_vars_file }}"
-        state: absent
     
-    - name: Add raw and ready host definitions to inventory group
-      blockinfile:
-        path: "{{ project_dir }}/hosts"
-        state: absent
-        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
-
-    - name: Link created host group to 'clans' group in inventory
+    - name: Remove clan link from inventory
       lineinfile:
         path: "{{ project_dir }}/hosts"
         state: absent
         line: >-
           {{ clan_name }}
+
+    - name: Remove clan definition from inventory group
+      blockinfile:
+        path: "{{ project_dir }}/hosts"
+        state: absent
+        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
 
     - name: "Destroy workspace {{ tf_workspace }} on {{ tf_stack }}"
       terraform:
