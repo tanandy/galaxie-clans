@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  become: no
+  gather_facts: no
+
+  vars:
+    cloud_provider: scw
+    tf_workspace: "{{ cloud_provider }}"
+    project_dir: "{{ (playbook_dir + '/..') | realpath }}" 
+    tf_workdir: "{{ project_dir }}/terraform/{{ cloud_provider }}"
+    ssh_private_key_file: "{{ project_dir }}/keys/{{ tf_workspace }}.key"
+    ssh_public_key_file: "{{ ssh_private_key_file }}.pub"
+    tf_state: absent
+
+  tasks:
+    - name: Apply terraform
+      terraform:
+        project_path: "{{ tf_workdir }}"
+        state: "present"
+        force_init: true
+        workspace: "{{ tf_workspace }}"
+        variables:
+          ssh_public_key_file: "{{ ssh_public_key_file }}"
+      register: tf_apply
+
+    - debug:
+        msg: "{{ tf_apply.outputs }}"
+
+    
+
+    - name: Add mappings to /etc/hosts
+      blockinfile:
+        path: "{{ project_dir }}/ssh.cfg"
+        state: absent
+        create: yes
+        block: |
+          {{ tf_apply.outputs.ansible_ssh_config.value }}
+        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
+
+    - name: Add new clan to clans
+      lineinfile:
+        path: "{{ project_dir }}/hosts"
+        state: absent
+        line: >-
+          {{ cloud_provider }}_clan
+
+    - name: Apply terraform
+      terraform:
+        project_path: "{{ tf_workdir }}"
+        state: "absent"
+        force_init: true
+        workspace: "{{ tf_workspace }}"

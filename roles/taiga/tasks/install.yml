@@ -1,0 +1,58 @@
+---
+- name: Create taiga group
+  group:
+    name: "{{ taiga_user.group }}"
+    gid: "{{ taiga_user.gid }}"
+
+- name: Create taiga user
+  user:
+    name: "{{ taiga_user.name }}"
+    uid: "{{ taiga_user.uid }}"
+    home: "{{ taiga_user.home }}"
+    group: "{{ taiga_user.group }}"
+    groups: "{{ taiga_user.groups }}"
+    shell: "{{ taiga_user.shell | default('/bin/false') }}"
+
+- name: Create expected directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ taiga_user.name }}"
+    group: "{{ taiga_user.group }}"
+    state: directory
+  loop: "{{ taiga_expected_directories }}"
+
+- name: Render configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ taiga_user.name }}"
+    group: "{{ taiga_user.group }}"
+    mode: 0640
+  loop: "{{ taiga_expected_templates }}"
+  notify: 
+    - Restart taiga service
+    - Reload nginx service
+
+- name: Render rproxy service configuration
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/taiga.conf"
+  notify: Reload nginx service
+
+- name: Pre-pull container images
+  docker_image:
+    name: "{{ item.value }}"
+    source: pull
+  loop: "{{ taiga_containers | dict2items }}"
+
+- name: Start taiga service
+  systemd:
+    name: taiga
+    state: started
+    daemon_reload: yes
+
+
+# docker-compose exec back /usr/bin/python3 /srv/taiga/back/manage.py loaddata initial_user
+# docker-compose exec back /usr/bin/python3 /srv/taiga/back/manage.py loaddata initial_project_templates
+# docker-compose exec back /usr/bin/python3 /srv/taiga/back/manage.py compilemessages
+# docker-compose exec back /usr/bin/python3 /srv/taiga/back/manage.py collectstatic --noinput

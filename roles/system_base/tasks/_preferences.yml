@@ -13,9 +13,12 @@
       dest: "/etc/skel/.bashrc"
 
 - name: Configure vim
-  template:
-    src: "vimrc.j2"
+  lineinfile:
     dest: /etc/vim/vimrc
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop: "{{ system_base_vimrc_lines }}"
 
 - name: Gather info about default python
   stat:

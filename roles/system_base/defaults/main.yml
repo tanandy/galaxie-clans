@@ -1,11 +1,13 @@
 ---
 dockerized: false
 
+system_base_hostname: "{{ inventory_hostname | replace('_','-') }}"
 system_base_primary_local: 'fr_FR.UTF-8'
 system_base_secondary_local: 'en_US.UTF-8'
 system_base_language: 'fr'
 system_base_timezone: 'Europe/Paris'
 system_base_system_packages:
+  - acl
   - aptitude
   - apt-transport-https
   - bash
@@ -100,15 +102,6 @@ system_base_sysctl_tuning:
 
   - name: "net.core.rmem_max"
     value: "{{ system_base_sysctl_net_core_rmem_max }}"
-
-system_base_vimrc:
-  background: "dark"
-  tabstop: 4
-  shiftwidth: 4
-  expandtab: true
-  noautoindent: true
-  mouse: ""
-  ttymouse: ""
 
 system_base_vimrc_lines:
   - regexp: >-

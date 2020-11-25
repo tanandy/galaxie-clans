@@ -28,3 +28,7 @@ uranus-migration.md
 *.bak
 .env.gandi
 .env.scw
+.terraform
+*.tfstate
+*.tfstate.backup
+terraform.tfstate.d

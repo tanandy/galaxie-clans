@@ -1,5 +1,5 @@
 pip
-ansible
+ansible==2.9.15
 jinja2
 ipaddr
 mitogen
@@ -8,3 +8,5 @@ passlib
 molecule
 docker
 molecule[docker]
+mkdocs
+mkdocs-material

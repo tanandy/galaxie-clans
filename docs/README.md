@@ -4,6 +4,8 @@
 
 ## How is the documentation organized ?
 
+* [Users Guides](_UREF__.md) 
+    * Describe __how things work and how to use them__ but assume that you have a basic understanding of key concepts. Also contain technical reference on internals.
 * [Tutorials](_TUTO__.md) 
     * __Start here__ if you’re new to Galaxie-Clans. Tutorials take you by the hand through a series of steps to achieve results with Galaxie-Clans.
 * [How-To Guides](_HOWTO__.md)

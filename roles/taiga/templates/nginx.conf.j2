@@ -1,0 +1,21 @@
+server {
+	listen 80;
+    server_name {{ taiga_public_domain }};
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name {{ taiga_public_domain }};
+
+    ssl on;
+    ssl_certificate {{ taiga_certificate_file }};
+    ssl_certificate_key {{ taiga_certificate_key_file }};
+
+    location / {
+        proxy_pass        http://localhost:{{ taiga_port }}/; # The / is important!
+        proxy_set_header  X-Script-Name /;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass_header Authorization;
+    }
+}

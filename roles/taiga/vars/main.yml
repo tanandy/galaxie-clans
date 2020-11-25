@@ -1,0 +1,39 @@
+---
+#
+# Uninstall flag
+#
+_taiga_uninstall: "{{ taiga_uninstall | default(false) | bool }}"
+
+taiga_user:
+  name: "taiga"
+  group: "taiga"
+  uid: 59002
+  gid: 59002
+  home: "{{ taiga_home_dir }}"
+  groups:
+    - "docker"
+
+taiga_config_dir: "/etc/taiga"
+taiga_home_dir: "/var/lib/taiga"
+taiga_log_dir: "/var/log/taiga"
+
+taiga_expected_directories:
+  - "{{ taiga_config_dir }}"
+  - "{{ taiga_home_dir }}"
+  - "{{ taiga_log_dir }}"
+
+taiga_expected_templates:
+  - src: "docker-compose.yml.j2"
+    dest: "{{ taiga_config_dir }}/docker-compose.yml"
+
+  - src: "systemd.service.j2"
+    dest: "{{ taiga_systemd_service_file }}"
+
+  - src: "variables.env"
+    dest: "{{ taiga_config_dir }}/variables.env"
+
+taiga_systemd_service_file: "/lib/systemd/system/taiga.service"
+taiga_containers:
+  taiga: "taigaio/taiga5:5.5.2"
+  taiga_events: "taigaio/taiga-events5:latest"
+  db: "postgres:11"

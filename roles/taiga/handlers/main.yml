@@ -1,0 +1,13 @@
+---
+- name: Restart taiga service
+  systemd:
+    name: taiga
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+- name: Reload nginx service
+  systemd:
+    name: nginx
+    state: reloaded
+    enabled: yes

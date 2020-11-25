@@ -2,7 +2,7 @@
 #########################################
 # GENERAL
 #
-ansible_python_interpreter: /usr/bin/python3
+
 local_secrets_dir: "{{ (playbook_dir + '/../secrets') | realpath }}"
 local_keys_dir: "{{ (playbook_dir + '/../keys') | realpath }}"
 local_backups_dir: "{{ (playbook_dir + '/../backups') | realpath }}"

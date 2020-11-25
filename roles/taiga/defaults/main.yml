@@ -1,0 +1,9 @@
+---
+taiga_enable: no
+
+taiga_public_domain: ~
+taiga_certificate_file: ~
+taiga_certificate_key_file: ~
+
+taiga_radicale_container_version: "latest"
+taiga_port: 9097
