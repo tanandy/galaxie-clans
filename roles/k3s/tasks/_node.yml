@@ -1,0 +1,16 @@
+---
+- name: Render k3s-node service definition
+  template:
+    src: "k3s-node.service.j2"
+    dest: "{{ k3s_systemd_dir }}/k3s-node.service"
+    owner: root
+    group: root
+    mode: 0755
+  notify: Restart k3s-node service
+
+- name: Enable k3s-node service
+  systemd:
+    name: k3s-node
+    daemon_reload: yes
+    state: started
+    enabled: yes

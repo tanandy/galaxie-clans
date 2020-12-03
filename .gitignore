@@ -32,3 +32,4 @@ uranus-migration.md
 *.tfstate
 *.tfstate.backup
 terraform.tfstate.d
+_w_*.yml

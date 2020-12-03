@@ -1,0 +1,58 @@
+---
+- name: Add rancher chart repo
+  become_user: k3s
+  community.kubernetes.helm_repository:
+    name: rancher-latest
+    repo_url: "https://releases.rancher.com/server-charts/latest"
+
+- name: Create a k8s namespace
+  become_user: k3s
+  community.kubernetes.k8s:
+    name: cattle-system
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Render rancher chart values file
+  template:
+    src: values.yml.j2
+    dest: /var/lib/k3s/rancher.values.yml
+    owner: k3s
+    group: k3s
+    mode: 0600
+
+- name: Deploy Rancher latest chart
+  become_user: k3s
+  community.kubernetes.helm:
+    chart_ref: rancher-latest/rancher
+    state: present
+    name: rancher
+    chart_version: "{{ rancher_chart_version }}"
+    namespace: cattle-system
+    values_files:
+      - /var/lib/k3s/rancher.values.yml
+
+- name: Copy cert
+  slurp:
+    src: "{{ rancher_ingress_certificate_file }}"
+  register: rancher_ingress_certificate
+
+- name: Copy key
+  slurp:
+    src: "{{ rancher_ingress_certificate_key_file }}"
+  register: rancher_ingress_certificate_key
+
+- name: Create a Service object from an inline definition
+  become_user: k3s
+  community.kubernetes.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: tls-rancher-ingress
+        namespace: cattle-system
+      type: kubernetes.io/tls
+      data:
+        tls.crt: "{{ rancher_ingress_certificate.content }}"
+        tls.key: "{{ rancher_ingress_certificate_key.content }}"

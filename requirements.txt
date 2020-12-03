@@ -10,3 +10,4 @@ docker
 molecule[docker]
 mkdocs
 mkdocs-material
+openshift

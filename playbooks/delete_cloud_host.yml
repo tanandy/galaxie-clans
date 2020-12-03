@@ -21,6 +21,8 @@
     raw_host_vars_file: "{{ project_dir }}/host_vars/raw_{{ tf_workspace }}.yml"
 
   tasks:
+    - debug:
+        msg: mama
     - name: Sanity checks
       assert:
         that:

@@ -1,0 +1,65 @@
+---
+- name: Create system groups
+  group:
+    name: "k3s"
+    gid: "59003"
+
+- name: Create system users
+  user:
+    name: "k3s"
+    uid: "59003"
+    groups: 
+      - "k3s"
+      - "ssl-cert"
+    shell: "/bin/false"
+    home: "/var/lib/k3s"
+    create_home: yes
+
+- name: Enable IPv4 forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    reload: yes
+
+- name: Enable IPv6 forwarding
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "1"
+    state: present
+    reload: yes
+
+- pip:
+    name: openshift
+
+- name: Download k3s binary x64
+  get_url:
+    url: https://github.com/rancher/k3s/releases/download/{{ k3s_version }}/k3s
+    checksum: sha256:https://github.com/rancher/k3s/releases/download/{{ k3s_version }}/sha256sum-amd64.txt
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Download helm release
+  get_url:
+    url: "https://get.helm.sh/helm-v{{ k3s_helm_version }}-linux-amd64.tar.gz"
+    checksum: "sha256:https://get.helm.sh/helm-v{{ k3s_helm_version }}-linux-amd64.tar.gz.sha256sum"
+    dest: /var/cache/private/helm-v{{ k3s_helm_version }}-linux-amd64.tar.gz
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Unarchive helm release
+  unarchive:
+    src: /var/cache/private/helm-v{{ k3s_helm_version }}-linux-amd64.tar.gz
+    dest: /var/cache/private
+    remote_src: yes
+    creates: /var/cache/private/linux-amd64/helm
+
+- name: Place helm binary
+  copy:
+    src: /var/cache/private/linux-amd64/helm
+    dest: /usr/local/bin/helm
+    remote_src: yes
+    mode: 0755

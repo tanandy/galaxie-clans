@@ -1,0 +1,21 @@
+---
+- name: Restart k3s-node service
+  systemd:
+    name: k3s-node
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
+- name: Restart k3s service
+  systemd:
+    name: k3s
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+
+- name: Reload nginx service
+  systemd:
+    name: nginx
+    daemon_reload: yes
+    state: reloaded
+    enabled: yes
