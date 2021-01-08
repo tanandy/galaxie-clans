@@ -1,3 +1,4 @@
+#!/usr/bin/env ansible-playbook
 ---
 - name: Gathering facts
   hosts: "clans:!allies"

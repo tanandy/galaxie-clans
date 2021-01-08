@@ -44,3 +44,9 @@ refresh:
 
 mailserver_refresh:
 	ansible-playbook playbooks/apply_single_role.yml -e role_name=mailserver -e scope=${CLAN_SCOPE}
+
+sphinx:
+	@ echo "BUILD DOCUMENTATIONS"
+  	pip3 install -r documentation/requirements.txt --no-cache-dir --quiet
+	cd documentation &&\
+	make html

@@ -49,6 +49,8 @@
     terms_agreed: yes
     contact:
       - "mailto:{{ acme_account_email }}"
+  retries: 5
+  delay: 10
   when: private_key_generation is changed
 
 - name: "{{ _domain_to_certify.cn }} - Create a challenge"
@@ -60,6 +62,8 @@
     dest: "{{ crt_filename }}"
     fullchain_dest: "{{ full_crt_filename }}"
     challenge: "dns-01"
+  retries: 5
+  delay: 10
   register: _domain_to_certify_challenge
 
 - name: "{{ _domain_to_certify.cn }} - Create _acme-challenge record"
@@ -119,6 +123,8 @@
     fullchain_dest: "{{ full_crt_filename }}"
     challenge: "dns-01"
     data: "{{ _domain_to_certify_challenge }}"
+  retries: 5
+  delay: 10
   when:
     - _domain_to_certify_challenge is changed
 

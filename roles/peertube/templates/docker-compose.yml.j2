@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+
+  peertube:
+    image: {{ peertube_containers.peertube }}
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:9004:9000"
+    volumes:
+      - {{ peertube_data_dir }}:/data
+      - {{ peertube_config_dir }}:/config
+    depends_on:
+      - postgres
+      - redis
+    restart: "always"
+
+  postgres:
+    image: postgres:13-alpine
+    env_file:
+      - .env
+    volumes:
+      - {{ peertube_db_dir }}:/var/lib/postgresql/data
+    restart: "always"
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - {{ peertube_redis_dir }}:/data
+    restart: "always"
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.18.0.0/16
+
+volumes:
+  assets:

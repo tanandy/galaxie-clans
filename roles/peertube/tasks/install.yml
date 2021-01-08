@@ -1,0 +1,73 @@
+---
+- name: Create peertube group
+  group:
+    name: "{{ peertube_user.group }}"
+    gid: "{{ peertube_user.gid }}"
+
+- name: Create peertube user
+  user:
+    name: "{{ peertube_user.name }}"
+    uid: "{{ peertube_user.uid }}"
+    home: "{{ peertube_user.home }}"
+    group: "{{ peertube_user.group }}"
+    groups: "{{ peertube_user.groups }}"
+    shell: "{{ peertube_user.shell | default('/bin/false') }}"
+
+- name: Create expected directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ peertube_user.name }}"
+    group: "{{ peertube_user.group }}"
+    state: directory
+  loop: "{{ peertube_expected_directories }}"
+
+- name: Render configuration files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ peertube_user.name }}"
+    group: "{{ peertube_user.group }}"
+    mode: 0640
+  loop: "{{ peertube_expected_templates }}"
+  notify: Restart peertube service
+
+- name: Create user file
+  blockinfile:
+    path: "/etc/radicale/users"
+    insertbefore: "BOF"
+    owner: "{{ peertube_user.name }}"
+    group: "{{ peertube_user.group }}"
+    mode: 0640
+    create: yes
+    block: |-
+      # This file is to be managed by galaxie-clans tooling. Any manual addition can be erased at any time.
+
+- name: "Set peertube passwords"
+  htpasswd:
+    path: /etc/radicale/users
+    name: "{{ item.email }}"
+    password: "{{ ansible_local.system_users_password_hash[item.system_user].bcrypt }}"
+    crypt_scheme: plaintext
+    create: yes
+  loop: "{{ postfix_virtual_mailboxes }}"
+  when:
+    - item.system_user is defined
+    - item.system_user in ansible_local.system_users_password_hash.keys() | default([])
+
+- name: Render rproxy service configuration
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/sites-available/peertube.conf"
+  notify: Reload nginx service
+
+- name: Pre-pull container images
+  docker_image:
+    name: "{{ item.value }}"
+    source: pull
+  loop: "{{ peertube_containers | dict2items }}"
+
+- name: Start peertube service
+  systemd:
+    name: peertube
+    state: started
+    daemon_reload: yes

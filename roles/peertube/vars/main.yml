@@ -1,0 +1,52 @@
+---
+#
+# Uninstall flag
+#
+_peertube_uninstall: "{{ peertube_uninstall | default(false) | bool }}"
+
+peertube_system_packages:
+  - radicale
+
+peertube_user:
+  name: "peertube"
+  group: "peertube"
+  uid: 59004
+  gid: 59004
+  home: "{{ peertube_home_dir }}"
+  groups:
+    - "docker"
+
+peertube_etc_dir: "/etc/peertube"
+peertube_config_dir: "{{ peertube_etc_dir }}/conf"
+peertube_home_dir: "/var/lib/peertube"
+peertube_data_dir: "{{ peertube_home_dir }}/data"
+peertube_db_dir: "{{ peertube_home_dir }}/db"
+peertube_redis_dir: "{{ peertube_home_dir }}/redis"
+peertube_log_dir: "/var/log/peertube"
+
+peertube_expected_directories:
+  - "{{ peertube_etc_dir }}"
+  - "{{ peertube_config_dir }}"
+  - "{{ peertube_home_dir }}"
+  - "{{ peertube_data_dir }}"
+  - "{{ peertube_db_dir }}"
+  - "{{ peertube_redis_dir }}"
+  - "{{ peertube_log_dir }}"
+
+peertube_expected_templates:
+  - src: "docker.env.j2"
+    dest: "{{ peertube_etc_dir }}/.env"
+
+  - src: "docker-compose.yml.j2"
+    dest: "{{ peertube_etc_dir }}/docker-compose.yml"
+
+  - src: "systemd.service.j2"
+    dest: "{{ peertube_systemd_service_file }}"
+
+
+peertube_systemd_service_file: "/lib/systemd/system/peertube.service"
+
+peertube_container_version: "production-buster"
+
+peertube_containers:
+  peertube: "chocobozzz/peertube:{{ peertube_container_version }}"

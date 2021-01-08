@@ -1,0 +1,10 @@
+---
+peertube_enable: no
+
+peertube_public_domain: ~
+peertube_certificate_file: ~
+peertube_certificate_key_file: ~
+
+peertube_radicale_container_version: "latest"
+
+peertube_system_packages: []
