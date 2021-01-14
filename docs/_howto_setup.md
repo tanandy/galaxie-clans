@@ -1,8 +1,9 @@
-[Galaxie-Clans Documentation](README.md) / [How-to Guides](_HOWTO__.md)
+******************************************
+How to setup a `galaxie-clans` workspace ?
+******************************************
 
-# How to setup a `galaxie-clans` workspace ?
-
-## Ready?
+Ready?
+======
 
 * Have `git` installed.
 * Have `make` installed.
