@@ -1,5 +1,6 @@
+wheel
 pip
-ansible==2.9.15
+ansible==2.9.16
 jinja2
 ipaddr
 mitogen

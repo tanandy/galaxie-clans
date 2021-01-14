@@ -47,6 +47,6 @@ mailserver_refresh:
 
 sphinx:
 	@ echo "BUILD DOCUMENTATIONS"
-  	pip3 install -r documentation/requirements.txt --no-cache-dir --quiet
+	pip3 install -r documentation/requirements.txt --no-cache-dir --quiet
 	cd documentation &&\
 	make html
