@@ -1,5 +1,5 @@
 ********************************
-HOWTO Contribute documentation?
+How to Contribute documentation?
 ********************************
 
 Tutorials: Learning oriented content

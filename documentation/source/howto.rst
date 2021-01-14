@@ -6,3 +6,4 @@ How-to Guides: Problem-oriented
    :maxdepth: 1
 
    howto/contribute
+   howto/add_server
