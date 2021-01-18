@@ -14,20 +14,16 @@ help:
 	@echo "	make apply-role -e role=<role_name> -e to=<inventory scope>     -- Applies a role to an inventory scope"
 	@echo ""
 
-
 sys-requirements:
 	sudo apt-get install python3 python3-venv direnv -y
 
 hook-bash:
 	direnv hook bash >> ~/.bashrc
 
-dependencies:
-	pip3 install -U -r requirements.txt --no-cache
-
 requirements:
 	direnv allow .
 	direnv reload
-	pip3 install -U -r requirements.txt --no-cache
+	which ansible-playbook && ansible-playbook  playbooks/prepare_pip_requirements.yml || pip install -U --no-cache-dir -q pip setuptools wheel; pip install -U -q pip -r requirements.txt
 	direnv reload
 
 first-date: sys-requirements hook-bash requirements

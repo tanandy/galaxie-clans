@@ -1,0 +1,26 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Setup virtual environement
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    venv_directory: "{{ lookup('env','VIRTUAL_ENV') }}"
+    direnv_dir: "{{ lookup('env','PWD') }}"
+
+  tasks:
+    - name: Install pip, setuptools, wheel into {{ venv_directory }}
+      pip:
+        name:
+          - pip
+          - setuptools
+          - wheel
+        virtualenv: "{{ venv_directory }}"
+        virtualenv_site_packages: yes
+
+    - name: Install requirements into {{ venv_directory }}
+      pip:
+        requirements: "{{ direnv_dir }}/requirements.txt"
+        virtualenv: "{{ venv_directory }}"
+        virtualenv_site_packages: yes
+
