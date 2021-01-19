@@ -1,0 +1,6 @@
+---
+- hosts: tested_clans
+  gather_facts: yes
+  become: yes
+  roles:
+    - system_base

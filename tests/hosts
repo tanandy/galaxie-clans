@@ -1,0 +1,13 @@
+node_1 ansible_host=172.16.1.41
+node_2 ansible_host=172.16.1.42
+node_3 ansible_host=172.16.1.43
+
+[tested_clans]
+node_1
+node_2
+node_3
+
+[tested_clans:vars]
+strategy=linear
+ansible_ssh_user=vagrant
+ansible_password=vagrant
