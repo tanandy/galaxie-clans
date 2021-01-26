@@ -1,0 +1,9 @@
+---
+- command: >-
+    which samba
+  register: samba_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    samba_exists: "{{ samba_existence_check.rc == 0 }}"

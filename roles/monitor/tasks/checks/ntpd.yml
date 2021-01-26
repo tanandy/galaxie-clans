@@ -1,0 +1,9 @@
+---
+- command: >-
+    which ntpd
+  register: ntpd_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    ntpd_exists: "{{ ntpd_existence_check.rc == 0 }}"

@@ -35,31 +35,31 @@ apache_cache: no
 # bind_rndc: yes
 # boinc: yes
 # ceph: yes
-chrony: no
+chrony: {{ chrony_exists | ternary('yes', 'no') }}
 # couchdb: yes
 # dns_query_time: yes
 # dnsdist: yes
-dockerd: yes
-dovecot: yes
+dockerd: {{ dockerd_exists | ternary('yes', 'no') }}
+dovecot: {{ dovecot_exists | ternary('yes', 'no') }}
 # elasticsearch: yes
 # energid: yes
 
 # this is just an example
 example: no
 
-# exim: yes
-# fail2ban: yes
-# freeradius: yes
-# gearman: yes
+exim: {{ exim_exists | ternary('yes', 'no') }}
+fail2ban: {{ fail2ban_exists | ternary('yes', 'no') }}
+freeradius: {{ freeradius_exists | ternary('yes', 'no') }}
+gearman: {{ gearman_exists | ternary('yes', 'no') }}
 go_expvar: no
 
 # gunicorn_log has been replaced by web_log
 gunicorn_log: no
-# haproxy: yes
+haproxy: {{ haproxy_exists | ternary('yes', 'no') }}
 # hddtemp: yes
 # httpcheck: yes
 hpssa: no
-# icecast: yes
+icecast: {{ icecast_exists | ternary('yes', 'no') }}
 # ipfs: yes
 # isc_dhcpd: yes
 # litespeed: yes
@@ -68,36 +68,36 @@ logind: no
 # memcached: yes
 # mongodb: yes
 # monit: yes
-# mysql: yes
-nginx: yes
+mysql: {{ mysql_exists | ternary('yes', 'no') }}
+nginx: {{ nginx_exists | ternary('yes', 'no') }}
 # nginx_plus: yes
 # nvidia_smi: yes
 
 # nginx_log has been replaced by web_log
 nginx_log: no
 # nsd: yes
-ntpd: yes
+ntpd: {{ ntpd_exists | ternary('yes', 'no') }}
 # openldap: yes
 # oracledb: yes
 # ovpn_status_log: yes
 # phpfpm: yes
 # portcheck: yes
-postfix: yes
-# postgres: yes
+postfix: {{ postfix_exists | ternary('yes', 'no') }}
+postgres: {{ pgsql_exists | ternary('yes', 'no') }}
 # powerdns: yes
 # proxysql: yes
 # puppet: yes
-# rabbitmq: yes
-# redis: yes
+rabbitmq: {{ rabbitmq_exists | ternary('yes', 'no') }}
+redis: {{ redis_exists | ternary('yes', 'no') }}
 # rethinkdbs: yes
 # retroshare: yes
 # riakkv: yes
-# samba: yes
+samba: {{ samba_exists | ternary('yes', 'no') }}
 # sensors: yes
 # smartd_log: yes
 # spigotmc: yes
 # springboot: yes
-# squid: yes
+squid: {{ squid_exists | ternary('yes', 'no') }}
 # traefik: yes
 # tomcat: yes
 # tor: yes

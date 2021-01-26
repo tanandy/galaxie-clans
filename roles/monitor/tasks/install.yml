@@ -1,4 +1,10 @@
 ---
+- name: Install system package
+  apt:
+    name:
+      - gpg
+    state: present
+
 - name: Add Netdata repository key
   apt_key:
     url: "https://packagecloud.io/netdata/netdata/gpgkey"
@@ -36,6 +42,15 @@
     name: netdata
     groups:
       - docker
+    append: yes
+  when:
+    - docker_group_exists
+    - dockerd_exists
+
+- name: Add netdata user to adm group
+  user:
+    name: netdata
+    groups:
       - adm
     append: yes
 

@@ -1,0 +1,9 @@
+---
+- command: >-
+    which nginx
+  register: nginx_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    nginx_exists: "{{ nginx_existence_check.rc == 0 }}"

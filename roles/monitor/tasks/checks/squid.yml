@@ -1,0 +1,9 @@
+---
+- command: >-
+    which squid
+  register: squid_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    squid_exists: "{{ squid_existence_check.rc == 0 }}"

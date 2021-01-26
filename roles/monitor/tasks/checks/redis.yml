@@ -1,0 +1,9 @@
+---
+- command: >-
+    which redis-server
+  register: redis_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    redis_exists: "{{ redis_existence_check.rc == 0 }}"

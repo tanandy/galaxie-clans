@@ -1,0 +1,9 @@
+---
+- command: >-
+    which mysqld
+  register: mysql_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    mysql_exists: "{{ mysql_existence_check.rc == 0 }}"

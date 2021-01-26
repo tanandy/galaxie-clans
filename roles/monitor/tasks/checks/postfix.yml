@@ -1,0 +1,9 @@
+---
+- command: >-
+    which postfix
+  register: postfix_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    postfix_exists: "{{ postfix_existence_check.rc == 0 }}"

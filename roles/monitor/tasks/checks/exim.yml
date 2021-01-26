@@ -1,0 +1,9 @@
+---
+- command: >-
+    which exim
+  register: exim_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    exim_exists: "{{ exim_existence_check.rc == 0 }}"

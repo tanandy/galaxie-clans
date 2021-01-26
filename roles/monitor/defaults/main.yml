@@ -5,3 +5,5 @@ monitor_netdata_update_every: 3
 # In Mb, RAM allocated for caching and indexing
 monitor_netdata_page_cache_size: 32
 monitor_netdata_dbengine_disk_space: 256
+
+monitor_netdata_web_interface: yes

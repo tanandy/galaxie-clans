@@ -1,0 +1,9 @@
+---
+- command: >-
+    which fail2ban-server
+  register: fail2ban_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    fail2ban_exists: "{{ fail2ban_existence_check.rc == 0 }}"

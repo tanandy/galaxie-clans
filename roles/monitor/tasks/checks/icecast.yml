@@ -1,0 +1,9 @@
+---
+- command: >-
+    which icecast2
+  register: icecast_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    icecast_exists: "{{ icecast_existence_check.rc == 0 }}"

@@ -1,0 +1,9 @@
+---
+- command: >-
+    which rabbitmq-server
+  register: rabbitmq_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    rabbitmq_exists: "{{ rabbitmq_existence_check.rc == 0 }}"

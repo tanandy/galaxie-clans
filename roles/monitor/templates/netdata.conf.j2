@@ -29,6 +29,8 @@
     page cache size = {{ monitor_netdata_page_cache_size }}
     dbengine disk space = {{ monitor_netdata_dbengine_disk_space }}
 
+
+{% if monitor_netdata_web_interface %}
 [web]
     web files owner = root
     web files group = netdata
@@ -39,3 +41,4 @@
     respect do not track policy = yes
     web server threads = {{ monitor_netdata_web_server_threads }}
     web server max sockets = {{ monitor_netdata_web_server_max_sockets }}
+{% endif %}

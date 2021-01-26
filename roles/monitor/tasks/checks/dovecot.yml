@@ -1,0 +1,9 @@
+---
+- command: >-
+    which dovecot
+  register: dovecot_existence_check
+  changed_when: no
+  failed_when: no
+
+- set_fact:
+    dovecot_exists: "{{ dovecot_existence_check.rc == 0 }}"
