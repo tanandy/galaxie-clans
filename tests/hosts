@@ -8,6 +8,5 @@ node_2
 node_3
 
 [tested_clans:vars]
-strategy=linear
 ansible_ssh_user=vagrant
 ansible_password=vagrant
