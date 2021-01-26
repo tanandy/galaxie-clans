@@ -1,6 +1,12 @@
 ---
-- hosts: tested_clans
-  gather_facts: yes
-  become: yes
-  roles:
-    - system_base
+- import_playbook: "{{ playbook_dir }}/../playbooks/clan_caretaker_install.yml"
+  vars:
+    scope: "tested_clans"
+
+- import_playbook: "{{ playbook_dir }}/../playbooks/setup_core_services.yml"
+  vars:
+    scope: "tested_clans"
+
+- import_playbook: "{{ playbook_dir }}/../playbooks/setup_broadcast_services.yml"
+  vars:
+    scope: "tested_clans"
