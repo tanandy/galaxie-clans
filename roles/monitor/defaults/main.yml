@@ -1,5 +1,5 @@
 ---
-monitor_netdata_web_server_threads: "{{ [ ansible_processor_cores, 6] | min | int }}"
+# monitor_netdata_web_server_threads: "{{ [ ansible_processor_cores, 6] | min | int }}"
 monitor_netdata_web_server_max_sockets: 256
 monitor_netdata_update_every: 3
 # In Mb, RAM allocated for caching and indexing
