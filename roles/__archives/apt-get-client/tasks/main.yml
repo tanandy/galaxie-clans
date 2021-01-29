@@ -1,4 +1,0 @@
----
-- name: Include tasks based on Debian generation
-  include_tasks: >-
-    {{ ansible_distribution | lower }}-{{ ansible_lsb.codename | lower }}.yml

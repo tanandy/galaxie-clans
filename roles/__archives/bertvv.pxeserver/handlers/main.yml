@@ -1,7 +1,0 @@
-# roles/pxeserver/handlers/main.yml
----
-
-- name: restart nfs
-  service:
-    name: nfs
-    state: restarted
