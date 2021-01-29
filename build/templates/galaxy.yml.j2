@@ -1,31 +1,18 @@
-# The namespace of the collection. This can be a company/brand/organization or product namespace under which all
-# content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
-# underscores or numbers and cannot contain consecutive underscores
-namespace: "{{ galaxy_namespace }}"
-
-# The name of the collection. Has the same character restrictions as 'namespace'
-name: "{{ galaxy_name }}"
-
-# The version of the collection. Must be compatible with semantic versioning
+---
+namespace: "rtnp"
+name: "galaxie_clans"
 version: "{{ galaxy_version }}"
-
-# The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
 
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Aurélien Maury <aurelien.maury@wescale.fr>
+  - Mo <mo@rtnp.org>
+  - Tuuux <tuxa@rtnp.org>
 
-
-### OPTIONAL but strongly recommended
-
-# A short summary description of the collection
 description: >-
-  Deploy and manage a Rancher platform. 
+  Digital survival kit for clans.
 
-# Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
-# accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
   - GPL-3.0-or-later
 
@@ -40,23 +27,20 @@ tags: []
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: >-
-  https://gitlab.com/wescalefr-oss/ansible/collections/kubefactory
+repository: "https://gitlab.com/Tuuux/galaxie-clans"
 
 # The URL to any online docs
-documentation: >-
-  https://kubefactory.readthedocs.io
+documentation: "https://galaxie-clans.readthedocs.io/"
 
 # The URL to the homepage of the collection/project
-homepage: >-
-  https://gitlab.com/wescalefr-oss/ansible/collections/kubefactory
+homepage: "https://galaxie-clans.readthedocs.io/"
 
 # The URL to the collection issue tracker
-issues: >-
-  https://gitlab.com/wescalefr-oss/ansible/collections/kubefactory/-/issues
+issues: "https://gitlab.com/Tuuux/galaxie-clans/-/issues"
 
 #
 # Since: ansible>=2.10
+# Backported with love in build/galaxy_release.yml
 #
 build_ignore:
   - ".direnv"
