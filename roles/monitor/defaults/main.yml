@@ -13,13 +13,13 @@ monitor_netdata_web_default_port: 19999
 monitor_netdata_web_server_max_sockets: 256
 # monitor_netdata_web_bind_to: 127.0.0.1=dashboard^SSL=optional 10.1.1.1:19998=management|netdata.conf hostname:19997=badges [::]:19996=streaming^SSL=force localhost:19995=registry *:http=dashboard unix:/run/netdata/netdata.sock
 monitor_netdata_web_enable_web_responses_gzip_compression: no
-monitor_netdata_web_gzip_compression_strategy: default
+monitor_netdata_web_gzip_compression_strategy: "default"
 monitor_netdata_web_gzip_compression_level: 3
 monitor_netdata_web_respect_do_not_track_policy: yes
-monitor_netdata_web_bind_to: localhost
-monitor_netdata_web_allow_connections_from: localhost *
-monitor_netdata_web_allow_dashboard_from: localhost *
-monitor_netdata_web_allow_badges_from: *
-monitor_netdata_web_allow_streaming_from: *
-monitor_netdata_web_allow_netdata_conf_from: localhost fd* 10.* 192.168.* 172.16.* 172.17.* 172.18.* 172.19.* 172.20.* 172.21.* 172.22.* 172.23.* 172.24.* 172.25.* 172.26.* 172.27.* 172.28.* 172.29.* 172.30.* 172.31.*
-monitor_netdata_web_allow_management_from: localhost
+monitor_netdata_web_bind_to: "localhost"
+monitor_netdata_web_allow_connections_from: "localhost *"
+monitor_netdata_web_allow_dashboard_from: "localhost *"
+monitor_netdata_web_allow_badges_from: "*"
+monitor_netdata_web_allow_streaming_from: "*"
+monitor_netdata_web_allow_netdata_conf_from: "localhost fd* 10.* 192.168.* 172.16.* 172.17.* 172.18.* 172.19.* 172.20.* 172.21.* 172.22.* 172.23.* 172.24.* 172.25.* 172.26.* 172.27.* 172.28.* 172.29.* 172.30.* 172.31.*"
+monitor_netdata_web_allow_management_from: "localhost"
