@@ -40,6 +40,11 @@
         dest: "{{ galaxy_token_file }}"
 
   tasks:
+    - name: Delete old clone
+      file:
+        path: "{{ clone_dir }}"
+        state: absent
+        
     - name: Clone project at desired gitref
       git:
         repo: "{{ project_repository }}"
@@ -51,6 +56,15 @@
         src: "{{ src_galaxy_template }}"
         dest: "{{ galaxy_meta_file }}"
       register: galaxy_yml_rendering
+
+    - include_vars:
+        file: "{{ galaxy_meta_file }}"
+        name: galaxy_meta
+
+    - shell: >-
+        rm -rf {{ galaxy_meta.build_ignore | join (' ') }}
+      args:
+        chdir: "{{ clone_dir }}"
 
     - name: Build the collection
       command: >-
