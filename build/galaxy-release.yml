@@ -14,7 +14,7 @@
     galaxy_token: "{{ lookup('env','ANSIBLE_GALAXY_TOKEN') }}"
     galaxy_namespace: rtnp
     galaxy_name: galaxie_clans
-    project_repository: "git@github.com:{{ galaxy_namespace }}/{{ galaxy_name }}.git"
+    project_repository: "git@gitlab.com:Tuuux/galaxie-clans.git"
     src_galaxy_template: "{{ clone_dir }}/build/templates/galaxy.yml.j2"
     galaxy_version: "{{ gitref | regex_replace('v','') }}"
     galaxy_archive_name: "{{ galaxy_namespace }}-{{ galaxy_name }}-{{ galaxy_version }}.tar.gz"
