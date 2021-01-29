@@ -11,7 +11,7 @@
 #
 
 [global]
-    run as user = netdata
+    run as user = {{ monitor_netdata_global_run_as_user }}
 
     # the default database size - 1 hour
     history = 3600
@@ -32,12 +32,19 @@
 
 {% if monitor_netdata_web_interface %}
 [web]
-    web files owner = root
-    web files group = netdata
-
-    # by default do not expose the netdata port
-    bind to = localhost
-    enable web responses gzip compression = no
-    respect do not track policy = yes
+    web files owner = {{ monitor_netdata_web_files_owner }}
+    web files group = {{ monitor_netdata_web_files_group }}
+    default port = {{ monitor_netdata_web_default_port }}
+    bind to = {{ monitor_netdata_web_bind_to }}
+    enable web responses gzip compression = {{ monitor_netdata_web_enable_web_responses_gzip_compression }}
+    gzip compression strategy = {{ monitor_netdata_web_gzip_compression_strategy }}
+    gzip compression level = {{ monitor_netdata_web_gzip_compression_level }}
+    respect do not track policy = {{ monitor_netdata_web_respect_do_not_track_policy }}
     web server max sockets = {{ monitor_netdata_web_server_max_sockets }}
+    allow connections from = {{ monitor_netdata_web_allow_connections_from }}
+    allow dashboard from = {{ monitor_netdata_web_allow_dashboard_from }}
+    allow badges from = {{ monitor_netdata_web_allow_badges_from }}
+    allow streaming from = {{ monitor_netdata_web_allow_streaming_from }}
+    allow netdata.conf from = {{ monitor_netdata_web_allow_netdata_conf_from }}
+    allow management from = {{ monitor_netdata_web_allow_management_from }}
 {% endif %}
