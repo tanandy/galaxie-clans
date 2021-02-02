@@ -6,15 +6,18 @@
   gather_facts: false
 
   vars:
+    project_repository: "git@gitlab.com:Tuuux/galaxie-clans.git"
+    galaxy_namespace: rtnp
+    galaxy_name: galaxie_clans
+    
     project_dir: "{{ (playbook_dir + '/../') | realpath }}"
     build_dir: "{{ project_dir }}/build"
     clone_dir: "{{ build_dir }}/clone"
+
     dot_ansible_dir: "{{ lookup('env', 'HOME') }}/.ansible"
     galaxy_token_file: "{{ dot_ansible_dir }}/galaxy_token"
     galaxy_token: "{{ lookup('env','ANSIBLE_GALAXY_TOKEN') }}"
-    galaxy_namespace: rtnp
-    galaxy_name: galaxie_clans
-    project_repository: "git@gitlab.com:Tuuux/galaxie-clans.git"
+    
     src_galaxy_template: "{{ clone_dir }}/build/templates/galaxy.yml.j2"
     galaxy_version: "{{ gitref | regex_replace('v','') }}"
     galaxy_archive_name: "{{ galaxy_namespace }}-{{ galaxy_name }}-{{ galaxy_version }}.tar.gz"
