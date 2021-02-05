@@ -7,29 +7,27 @@
   vars:
 # configuration variables
     tf_stack: scw
-    # tf_workspace: 
+    # workspace: 
 # utils variables    
     project_dir: "{{ (playbook_dir + '/..') | realpath }}" 
     tf_stack_dir: "{{ project_dir }}/terraform/{{ tf_stack }}"
 
-    ssh_private_key_file: "{{ project_dir }}/keys/{{ tf_workspace }}.key"
+    ssh_private_key_file: "{{ project_dir }}/keys/{{ workspace }}.key"
     ssh_public_key_file: "{{ ssh_private_key_file }}.pub"
     
-    ready_host_name: "{{ tf_workspace }}"
-    raw_host_name: "raw_{{ tf_workspace }}"
-    clan_name: "{{ tf_stack }}_{{ tf_workspace }}_clan"
-    ready_host_vars_file: "{{ project_dir }}/host_vars/{{ tf_workspace }}.yml"
-    raw_host_vars_file: "{{ project_dir }}/host_vars/raw_{{ tf_workspace }}.yml"
+    ready_host_name: "{{ workspace }}"
+    raw_host_name: "raw_{{ workspace }}"
+    clan_name: "{{ tf_stack }}_{{ workspace }}_clan"
+    ready_host_vars_file: "{{ project_dir }}/host_vars/{{ workspace }}.yml"
+    raw_host_vars_file: "{{ project_dir }}/host_vars/raw_{{ workspace }}.yml"
 
   tasks:
-    - debug:
-        msg: mama
     - name: Sanity checks
       assert:
         that:
-          - tf_workspace is defined
-          - tf_workspace != 'default'
-        msg: "'tf_workspace' must be defined and not 'default'"
+          - workspace is defined
+          - workspace != 'default'
+        msg: "'workspace' must be defined and not 'default'"
     
     - name: Remove clan link from inventory
       lineinfile:
@@ -42,13 +40,13 @@
       blockinfile:
         path: "{{ project_dir }}/hosts"
         state: absent
-        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
+        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ workspace }}"
 
-    - name: "Destroy workspace {{ tf_workspace }} on {{ tf_stack }}"
+    - name: "Destroy workspace {{ workspace }} on {{ tf_stack }}"
       terraform:
         project_path: "{{ tf_stack_dir }}"
         state: absent
         force_init: true
-        workspace: "{{ tf_workspace }}"
+        workspace: "{{ workspace }}"
         variables:
           ssh_public_key_file: "{{ ssh_public_key_file }}"

@@ -6,42 +6,53 @@
   vars:
 # configuration variables
     tf_stack: scw
-    # tf_workspace: 
+    # workspace: 
 # utils variables    
     project_dir: "{{ (playbook_dir + '/..') | realpath }}" 
     tf_stack_dir: "{{ project_dir }}/terraform/{{ tf_stack }}"
 
-    ssh_private_key_file: "{{ project_dir }}/keys/{{ tf_workspace }}.key"
+    ssh_private_key_file: "{{ project_dir }}/keys/{{ workspace }}.key"
     ssh_public_key_file: "{{ ssh_private_key_file }}.pub"
     
-    ready_host_name: "{{ tf_workspace }}"
-    raw_host_name: "raw_{{ tf_workspace }}"
-    clan_name: "{{ tf_stack }}_{{ tf_workspace }}_clan"
-    ready_host_vars_dir: "{{ project_dir }}/host_vars/{{ tf_workspace }}"
+    ready_host_name: "{{ workspace }}"
+    raw_host_name: "raw_{{ workspace }}"
+    clan_name: "{{ tf_stack }}_{{ workspace }}_clan"
+    ready_host_vars_dir: "{{ project_dir }}/host_vars/{{ workspace }}"
     ready_host_vars_file: "{{ ready_host_vars_dir }}/tf_vars.yml"
+    ready_srv_host_vars_file: "{{ ready_host_vars_dir }}/services.yml"
 
-    raw_host_vars_dir: "{{ project_dir }}/host_vars/raw_{{ tf_workspace }}"
+    tfstate_dir: "{{ project_dir }}/tfstates"
+    raw_host_vars_dir: "{{ project_dir }}/host_vars/raw_{{ workspace }}"
     raw_host_vars_file: "{{ raw_host_vars_dir }}/tf_vars.yml"
 
   tasks:
     - name: Sanity checks
       assert:
         that:
-          - tf_workspace is defined
-          - tf_workspace != 'default'
-        msg: "'tf_workspace' must be defined and not 'default'"
+          - workspace is defined
+          - workspace != 'default'
+        msg: "'workspace' must be defined and not 'default'"
+
+    - name: Directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "{{ tfstate_dir }}"
+        - "{{ tfstate_dir }}/{{ workspace }}"
+        - "{{ project_dir }}/keys"
 
     - name: Create a dedicated keypair
       openssh_keypair:
         path: "{{ ssh_private_key_file }}"
         type: ed25519
 
-    - name: "Apply workspace {{ tf_workspace }} on {{ tf_stack }}"
+    - name: "Apply workspace {{ workspace }} on {{ tf_stack }}"
       terraform:
         project_path: "{{ tf_stack_dir }}"
         state: present
         force_init: true
-        workspace: "{{ tf_workspace }}"
+        workspace: "{{ workspace }}"
         variables:
           ssh_public_key_file: "{{ ssh_public_key_file }}"
       register: tf_apply
@@ -59,11 +70,12 @@
         - "{{ raw_host_vars_dir }}"
         - "{{ ready_host_vars_dir }}"
 
-    - name: Render host vars file
+    - name: Render terraform host vars
       copy:
         dest: "{{ item }}"
         content: |
           ---
+          workspace: "{{ workspace }}"
           caretaker_authorized_key_files:
             - "{{ ssh_public_key_file }}"
           public_ipv4: "{{ tf_apply.outputs.ipv4.value }}"
@@ -72,20 +84,42 @@
         - "{{ raw_host_vars_file }}"
         - "{{ ready_host_vars_file }}"
 
+    - name: Render terraform host vars
+      template:
+        src: host_vars.yml.j2
+        dest: "{{ ready_srv_host_vars_file }}"
+
+    - name: Add raw and ready host definitions to ssh config
+      blockinfile:
+        path: "{{ project_dir }}/ssh.cfg"
+        state: present
+        create: yes
+        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ workspace }}"
+        block: |
+          Host {{ raw_host_name }} 
+            Hostname {{ public_ipv4 }}
+            User {{ raw_ssh_user }}
+            IdentityFile {{ ssh_private_key_file }}
+            IdentitiesOnly yes
+            StrictHostKeyChecking no
+
+          Host {{ ready_host_name }}
+            Hostname {{ public_ipv4 }}
+            User caretaker
+            IdentityFile {{ ssh_private_key_file }}
+            IdentitiesOnly yes
+            StrictHostKeyChecking no
+
     - name: Add raw and ready host definitions to inventory group
       blockinfile:
         path: "{{ project_dir }}/hosts"
         state: present
         create: yes
-        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ tf_workspace }}"
+        marker: "# {mark} -- playbooks/create_cloud_host.yml -- {{ workspace }}"
         block: |
           [{{ clan_name }}]
-          {{ raw_host_name }} ansible_ssh_host={{ public_ipv4 }} ansible_ssh_user={{ raw_ssh_user }}
-          {{ ready_host_name }}  ansible_ssh_host={{ public_ipv4 }} ansible_ssh_user=caretaker 
-
-          [{{ clan_name }}:vars]
-          ansible_host_key_checking=False
-          ansible_ssh_private_key_file={{ ssh_private_key_file }}
+          {{ raw_host_name }}
+          {{ ready_host_name }}    
 
     - name: Link created host group to 'clans' group in inventory
       lineinfile:
@@ -96,4 +130,13 @@
         insertafter: >-
           \[clans:children\]
 
+    - meta: refresh_inventory
 
+- import_playbook: "{{ playbook_dir }}/init_host.yml"
+  vars:
+    scope: "raw_{{ workspace }}"
+
+- hosts: "{{ workspace }}"
+  become: yes
+  tasks:
+    - ping:

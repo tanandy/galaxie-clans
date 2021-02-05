@@ -1,0 +1,7 @@
+---
+ansible_pwd: "{{ lookup('env', 'PWD') }}"
+
+gandi_api_key: "{{ lookup('env', 'GANDI_API_KEY') }}"
+gandi_domain: "{{ lookup('env', 'GANDI_DOMAIN') }}"
+gandi_subdomain: "{{ lookup('env', 'GANDI_SUBDOMAIN') }}"
+gandi_subdomain_ns: "ns.{{ gandi_subdomain }}"

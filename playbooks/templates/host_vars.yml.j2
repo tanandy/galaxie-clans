@@ -1,0 +1,72 @@
+---
+{% raw %}
+gandi_subdomain: "{{ workspace }}"
+system_base_domain: "{{ gandi_subdomain }}.{{ gandi_domain }}"
+
+common_certificate_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.fullchain.crt"
+common_certificate_key_file: "{{ ssl_certs_dir }}/{{ system_base_domain }}.key"
+
+dns_enable: yes
+mailserver_enable: yes
+rproxy_enable: yes
+
+rproxy_nginx_managed_sites:
+  - "k3s"
+k3s_public_domain: "k3s.{{ system_base_domain }}"
+k3s_ingress_certificate_file: "{{ ssl_certs_dir }}/{{ k3s_public_domain }}.fullchain.crt"
+k3s_ingress_certificate_key_file: "{{ ssl_certs_dir }}/{{ k3s_public_domain }}.key"
+
+rancher_public_domain: "rancher.{{ k3s_public_domain }}"
+
+acme_domains:
+  - cn: "{{ system_base_domain }}"
+    zone: "{{ system_base_domain }}"
+    alt:
+      - "DNS:mail.{{ system_base_domain }}"
+
+  - cn: "{{ k3s_public_domain }}"
+    zone: "{{ system_base_domain }}"
+    alt:
+      - "DNS:*.{{ k3s_public_domain }}"
+
+bind_zone_domains:
+  - name: "{{ system_base_domain }}"
+    type: master
+    hostmaster_email: "hostmaster.{{ system_base_domain }}"
+    allow_update:
+      - "localhost"
+    name_servers:
+      - ns
+    mail_servers:
+      - name: mail
+        preference: 10
+    text:
+      - name: "{{ system_base_domain }}."
+        text: "v=spf1 mx -all"
+    hosts:
+      - name: ""
+        ip: "{{ ansible_default_ipv4.address }}"
+        ipv6: "{{ ansible_default_ipv6.address }}"
+        
+      - name: "{{ gandi_subdomain }}"
+        ip: "{{ public_ipv4 }}"
+        ipv6: "{{ public_ipv6 }}"
+        aliases:
+          - chat
+          - meet
+          - stun
+          
+      - name: "k3s"
+        ip: "{{ public_ipv4 }}"
+        ipv6: "{{ public_ipv6 }}"
+        aliases:
+          - rancher.k3s
+
+      - name: ns
+        ip: "{{ public_ipv4 }}"
+        ipv6: "{{ public_ipv6 }}"
+
+      - name: mail
+        ip: "{{ public_ipv4 }}"
+        ipv6: "{{ public_ipv6 }}"
+{% endraw %}

@@ -1,0 +1,110 @@
+---
+- hosts: "{{ workspace }}"
+  become: yes
+  gather_facts: no
+
+  vars:
+    # ----
+    # MANDATORY VARS
+    #
+    # Defaults are located in $WORKSPACE/playbooks/group_vars/all.yml
+    # to ease overriding at other levels of variable precedence.
+    # More: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
+    #
+    # gandi_api_key: "{{ lookup('env', 'GANDI_API_KEY') }}"
+    # gandi_domain: "{{ lookup('env', 'GANDI_DOMAIN') }}"
+    # gandi_subdomain: "{{ lookup('env', 'GANDI_SUBDOMAIN') }}"
+    # gandi_subdomain_ns: "ns.{{ gandi_subdomain }}"
+    # ----
+
+    mode: create
+    force: false
+    gandi_api_auth_headers:
+      Authorization: "Apikey {{ gandi_api_key }}"
+    gandi_api_endpoints:
+      fqdn_records: >-
+        https://api.gandi.net/v5/livedns/domains/{{ gandi_domain }}/records
+      subdomain_a_record: >-
+        https://api.gandi.net/v5/livedns/domains/{{ gandi_domain }}/records/{{ gandi_subdomain_ns }}
+      subdomain_aaaa_record: >-
+        https://api.gandi.net/v5/livedns/domains/{{ gandi_domain }}/records/{{ gandi_subdomain_ns }}
+      subdomain_ns_record: >- 
+        https://api.gandi.net/v5/livedns/domains/{{ gandi_domain }}/records/{{ gandi_subdomain }}
+
+  tasks:
+    
+    - name: Validate api key (domain lookup)
+      uri:
+        method: GET
+        url: "{{ gandi_api_endpoints.fqdn_records }}"
+        headers: "{{ gandi_api_auth_headers }}"
+        return_content: yes
+      register: gandi_domain_content
+
+    - set_fact:
+        a_record_exists: >-
+          {{ gandi_domain_content.json | selectattr('rrset_name', 'eq', gandi_subdomain_ns) | selectattr('rrset_type', 'eq', 'A') | list | length == 1 }}
+        aaaa_record_exists: >-
+          {{ gandi_domain_content.json | selectattr('rrset_name', 'eq', gandi_subdomain_ns) | selectattr('rrset_type', 'eq', 'A') | list | length == 1 }}
+        ns_record_exists: >-
+          {{ gandi_domain_content.json | selectattr('rrset_name', 'eq', gandi_subdomain) | selectattr('rrset_type', 'eq', 'NS') | list | length == 1 }}
+       
+
+    - name: Silent overriding protection
+      assert:
+        that:
+          - not a_record_exists
+          - not aaaa_record_exists
+          - not ns_record_exists
+        msg: "Delegation already exist. Set variable 'force' to True to enforce."
+      when: 
+        - not force
+
+    - meta: end_play
+      when:
+        - not a_record_exists
+        - not aaaa_record_exists
+        - not ns_record_exists
+        - mode == 'destroy'
+
+    - name: Subdomain delegation - A record to SOA
+      uri:
+        method: "{{ (mode == 'destroy') | ternary ('DELETE', 'POST') }}"
+        url: "{{ gandi_api_endpoints.subdomain_a_record }}"
+        headers: "{{ gandi_api_auth_headers }}"
+        body_format: json
+        body:
+          rrset_type: A
+          rrset_values:
+            - "{{ public_ipv4 }}"
+          rrset_ttl: 300
+        return_content: yes
+        status_code: "{{ (mode == 'destroy') | ternary (204, 201) }}"
+
+    - name: Subdomain delegation - AAAA record to SOA
+      uri:
+        method: "{{ (mode == 'destroy') | ternary ('DELETE', 'POST') }}"
+        url: "{{ gandi_api_endpoints.subdomain_aaaa_record }}"
+        headers: "{{ gandi_api_auth_headers }}"
+        body_format: json
+        body:
+          rrset_type: AAAA
+          rrset_values:
+            - "{{ public_ipv6 }}"
+          rrset_ttl: 300
+        return_content: yes
+        status_code: "{{ (mode == 'destroy') | ternary (204, 201) }}"
+
+    - name: Subdomain delegation - NS record
+      uri:
+        method: "{{ (mode == 'destroy') | ternary ('DELETE', 'POST') }}"
+        url: "{{ gandi_api_endpoints.subdomain_ns_record }}"
+        headers: "{{ gandi_api_auth_headers }}"
+        body_format: json
+        body:
+          rrset_type: NS
+          rrset_values:
+            - "{{ gandi_subdomain_ns }}"
+          rrset_ttl: 300
+        return_content: yes
+        status_code: "{{ (mode == 'destroy') | ternary (204, 201) }}"
