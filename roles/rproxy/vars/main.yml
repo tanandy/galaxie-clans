@@ -30,3 +30,4 @@ rproxy_modular_config_directories:
   - "{{ rproxy_nginx_modular_conf_directory_streams_enabled }}"
   - "{{ rproxy_nginx_modular_conf_directory_mails_available }}"
   - "{{ rproxy_nginx_modular_conf_directory_mails_enabled }}"
+  - "/etc/nginx/sites-available"
