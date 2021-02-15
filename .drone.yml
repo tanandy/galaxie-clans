@@ -11,4 +11,4 @@ steps:
     PASSWORD:
       from_secret: docker_password
   commands:
-  - "MASTER VERSION"
+  - echo "MASTER VERSION"
