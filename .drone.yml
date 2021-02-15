@@ -1,3 +1,4 @@
+---
 kind: pipeline
 type: kubernetes
 name: default
@@ -12,3 +13,8 @@ steps:
       from_secret: docker_password
   commands:
   - echo "MASTER VERSION"
+---
+kind: signature
+hmac: 73c5a1352255ccd0eeee29930022c4cbb562cb19503d120a9b61a071b180cf01
+
+...
