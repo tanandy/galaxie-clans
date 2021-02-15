@@ -1,4 +1,5 @@
 kind: pipeline
+type: kubernetes
 name: default
 
 steps:
@@ -9,3 +10,5 @@ steps:
       from_secret: docker_username
     PASSWORD:
       from_secret: docker_password
+  commands:
+  - echo 'WIN'
