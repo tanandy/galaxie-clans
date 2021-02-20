@@ -8,7 +8,6 @@ ansible-lint
 passlib
 molecule
 docker
-molecule[docker]
 mkdocs
 mkdocs-material
 openshift

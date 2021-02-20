@@ -1,0 +1,13 @@
+---
+- name: Destroy
+  hosts: localhost
+  become: no
+  gather_facts: false
+  no_log: false
+
+  tasks:
+    - name: Stop k3s server
+      become: yes
+      shell: >-
+        kill {{ k3s_pid }}
+#      loop: "{{ molecule_yml.platforms }}"

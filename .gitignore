@@ -37,3 +37,4 @@ documentation/build
 *.code-workspace
 .env.*
 build/clone
+.vault_password_file

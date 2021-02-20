@@ -1,0 +1,23 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: delegated
+
+platforms:
+  - name: "alpine"
+    image_name: "alpine:latest"
+
+provisioner:
+  name: ansible
+  playbooks:
+    create: "${MOLECULE_PROJECT_DIRECTORY}/molecule/utils/delegated_create.yml"
+    prepare: "${MOLECULE_PROJECT_DIRECTORY}/molecule/utils/delegated_prepare.yml"
+    converge: "${MOLECULE_PROJECT_DIRECTORY}/molecule/utils/delegated_converge.yml"
+    destroy: "${MOLECULE_PROJECT_DIRECTORY}/molecule/utils/delegated_destroy.yml"
+
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

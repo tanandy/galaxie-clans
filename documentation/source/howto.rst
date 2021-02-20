@@ -7,3 +7,4 @@ How-to Guides: Problem-oriented
 
    howto/contribute
    howto/add_server
+   howto/test

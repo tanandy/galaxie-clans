@@ -1,0 +1,4 @@
+---
+k3s_cmd: "{{ lookup('env', 'DIRENV_CONTENT_DIR') }}/bin/k3s"
+k3s_pid_file: "{{ lookup('env', 'DIRENV_CONTENT_DIR') }}/k3s.pid"
+k3s_pid: "{{ lookup('file', k3s_pid_file) }}"

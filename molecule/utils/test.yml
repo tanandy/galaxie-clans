@@ -1,0 +1,11 @@
+---
+- name: Create molecule platforms
+  hosts: localhost
+  gather_facts: false
+  become: yes
+
+  tasks:
+    - name: Start k3s server
+      shell: >-
+        nohup {{ k3s_cmd }} server > {{ k3s_pid_file }}.log 2>&1 & echo $! > {{ k3s_pid_file }}
+
